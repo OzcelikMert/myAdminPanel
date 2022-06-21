@@ -1,0 +1,47 @@
+MyAdminPanel-Pages:
+  Pages:
+    Dashboard:
+
+    Gallery:
+
+    Pages:
+      List:
+        Delete:
+        Edit:
+      Add:
+
+    Blog:
+      List:
+        Delete:
+        Edit:
+      Add:
+        Title
+        content
+        start date
+        category
+        tag
+
+
+    Portfolio:
+      List:
+        Delete:
+        Edit:
+      Add:
+
+    Slider:
+      List:
+        Delete:
+        Edit:
+      Add:
+
+    References:
+      List:
+        Delete:
+        Edit:
+      Add:
+
+    Users:
+      List:
+        Delete:
+        Edit:
+      Add:

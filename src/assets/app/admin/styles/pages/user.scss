@@ -1,0 +1,18 @@
+.page-user {
+  .table-user {
+    overflow: hidden;
+    position: relative;
+    .table-responsive {
+      min-height: 550px;
+      .post-image {
+        img {
+          width: 50px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+  .btn-save {
+    padding: 15px 40px 15px 40px;
+  }
+}

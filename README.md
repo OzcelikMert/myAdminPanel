@@ -1,2 +1,2 @@
-# myAdminPanel
-My Admin Panel For React And TypeScript
+# my_admin
+My Admin Panel

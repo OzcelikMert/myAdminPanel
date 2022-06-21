@@ -1,0 +1,82 @@
+.page-post,
+.page-post-term {
+  .table-post {
+    overflow: hidden;
+    position: relative;
+    .table-responsive {
+      min-height: 550px;
+      table{
+        thead {
+          height: 4rem;
+          tr{
+            th{
+              padding: 0.4rem;
+              &:nth-child(1),
+              &:nth-child(2) {
+                width: 3rem;
+              }
+              &:first-child{
+                padding-left: 20px;
+              }
+              &:last-child {
+                padding-right: 20px;
+              }
+              .table-toggle-menu{
+                color: #767676c7;
+                background: unset;
+                border: 0;
+                i {
+                  font-size: 27px;
+                }
+              }
+              .table-dropdown-menu{
+                button{
+                  width: 140px;
+                }
+              }
+            }
+          }
+        }
+        tbody {
+          .post-image {
+            background: #a3a3a363;
+            padding: 0.4rem;
+            border-radius: 10px;
+            img {
+              border-radius: 10px;
+              box-shadow: 4px 5px 9px 1px #000000b3;
+              width: 45px;
+              height: 45px;
+            }
+          }
+          tr {
+            th,
+            td {
+              padding: 0.4rem;
+              &:first-child {
+                padding-left: 20px;
+              }
+              &:last-child {
+                padding-right: 20px;
+              }
+              &.category {
+                label {
+                  margin-left: 2px;
+                  &:first-child{
+                    margin-left: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .btn-save {
+    padding: 15px 40px 15px 40px;
+  }
+  .category-badge:hover {
+    background: theme-gradient-color("primary");
+  }
+}
