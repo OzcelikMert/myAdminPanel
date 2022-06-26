@@ -8,7 +8,7 @@ import Spinner from './views/tools/spinner';
 import {PagePropCommonDocument} from "../../modules/views/pages/pageProps";
 
 import PageLogin from "./views/pages/login";
-import PageHome from "./views/pages/home";
+import PageDashboard from "./views/pages/dashboard";
 import PageGalleryList from "./views/pages/gallery/list";
 import PageGalleryUpload from "./views/pages/gallery/upload";
 import PagePostList from "./views/pages/post/list";
@@ -139,7 +139,7 @@ class AppRoutes extends Component<PageProps, PageState> {
                 <Routes>
                     <Route path={pageRoutes.login.path()} element={<PageLogin router={this.props.router}/>}/>
 
-                    <Route path={pageRoutes.dashboard.path()} element={<PageHome router={this.props.router}/>}/>
+                    <Route path={pageRoutes.dashboard.path()} element={<PageDashboard router={this.props.router}/>}/>
 
                     <Route path={pageRoutes.gallery.path()}>
                         <Route path={pageRoutes.gallery.upload.path()}

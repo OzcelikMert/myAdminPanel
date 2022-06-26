@@ -166,7 +166,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                     row.postTermContents.map(item => (item.postTermTypeId == PostTermTypeId.Category)
                         ? <label
                             onClick={() => this.navigateTermPage("termEdit", item.postTermId, PostTermTypeId.Category)}
-                            className={`badge badge-gradient-success ms-1 cursor-pointer category-badge`}
+                            className={`badge badge-gradient-success me-1 cursor-pointer category-badge`}
                         >{item.postTermContentTitle}</label>
                         : null
                     )

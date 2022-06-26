@@ -85,6 +85,7 @@ type LanguageKeys =
     "websiteDescription" |
     "websiteTags" |
     "websiteTitleSeparator" |
-    "websiteMainLanguage"
+    "websiteMainLanguage" |
+    "type"
 
 export default LanguageKeys;

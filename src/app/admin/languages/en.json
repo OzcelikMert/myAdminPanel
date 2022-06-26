@@ -72,6 +72,7 @@
   "websiteTags": "Website tags",
   "websiteTitleSeparator": "Website title separator",
   "websiteMainLanguage": "Website main language",
+  "type": "Type",
 
   "toastMessageLoadingPostTitle": "Creating...",
   "toastMessageLoadingPostContent": "Creating please wait",
