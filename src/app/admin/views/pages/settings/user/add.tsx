@@ -28,6 +28,7 @@ type PageState = {
     status?: { value: number, label: string }[]
     isSubmitting: boolean
     formData: {
+        image: string,
         name: string
         email: string
         password: string
@@ -49,6 +50,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
             formActiveKey: "general",
             isSubmitting: false,
             formData: {
+                image: "",
                 name: "",
                 email: "",
                 password: "",
@@ -113,6 +115,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                 console.log(user);
                 this.setState((state: PageState) => {
                     state.formData = {
+                        image: user.userImage,
                         name: user.userName,
                         email: user.userEmail,
                         password: "",

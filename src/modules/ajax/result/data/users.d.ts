@@ -7,5 +7,5 @@ export interface UserDocument {
     userImage: string,
     userPermissions: number[]
     userBanDateEnd: string
-    userBanComment
+    userBanComment: string
 }

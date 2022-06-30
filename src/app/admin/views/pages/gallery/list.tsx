@@ -7,31 +7,55 @@ import {LazyLoadImage} from 'react-lazy-load-image-component';
 import Swal from "sweetalert2";
 import {GalleryDeleteParamDocument} from "../../../../../modules/services/delete/gallery";
 import {ThemeFormCheckBox} from "../../components/form";
+import HandleForm from "../../../../../library/react/handles/form";
 
 type PageState = {
     isSelectedAll: boolean
     images: string[]
-    showingImages: PageState["images"]
     selectedImages: PageState["images"]
     selectedImageIndex: number
     isOpenViewer: boolean
+    formData: {
+        imageName: string
+    }
 };
 
-type PageProps = {} & PagePropCommonDocument;
+type PageProps = {
+    isModal?: boolean
+    isMulti?: boolean
+    onSelected?: (images: string[]) => void
+    uploadedImages?: string[]
+} & PagePropCommonDocument;
 
 export class PageGalleryList extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
-        let images = Services.Get.gallery().data;
+        let images = Services.Get.gallery().data.orderBy("", "desc");
         this.state = {
             isSelectedAll: false,
             images: images,
-            showingImages: images,
             selectedImages: [],
             selectedImageIndex: 0,
-            isOpenViewer: false
+            isOpenViewer: false,
+            formData: {
+                imageName: ""
+            }
         }
     }
+
+    componentDidUpdate(prevProps:Readonly<PageProps>, prevState:Readonly<PageState>) {
+        if(
+            this.props.uploadedImages &&
+            JSON.stringify(this.props.uploadedImages) !== JSON.stringify(prevProps.uploadedImages) &&
+            this.props.uploadedImages.length > 0
+        ) {
+            this.setState((state: PageState) => {
+                state.images = state.images.concat(this.props.uploadedImages || []).orderBy("", "desc");
+                return state;
+            })
+        }
+    }
+
 
     setPageTitle() {
         setPageData({
@@ -39,7 +63,7 @@ export class PageGalleryList extends Component<PageProps, PageState> {
         })
     }
 
-    onSelect(type: "select" | "unSelect" | "show", image: string) {
+    onSelect(type: "select" | "unSelect" | "show", image: string, index: number) {
         switch (type) {
             case `select`:
             case `unSelect`:
@@ -49,7 +73,11 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                     if (findIndex > -1) {
                         state.selectedImages.remove(findIndex);
                     } else {
+                        if(this.props.isModal && !this.props.isMulti){
+                            state.selectedImages = [];
+                        }
                         state.selectedImages.push(image);
+
                     }
 
                     if (state.images.length > 0) {
@@ -60,9 +88,8 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                 })
                 break;
             case `show`:
-                let findIndex = this.state.showingImages.indexOfKey("", image);
                 this.setState({
-                    selectedImageIndex: findIndex,
+                    selectedImageIndex: index,
                     isOpenViewer: true
                 })
                 break;
@@ -101,7 +128,6 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                     if (resData.status) {
                         this.setState((state: PageState) => {
                             state.images = state.images.filter(image => !state.selectedImages.includes(image));
-                            state.showingImages = state.showingImages.filter(image => !state.selectedImages.includes(image));
                             state.selectedImages = [];
                             return state;
                         })
@@ -111,20 +137,19 @@ export class PageGalleryList extends Component<PageProps, PageState> {
         })
     }
 
+    onSubmit() {
+        if(this.props.onSelected){
+            this.props.onSelected(this.state.selectedImages);
+        }
+    }
+
     onCloseViewer() {
         this.setState({
             isOpenViewer: false
         })
     }
 
-    onSearch(searchValue: string) {
-        this.setState((state: PageState) => {
-            state.showingImages = state.images.filter(image => image.search(searchValue) > -1);
-            return state;
-        })
-    }
-
-    Image = (props: { image: string }) => {
+    Image = (props: { image: string, index: number }) => {
         return (
             <div className="col-md-2 gallery-item">
                 {
@@ -146,16 +171,16 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                         {
                             this.state.selectedImages.includes(props.image)
                                 ? <button type="button" className="btn btn-gradient-danger btn-icon-text me-3"
-                                          onClick={() => this.onSelect("unSelect", props.image)} datatype="unselect">
+                                          onClick={() => this.onSelect("unSelect", props.image, 0)} datatype="unselect">
                                     <i className="mdi mdi-close btn-icon-append"></i> {this.props.router.t("unSelect")}
                                 </button>
                                 : <button type="button" className="btn btn-gradient-success btn-icon-text me-3"
-                                          onClick={() => this.onSelect("select", props.image)} datatype="select">
+                                          onClick={() => this.onSelect("select", props.image, 0)} datatype="select">
                                     <i className="mdi mdi-check btn-icon-append"></i> {this.props.router.t("select")}
                                 </button>
                         }
                         <button type="button" className="btn btn-gradient-info btn-icon-text"
-                                onClick={() => this.onSelect("show", props.image)}
+                                onClick={() => this.onSelect("show", props.image, props.index)}
                                 datatype="show">
                             <i className="mdi mdi-eye btn-icon-append"></i> {this.props.router.t("show")}
                         </button>
@@ -174,7 +199,7 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                         <Modal onClose={() => this.onCloseViewer()} closeOnBackdropClick={false}>
                             <Carousel
                                 currentIndex={this.state.selectedImageIndex}
-                                views={this.state.showingImages.map(image => ({
+                                views={this.state.images.filter(image => image.search(this.state.formData.imageName) > -1).map(image => ({
                                     alt: image,
                                     source: process.env.REACT_APP_UPLOADS_IMAGE_PATH + image,
                                     caption: image
@@ -188,34 +213,45 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                         <div className="card-body">
                             <div className="row">
                                 <div className="col-md-9 mb-4">
-                                    <ThemeFormCheckBox
-                                        onChange={() => this.onSelectAll()}
-                                        checked={this.state.isSelectedAll}
-                                        title={this.props.router.t("selectAll").toCapitalizeCase()}
-                                    />
+                                    {
+                                        this.props.isMulti || typeof this.props.isMulti === "undefined"
+                                            ? <ThemeFormCheckBox
+                                                onChange={() => this.onSelectAll()}
+                                                checked={this.state.isSelectedAll}
+                                                title={this.props.router.t("selectAll").toCapitalizeCase()}
+                                            /> : null
+                                    }
                                     {
                                         this.state.selectedImages.length > 0
-                                            ? <button type="button" className="btn btn-gradient-danger btn-icon-text ms-5"
+                                            ? (this.props.isModal)
+                                                ? <button type="button" className="btn btn-gradient-success btn-icon-text ms-2"
+                                                          onClick={() => this.onSubmit()}>
+                                                    <i className="mdi mdi-check btn-icon-prepend"></i>Okay
+                                                </button>
+                                                : <button type="button" className="btn btn-gradient-danger btn-icon-text ms-2"
                                                       onClick={() => this.onDelete()}>
-                                                <i className="mdi mdi-trash-can btn-icon-prepend"></i>Delete
-                                            </button> : null
+                                                    <i className="mdi mdi-trash-can btn-icon-prepend"></i>Delete
+                                                </button>
+                                            : null
                                     }
                                 </div>
                                 <div className="col-md-3">
                                     <input
+                                        name="imageName"
                                         className="form-control w-100"
                                         placeholder={`${this.props.router.t("search")}...`}
                                         type="search"
-                                        onChange={(event) => this.onSearch(event.target.value)}
+                                        onChange={(event) => HandleForm.onChangeInput(event, this)}
                                     />
                                 </div>
                             </div>
                             <div className="row mt-3">
                                 {
-                                    this.state.showingImages.map((item, index) => {
+                                    this.state.images.filter(image => image.search(this.state.formData.imageName) > -1).map((item, index) => {
                                         return <this.Image
                                             key={index}
                                             image={item}
+                                            index={index}
                                         />
                                     })
                                 }

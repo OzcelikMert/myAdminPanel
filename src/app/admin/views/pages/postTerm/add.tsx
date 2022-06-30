@@ -22,6 +22,7 @@ import V from "../../../../../library/variable";
 import SweetAlert from "react-sweetalert2";
 import {PostTermGetParamDocument} from '../../../../../modules/services/get/postTerm';
 import HandleForm from "../../../../../library/react/handles/form";
+import ThemeChooseImage, {emptyImage} from "../../components/chooseImage";
 
 type PageState = {
     formActiveKey: string,
@@ -29,9 +30,10 @@ type PageState = {
     status?: { value: number, label: string }[]
     isSubmitting: boolean
     formData: {
-        title: string,
         mainId: number,
         statusId: number,
+        image: string,
+        title: string,
         order: number,
         url: string,
         seoTitle: string,
@@ -39,6 +41,7 @@ type PageState = {
         isFixed: 1 | 0
     },
     isSuccessMessage: boolean
+    isSelectionImage: boolean
 };
 
 type PageProps = {} & PagePropCommonDocument;
@@ -50,16 +53,18 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
             formActiveKey: `general`,
             isSubmitting: false,
             formData: {
-                title: "",
                 mainId: 0,
                 statusId: 0,
+                image: "",
+                title: "",
                 order: 0,
                 url: "",
                 seoTitle: "",
                 seoContent: "",
                 isFixed: 0
             },
-            isSuccessMessage: false
+            isSuccessMessage: false,
+            isSelectionImage: false
         }
     }
 
@@ -130,6 +135,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                     state.formData = {
                         mainId: term.postTermMainId,
                         statusId: term.postTermStatusId,
+                        image: term.postTermContentImage,
                         title: term.postTermContentTitle,
                         url: term.postTermContentUrl,
                         seoTitle: term.postTermContentSEOTitle,
@@ -171,6 +177,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                         state.formData = {
                             mainId: state.formData.mainId,
                             statusId: state.formData.statusId,
+                            image: "",
                             title: "",
                             order: 0,
                             isFixed: 0,
@@ -248,6 +255,26 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         return (
             <div className="row">
                 <div className="col-md-7 mb-3">
+                    <img
+                        src={
+                            !V.isEmpty(this.state.formData.image)
+                                ? (this.state.formData.image.isUrl())
+                                    ? this.state.formData.image
+                                    : process.env.REACT_APP_UPLOADS_IMAGE_PATH + this.state.formData.image
+                                : emptyImage
+                        }
+                        alt="Empty Image"
+                        className="post-image"
+                    />
+                    <button
+                        type="button"
+                        className="btn btn-gradient-warning btn-xs ms-1"
+                        onClick={() => {
+                            this.setState({isSelectionImage: true})
+                        }}
+                    ><i className="fa fa-pencil-square-o"></i></button>
+                </div>
+                <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={`${this.props.router.t("title")}*`}
                         name="title"
@@ -306,6 +333,17 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         return (typeof this.state.status === "undefined" || typeof this.state.postTerms === "undefined") ? "" : (
             <div className="page-post-term">
                 <this.Messages/>
+                <ThemeChooseImage
+                    isShow={this.state.isSelectionImage}
+                    onHide={() => this.setState({isSelectionImage: false})}
+                    router={this.props.router}
+                    result={this.state.formData.image}
+                    onSelected={images => this.setState((state: PageState) => {
+                        state.formData.image = images[0];
+                        return state
+                    })}
+                    isMulti={false}
+                />
                 <div className="navigate-buttons mb-3">
                     <button className="btn btn-gradient-dark btn-lg btn-icon-text"
                             onClick={() => this.navigateTermPage()}>

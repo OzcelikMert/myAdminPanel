@@ -11,6 +11,8 @@ import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../components/form";
 import {ThemeTableToggleMenu} from "../../components/table";
 import Swal from "sweetalert2";
+import V from "../../../../../library/variable";
+import {emptyImage} from "../../components/chooseImage";
 
 
 type PageState = {
@@ -72,7 +74,8 @@ export class PagePostList extends Component<PageProps, PageState> {
         event.preventDefault();
         const params: PostPutParamDocument = {
             postId: this.state.selectedPosts,
-            statusId: statusId
+            statusId: statusId,
+            langId: getPageData().langId
         }
         if (statusId === StatusId.Deleted && this.state.listMode === "deleted") {
             Swal.fire({
@@ -151,9 +154,23 @@ export class PagePostList extends Component<PageProps, PageState> {
     get getTableColumns(): TableColumn<PageState["showingPosts"][0]>[] {
         return [
             {
-                name: "",
-                selector: row => row.postContentImage,
-                sortable: true,
+                name: this.props.router.t("image"),
+                width: "75px",
+                cell: row => (
+                    <div className="image pt-2 pb-2">
+                        <img
+                            src={
+                                !V.isEmpty(row.postContentImage)
+                                    ? (row.postContentImage.isUrl())
+                                        ? row.postContentImage
+                                        : process.env.REACT_APP_UPLOADS_IMAGE_PATH + row.postContentImage
+                                    : emptyImage
+                            }
+                            alt={row.postContentTitle}
+                            className="post-image"
+                        />
+                    </div>
+                )
             },
             {
                 name: this.props.router.t("title"),
@@ -190,12 +207,13 @@ export class PagePostList extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("edit"),
+                width: "70px",
                 button: true,
                 cell: row => (
                     <button
                         onClick={() => this.navigateTermPage("edit", row.postId)}
                         className="btn btn-gradient-warning"
-                    >{this.props.router.t("edit")}</button>
+                    ><i className="fa fa-pencil-square-o"></i></button>
                 )
             }
         ];

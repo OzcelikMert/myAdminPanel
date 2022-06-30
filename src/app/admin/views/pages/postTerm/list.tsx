@@ -17,6 +17,7 @@ import {PostTermPutParamDocument} from "../../../../../modules/services/put/post
 import {ThemeTableToggleMenu} from "../../components/table";
 import V from "../../../../../library/variable";
 import Swal from "sweetalert2";
+import {emptyImage} from "../../components/chooseImage";
 
 type PageState = {
     postTerms: PostTermDocument[],
@@ -62,7 +63,8 @@ export class PagePostTermList extends Component<PageProps, PageState> {
         event.preventDefault();
         const params: PostTermPutParamDocument = {
             termId: this.state.selectedPostTerms,
-            statusId: statusId
+            statusId: statusId,
+            langId: getPageData().langId
         }
 
         if (statusId === StatusId.Deleted && this.state.listMode === "deleted") {
@@ -142,6 +144,24 @@ export class PagePostTermList extends Component<PageProps, PageState> {
     get getTableColumns(): TableColumn<PageState["showingPostTerms"][0]>[] {
         return [
             {
+                name: this.props.router.t("image"),
+                width: "75px",
+                cell: row => (
+                    <div className="image pt-2 pb-2">
+                        <img
+                            src={
+                                !V.isEmpty(row.postTermContentImage)
+                                    ? (row.postTermContentImage.isUrl())
+                                        ? row.postTermContentImage
+                                        : process.env.REACT_APP_UPLOADS_IMAGE_PATH + row.postTermContentImage
+                                    : emptyImage
+                            }
+                            alt={row.postTermContentTitle}
+                        />
+                    </div>
+                )
+            },
+            {
                 name: this.props.router.t("name"),
                 selector: row => row.postTermContentTitle,
                 sortable: true,
@@ -165,12 +185,13 @@ export class PagePostTermList extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("edit"),
+                width: "70px",
                 button: true,
                 cell: row => (
                     <button
                         className="btn btn-gradient-warning"
                         onClick={() => this.navigateTermPage("edit", row.postTermId)}
-                    >{this.props.router.t("edit")}</button>
+                    ><i className="fa fa-pencil-square-o"></i></button>
                 )
             }
         ];

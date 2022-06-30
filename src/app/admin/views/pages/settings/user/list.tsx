@@ -17,6 +17,8 @@ import {pageRoutes} from "../../../../routes";
 import Swal from "sweetalert2";
 import {UserDeleteParamDocument} from "../../../../../../modules/services/delete/user";
 import ThemeUsersProfileCard from "../../../components/users/profileCard";
+import V from "../../../../../../library/variable";
+import {emptyImage} from "../../../components/chooseImage";
 
 type PageState = {
     users: UserDocument[]
@@ -104,11 +106,20 @@ export class PageUserList extends Component<PageProps, PageState> {
     get getTableColumns(): TableColumn<PageState["users"][0]>[] {
         return [
             {
-                name: "",
+                name: this.props.router.t("image"),
                 width: "75px",
                 cell: row => (
-                    <div className="post-image pt-2 pb-2">
-                        <img src={require("../../../../../../uploads/face1.jpg")} alt=""/>
+                    <div className="image pt-2 pb-2">
+                        <img
+                            src={
+                                !V.isEmpty(row.userImage)
+                                    ? (row.userImage.isUrl())
+                                        ? row.userImage
+                                        : process.env.REACT_APP_UPLOADS_IMAGE_PATH + row.userImage
+                                    : emptyImage
+                            }
+                            alt={row.userName}
+                        />
                     </div>
                 )
             },

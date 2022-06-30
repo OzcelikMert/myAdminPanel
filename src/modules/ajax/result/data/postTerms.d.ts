@@ -11,6 +11,7 @@ export interface PostTermDocument {
     postTermContentId: number,
     postTermContentTermId: number,
     postTermContentLangId: number,
+    postTermContentImage: string
     postTermContentTitle: string,
     postTermContentUrl: string,
     postTermContentSEOTitle: string,

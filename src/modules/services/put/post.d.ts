@@ -1,10 +1,11 @@
 export interface PostPutParamDocument {
     postId: number | number[]
     statusId: number
+    langId: number
     order?: number
     isFixed?: 1 | 0
     dateStart?: string
-    langId?: number
+    image?: string,
     title?: string
     shortContent?: string
     content?: string

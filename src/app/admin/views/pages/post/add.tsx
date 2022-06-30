@@ -16,6 +16,7 @@ import {PostTermGetParamDocument} from "../../../../../modules/services/get/post
 import {PostPostParamDocument} from "../../../../../modules/services/post/post";
 import {PostPutParamDocument} from "../../../../../modules/services/put/post";
 import {PostGetParamDocument} from "../../../../../modules/services/get/post";
+import ThemeChooseImage, {emptyImage} from "../../components/chooseImage";
 
 type PageState = {
     formActiveKey: string
@@ -24,6 +25,7 @@ type PageState = {
     status?: { value: number, label: string }[]
     isSubmitting: boolean
     formData: {
+        image: string
         title: string
         categoryTermId: number[]
         tagTermId: number[]
@@ -38,6 +40,7 @@ type PageState = {
         isFixed: 1 | 0
     },
     isSuccessMessage: boolean
+    isSelectionImage: boolean
 };
 
 type PageProps = {} & PagePropCommonDocument;
@@ -49,6 +52,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             formActiveKey: `general`,
             isSubmitting: false,
             formData: {
+                image: "",
                 title: "",
                 categoryTermId: [],
                 tagTermId: [],
@@ -62,7 +66,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 seoContent: "",
                 isFixed: 0
             },
-            isSuccessMessage: false
+            isSuccessMessage: false,
+            isSelectionImage: false
         }
     }
 
@@ -142,6 +147,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     });
 
                     state.formData = {
+                        image: post.postContentImage,
                         dateStart: post.postDateStart,
                         url: post.postContentUrl,
                         order: post.postOrder,
@@ -184,14 +190,14 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         ((V.isEmpty(params.postId))
             ? Services.Post.post(params)
             : Services.Put.post(params)).then(resData => {
-                this.setState((state: PageState) => {
-                    if (resData.status) {
-                        state.isSuccessMessage = true;
-                    }
+            this.setState((state: PageState) => {
+                if (resData.status) {
+                    state.isSuccessMessage = true;
+                }
 
-                    state.isSubmitting = false;
-                    return state;
-                })
+                state.isSubmitting = false;
+                return state;
+            })
         });
     }
 
@@ -328,6 +334,26 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         return (
             <div className="row">
                 <div className="col-md-7 mb-3">
+                    <img
+                        src={
+                            !V.isEmpty(this.state.formData.image)
+                                ? (this.state.formData.image.isUrl())
+                                    ? this.state.formData.image
+                                    : process.env.REACT_APP_UPLOADS_IMAGE_PATH + this.state.formData.image
+                                : emptyImage
+                        }
+                        alt="Empty Image"
+                        className="post-image"
+                    />
+                    <button
+                        type="button"
+                        className="btn btn-gradient-warning btn-xs ms-1"
+                        onClick={() => {
+                            this.setState({isSelectionImage: true})
+                        }}
+                    ><i className="fa fa-pencil-square-o"></i></button>
+                </div>
+                <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={`${this.props.router.t("title")}*`}
                         name="title"
@@ -377,8 +403,19 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     render() {
         this.setPageTitle()
         return (typeof this.state.status === "undefined") ? "" : (
-            <div className="page-post-term">
+            <div className="page-post">
                 <this.Messages/>
+                <ThemeChooseImage
+                    isShow={this.state.isSelectionImage}
+                    onHide={() => this.setState({isSelectionImage: false})}
+                    router={this.props.router}
+                    result={this.state.formData.image}
+                    onSelected={images => this.setState((state: PageState) => {
+                        state.formData.image = images[0];
+                        return state
+                    })}
+                    isMulti={false}
+                />
                 <div className="navigate-buttons mb-3">
                     <button className="btn btn-gradient-dark btn-lg btn-icon-text"
                             onClick={() => this.navigateTermPage()}>

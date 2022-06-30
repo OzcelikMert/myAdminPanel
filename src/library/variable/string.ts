@@ -9,6 +9,7 @@ declare global {
         stripTags(): string
         convertSEOUrl(): string
         toCapitalizeCase(): string
+        isUrl(): boolean
     }
     interface StringConstructor {
         createId(): string
@@ -69,6 +70,16 @@ String.prototype.toCapitalizeCase = function () {
     }
     return arr.join(" ");
 }
+String.prototype.isUrl = function () {
+    let url;
 
+    try {
+        url = new URL(this.toString());
+    } catch (_) {
+        return false;
+    }
+
+    return url.protocol === "http:" || url.protocol === "https:";
+}
 
 export default {}

@@ -37,15 +37,18 @@ Array.prototype.findMulti = function (key, value) {
 }
 Array.prototype.orderBy = function (key, sort_type) {
     return this.sort(function (a, b) {
-        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+        if (key !== "" && (!a.hasOwnProperty(key) || !b.hasOwnProperty(key))) {
             // property doesn't exist on either object
             return 0;
         }
 
-        const varA = (typeof a[key] === 'string')
-            ? a[key].toUpperCase() : a[key];
-        const varB = (typeof b[key] === 'string')
-            ? b[key].toUpperCase() : b[key];
+        let keyA = (key != "") ? a[key] : a;
+        let keyB = (key != "") ? b[key] : b;
+
+        const varA = (typeof keyA === 'string')
+            ? keyA.toUpperCase() : keyA;
+        const varB = (typeof keyB === 'string')
+            ? keyB.toUpperCase() : keyB;
 
         let comparison = 0;
         if (varA > varB) {

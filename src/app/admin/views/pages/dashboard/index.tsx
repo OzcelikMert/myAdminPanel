@@ -11,6 +11,8 @@ import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../components/form";
 import {PostTermTypeId, PostTypeContents, PostTypeId, StatusContents} from "../../../../../public/static";
 import {pageRoutes} from "../../../routes";
+import V from "../../../../../library/variable";
+import {emptyImage} from "../../components/chooseImage";
 
 type PageState = {
     chartData: {
@@ -194,9 +196,23 @@ class PageDashboard extends Component<PageProps, PageState> {
     get getTableColumns(): TableColumn<PageState["lastPosts"][0]>[] {
         return [
             {
-                name: "",
-                selector: row => row.postContentImage,
-                sortable: true,
+                name: this.props.router.t("image"),
+                width: "75px",
+                cell: row => (
+                    <div className="image pt-2 pb-2">
+                        <img
+                            src={
+                                !V.isEmpty(row.postContentImage)
+                                    ? (row.postContentImage.isUrl())
+                                        ? row.postContentImage
+                                        : process.env.REACT_APP_UPLOADS_IMAGE_PATH + row.postContentImage
+                                    : emptyImage
+                            }
+                            alt={row.postContentTitle}
+                            className="post-image"
+                        />
+                    </div>
+                )
             },
             {
                 name: this.props.router.t("type"),
@@ -249,11 +265,12 @@ class PageDashboard extends Component<PageProps, PageState> {
             {
                 name: this.props.router.t("edit"),
                 button: true,
+                width: "70px",
                 cell: row => (
                     <button
                         onClick={() => this.navigateTermPage("edit", row.postTypeId, row.postId)}
                         className="btn btn-gradient-warning"
-                    >{this.props.router.t("edit")}</button>
+                    ><i className="fa fa-pencil-square-o"></i></button>
                 )
             }
         ];
@@ -373,32 +390,34 @@ class PageDashboard extends Component<PageProps, PageState> {
 
     LastPost = () => {
         return (
-            <div className="row">
+            <div className="row page-post">
                 <div className="col-12 grid-margin">
                     <div className="card">
                         <div className="card-body">
-                            <h4 className="card-title">Recent Tickets</h4>
-                            <div className="table-responsive">
-                                <DataTable
-                                    columns={this.getTableColumns}
-                                    data={this.state.lastPosts}
-                                    noHeader
-                                    fixedHeader
-                                    defaultSortAsc={false}
-                                    pagination={false}
-                                    highlightOnHover
-                                    noDataComponent={
-                                        <h5>
-                                            {this.props.router.t("noRecords")} <i
-                                            className="mdi mdi-emoticon-sad-outline"></i>
-                                        </h5>
-                                    }
-                                    paginationComponentOptions={{
-                                        noRowsPerPage: true,
-                                        rangeSeparatorText: "/",
-                                        rowsPerPageText: "",
-                                    }}
-                                />
+                            <h4 className="card-title">Last Posts</h4>
+                            <div className="table-post">
+                                <div className="table-responsive">
+                                    <DataTable
+                                        columns={this.getTableColumns}
+                                        data={this.state.lastPosts}
+                                        noHeader
+                                        fixedHeader
+                                        defaultSortAsc={false}
+                                        pagination={false}
+                                        highlightOnHover
+                                        noDataComponent={
+                                            <h5>
+                                                {this.props.router.t("noRecords")} <i
+                                                className="mdi mdi-emoticon-sad-outline"></i>
+                                            </h5>
+                                        }
+                                        paginationComponentOptions={{
+                                            noRowsPerPage: true,
+                                            rangeSeparatorText: "/",
+                                            rowsPerPageText: "",
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -5,7 +5,7 @@ type PageState = {} & any;
 type PageProps = {
     title: string,
     name?: string,
-    type: `text` | `password` | `textarea` | `phone` | `email` | `number` | `date`,
+    type: `text` | `password` | `textarea` | `phone` | `email` | `number` | `date` | `url` | `file`,
     placeHolder?: string,
     className?: string,
     required?: boolean,

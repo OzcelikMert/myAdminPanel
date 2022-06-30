@@ -14,12 +14,14 @@ type PageState = {
     isUploading: boolean
 };
 
-type PageProps = {} & PagePropCommonDocument;
+type PageProps = {
+    uploadedImages?: (images: string[]) => void
+} & PagePropCommonDocument;
 
 class PageGalleryUpload extends Component<PageProps, PageState> {
     refInputFile: RefObject<HTMLInputElement> = createRef();
 
-    constructor(props: PagePropCommonDocument) {
+    constructor(props: PageProps) {
         super(props);
         this.state = {
             isDragging: false,
@@ -40,7 +42,8 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
                 isUploading: true
             });
 
-            new Promise(async (resolve) => {
+            new Promise<string[]>(async (resolve) => {
+                let uploadedImages: string[] = [];
                 for (const uploadingFile of this.state.uploadingFiles) {
                     if (
                         uploadingFile.progressValue === 100 ||
@@ -58,7 +61,12 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
                     const formData = new FormData();
                     formData.append("file", uploadingFile.file, uploadingFile.file.name);
 
-                    await Services.Post.gallery(formData);
+                    let resData = await Services.Post.gallery(formData);
+                    if(
+                        resData.status &&
+                        Array.isArray(resData.data) &&
+                        resData.data.length > 0
+                    ) uploadedImages.push(resData.data[0])
                     await Thread.sleep(750);
                     this.setState((state: PageState) => {
                         let findIndex = state.uploadingFiles.indexOfKey("id", uploadingFile.id);
@@ -69,13 +77,14 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
                         return state;
                     })
                 }
-                resolve(0);
+                resolve(uploadedImages);
             }).then(result => {
+                console.log(result)
                 this.setState({
                     isUploading: false
                 });
-                ApiRequestConfig.onUploadProgress = () => {
-                };
+                ApiRequestConfig.onUploadProgress = undefined;
+                if(this.props.uploadedImages) this.props.uploadedImages(result)
             });
         }
     }

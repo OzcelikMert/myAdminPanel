@@ -73,6 +73,7 @@
   "websiteTitleSeparator": "Website title separator",
   "websiteMainLanguage": "Website main language",
   "type": "Type",
+  "image": "Image",
 
   "toastMessageLoadingPostTitle": "Creating...",
   "toastMessageLoadingPostContent": "Creating please wait",

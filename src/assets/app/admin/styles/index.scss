@@ -63,6 +63,7 @@
 @import "./components/landing-screens/auth";
 @import "./components/users/profileCard";
 @import "./components/loaders/loaders";
+@import "./components/chooseImage";
 
 /*@import "./components/widgets";
 @import "./components/forms";
@@ -116,3 +117,12 @@
 @import "./tools/footer";
 @import "./tools/layout";
 @import "./tools/spinner";
+
+html {
+  overflow: hidden;
+}
+
+body {
+  height: 100vh;
+  overflow-y: auto;
+}

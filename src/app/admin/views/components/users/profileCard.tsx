@@ -11,6 +11,8 @@ import {
     UserRoleContents
 } from "../../../../../public/static";
 import {ThemeFieldSet, ThemeFormCheckBox} from "../form";
+import V from "../../../../../library/variable";
+import {emptyImage} from "../chooseImage";
 
 type PageState = {};
 
@@ -98,7 +100,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
         </>
     )
 
-    PermissionItem = (props: {id: number}) => (
+    PermissionItem = (props: { id: number }) => (
         <label className="badge badge-outline-info ms-1 mb-1">
             {
                 GlobalFunctions.getStaticContent(PermissionContents, "permId", props.id, getSessionData().langId)
@@ -112,7 +114,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
             <div>
                 {
                     Permissions.findMulti("id", this.props.userInfo.userPermissions).orderBy("groupId", "asc").map(perm =>
-                        <this.PermissionItem id={perm.id} />
+                        <this.PermissionItem id={perm.id}/>
                     )
                 }
             </div>
@@ -137,8 +139,16 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                                 </h5>
                                 <div className="card-block text-center text-light">
                                     <div className="mb-4">
-                                        <img src={require("../../../../../uploads/face1.jpg")} className="user-img"
-                                             alt={this.props.userInfo.userName}/>
+                                        <img src={
+                                            !V.isEmpty(this.props.userInfo.userImage)
+                                                ? (this.props.userInfo.userImage.isUrl())
+                                                    ? this.props.userInfo.userImage
+                                                    : process.env.REACT_APP_UPLOADS_IMAGE_PATH + this.props.userInfo.userImage
+                                                : emptyImage
+                                        }
+                                             className="user-img"
+                                             alt={this.props.userInfo.userName}
+                                        />
                                     </div>
                                     <h4 className="fw-bold pt-3">{this.props.userInfo.userName}</h4>
                                     <this.SocialMedia/>

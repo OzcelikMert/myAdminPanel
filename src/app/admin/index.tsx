@@ -9,6 +9,7 @@ import {
 import {PagePropCommonDocument} from "../../modules/views/pages/pageProps";
 import {useTranslation} from "react-i18next";
 import AppProviders from "./providers";
+import $ from "jquery";
 
 import i18n from "i18next";
 import {initReactI18next} from "react-i18next";
