@@ -14,7 +14,7 @@ interface PagePropRouterDocument {
     navigate: NavigateFunction,
     params: Readonly<Params<string>>,
     searchParams: readonly [URLSearchParams, ((nextInit: URLSearchParamsInit, navigateOptions?: ({replace?: boolean | undefined, state?: any} | undefined)) => void)],
-    match?: PathMatch<any> | null,
+    match?: PathMatch<any> & {route?: {path: string}},
     t: (key: LanguageKeys) => string
 }
 

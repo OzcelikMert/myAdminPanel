@@ -44,6 +44,7 @@ class ThemeChooseImage extends Component<PageProps, PageState> {
             centered
             show={this.props.isShow}
             backdrop={true}
+            onHide={this.props.onHide}
         >
             <Modal.Body className="m-0 p-0">
                 <div className="card">

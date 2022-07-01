@@ -1,0 +1,17 @@
+.content-language {
+  .label {
+    background: #f2edf3;
+  }
+
+  .field {
+    div[class$="-control"] {
+      background: #f2edf3;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .content-language {
+    margin-top: 30px;
+  }
+}

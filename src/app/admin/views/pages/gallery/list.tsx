@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {GlobalFunctions, setPageData} from "../../../../../config/global";
+import {GlobalFunctions, GlobalPaths, setPageData} from "../../../../../config/global";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import Services from "../../../../../services";
 import Carousel, {Modal, ModalGateway} from "react-images";
@@ -162,7 +162,7 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                     className="gallery-img"
                     effect="blur"
                     alt={props.image}
-                    src={process.env.REACT_APP_UPLOADS_IMAGE_PATH + props.image} // use normal <img> attributes as props
+                    src={GlobalPaths.uploads.images + props.image} // use normal <img> attributes as props
                 />
                 <div className="item-info">
                     <p className="title">{props.image}</p>
@@ -201,7 +201,7 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                                 currentIndex={this.state.selectedImageIndex}
                                 views={this.state.images.filter(image => image.search(this.state.formData.imageName) > -1).map(image => ({
                                     alt: image,
-                                    source: process.env.REACT_APP_UPLOADS_IMAGE_PATH + image,
+                                    source: GlobalPaths.uploads.images + image,
                                     caption: image
                                 }))}
                             />

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../../modules/views/pages/pageProps";
 import {PostDocument, UserDocument} from "../../../../../../modules/ajax/result/data";
-import {getPageData, getSessionData, GlobalFunctions, setPageData} from "../../../../../../config/global";
+import {getPageData, getSessionData, GlobalFunctions, GlobalPaths, setPageData} from "../../../../../../config/global";
 import {
     PostTermTypeId,
     PostTypeContents, Status,
@@ -115,7 +115,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                                 !V.isEmpty(row.userImage)
                                     ? (row.userImage.isUrl())
                                         ? row.userImage
-                                        : process.env.REACT_APP_UPLOADS_IMAGE_PATH + row.userImage
+                                        : GlobalPaths.uploads.images + row.userImage
                                     : emptyImage
                             }
                             alt={row.userName}

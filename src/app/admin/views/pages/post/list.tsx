@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {PostTermTypeId, PostTypeContents, StatusContents, StatusId} from "../../../../../public/static";
-import {getPageData, getSessionData, setPageData} from "../../../../../config/global/";
+import {getPageData, getSessionData, GlobalPaths, setPageData} from "../../../../../config/global/";
 import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import {GlobalFunctions} from "../../../../../config/global";
@@ -60,7 +60,7 @@ export class PagePostList extends Component<PageProps, PageState> {
     onRouteChanged() {
         let params = {
             typeId: getPageData().searchParams.postTypeId,
-            langId: getPageData().langId
+            langId: 1
         };
         let posts: PageState["posts"] = Services.Get.posts(params).data;
         this.setState((state: PageState) => {
@@ -160,10 +160,10 @@ export class PagePostList extends Component<PageProps, PageState> {
                     <div className="image pt-2 pb-2">
                         <img
                             src={
-                                !V.isEmpty(row.postContentImage)
+                                row.postContentImage && !V.isEmpty(row.postContentImage)
                                     ? (row.postContentImage.isUrl())
                                         ? row.postContentImage
-                                        : process.env.REACT_APP_UPLOADS_IMAGE_PATH + row.postContentImage
+                                        : GlobalPaths.uploads.images + row.postContentImage
                                     : emptyImage
                             }
                             alt={row.postContentTitle}
@@ -174,7 +174,7 @@ export class PagePostList extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("title"),
-                selector: row => row.postContentTitle,
+                selector: row => row.postContentTitle || "",
                 sortable: true
             },
             {

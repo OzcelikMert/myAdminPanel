@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {getPageData, getSessionData, GlobalFunctions, setPageData} from "../../../../../config/global";
+import {getPageData, getSessionData, GlobalFunctions, GlobalPaths, setPageData} from "../../../../../config/global";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import {Bar, Doughnut} from "react-chartjs-2";
 import ThemeChartBar from "../../components/charts/bar";
@@ -77,7 +77,7 @@ class PageDashboard extends Component<PageProps, PageState> {
 
     getLastPosts() {
         let params: PostGetParamDocument = {
-            langId: getSessionData().langId,
+            langId: 1,
             maxCount: 10
         }
         let resData = Services.Get.posts(params);
@@ -202,10 +202,10 @@ class PageDashboard extends Component<PageProps, PageState> {
                     <div className="image pt-2 pb-2">
                         <img
                             src={
-                                !V.isEmpty(row.postContentImage)
+                                row.postContentImage && !V.isEmpty(row.postContentImage)
                                     ? (row.postContentImage.isUrl())
                                         ? row.postContentImage
-                                        : process.env.REACT_APP_UPLOADS_IMAGE_PATH + row.postContentImage
+                                        : GlobalPaths.uploads.images + row.postContentImage
                                     : emptyImage
                             }
                             alt={row.postContentTitle}
@@ -231,7 +231,7 @@ class PageDashboard extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("title"),
-                selector: row => row.postContentTitle,
+                selector: row => row.postContentTitle || "",
                 sortable: true
             },
             {

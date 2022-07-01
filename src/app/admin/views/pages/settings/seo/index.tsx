@@ -13,6 +13,7 @@ type PageState = {
     separators: { label: string, value: any }[]
     isSubmitting: boolean
     formData: {
+        langId: number
         title: string
         content: string
         tags: string[]
@@ -29,6 +30,7 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
             separators: GlobalFunctions.getSeoTitleSeparatorForSelect(),
             isSubmitting: false,
             formData: {
+                langId: getPageData().langId,
                 title: "",
                 content: "",
                 tags: [],
@@ -41,6 +43,15 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
         this.getSeo();
     }
 
+    componentDidUpdate(prevProps: Readonly<PageProps>) {
+        if(this.state.formData.langId != getPageData().langId){
+            this.setState((state: PageState) => {
+                state.formData.langId = getPageData().langId;
+                return state;
+            }, () => this.getSeo())
+        }
+    }
+
     setPageTitle() {
         setPageData({
             title: this.props.router.t("seo")
@@ -49,7 +60,7 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
 
     getSeo() {
         let params: SeoGetParamDocument & SettingGetParamDocument = {
-            langId: getPageData().langId,
+            langId: this.state.formData.langId,
             id: SettingId.WebsiteTitleSeparator
         }
 
@@ -57,21 +68,33 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
         let resDataSetting = Services.Get.settings(params)
 
         if (resDataSeo.status && resDataSetting.status) {
-            if (resDataSeo.data.length > 0) {
-                this.setState((state: PageState) => {
+            this.setState((state: PageState) => {
+                state.formData = {
+                    langId: state.formData.langId,
+                    title: "",
+                    content: "",
+                    tags: [],
+                    separatorId: SeoTitleSeparators[0].id
+                }
+
+                if(resDataSeo.data.length > 0){
                     let seo = resDataSeo.data[0];
-                    state.formData = {
+                    state.formData = Object.assign(state.formData, {
                         title: seo.seoContentTitle,
                         content: seo.seoContent,
                         tags: seo.seoContentTags,
-                        separatorId:
-                            resDataSetting.data.length > 0
-                                ? Number(resDataSetting.data[0].settingValue)
-                                : 1
-                    }
-                    return state;
-                })
-            }
+                    });
+                }
+
+                if(resDataSetting.data.length > 0){
+                    let settings = resDataSetting.data;
+                    state.formData = Object.assign(state.formData, {
+                        separatorId: settings.findSingle("settingId", SettingId.WebsiteTitleSeparator).settingValue
+                    });
+                }
+
+                return state;
+            })
         }
     }
 
@@ -80,9 +103,7 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
         this.setState({
             isSubmitting: true
         })
-        let params: SeoPostParamDocument = Object.assign({
-            langId: getPageData().langId
-        }, this.state.formData);
+        let params: SeoPostParamDocument = Object.assign({}, this.state.formData);
 
         Services.Post.seo(params).then(resData => {
             if (resData.status) {

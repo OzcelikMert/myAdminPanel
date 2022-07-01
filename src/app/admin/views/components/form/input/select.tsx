@@ -17,14 +17,7 @@ class ThemeFormSelect extends Component<PageProps, PageState> {
                 <span className="label">{this.props.title}</span>
                 <div className="field">
                     <Select
-                        name={this.props.name}
-                        closeMenuOnSelect={this.props.closeMenuOnSelect}
-                        defaultValue={this.props.defaultValue}
-                        value={this.props.value}
-                        onChange={this.props.onChange}
-                        options={this.props.options}
-                        placeholder={this.props.placeholder}
-                        isMulti={this.props.isMulti}
+                        {...this.props}
                     />
                 </div>
             </label>

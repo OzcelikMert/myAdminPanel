@@ -9,7 +9,7 @@ import {
 import {pageRoutes} from "../../../routes";
 import Services from "../../../../../services";
 import {PostTermDocument} from "../../../../../modules/ajax/result/data";
-import {GlobalFunctions, getPageData, setPageData, getSessionData} from "../../../../../config/global";
+import {GlobalFunctions, getPageData, setPageData, getSessionData, GlobalPaths} from "../../../../../config/global";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../components/form";
@@ -36,7 +36,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
         let params = {
             typeId: getPageData().searchParams.termTypeId,
             postTypeId: getPageData().searchParams.postTypeId,
-            langId: getPageData().langId
+            langId: 1
         };
         let postTerms: PageState["postTerms"] = Services.Get.postTerms(params).data;
         this.state = {
@@ -150,10 +150,10 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                     <div className="image pt-2 pb-2">
                         <img
                             src={
-                                !V.isEmpty(row.postTermContentImage)
+                                row.postTermContentImage && !V.isEmpty(row.postTermContentImage)
                                     ? (row.postTermContentImage.isUrl())
                                         ? row.postTermContentImage
-                                        : process.env.REACT_APP_UPLOADS_IMAGE_PATH + row.postTermContentImage
+                                        : GlobalPaths.uploads.images + row.postTermContentImage
                                     : emptyImage
                             }
                             alt={row.postTermContentTitle}
@@ -163,7 +163,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("name"),
-                selector: row => row.postTermContentTitle,
+                selector: row => row.postTermContentTitle || "",
                 sortable: true,
             },
             {

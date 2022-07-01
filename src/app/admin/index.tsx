@@ -110,9 +110,7 @@ class AppAdmin extends Component<PageProps, PageState> {
 
     render() {
         return (
-            <AppProviders router={this.props.router}>
-                <AppRoutes router={this.props.router}/>
-            </AppProviders>
+            <AppProviders router={this.props.router} />
         );
     }
 }

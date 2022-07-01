@@ -6,7 +6,7 @@ import {
     ThemeForm,
     ThemeFormCheckBox
 } from "../../components/form"
-import {getPageData, getSessionData, setPageData} from "../../../../../config/global/";
+import {getPageData, getSessionData, GlobalPaths, setPageData} from "../../../../../config/global/";
 import {PostTermDocument} from "../../../../../modules/ajax/result/data";
 import Services from "../../../../../services";
 import {pageRoutes} from "../../../routes";
@@ -25,19 +25,24 @@ import HandleForm from "../../../../../library/react/handles/form";
 import ThemeChooseImage, {emptyImage} from "../../components/chooseImage";
 
 type PageState = {
-    formActiveKey: string,
-    postTerms?: { value: number, label: string }[],
+    formActiveKey: string
+    postTerms?: { value: number, label: string }[]
     status?: { value: number, label: string }[]
     isSubmitting: boolean
+    mainTitle: string
     formData: {
-        mainId: number,
-        statusId: number,
-        image: string,
-        title: string,
-        order: number,
-        url: string,
-        seoTitle: string,
-        seoContent: string,
+        termId: number
+        typeId: number
+        postTypeId: number
+        langId: number
+        mainId: number
+        statusId: number
+        image: string
+        title: string
+        order: number
+        url: string
+        seoTitle: string
+        seoContent: string
         isFixed: 1 | 0
     },
     isSuccessMessage: boolean
@@ -52,7 +57,12 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         this.state = {
             formActiveKey: `general`,
             isSubmitting: false,
+            mainTitle: "",
             formData: {
+                termId: getPageData().searchParams.termId,
+                postTypeId: getPageData().searchParams.postTypeId,
+                typeId: getPageData().searchParams.termTypeId,
+                langId: getPageData().langId,
                 mainId: 0,
                 statusId: 0,
                 image: "",
@@ -73,7 +83,9 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
             title: `
                 ${GlobalFunctions.getStaticContent(PostTypeContents, "typeId", getPageData().searchParams.postTypeId, getSessionData().langId)} 
                 - 
-                ${GlobalFunctions.getStaticContent(PostTermTypeContents, "typeId", getPageData().searchParams.termTypeId, getSessionData().langId)}
+                ${GlobalFunctions.getStaticContent(PostTermTypeContents, "typeId", getPageData().searchParams.termTypeId, getSessionData().langId)} 
+                -> 
+                ${this.state.mainTitle}
             `
         })
     }
@@ -83,6 +95,15 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         this.getStatus();
         if (!V.isEmpty(getPageData().searchParams.termId)) {
             this.getTerm();
+        }
+    }
+
+    componentDidUpdate(prevProps: Readonly<PageProps>) {
+        if(this.state.formData.langId != getPageData().langId){
+            this.setState((state: PageState) => {
+                state.formData.langId = getPageData().langId;
+                return state;
+            }, () => this.getTerm())
         }
     }
 
@@ -100,9 +121,9 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
 
     getTerms() {
         let params: PostTermGetParamDocument = {
-            typeId: getPageData().searchParams.termTypeId,
-            postTypeId: getPageData().searchParams.postTypeId,
-            langId: getPageData().langId,
+            typeId: this.state.formData.typeId,
+            postTypeId: this.state.formData.postTypeId,
+            langId: 1,
             statusId: StatusId.Active
         };
         let resData = Services.Get.postTerms(params);
@@ -113,7 +134,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                     if (!V.isEmpty(getPageData().searchParams.termId)) {
                         if (getPageData().searchParams.termId == item.postTermId) return;
                     }
-                    state.postTerms?.push({value: item.postTermId, label: item.postTermContentTitle});
+                    state.postTerms?.push({value: item.postTermId, label: item.postTermContentTitle || ""});
                 });
                 return state;
             })
@@ -122,9 +143,9 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
 
     getTerm() {
         let params: PostTermGetParamDocument = {
-            postTypeId: getPageData().searchParams.postTypeId,
-            termId: getPageData().searchParams.termId,
-            langId: getPageData().langId,
+            postTypeId: this.state.formData.postTypeId,
+            termId: this.state.formData.termId,
+            langId: this.state.formData.langId,
             getContents: true
         };
         let resData = Services.Get.postTerms(params);
@@ -133,15 +154,23 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 const term: PostTermDocument = resData.data[0];
                 this.setState((state: PageState) => {
                     state.formData = {
+                        postTypeId: state.formData.postTypeId,
+                        termId: state.formData.termId,
+                        langId: state.formData.langId,
+                        typeId: state.formData.typeId,
                         mainId: term.postTermMainId,
                         statusId: term.postTermStatusId,
-                        image: term.postTermContentImage,
-                        title: term.postTermContentTitle,
-                        url: term.postTermContentUrl,
-                        seoTitle: term.postTermContentSEOTitle,
-                        seoContent: term.postTermContentSEO,
                         order: term.postTermOrder,
-                        isFixed: term.postTermIsFixed ? 1 : 0
+                        isFixed: term.postTermIsFixed ? 1 : 0,
+                        image: term.postTermContentImage || "",
+                        title: term.postTermContentTitle || "",
+                        url: term.postTermContentUrl || "",
+                        seoTitle: term.postTermContentSEOTitle || "",
+                        seoContent: term.postTermContentSEO || "",
+                    }
+
+                    if(state.formData.langId == 1) {
+                        state.mainTitle = state.formData.title;
                     }
                     return state;
                 })
@@ -175,6 +204,10 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 this.setState((state: PageState) => {
                     if (resData.status) {
                         state.formData = {
+                            postTypeId: state.formData.postTypeId,
+                            termId: state.formData.termId,
+                            langId: state.formData.langId,
+                            typeId: state.formData.typeId,
                             mainId: state.formData.mainId,
                             statusId: state.formData.statusId,
                             image: "",
@@ -260,7 +293,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                             !V.isEmpty(this.state.formData.image)
                                 ? (this.state.formData.image.isUrl())
                                     ? this.state.formData.image
-                                    : process.env.REACT_APP_UPLOADS_IMAGE_PATH + this.state.formData.image
+                                    : GlobalPaths.uploads.images + this.state.formData.image
                                 : emptyImage
                         }
                         alt="Empty Image"

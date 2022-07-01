@@ -1,25 +1,31 @@
 import React, {Component} from 'react';
 import {PagePropCommonDocument} from "../../modules/views/pages/pageProps";
-import {pageRoutes} from "./routes";
+import AppRoutes, {pageRoutes} from "./routes";
 import Services from "../../services";
 import {ErrorCodes, ServicePages} from "../../public/ajax";
-import {UserDocument} from "../../modules/ajax/result/data";
-import {LanguageId} from "../../public/static";
+import {LanguageDocument, UserDocument} from "../../modules/ajax/result/data";
+import {LanguageId, SettingId, StatusContents} from "../../public/static";
 import Statement from "../../library/statement";
-import {getPageData, getSessionData, setPageData, setSessionData} from "../../config/global/";
+import {getPageData, getSessionData, GlobalFunctions, setPageData, setSessionData} from "../../config/global/";
 import {Navigate} from "react-router-dom";
 import Spinner from "./views/tools/spinner";
 import Navbar from "./views/tools/navbar";
 import Sidebar from "./views/tools/sidebar";
 import Footer from "./views/tools/footer";
 import {UsersGetParamDocument} from "../../modules/services/get/user";
-
+import {ThemeFormSelect} from "./views/components/form";
+import {GlobalPaths} from "../../config/global";
+import HandleForm from "../../library/react/handles/form";
 
 type PageState = {
     isAuth: boolean
     isPageLoading: boolean
     isFullPageLayout: boolean,
     pageTitle: string
+    contentLanguages: {label: string | JSX.Element, value: any}[],
+    formData: {
+        contentLanguageId: number
+    }
 };
 
 type PageProps = {} & PagePropCommonDocument;
@@ -31,20 +37,42 @@ class AppProviders extends Component<PageProps, PageState> {
             isAuth: false,
             isPageLoading: true,
             isFullPageLayout: true,
-            pageTitle: ""
+            pageTitle: "",
+            contentLanguages: [],
+            formData: {
+                contentLanguageId: 1
+            }
         }
     }
 
     componentDidMount() {
+        this.getContentLanguages();
         this.onRouteChanged();
     }
 
-    componentDidUpdate(prevProps: Readonly<PageProps>) {
-        if (this.state.pageTitle === "") {
+    componentDidUpdate(prevProps:Readonly<PageProps>, prevState:Readonly<PageState>) {
+        if (this.state.pageTitle === "" || this.state.pageTitle !== getPageData().title) {
             this.setPageTitle();
         }
+
         if (this.props.router.location.pathname !== prevProps.router.location.pathname) {
             this.onRouteChanged();
+        }
+
+        if(this.state.formData.contentLanguageId != getPageData().langId){
+
+        }
+    }
+
+    getContentLanguages() {
+        let resData = Services.Get.languages({})
+        if(resData.status){
+            this.setState({
+                contentLanguages: resData.data.map((lang, index) => ({
+                    label: <this.ContentLanguageItem {...lang} key={index}/>,
+                    value: lang.langId
+                }))
+            })
         }
     }
 
@@ -54,10 +82,11 @@ class AppProviders extends Component<PageProps, PageState> {
             isPageLoading: true,
         })
         this.checkSession();
-        console.log(getPageData());
-        this.setState({
-            isFullPageLayout: fullPageLayoutRoutes.includes(this.props.router.location.pathname),
-            isPageLoading: false
+        this.setState((state: PageState) => {
+            state.isFullPageLayout = fullPageLayoutRoutes.includes(this.props.router.location.pathname);
+            state.isPageLoading = false;
+            state.formData.contentLanguageId = 1;
+            return state;
         })
         this.setPageTitle();
     }
@@ -76,7 +105,6 @@ class AppProviders extends Component<PageProps, PageState> {
             requestType: "session"
         };
         let resData = Services.Get.users(params);
-        console.log(resData);
         if (!resData.status || resData.errorCode == ErrorCodes.notLoggedIn) {
             this.setState({
                 isAuth: false
@@ -111,18 +139,65 @@ class AppProviders extends Component<PageProps, PageState> {
         }
         setPageData({
             searchParams: searchParams,
-            langId: LanguageId.English
+            langId: this.state.formData.contentLanguageId
         })
+    }
+
+    ContentLanguageItem = (props: LanguageDocument) => (
+        <div className="row p-0">
+            <div className="col-6 text-end">
+                <img width="35" src={GlobalPaths.uploads.flags + props.langImage} alt={props.langShortKey}/>
+            </div>
+            <div className="col-6 text-start">
+                <h6>{props.langTitle}</h6>
+            </div>
+        </div>
+    )
+
+    ContentLanguage = () => {
+        const showingPages = [
+            pageRoutes.post.path() + pageRoutes.post.edit.path(),
+            pageRoutes.postTerm.path() + pageRoutes.postTerm.edit.path(),
+            pageRoutes.settings.path() + pageRoutes.settings.seo.path()
+        ];
+
+        let isShow = showingPages.map(page => {
+            if(
+                this.props.router.match &&
+                this.props.router.match.route
+            ){
+                return this.props.router.match.route.path.indexOf(page) > -1
+            }
+            return this.props.router.location.pathname.indexOf(page) > -1
+        }).includes(true);
+
+        return isShow ? (
+            <ThemeFormSelect
+                title="Content Language"
+                name="contentLanguageId"
+                isSearchable={false}
+                options={this.state.contentLanguages}
+                value={this.state.contentLanguages.findSingle("value", this.state.formData.contentLanguageId)}
+                onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
+            />
+        ) : null
     }
 
     PageTitle = () => (
         <div className="page-header">
-            <h3 className="page-title">
-                <span className="page-title-icon bg-gradient-primary text-white me-2">
-                    <i className="mdi mdi-home"></i>
-                </span>
-                {this.state.pageTitle}
-            </h3>
+            <div className="row w-100 m-0">
+                <div className="col-md-8 p-0">
+                    <h3 className="page-title">
+                        <span className="page-title-icon bg-gradient-primary text-white me-2">
+                            <i className="mdi mdi-home"></i>
+                        </span>
+                        {this.state.pageTitle}
+                    </h3>
+                </div>
+                <div className="col-md-4 p-0 content-language">
+                    <this.ContentLanguage />
+                </div>
+            </div>
         </div>
     );
 
@@ -146,7 +221,7 @@ class AppProviders extends Component<PageProps, PageState> {
                                 <div className="main-panel">
                                     <div className="content-wrapper">
                                         {pageTitle}
-                                        {this.props.children}
+                                        <AppRoutes router={this.props.router}/>
                                     </div>
                                     {footerComponent}
                                 </div>

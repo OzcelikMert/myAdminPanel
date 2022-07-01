@@ -3,7 +3,7 @@ import {Tab, Tabs} from "react-bootstrap";
 import JoditEditor from "jodit-react";
 import moment from "moment";
 import {ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
-import {getPageData, getSessionData, GlobalFunctions, setPageData} from "../../../../../config/global";
+import {getPageData, getSessionData, GlobalFunctions, GlobalPaths, setPageData} from "../../../../../config/global";
 import {PostTermTypeId, PostTypeContents, Status, StatusContents, StatusId} from "../../../../../public/static";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import SweetAlert from "react-sweetalert2";
@@ -24,7 +24,11 @@ type PageState = {
     tagTerms?: { value: number, label: string }[]
     status?: { value: number, label: string }[]
     isSubmitting: boolean
+    mainTitle: string,
     formData: {
+        postId: number
+        typeId: number
+        langId: number
         image: string
         title: string
         categoryTermId: number[]
@@ -51,7 +55,11 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         this.state = {
             formActiveKey: `general`,
             isSubmitting: false,
+            mainTitle: "",
             formData: {
+                postId: getPageData().searchParams.postId,
+                typeId: getPageData().searchParams.postTypeId,
+                langId: getPageData().langId,
                 image: "",
                 title: "",
                 categoryTermId: [],
@@ -79,10 +87,21 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         }
     }
 
+    componentDidUpdate(prevProps: Readonly<PageProps>) {
+        if(this.state.formData.langId != getPageData().langId){
+            this.setState((state: PageState) => {
+                state.formData.langId = getPageData().langId;
+                return state;
+            }, () => this.getPost())
+        }
+    }
+
     setPageTitle() {
         setPageData({
             title: `
                   ${GlobalFunctions.getStaticContent(PostTypeContents, "typeId", getPageData().searchParams.postTypeId, getSessionData().langId)}
+                  -> 
+                  ${this.state.mainTitle}
             `
         })
     }
@@ -102,7 +121,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     getTerms() {
         let params: PostTermGetParamDocument = {
             postTypeId: getPageData().searchParams.postTypeId,
-            langId: getPageData().langId,
+            langId: 1,
             statusId: StatusId.Active
         };
 
@@ -114,11 +133,11 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 resData.data.orderBy("postTermOrder", "asc").forEach((item: PostTermDocument) => {
                     if (item.postTermTypeId == PostTermTypeId.Category) state.categoryTerms?.push({
                         value: item.postTermId,
-                        label: item.postTermContentTitle
+                        label: item.postTermContentTitle || ""
                     });
                     else if (item.postTermTypeId == PostTermTypeId.Tag) state.tagTerms?.push({
                         value: item.postTermId,
-                        label: item.postTermContentTitle
+                        label: item.postTermContentTitle || ""
                     });
                 });
                 return state;
@@ -127,10 +146,11 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     }
 
     getPost() {
+        console.log("getPost")
         let params: PostGetParamDocument = {
-            postId: getPageData().searchParams.postId,
-            typeId: getPageData().searchParams.postTypeId,
-            langId: getPageData().langId,
+            postId: this.state.formData.postId,
+            typeId: this.state.formData.typeId,
+            langId: this.state.formData.langId,
             getContents: true
         };
         let resData = Services.Get.posts(params);
@@ -147,25 +167,33 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     });
 
                     state.formData = {
-                        image: post.postContentImage,
+                        postId: state.formData.postId,
+                        typeId: state.formData.typeId,
+                        langId: state.formData.langId,
                         dateStart: post.postDateStart,
-                        url: post.postContentUrl,
                         order: post.postOrder,
-                        content: post.postContent,
-                        shortContent: post.postContentShort,
-                        title: post.postContentTitle,
-                        seoContent: post.postContentSEO,
-                        seoTitle: post.postContentSEOTitle,
                         statusId: post.postStatusId,
                         categoryTermId: categoryTermId,
                         tagTermId: tagTermId,
-                        isFixed: post.postIsFixed ? 1 : 0
+                        isFixed: post.postIsFixed ? 1 : 0,
+                        image: post.postContentImage || "",
+                        url: post.postContentUrl || "",
+                        content: post.postContent || "",
+                        shortContent: post.postContentShort || "",
+                        title: post.postContentTitle || "",
+                        seoContent: post.postContentSEO || "",
+                        seoTitle: post.postContentSEOTitle || ""
                     }
+
+                    if(state.formData.langId == 1) {
+                        state.mainTitle = state.formData.title;
+                    }
+
                     return state;
                 })
-            } else {
-                this.navigateTermPage();
             }
+        }else {
+            this.navigateTermPage();
         }
     }
 
@@ -181,10 +209,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             isSubmitting: true
         })
         let params: PostPostParamDocument & PostPutParamDocument = Object.assign({
-            postId: getPageData().searchParams.postId,
             termId: this.state.formData.tagTermId.concat(this.state.formData.categoryTermId),
-            typeId: getPageData().searchParams.postTypeId,
-            langId: getPageData().langId
         }, this.state.formData);
 
         ((V.isEmpty(params.postId))
@@ -339,7 +364,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             !V.isEmpty(this.state.formData.image)
                                 ? (this.state.formData.image.isUrl())
                                     ? this.state.formData.image
-                                    : process.env.REACT_APP_UPLOADS_IMAGE_PATH + this.state.formData.image
+                                    : GlobalPaths.uploads.images + this.state.formData.image
                                 : emptyImage
                         }
                         alt="Empty Image"

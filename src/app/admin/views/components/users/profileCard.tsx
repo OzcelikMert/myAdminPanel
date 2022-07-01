@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Modal} from "react-bootstrap";
 import {UserDocument} from "../../../../../modules/ajax/result/data";
-import {getSessionData, GlobalFunctions} from "../../../../../config/global";
+import {getSessionData, GlobalFunctions, GlobalPaths} from "../../../../../config/global";
 import {
     PermissionContents,
     PermissionGroups,
@@ -143,7 +143,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                                             !V.isEmpty(this.props.userInfo.userImage)
                                                 ? (this.props.userInfo.userImage.isUrl())
                                                     ? this.props.userInfo.userImage
-                                                    : process.env.REACT_APP_UPLOADS_IMAGE_PATH + this.props.userInfo.userImage
+                                                    : GlobalPaths.uploads.images + this.props.userInfo.userImage
                                                 : emptyImage
                                         }
                                              className="user-img"
