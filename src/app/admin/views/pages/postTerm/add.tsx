@@ -62,7 +62,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 termId: getPageData().searchParams.termId,
                 postTypeId: getPageData().searchParams.postTypeId,
                 typeId: getPageData().searchParams.termTypeId,
-                langId: getPageData().langId,
+                langId: getPageData().mainLangId,
                 mainId: 0,
                 statusId: 0,
                 image: "",
@@ -123,7 +123,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         let params: PostTermGetParamDocument = {
             typeId: this.state.formData.typeId,
             postTypeId: this.state.formData.postTypeId,
-            langId: 1,
+            langId: getPageData().mainLangId,
             statusId: StatusId.Active
         };
         let resData = Services.Get.postTerms(params);

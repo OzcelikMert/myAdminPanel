@@ -46,6 +46,7 @@ class AppProviders extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
+        this.getContentMainLanguage();
         this.getContentLanguages();
         this.onRouteChanged();
     }
@@ -76,6 +77,23 @@ class AppProviders extends Component<PageProps, PageState> {
         }
     }
 
+    getContentMainLanguage() {
+        let resData = Services.Get.settings({
+            id: SettingId.WebsiteMainLanguage
+        })
+        if (resData.status) {
+            this.setState((state: PageState) => {
+                resData.data.forEach(setting => {
+                    state.formData.contentLanguageId = Number(setting.settingValue);
+                })
+                setPageData({
+                    mainLangId: state.formData.contentLanguageId
+                })
+                return state;
+            })
+        }
+    }
+
     onRouteChanged() {
         const fullPageLayoutRoutes = [pageRoutes.login.path()];
         this.setState({
@@ -85,7 +103,7 @@ class AppProviders extends Component<PageProps, PageState> {
         this.setState((state: PageState) => {
             state.isFullPageLayout = fullPageLayoutRoutes.includes(this.props.router.location.pathname);
             state.isPageLoading = false;
-            state.formData.contentLanguageId = 1;
+            state.formData.contentLanguageId = getPageData().mainLangId;
             return state;
         })
         this.setPageTitle();

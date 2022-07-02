@@ -59,7 +59,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             formData: {
                 postId: getPageData().searchParams.postId,
                 typeId: getPageData().searchParams.postTypeId,
-                langId: getPageData().langId,
+                langId: getPageData().mainLangId,
                 image: "",
                 title: "",
                 categoryTermId: [],
@@ -121,7 +121,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     getTerms() {
         let params: PostTermGetParamDocument = {
             postTypeId: getPageData().searchParams.postTypeId,
-            langId: 1,
+            langId: getPageData().mainLangId,
             statusId: StatusId.Active
         };
 
@@ -146,7 +146,6 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     }
 
     getPost() {
-        console.log("getPost")
         let params: PostGetParamDocument = {
             postId: this.state.formData.postId,
             typeId: this.state.formData.typeId,

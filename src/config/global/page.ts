@@ -4,6 +4,7 @@ import {LanguageId} from "../../public/static";
 let GlobalPageData: GlobalPageDocument = {
     searchParams: {},
     langId: 1,
+    mainLangId: 1,
     title: "",
 }
 

@@ -60,9 +60,10 @@ export class PagePostList extends Component<PageProps, PageState> {
     onRouteChanged() {
         let params = {
             typeId: getPageData().searchParams.postTypeId,
-            langId: 1
+            langId: getPageData().mainLangId
         };
         let posts: PageState["posts"] = Services.Get.posts(params).data;
+        console.log(posts)
         this.setState((state: PageState) => {
             state.posts = posts;
             state.showingPosts = posts.filter(value => value.postStatusId !== StatusId.Deleted);

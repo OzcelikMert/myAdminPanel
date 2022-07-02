@@ -82,6 +82,11 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                 state.isSubmitting = false;
                 return state;
             })
+            if(resData.status){
+                setPageData({
+                    mainLangId: this.state.formData.langId
+                })
+            }
         })
     }
 

@@ -36,7 +36,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
         let params = {
             typeId: getPageData().searchParams.termTypeId,
             postTypeId: getPageData().searchParams.postTypeId,
-            langId: 1
+            langId: getPageData().mainLangId
         };
         let postTerms: PageState["postTerms"] = Services.Get.postTerms(params).data;
         this.state = {

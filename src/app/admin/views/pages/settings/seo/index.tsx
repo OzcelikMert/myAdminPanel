@@ -30,7 +30,7 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
             separators: GlobalFunctions.getSeoTitleSeparatorForSelect(),
             isSubmitting: false,
             formData: {
-                langId: getPageData().langId,
+                langId: getPageData().mainLangId,
                 title: "",
                 content: "",
                 tags: [],
