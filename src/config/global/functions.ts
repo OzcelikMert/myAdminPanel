@@ -7,7 +7,6 @@ import {
     UserRoleId,
     UserRoles
 } from "../../public/static";
-import {getSessionData} from "./session";
 
 const GlobalFunctions = {
     getStatusForSelect(statusId: StatusId[], langId: number) {

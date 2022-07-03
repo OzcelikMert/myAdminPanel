@@ -2,12 +2,12 @@ import React, {Component, FormEvent} from 'react'
 import {Tab, Tabs} from "react-bootstrap";
 import moment from "moment";
 import {PagePropCommonDocument} from "../../../../../../modules/views/pages/pageProps";
-import {getPageData, getSessionData, GlobalFunctions, setPageData} from "../../../../../../config/global";
+import {GlobalFunctions} from "../../../../../../config/global";
 import {
     PermissionContents,
     PermissionGroups,
     PermissionGroupsContents,
-    Permissions,
+    Permissions, PostTermTypeContents, PostTypeContents,
     StatusId,
     UserRoleId, UserRoles
 } from "../../../../../../public/static";
@@ -26,9 +26,11 @@ type PageState = {
     formActiveKey: string
     userRoles: { value: number, label: string }[]
     status: { value: number, label: string }[]
+    mainTitle: string,
     isSubmitting: boolean
     formData: {
-        image: string,
+        userId: number
+        image: string
         name: string
         email: string
         password: string
@@ -50,8 +52,10 @@ export class PageUserAdd extends Component<PageProps, PageState> {
             formActiveKey: "general",
             userRoles: [],
             status: [],
+            mainTitle: "",
             isSubmitting: false,
             formData: {
+                userId: 0,
                 image: "",
                 name: "",
                 email: "",
@@ -66,18 +70,25 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         }
     }
 
-    setPageTitle() {
-        setPageData({
-            title: this.props.router.t("users")
-        })
-    }
-
     componentDidMount() {
+        this.setPageTitle();
         this.getRoles();
         this.getStatus();
-        if (!V.isEmpty(getPageData().searchParams.userId)) {
+        if (this.props.getPageData.searchParams.userId > 0) {
             this.getUser();
         }
+    }
+
+    setPageTitle() {
+        let titles: string[] = [
+            this.props.router.t("settings"),
+            this.props.router.t("users"),
+            this.props.router.t((this.state.formData.userId) > 0 ? "edit" : "add")
+        ];
+        if(this.state.formData.userId > 0) {
+            titles.push(this.state.mainTitle)
+        }
+        this.props.setBreadCrumb(titles);
     }
 
     getStatus() {
@@ -87,7 +98,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                 StatusId.Pending,
                 StatusId.Disabled,
                 StatusId.Banned
-            ], getSessionData().langId);
+            ], this.props.getSessionData.langId);
             state.formData.statusId = StatusId.Active;
             return state;
         })
@@ -99,7 +110,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                 UserRoleId.User,
                 UserRoleId.Author,
                 UserRoleId.Editor
-            ], getSessionData().langId);
+            ], this.props.getSessionData.langId);
             state.formData.roleId = UserRoleId.User;
             return state;
         })
@@ -107,7 +118,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
 
     getUser() {
         let params: UsersGetParamDocument = {
-            userId: getPageData().searchParams.userId,
+            userId: this.props.getPageData.searchParams.userId,
             requestType: "list"
         };
         let resData = Services.Get.users(params);
@@ -116,6 +127,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                 const user: UserDocument = resData.data[0];
                 this.setState((state: PageState) => {
                     state.formData = {
+                        userId: user.userId,
                         image: user.userImage,
                         name: user.userName,
                         email: user.userEmail,
@@ -125,6 +137,10 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                         banDateEnd: user.userBanDateEnd,
                         banComment: user.userBanComment,
                         permissionId: user.userPermissions
+                    }
+
+                    if(this.props.getPageData.langId == this.props.getPageData.mainLangId) {
+                        state.mainTitle = state.formData.name;
                     }
                     return state;
                 })
@@ -142,7 +158,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
     onSubmit(event: FormEvent) {
         event.preventDefault();
         let params: UserPostParamDocument & UserPutParamDocument = Object.assign({
-            userId: getPageData().searchParams.userId,
+            userId: this.props.getPageData.searchParams.userId,
         }, this.state.formData);
 
         ((V.isEmpty(params.userId))
@@ -195,7 +211,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
             <SweetAlert
                 show={this.state.isSuccessMessage}
                 title={this.props.router.t("successful")}
-                text={`${this.props.router.t((V.isEmpty(getPageData().searchParams.userId)) ? "itemAdded" : "itemEdited")}!`}
+                text={`${this.props.router.t((V.isEmpty(this.props.getPageData.searchParams.userId)) ? "itemAdded" : "itemEdited")}!`}
                 icon="success"
                 timer={1000}
                 timerProgressBar={true}
@@ -211,14 +227,14 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                     PermissionGroups.map((group, index) => (
                         <ThemeFieldSet
                             key={index}
-                            legend={GlobalFunctions.getStaticContent(PermissionGroupsContents, "groupId", group.id, getSessionData().langId)}
+                            legend={GlobalFunctions.getStaticContent(PermissionGroupsContents, "groupId", group.id, this.props.getSessionData.langId)}
                         >
                             {
                                 Permissions.findMulti("groupId", group.id).map((perm, index) => (
                                         <div className="col-md-4" key={index}>
                                             <ThemeFormCheckBox
                                                 key={index}
-                                                title={GlobalFunctions.getStaticContent(PermissionContents, "permId", perm.id, getSessionData().langId)}
+                                                title={GlobalFunctions.getStaticContent(PermissionContents, "permId", perm.id, this.props.getSessionData.langId)}
                                                 name="permissionId"
                                                 checked={this.state.formData.permissionId.includes(perm.id)}
                                                 onChange={e => this.onPermissionSelected(e.target.checked, perm.id)}
@@ -302,7 +318,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                         name="password"
                         type="password"
                         autoComplete={"new-password"}
-                        required={V.isEmpty(getPageData().searchParams.userId)}
+                        required={V.isEmpty(this.props.getPageData.searchParams.userId)}
                         value={this.state.formData.password}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
@@ -325,7 +341,6 @@ export class PageUserAdd extends Component<PageProps, PageState> {
     }
 
     render() {
-        this.setPageTitle();
         return (
             <div className="page-user">
                 <this.Messages/>

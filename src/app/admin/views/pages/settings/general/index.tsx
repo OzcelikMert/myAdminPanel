@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../../modules/views/pages/pageProps";
-import {getPageData, GlobalFunctions, setPageData} from "../../../../../../config/global";
 import {ThemeForm, ThemeFormSelect, ThemeFormTags, ThemeFormType} from "../../../components/form";
 import HandleForm from "../../../../../../library/react/handles/form";
 import Services from "../../../../../../services";
@@ -30,14 +29,13 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
+        this.setPageTitle();
         this.getLanguages();
         this.getSettings();
     }
 
     setPageTitle() {
-        setPageData({
-            title: this.props.router.t("general")
-        })
+        this.props.setBreadCrumb([this.props.router.t("settings"), this.props.router.t("general")])
     }
 
     getSettings() {
@@ -83,15 +81,14 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                 return state;
             })
             if(resData.status){
-                setPageData({
-                    mainLangId: this.state.formData.langId
-                })
+                this.props.setPageData({
+                    langId: this.state.formData.langId
+                });
             }
         })
     }
 
     render() {
-        this.setPageTitle();
         return (
             <div className="page-settings">
                 <div className="gird-margin stretch-card">

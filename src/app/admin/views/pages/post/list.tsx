@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {PostTermTypeId, PostTypeContents, StatusContents, StatusId} from "../../../../../public/static";
-import {getPageData, getSessionData, GlobalPaths, setPageData} from "../../../../../config/global/";
+import {LanguageId, PostTermTypeId, PostTypeContents, StatusContents, StatusId} from "../../../../../public/static";
+import {GlobalPaths} from "../../../../../config/global/";
 import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import {GlobalFunctions} from "../../../../../config/global";
@@ -13,6 +13,7 @@ import {ThemeTableToggleMenu} from "../../components/table";
 import Swal from "sweetalert2";
 import V from "../../../../../library/variable";
 import {emptyImage} from "../../components/chooseImage";
+import {PostGetParamDocument} from "../../../../../modules/services/get/post";
 
 
 type PageState = {
@@ -40,30 +41,33 @@ export class PagePostList extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
-        this.onRouteChanged();
+        this.setPageTitle();
+        this.getPosts();
     }
 
     componentDidUpdate(prevProps: Readonly<PageProps>) {
         if (this.props.router.location.pathname !== prevProps.router.location.pathname) {
-            this.onRouteChanged();
+            this.getPosts();
         }
     }
 
     setPageTitle() {
-        setPageData({
-            title: `
-                ${GlobalFunctions.getStaticContent(PostTypeContents, "typeId", getPageData().searchParams.postTypeId, getSessionData().langId)}
-            `
-        })
+        this.props.setBreadCrumb([
+            GlobalFunctions.getStaticContent(
+                PostTypeContents,
+                "typeId",
+                this.props.getPageData.searchParams.postTypeId,
+                this.props.getSessionData.langId
+            )
+        ])
     }
 
-    onRouteChanged() {
-        let params = {
-            typeId: getPageData().searchParams.postTypeId,
-            langId: getPageData().mainLangId
+    getPosts() {
+        let params: PostGetParamDocument = {
+            typeId: this.props.getPageData.searchParams.postTypeId,
+            langId: this.props.getPageData.langId
         };
         let posts: PageState["posts"] = Services.Get.posts(params).data;
-        console.log(posts)
         this.setState((state: PageState) => {
             state.posts = posts;
             state.showingPosts = posts.filter(value => value.postStatusId !== StatusId.Deleted);
@@ -76,7 +80,7 @@ export class PagePostList extends Component<PageProps, PageState> {
         const params: PostPutParamDocument = {
             postId: this.state.selectedPosts,
             statusId: statusId,
-            langId: getPageData().langId
+            langId: this.props.getPageData.langId
         }
         if (statusId === StatusId.Deleted && this.state.listMode === "deleted") {
             Swal.fire({
@@ -144,10 +148,10 @@ export class PagePostList extends Component<PageProps, PageState> {
 
     navigateTermPage(type: "termEdit" | "edit", itemId = 0, termTypeId = 0) {
         let path = (type === "edit")
-            ? pageRoutes.post.path(getPageData().searchParams.postTypeId) + pageRoutes.post.edit.path(itemId)
+            ? pageRoutes.post.path(this.props.getPageData.searchParams.postTypeId) + pageRoutes.post.edit.path(itemId)
             : (itemId > 0)
-                ? pageRoutes.postTerm.path(getPageData().searchParams.postTypeId, termTypeId) + pageRoutes.postTerm.edit.path(itemId)
-                : pageRoutes.postTerm.path(getPageData().searchParams.postTypeId, termTypeId) + pageRoutes.postTerm.list.path();
+                ? pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, termTypeId) + pageRoutes.postTerm.edit.path(itemId)
+                : pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, termTypeId) + pageRoutes.postTerm.list.path();
         path = (this.props.router.location.pathname.search(pageRoutes.themeContent.path()) > -1) ? pageRoutes.themeContent.path() + path : path;
         this.props.router.navigate(path, {replace: true});
     }
@@ -201,7 +205,12 @@ export class PagePostList extends Component<PageProps, PageState> {
                 cell: row => (
                     <label className={`badge badge-gradient-${GlobalFunctions.getStatusClassName(row.postStatusId)}`}>
                         {
-                            GlobalFunctions.getStaticContent(StatusContents, "statusId", row.postStatusId, getSessionData().langId)
+                            GlobalFunctions.getStaticContent(
+                                StatusContents,
+                                "statusId",
+                                row.postStatusId,
+                                this.props.getSessionData.langId
+                            )
                         }
                     </label>
                 )
@@ -221,8 +230,7 @@ export class PagePostList extends Component<PageProps, PageState> {
     }
 
     render() {
-        this.setPageTitle();
-        return (
+        return this.props.getPageData.searchParams.postTypeId == 0 ? null : (
             <div className="page-post">
                 <div className="navigate-buttons mb-3">
                     <button className="btn btn-gradient-info btn-lg"
@@ -254,7 +262,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                                             StatusId.Deleted
                                         ]}
                                         onChange={(event, statusId) => this.onChangeStatus(event, statusId)}
-                                        langId={getSessionData().langId}
+                                        langId={this.props.getSessionData.langId}
                                     />
                                 </div>
                                 <div className="table-responsive">

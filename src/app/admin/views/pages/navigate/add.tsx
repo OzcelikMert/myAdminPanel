@@ -3,10 +3,9 @@ import {Tab, Tabs} from "react-bootstrap";
 import {
     ThemeFormType,
     ThemeFormSelect,
-    ThemeForm,
-    ThemeFormCheckBox
+    ThemeForm
 } from "../../components/form"
-import {getPageData, getSessionData, GlobalPaths, setPageData} from "../../../../../config/global/";
+import {GlobalPaths} from "../../../../../config/global/";
 import {PostTermDocument} from "../../../../../modules/ajax/result/data";
 import Services from "../../../../../services";
 import {pageRoutes} from "../../../routes";
@@ -55,8 +54,8 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
             isSubmitting: false,
             mainTitle: "",
             formData: {
-                navigateId: getPageData().searchParams.navigateId,
-                langId: getPageData().mainLangId,
+                navigateId: this.props.getPageData.searchParams.navigateId,
+                langId: this.props.getPageData.mainLangId,
                 mainId: 0,
                 statusId: 0,
                 title: "",
@@ -67,30 +66,32 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
         }
     }
 
-    setPageTitle() {
-        setPageData({
-            title: `
-                ${this.props.router.t("navigates")} 
-                ${this.state.formData.navigateId > 0 ? `- ${this.props.router.t("edit")} -> ${this.state.mainTitle} ` : ` - ${this.props.router.t("add")}`}
-            `
-        })
-    }
-
     componentDidMount() {
         this.getTerms();
         this.getStatus();
-        if (!V.isEmpty(getPageData().searchParams.termId)) {
+        if (!V.isEmpty(this.props.getPageData.searchParams.termId)) {
             this.getTerm();
         }
     }
 
     componentDidUpdate(prevProps: Readonly<PageProps>) {
-        if(this.state.formData.langId != getPageData().langId){
+        if(this.state.formData.langId != this.props.getPageData.langId){
             this.setState((state: PageState) => {
-                state.formData.langId = getPageData().langId;
+                state.formData.langId = this.props.getPageData.langId;
                 return state;
             }, () => this.getTerm())
         }
+    }
+
+    setPageTitle() {
+        let titles: string[] = [
+            this.props.router.t("navigates"),
+            this.props.router.t((this.state.formData.navigateId) > 0 ? "edit" : "add")
+        ];
+        if(this.state.formData.navigateId > 0) {
+            titles.push(this.state.mainTitle)
+        }
+        this.props.setBreadCrumb(titles);
     }
 
     getStatus() {
@@ -99,7 +100,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
                 StatusId.Active,
                 StatusId.InProgress,
                 StatusId.Pending
-            ], getSessionData().langId);
+            ], this.props.getSessionData.langId);
             state.formData.statusId = StatusId.Active;
             return state;
         })
@@ -167,7 +168,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
     }
 
     navigateTermPage() {
-        let path = pageRoutes.postTerm.path(getPageData().searchParams.postTypeId, getPageData().searchParams.termTypeId) + pageRoutes.postTerm.list.path()
+        let path = pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, this.props.getPageData.searchParams.termTypeId) + pageRoutes.postTerm.list.path()
         path = (this.props.router.location.pathname.search(pageRoutes.themeContent.path()) > -1) ? pageRoutes.themeContent.path() + path : path;
         this.props.router.navigate(path, {replace: true});
     }
@@ -175,10 +176,10 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
     onSubmit(event: FormEvent) {
         event.preventDefault();
         let params: any = Object.assign({
-            termId: getPageData().searchParams.termId,
-            typeId: getPageData().searchParams.termTypeId,
-            postTypeId: getPageData().searchParams.postTypeId,
-            langId: getPageData().langId,
+            termId: this.props.getPageData.searchParams.termId,
+            typeId: this.props.getPageData.searchParams.termTypeId,
+            postTypeId: this.props.getPageData.searchParams.postTypeId,
+            langId: this.props.getPageData.langId,
         }, this.state.formData);
         ((V.isEmpty(params.termId))
             ? Services.Post.postTerm(params)
@@ -211,7 +212,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
         this.setState({
             isSuccessMessage: false
         });
-        if (!V.isEmpty(getPageData().searchParams.termId)) {
+        if (!V.isEmpty(this.props.getPageData.searchParams.termId)) {
             this.navigateTermPage()
         }
     }
@@ -221,7 +222,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
             <SweetAlert
                 show={this.state.isSuccessMessage}
                 title={this.props.router.t("successful")}
-                text={`${this.props.router.t((V.isEmpty(getPageData().searchParams.termId)) ? "itemAdded" : "itemEdited")}!`}
+                text={`${this.props.router.t((V.isEmpty(this.props.getPageData.searchParams.termId)) ? "itemAdded" : "itemEdited")}!`}
                 icon="success"
                 timer={1000}
                 timerProgressBar={true}
@@ -273,7 +274,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
                     <ThemeFormSelect
                         title={`
                             ${this.props.router.t("main")} 
-                            ${this.props.router.t((getPageData().searchParams.termTypeId == PostTermTypeId.Category) ? "category" : "tag")}
+                            ${this.props.router.t((this.props.getPageData.searchParams.termTypeId == PostTermTypeId.Category) ? "category" : "tag")}
                        `}
                         name="mainId"
                         placeholder="Choose Main Term"
@@ -296,7 +297,6 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
     }
 
     render() {
-        this.setPageTitle()
         return (
             <div className="page-post-term">
                 <this.Messages/>

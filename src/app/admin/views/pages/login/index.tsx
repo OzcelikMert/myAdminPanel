@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import ThemeInputType from "../../components/form/input/type";
-import {setPageData, setSessionData} from "../../../../../config/global";
 import Services from "../../../../../services";
 import {pageRoutes} from "../../../routes";
 import {UserDocument} from "../../../../../modules/ajax/result/data";
@@ -35,12 +34,14 @@ class PageLogin extends Component<PageProps, PageState> {
         }
     }
 
+    componentDidMount() {
+        this.setPageTitle();
+    }
+
     setPageTitle() {
-        setPageData({
-            title: `
-                ${this.props.router.t("login")}
-            `
-        })
+        this.props.setBreadCrumb([
+            this.props.router.t("login")
+        ])
     }
 
     onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -55,7 +56,7 @@ class PageLogin extends Component<PageProps, PageState> {
         let resData = Services.Get.users(params);
         if (resData.data.length > 0) {
             let user: UserDocument = resData.data[0];
-            setSessionData({
+            this.props.setSessionData({
                 id: user.userId,
                 langId: LanguageId.English,
                 roleId: user.userRoleId,
@@ -72,7 +73,6 @@ class PageLogin extends Component<PageProps, PageState> {
     }
 
     render() {
-        this.setPageTitle();
         return (
             <div className="page-login">
                 <div className="d-flex align-items-stretch auth auth-img-bg h-100">

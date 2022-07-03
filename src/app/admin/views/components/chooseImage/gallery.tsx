@@ -53,16 +53,14 @@ class ThemeChooseImageGallery extends Component<PageProps, PageState> {
                                     transition={false}>
                                     <Tab eventKey="upload" title={"Upload"}>
                                         <PageGalleryUpload
-                                            router={this.props.router}
+                                            {...this.props}
                                             uploadedImages={uploadedImages => this.setState({uploadedImages: uploadedImages})}
                                         />
                                     </Tab>
                                     <Tab eventKey="list" title={"List"}>
                                         <PageGalleryList
-                                            router={this.props.router}
+                                            {...this.props}
                                             isModal
-                                            onSelected={this.props.onSubmit}
-                                            isMulti={this.props.isMulti}
                                             uploadedImages={this.state.uploadedImages}
                                         />
                                     </Tab>

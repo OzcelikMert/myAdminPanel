@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Dropdown} from "react-bootstrap";
 import {LanguageId, Status, StatusContents, StatusId} from "../../../../../public/static";
-import {getPageData, GlobalFunctions} from "../../../../../config/global";
+import {GlobalFunctions} from "../../../../../config/global";
 
 type PageState = {};
 

@@ -1,9 +1,6 @@
 import React, {Component, createRef, RefObject} from 'react'
-import {ProgressBar} from 'react-bootstrap';
-import {setPageData} from "../../../../../config/global";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import UploadingFilesDocument from "../../../../../modules/app/admin/views/pages/gallery/upload";
-import V from "../../../../../library/variable";
 import ApiRequestConfig from "../../../../../services/api/config";
 import Services from "../../../../../services";
 import Thread from "../../../../../library/thread";
@@ -30,10 +27,15 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
         }
     }
 
+    componentDidMount() {
+        this.setPageTitle()
+    }
+
     setPageTitle() {
-        setPageData({
-            title: this.props.router.t("gallery")
-        })
+        this.props.setBreadCrumb([
+            this.props.router.t("gallery"),
+            this.props.router.t("upload")
+        ])
     }
 
     uploadFiles() {
@@ -178,7 +180,6 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
     }
 
     render() {
-        this.setPageTitle();
         return (
             <div className="page-gallery">
                 <div className="gird-margin stretch-card">

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {GlobalFunctions, GlobalPaths, setPageData} from "../../../../../config/global";
+import {GlobalFunctions, GlobalPaths} from "../../../../../config/global";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import Services from "../../../../../services";
 import Carousel, {Modal, ModalGateway} from "react-images";
@@ -43,6 +43,10 @@ export class PageGalleryList extends Component<PageProps, PageState> {
         }
     }
 
+    componentDidMount() {
+        this.setPageTitle()
+    }
+
     componentDidUpdate(prevProps:Readonly<PageProps>, prevState:Readonly<PageState>) {
         if(
             this.props.uploadedImages &&
@@ -56,11 +60,11 @@ export class PageGalleryList extends Component<PageProps, PageState> {
         }
     }
 
-
     setPageTitle() {
-        setPageData({
-            title: this.props.router.t("gallery")
-        })
+        this.props.setBreadCrumb([
+            this.props.router.t("gallery"),
+            this.props.router.t("list")
+        ])
     }
 
     onSelect(type: "select" | "unSelect" | "show", image: string, index: number) {
@@ -191,7 +195,6 @@ export class PageGalleryList extends Component<PageProps, PageState> {
     };
 
     render() {
-        this.setPageTitle();
         return (
             <div className="page-gallery">
                 <ModalGateway>

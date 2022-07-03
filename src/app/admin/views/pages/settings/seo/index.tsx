@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {ThemeForm, ThemeFormSelect, ThemeFormTags, ThemeFormType} from "../../../components/form";
 import {PagePropCommonDocument} from "../../../../../../modules/views/pages/pageProps";
 import HandleForm from "../../../../../../library/react/handles/form";
-import {getPageData, GlobalFunctions, setPageData} from "../../../../../../config/global";
+import {GlobalFunctions} from "../../../../../../config/global";
 import {SeoTitleSeparators, SettingId} from "../../../../../../public/static";
 import Services from "../../../../../../services";
 import {SeoPostParamDocument} from "../../../../../../modules/services/post/seo";
@@ -30,7 +30,7 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
             separators: GlobalFunctions.getSeoTitleSeparatorForSelect(),
             isSubmitting: false,
             formData: {
-                langId: getPageData().mainLangId,
+                langId: this.props.getPageData.mainLangId,
                 title: "",
                 content: "",
                 tags: [],
@@ -40,22 +40,21 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
+        this.setPageTitle()
         this.getSeo();
     }
 
     componentDidUpdate(prevProps: Readonly<PageProps>) {
-        if(this.state.formData.langId != getPageData().langId){
+        if(this.state.formData.langId != this.props.getPageData.langId){
             this.setState((state: PageState) => {
-                state.formData.langId = getPageData().langId;
+                state.formData.langId = this.props.getPageData.langId;
                 return state;
             }, () => this.getSeo())
         }
     }
 
     setPageTitle() {
-        setPageData({
-            title: this.props.router.t("seo")
-        })
+        this.props.setBreadCrumb([this.props.router.t("settings"), this.props.router.t("seo")])
     }
 
     getSeo() {
@@ -122,7 +121,6 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
     }
 
     render() {
-        this.setPageTitle();
         return (
             <div className="page-settings">
                 <div className="gird-margin stretch-card">

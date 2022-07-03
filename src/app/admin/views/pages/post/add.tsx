@@ -3,8 +3,13 @@ import {Tab, Tabs} from "react-bootstrap";
 import JoditEditor from "jodit-react";
 import moment from "moment";
 import {ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
-import {getPageData, getSessionData, GlobalFunctions, GlobalPaths, setPageData} from "../../../../../config/global";
-import {PostTermTypeId, PostTypeContents, Status, StatusContents, StatusId} from "../../../../../public/static";
+import {GlobalFunctions, GlobalPaths} from "../../../../../config/global";
+import {
+    LanguageId,
+    PostTermTypeId,
+    PostTypeContents,
+    StatusId
+} from "../../../../../public/static";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import SweetAlert from "react-sweetalert2";
 import V, {DateMask} from "../../../../../library/variable";
@@ -27,7 +32,6 @@ type PageState = {
     mainTitle: string,
     formData: {
         postId: number
-        typeId: number
         langId: number
         image: string
         title: string
@@ -60,9 +64,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             isSubmitting: false,
             mainTitle: "",
             formData: {
-                postId: getPageData().searchParams.postId,
-                typeId: getPageData().searchParams.postTypeId,
-                langId: getPageData().mainLangId,
+                postId: 0,
+                langId: this.props.getPageData.langId,
                 image: "",
                 title: "",
                 categoryTermId: [],
@@ -83,29 +86,38 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
+        this.setPageTitle();
         this.getTerms();
         this.getStatus();
-        if (!V.isEmpty(getPageData().searchParams.postId)) {
+        if (this.props.getPageData.searchParams.postId > 0) {
+            console.log("did mount")
             this.getPost();
         }
     }
 
-    componentDidUpdate(prevProps: Readonly<PageProps>) {
-        if(this.state.formData.langId != getPageData().langId){
+    componentDidUpdate(prevProps) {
+        if(this.state.formData.langId != this.props.getPageData.langId){
             this.setState((state: PageState) => {
-                state.formData.langId = getPageData().langId;
+                state.formData.langId = this.props.getPageData.langId;
                 return state;
             }, () => this.getPost())
         }
     }
 
     setPageTitle() {
-        setPageData({
-            title: `
-                  ${GlobalFunctions.getStaticContent(PostTypeContents, "typeId", getPageData().searchParams.postTypeId, getSessionData().langId)}
-                  ${this.state.formData.postId > 0 ? ` -> ${this.state.mainTitle} ` : ""}
-            `
-        })
+        let titles: string[] = [
+            GlobalFunctions.getStaticContent(
+                PostTypeContents,
+                "typeId",
+                this.props.getPageData.searchParams.postTypeId,
+                this.props.getSessionData.langId
+            ),
+            this.props.router.t((this.state.formData.postId) > 0 ? "edit" : "add")
+        ];
+        if(this.state.formData.postId > 0) {
+            titles.push(this.state.mainTitle)
+        }
+        this.props.setBreadCrumb(titles);
     }
 
     getStatus() {
@@ -114,7 +126,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 StatusId.Active,
                 StatusId.InProgress,
                 StatusId.Pending
-            ], getSessionData().langId);
+            ], this.props.getSessionData.langId);
             state.formData.statusId = StatusId.Active;
             return state;
         })
@@ -122,8 +134,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
 
     getTerms() {
         let params: PostTermGetParamDocument = {
-            postTypeId: getPageData().searchParams.postTypeId,
-            langId: getPageData().mainLangId,
+            postTypeId: this.props.getPageData.searchParams.postTypeId,
+            langId: this.props.getPageData.mainLangId,
             statusId: StatusId.Active
         };
 
@@ -150,7 +162,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     getPost() {
         let params: PostGetParamDocument = {
             postId: this.state.formData.postId,
-            typeId: this.state.formData.typeId,
+            typeId: this.props.getPageData.searchParams.postTypeId,
             langId: this.state.formData.langId,
             getContents: true
         };
@@ -169,7 +181,6 @@ export class PagePostAdd extends Component<PageProps, PageState> {
 
                     state.formData = {
                         postId: state.formData.postId,
-                        typeId: state.formData.typeId,
                         langId: state.formData.langId,
                         dateStart: post.postDateStart,
                         order: post.postOrder,
@@ -186,7 +197,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         seoTitle: post.postContentSEOTitle || ""
                     }
 
-                    if(state.formData.langId == getPageData().mainLangId) {
+                    if(this.props.getPageData.langId == this.props.getPageData.mainLangId) {
                         state.mainTitle = state.formData.title;
                     }
 
@@ -199,7 +210,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     }
 
     navigateTermPage() {
-        let path = pageRoutes.post.path(getPageData().searchParams.postTypeId) + pageRoutes.post.list.path()
+        let path = pageRoutes.post.path(this.props.getPageData.searchParams.postTypeId) + pageRoutes.post.list.path()
         path = (this.props.router.location.pathname.search(pageRoutes.themeContent.path()) > -1) ? pageRoutes.themeContent.path() + path : path;
         this.props.router.navigate(path, {replace: true});
     }
@@ -211,6 +222,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         })
         let params: PostPostParamDocument & PostPutParamDocument = Object.assign({
             termId: this.state.formData.tagTermId.concat(this.state.formData.categoryTermId),
+            typeId: this.props.getPageData.searchParams.postTypeId,
         }, this.state.formData);
 
         ((V.isEmpty(params.postId))
@@ -246,7 +258,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             <SweetAlert
                 show={this.state.isSuccessMessage}
                 title={this.props.router.t("successful")}
-                text={`${this.props.router.t((V.isEmpty(getPageData().searchParams.termId)) ? "itemAdded" : "itemEdited")}!`}
+                text={`${this.props.router.t((V.isEmpty(this.state.formData.postId)) ? "itemAdded" : "itemEdited")}!`}
                 icon="success"
                 timer={1000}
                 timerProgressBar={true}
@@ -427,14 +439,13 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     }
 
     render() {
-        this.setPageTitle()
         return (
             <div className="page-post">
                 <this.Messages/>
                 <ThemeChooseImage
+                    {...this.props}
                     isShow={this.state.isSelectionImage}
                     onHide={() => this.setState({isSelectionImage: false})}
-                    router={this.props.router}
                     result={this.state.formData.image}
                     onSelected={images => this.setState((state: PageState) => {
                         state.formData.image = images[0];

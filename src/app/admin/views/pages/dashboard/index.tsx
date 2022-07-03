@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {getPageData, getSessionData, GlobalFunctions, GlobalPaths, setPageData} from "../../../../../config/global";
+import {GlobalFunctions, GlobalPaths} from "../../../../../config/global";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import {Bar, Doughnut} from "react-chartjs-2";
 import ThemeChartBar from "../../components/charts/bar";
@@ -65,19 +65,18 @@ class PageDashboard extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
+        this.setPageTitle()
         this.chartInit();
         this.getLastPosts();
     }
 
     setPageTitle() {
-        setPageData({
-            title: this.props.router.t("dashboard")
-        })
+        this.props.setBreadCrumb([this.props.router.t("dashboard")])
     }
 
     getLastPosts() {
         let params: PostGetParamDocument = {
-            langId: 1,
+            langId: this.props.getPageData.mainLangId,
             maxCount: 10
         }
         let resData = Services.Get.posts(params);
@@ -224,7 +223,7 @@ class PageDashboard extends Component<PageProps, PageState> {
                         className={`badge badge-gradient-primary cursor-pointer`}
                     >
                         {
-                            GlobalFunctions.getStaticContent(PostTypeContents, "typeId", row.postTypeId, getSessionData().langId)
+                            GlobalFunctions.getStaticContent(PostTypeContents, "typeId", row.postTypeId, this.props.getSessionData.langId)
                         }
                     </label>
                 )
@@ -257,7 +256,7 @@ class PageDashboard extends Component<PageProps, PageState> {
                 cell: row => (
                     <label className={`badge badge-gradient-${GlobalFunctions.getStatusClassName(row.postStatusId)}`}>
                         {
-                            GlobalFunctions.getStaticContent(StatusContents, "statusId", row.postStatusId, getSessionData().langId)
+                            GlobalFunctions.getStaticContent(StatusContents, "statusId", row.postStatusId, this.props.getSessionData.langId)
                         }
                     </label>
                 )
@@ -427,7 +426,6 @@ class PageDashboard extends Component<PageProps, PageState> {
     }
 
     render() {
-        this.setPageTitle();
         return (
             <div className="page-dashboard">
                 <this.VisitorWithNumber/>

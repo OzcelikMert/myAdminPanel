@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import {Modal} from "react-bootstrap";
 import {UserDocument} from "../../../../../modules/ajax/result/data";
-import {getSessionData, GlobalFunctions, GlobalPaths} from "../../../../../config/global";
+import {GlobalFunctions, GlobalPaths} from "../../../../../config/global";
 import {
+    LanguageId,
     PermissionContents,
-    PermissionGroups,
-    PermissionGroupsContents, Permissions,
+    Permissions,
     StatusContents,
     StatusId,
     UserRoleContents
@@ -13,6 +13,7 @@ import {
 import {ThemeFieldSet, ThemeFormCheckBox} from "../form";
 import V from "../../../../../library/variable";
 import {emptyImage} from "../chooseImage";
+import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 
 type PageState = {};
 
@@ -20,6 +21,7 @@ type PageProps = {
     isShow: boolean
     onClose: any
     userInfo: UserDocument
+    langId: LanguageId
 };
 
 class ThemeUsersProfileCard extends Component<PageProps, PageState> {
@@ -62,7 +64,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                         <label
                             className={`badge badge-gradient-${GlobalFunctions.getUserRolesClassName(this.props.userInfo.userRoleId)} ms-1`}>
                             {
-                                GlobalFunctions.getStaticContent(UserRoleContents, "roleId", this.props.userInfo.userRoleId, getSessionData().langId)
+                                GlobalFunctions.getStaticContent(UserRoleContents, "roleId", this.props.userInfo.userRoleId, this.props.langId)
                             }
                         </label>
                     </p>
@@ -72,7 +74,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                         <label
                             className={`badge badge-gradient-${GlobalFunctions.getStatusClassName(this.props.userInfo.userStatusId)} ms-1`}>
                             {
-                                GlobalFunctions.getStaticContent(StatusContents, "statusId", this.props.userInfo.userStatusId, getSessionData().langId)
+                                GlobalFunctions.getStaticContent(StatusContents, "statusId", this.props.userInfo.userStatusId, this.props.langId)
                             }
                         </label>
                     </p>
@@ -103,7 +105,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
     PermissionItem = (props: { id: number }) => (
         <label className="badge badge-outline-info ms-1 mb-1">
             {
-                GlobalFunctions.getStaticContent(PermissionContents, "permId", props.id, getSessionData().langId)
+                GlobalFunctions.getStaticContent(PermissionContents, "permId", props.id, this.props.langId)
             }
         </label>
     )

@@ -152,42 +152,44 @@ export const pageRoutes = {
 
 type PageState = {} & any;
 
-type PageProps = {} & PagePropCommonDocument;
+type PageProps = {
+    isPageLoading: boolean
+} & PagePropCommonDocument;
 
 class AppRoutes extends Component<PageProps, PageState> {
     render() {
-        return (
+        return this.props.isPageLoading ? <Spinner/> : (
             <Suspense fallback={<Spinner/>}>
                 <Routes>
-                    <Route path={pageRoutes.login.path()} element={<PageLogin router={this.props.router} provider={this.props.provider}/>}/>
+                    <Route path={pageRoutes.login.path()} element={<PageLogin {...this.props}/>}/>
 
-                    <Route path={pageRoutes.dashboard.path()} element={<PageDashboard router={this.props.router} provider={this.props.provider}/>}/>
+                    <Route path={pageRoutes.dashboard.path()} element={<PageDashboard {...this.props}/>}/>
 
                     <Route path={pageRoutes.gallery.path()}>
                         <Route path={pageRoutes.gallery.upload.path()}
-                               element={<PageGalleryUpload router={this.props.router} provider={this.props.provider}/>}/>
+                               element={<PageGalleryUpload {...this.props}/>}/>
                         <Route path={pageRoutes.gallery.list.path()}
-                               element={<PageGalleryList router={this.props.router} provider={this.props.provider}/>}/>
+                               element={<PageGalleryList {...this.props}/>}/>
                     </Route>
 
                     <Route path={pageRoutes.navigate.path()}>
                         <Route path={pageRoutes.navigate.add.path()}
-                               element={<PageNavigateAdd router={this.props.router} provider={this.props.provider}/>}/>
+                               element={<PageNavigateAdd {...this.props}/>}/>
                         <Route path={pageRoutes.navigate.edit.path()}
-                               element={<PageNavigateAdd router={this.props.router} provider={this.props.provider}/>}/>
+                               element={<PageNavigateAdd {...this.props}/>}/>
                         <Route path={pageRoutes.navigate.list.path()}
-                               element={<PageNavigateList router={this.props.router} provider={this.props.provider}/>}/>
+                               element={<PageNavigateList {...this.props}/>}/>
                     </Route>
 
                     {
                         [pageRoutes.post.path(), pageRoutes.themeContent.path() + pageRoutes.post.path()].map((path, index) =>
                             <Route path={path} key={index}>
                                 <Route path={pageRoutes.post.add.path()}
-                                       element={<PagePostAdd router={this.props.router} provider={this.props.provider}/>}/>
+                                       element={<PagePostAdd {...this.props}/>}/>
                                 <Route path={pageRoutes.post.edit.path()}
-                                       element={<PagePostAdd router={this.props.router} provider={this.props.provider}/>}/>
+                                       element={<PagePostAdd {...this.props}/>}/>
                                 <Route path={pageRoutes.post.list.path()}
-                                       element={<PagePostList router={this.props.router} provider={this.props.provider}/>}/>
+                                       element={<PagePostList {...this.props}/>}/>
                             </Route>
                         )
                     }
@@ -196,11 +198,11 @@ class AppRoutes extends Component<PageProps, PageState> {
                         [pageRoutes.postTerm.path(), pageRoutes.themeContent.path() + pageRoutes.postTerm.path()].map((path, index) =>
                             <Route path={path} key={index}>
                                 <Route path={pageRoutes.postTerm.add.path()}
-                                       element={<PagePostTermAdd router={this.props.router} provider={this.props.provider}/>}/>
+                                       element={<PagePostTermAdd {...this.props}/>}/>
                                 <Route path={pageRoutes.postTerm.edit.path()}
-                                       element={<PagePostTermAdd router={this.props.router} provider={this.props.provider}/>}/>
+                                       element={<PagePostTermAdd {...this.props}/>}/>
                                 <Route path={pageRoutes.postTerm.list.path()}
-                                       element={<PagePostTermList router={this.props.router} provider={this.props.provider}/>}/>
+                                       element={<PagePostTermList {...this.props}/>}/>
                             </Route>
                         )
                     }
@@ -208,16 +210,16 @@ class AppRoutes extends Component<PageProps, PageState> {
                     <Route path={pageRoutes.settings.path()}>
                         <Route path={pageRoutes.settings.user.path()}>
                             <Route path={pageRoutes.settings.user.add.path()}
-                                   element={<PageUserAdd router={this.props.router} provider={this.props.provider}/>}/>
+                                   element={<PageUserAdd {...this.props}/>}/>
                             <Route path={pageRoutes.settings.user.edit.path()}
-                                   element={<PageUserAdd router={this.props.router} provider={this.props.provider}/>}/>
+                                   element={<PageUserAdd {...this.props}/>}/>
                             <Route path={pageRoutes.settings.user.list.path()}
-                                   element={<PageUserList router={this.props.router} provider={this.props.provider}/>}/>
+                                   element={<PageUserList {...this.props}/>}/>
                         </Route>
                         <Route path={pageRoutes.settings.seo.path()}
-                               element={<PageSettingsSEO router={this.props.router} provider={this.props.provider}/>}/>
+                               element={<PageSettingsSEO {...this.props}/>}/>
                         <Route path={pageRoutes.settings.general.path()}
-                               element={<PageSettingsGeneral router={this.props.router} provider={this.props.provider}/>}/>
+                               element={<PageSettingsGeneral {...this.props}/>}/>
                     </Route>
 
                     <Route path="*" element={<Navigate to={pageRoutes.dashboard.path()}/>}/>

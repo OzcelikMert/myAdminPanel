@@ -1,10 +1,15 @@
 import {NavigateFunction, Params, PathMatch, URLSearchParamsInit} from "react-router-dom";
 import LanguageKeys from "../../app/admin/languages";
-import AppProviders from "../../../app/admin/providers";
+import {AppAdminGetState, AppAdminSetState} from "../../app/admin/views";
 
 interface PagePropCommonDocument {
     router: PagePropRouterDocument,
-    provider?: AppProviders
+    setBreadCrumb: (titles: string[]) => void
+    setSessionData: (data: AppAdminSetState["sessionData"]) => void
+    getSessionData: AppAdminGetState["sessionData"],
+    setPageData: (data: AppAdminSetState["pageData"]) => void
+    getPageData: AppAdminGetState["pageData"],
+
 }
 
 type PagePropRouterLocationDocument = {

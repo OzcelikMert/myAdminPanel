@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../../modules/views/pages/pageProps";
 import {PostDocument, UserDocument} from "../../../../../../modules/ajax/result/data";
-import {getPageData, getSessionData, GlobalFunctions, GlobalPaths, setPageData} from "../../../../../../config/global";
+import {GlobalFunctions, GlobalPaths} from "../../../../../../config/global";
 import {
     PostTermTypeId,
     PostTypeContents, Status,
@@ -39,28 +39,25 @@ export class PageUserList extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
-        this.onRouteChanged();
-    }
-
-    componentDidUpdate(prevProps: Readonly<PageProps>) {
-        if (this.props.router.location.pathname !== prevProps.router.location.pathname) {
-            this.onRouteChanged();
-        }
+        this.setPageTitle();
+        this.getUsers();
     }
 
     setPageTitle() {
-        setPageData({
-            title: this.props.router.t("users")
-        })
+        this.props.setBreadCrumb([
+            this.props.router.t("settings"),
+            this.props.router.t("users"),
+            this.props.router.t("list"),
+        ])
     }
 
-    onRouteChanged() {
+    getUsers() {
         let params: UsersGetParamDocument = {
             requestType: "list"
         };
         let users: PageState["users"] = Services.Get.users(params).data;
         this.setState((state: PageState) => {
-            state.users = users.filter(user => user.userId != getSessionData().id);
+            state.users = users.filter(user => user.userId != this.props.getSessionData.id);
             return state;
         });
     }
@@ -139,7 +136,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                 cell: row => (
                     <label className={`badge badge-gradient-${GlobalFunctions.getUserRolesClassName(row.userRoleId)}`}>
                         {
-                            GlobalFunctions.getStaticContent(UserRoleContents, "roleId", row.userRoleId, getSessionData().langId)
+                            GlobalFunctions.getStaticContent(UserRoleContents, "roleId", row.userRoleId, this.props.getSessionData.langId)
                         }
                     </label>
                 )
@@ -151,7 +148,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                 cell: row => (
                     <label className={`badge badge-gradient-${GlobalFunctions.getStatusClassName(row.userStatusId)}`}>
                         {
-                            GlobalFunctions.getStaticContent(StatusContents, "statusId", row.userStatusId, getSessionData().langId)
+                            GlobalFunctions.getStaticContent(StatusContents, "statusId", row.userStatusId, this.props.getSessionData.langId)
                         }
                     </label>
                 )
@@ -170,7 +167,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                 name: "",
                 button: true,
                 width: "70px",
-                cell: row => (UserRoles.findSingle("id", row.userRoleId).rank < UserRoles.findSingle("id", getSessionData().roleId).rank)
+                cell: row => (UserRoles.findSingle("id", row.userRoleId).rank < UserRoles.findSingle("id", this.props.getSessionData.roleId).rank)
                     ? <button
                         onClick={() => this.navigateTermPage("edit", row.userId)}
                         className="btn btn-gradient-warning"
@@ -181,7 +178,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                 name: "",
                 button: true,
                 width: "70px",
-                cell: row => (UserRoles.findSingle("id", row.userRoleId).rank < UserRoles.findSingle("id", getSessionData().roleId).rank)
+                cell: row => (UserRoles.findSingle("id", row.userRoleId).rank < UserRoles.findSingle("id", this.props.getSessionData.roleId).rank)
                     ? <button
                         onClick={() => this.onDelete(row.userId)}
                         className="btn btn-gradient-danger"
@@ -192,7 +189,6 @@ export class PageUserList extends Component<PageProps, PageState> {
     }
 
     render() {
-        this.setPageTitle();
         return (
             <div className="page-user">
                 {
@@ -201,6 +197,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                             onClose={()=> {this.setState({isViewUserInfo: false})}}
                             isShow={this.state.isViewUserInfo}
                             userInfo={this.state.users.findSingle("userId", this.state.selectedUserId)}
+                            langId={this.props.getSessionData.langId}
                         />
                         : null
                 }

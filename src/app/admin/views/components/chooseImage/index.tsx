@@ -82,17 +82,16 @@ class ThemeChooseImage extends Component<PageProps, PageState> {
             <div className="theme-choose-img">
                 <this.ModalOption/>
                 <ThemeChooseImageUrl
+                    {...this.props}
                     isShow={this.state.isShowModalUrl}
                     onSubmit={image => this.onSelected([image])}
                     onClose={() => this.setState({isShowModalUrl: false})}
-                    router={this.props.router}
                 />
                 <ThemeChooseImageGallery
+                    {...this.props}
                     isShow={this.state.isShowModalGallery}
                     onSubmit={images => this.onSelected(images)}
                     onClose={() => this.setState({isShowModalGallery: false})}
-                    isMulti={this.props.isMulti}
-                    router={this.props.router}
                 />
             </div>
         )

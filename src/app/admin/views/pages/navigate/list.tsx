@@ -9,7 +9,7 @@ import {
 import {pageRoutes} from "../../../routes";
 import Services from "../../../../../services";
 import {PostTermDocument} from "../../../../../modules/ajax/result/data";
-import {GlobalFunctions, getPageData, setPageData, getSessionData, GlobalPaths} from "../../../../../config/global";
+import {GlobalFunctions, GlobalPaths} from "../../../../../config/global";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../components/form";
@@ -34,9 +34,9 @@ export class PageNavigateList extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         let params = {
-            typeId: getPageData().searchParams.termTypeId,
-            postTypeId: getPageData().searchParams.postTypeId,
-            langId: getPageData().mainLangId
+            typeId: this.props.getPageData.searchParams.termTypeId,
+            postTypeId: this.props.getPageData.searchParams.postTypeId,
+            langId: this.props.getPageData.mainLangId
         };
         let postTerms: PageState["postTerms"] = Services.Get.postTerms(params).data;
         this.state = {
@@ -49,12 +49,15 @@ export class PageNavigateList extends Component<PageProps, PageState> {
         }
     }
 
+    componentDidMount() {
+        this.setPageTitle();
+    }
+
     setPageTitle() {
-        setPageData({
-            title: `
-                ${this.props.router.t("navigates")} 
-            `
-        })
+        this.props.setBreadCrumb([
+            this.props.router.t("navigates"),
+            this.props.router.t("list"),
+        ])
     }
 
     onChangeStatus(event: any, statusId: number) {
@@ -62,7 +65,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
         const params: PostTermPutParamDocument = {
             termId: this.state.selectedPostTerms,
             statusId: statusId,
-            langId: getPageData().langId
+            langId:this.props.getPageData.langId
         }
 
         if (statusId === StatusId.Deleted && this.state.listMode === "deleted") {
@@ -131,10 +134,10 @@ export class PageNavigateList extends Component<PageProps, PageState> {
 
     navigateTermPage(type: "add" | "back" | "edit", postTermId = 0) {
         let path = (type === "add")
-            ? pageRoutes.postTerm.path(getPageData().searchParams.postTypeId, getPageData().searchParams.termTypeId) + pageRoutes.postTerm.add.path()
+            ? pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, this.props.getPageData.searchParams.termTypeId) + pageRoutes.postTerm.add.path()
             : (type === "edit")
-                ? pageRoutes.postTerm.path(getPageData().searchParams.postTypeId, getPageData().searchParams.termTypeId) + pageRoutes.postTerm.edit.path(postTermId)
-                : pageRoutes.post.path(getPageData().searchParams.postTypeId) + pageRoutes.post.list.path();
+                ? pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, this.props.getPageData.searchParams.termTypeId) + pageRoutes.postTerm.edit.path(postTermId)
+                : pageRoutes.post.path(this.props.getPageData.searchParams.postTypeId) + pageRoutes.post.list.path();
         path = (this.props.router.location.pathname.search(pageRoutes.themeContent.path()) > -1) ? pageRoutes.themeContent.path() + path : path;
         this.props.router.navigate(path, {replace: true});
     }
@@ -176,7 +179,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                     <label
                         className={`badge badge-gradient-${GlobalFunctions.getStatusClassName(row.postTermStatusId)}`}>
                         {
-                            GlobalFunctions.getStaticContent(StatusContents, "statusId", row.postTermStatusId, getSessionData().langId)
+                            GlobalFunctions.getStaticContent(StatusContents, "statusId", row.postTermStatusId, this.props.getSessionData.langId)
                         }
                     </label>
                 )
@@ -196,7 +199,6 @@ export class PageNavigateList extends Component<PageProps, PageState> {
     }
 
     render() {
-        this.setPageTitle();
         return (
             <div className="page-post-term">
                 <div className="navigate-buttons mb-3">
@@ -230,7 +232,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                                             StatusId.Deleted
                                         ]}
                                         onChange={(event, statusId) => this.onChangeStatus(event, statusId)}
-                                        langId={getSessionData().langId}
+                                        langId={this.props.getSessionData.langId}
                                     />
                                 </div>
                                 <div className="table-responsive">
