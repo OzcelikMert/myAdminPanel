@@ -20,9 +20,9 @@ import ThemeChooseImage, {emptyImage} from "../../components/chooseImage";
 
 type PageState = {
     formActiveKey: string
-    categoryTerms?: { value: number, label: string }[]
-    tagTerms?: { value: number, label: string }[]
-    status?: { value: number, label: string }[]
+    categoryTerms: { value: number, label: string }[]
+    tagTerms: { value: number, label: string }[]
+    status: { value: number, label: string }[]
     isSubmitting: boolean
     mainTitle: string,
     formData: {
@@ -54,6 +54,9 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         super(props);
         this.state = {
             formActiveKey: `general`,
+            categoryTerms: [],
+            tagTerms: [],
+            status: [],
             isSubmitting: false,
             mainTitle: "",
             formData: {
@@ -100,8 +103,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         setPageData({
             title: `
                   ${GlobalFunctions.getStaticContent(PostTypeContents, "typeId", getPageData().searchParams.postTypeId, getSessionData().langId)}
-                  -> 
-                  ${this.state.mainTitle}
+                  ${this.state.formData.postId > 0 ? ` -> ${this.state.mainTitle} ` : ""}
             `
         })
     }
@@ -184,7 +186,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         seoTitle: post.postContentSEOTitle || ""
                     }
 
-                    if(state.formData.langId == 1) {
+                    if(state.formData.langId == getPageData().mainLangId) {
                         state.mainTitle = state.formData.title;
                     }
 
@@ -426,7 +428,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
 
     render() {
         this.setPageTitle()
-        return (typeof this.state.status === "undefined") ? "" : (
+        return (
             <div className="page-post">
                 <this.Messages/>
                 <ThemeChooseImage

@@ -24,8 +24,8 @@ import {UserDocument} from "../../../../../../modules/ajax/result/data";
 
 type PageState = {
     formActiveKey: string
-    userRoles?: { value: number, label: string }[]
-    status?: { value: number, label: string }[]
+    userRoles: { value: number, label: string }[]
+    status: { value: number, label: string }[]
     isSubmitting: boolean
     formData: {
         image: string,
@@ -48,6 +48,8 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         super(props);
         this.state = {
             formActiveKey: "general",
+            userRoles: [],
+            status: [],
             isSubmitting: false,
             formData: {
                 image: "",
@@ -112,7 +114,6 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         if (resData.status) {
             if (resData.data.length > 0) {
                 const user: UserDocument = resData.data[0];
-                console.log(user);
                 this.setState((state: PageState) => {
                     state.formData = {
                         image: user.userImage,
@@ -232,6 +233,45 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         );
     }
 
+    TabOptions = () => {
+        return (
+            <div className="row">
+                <div className="col-md-7 mb-3">
+                    <ThemeFormSelect
+                        title={this.props.router.t("status")}
+                        name="statusId"
+                        options={this.state.status}
+                        value={this.state.status?.findSingle("value", this.state.formData.statusId)}
+                        onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
+                    />
+                </div>
+                {
+                    this.state.formData.statusId == StatusId.Banned ?
+                        <div className="col-md-7 mb-3">
+                            <div className="mb-3">
+                                <ThemeFormType
+                                    title={`${this.props.router.t("banDateEnd").toCapitalizeCase()}*`}
+                                    type="date"
+                                    name="banDateEnd"
+                                    value={moment(this.state.formData.banDateEnd).format("YYYY-MM-DD")}
+                                    onChange={(event) => HandleForm.onChangeInput(event, this)}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <ThemeFormType
+                                    title={this.props.router.t("banComment").toCapitalizeCase()}
+                                    name="banComment"
+                                    type="textarea"
+                                    value={this.state.formData.banComment}
+                                    onChange={e => HandleForm.onChangeInput(e, this)}
+                                />
+                            </div>
+                        </div> : null
+                }
+            </div>
+        );
+    }
+
     TabGeneral = () => {
         return (
             <div className="row">
@@ -280,38 +320,6 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                         }}
                     />
                 </div>
-                <div className="col-md-7 mb-3">
-                    <ThemeFormSelect
-                        title={this.props.router.t("status")}
-                        name="statusId"
-                        options={this.state.status}
-                        value={this.state.status?.findSingle("value", this.state.formData.statusId)}
-                        onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
-                    />
-                </div>
-                {
-                    this.state.formData.statusId == StatusId.Banned ?
-                        <div className="col-md-7 mb-3">
-                            <div className="mb-3">
-                                <ThemeFormType
-                                    title={`${this.props.router.t("banDateEnd").toCapitalizeCase()}*`}
-                                    type="date"
-                                    name="banDateEnd"
-                                    value={moment(this.state.formData.banDateEnd).format("YYYY-MM-DD")}
-                                    onChange={(event) => HandleForm.onChangeInput(event, this)}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <ThemeFormType
-                                    title={this.props.router.t("banComment").toCapitalizeCase()}
-                                    name="banComment"
-                                    type="textarea"
-                                    value={this.state.formData.banComment}
-                                    onChange={e => HandleForm.onChangeInput(e, this)}
-                                />
-                            </div>
-                        </div> : null
-                }
             </div>
         );
     }
@@ -343,10 +351,13 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                                         activeKey={this.state.formActiveKey}
                                         className="mb-5"
                                         transition={false}>
-                                        <Tab eventKey="general" title="General">
+                                        <Tab eventKey="general" title={this.props.router.t("general")}>
                                             <this.TabGeneral/>
                                         </Tab>
-                                        <Tab eventKey="permissions" title="Permissions">
+                                        <Tab eventKey="options" title={this.props.router.t("options")}>
+                                            <this.TabOptions/>
+                                        </Tab>
+                                        <Tab eventKey="permissions" title={this.props.router.t("permissions")}>
                                             <this.TabPermissions/>
                                         </Tab>
                                     </Tabs>

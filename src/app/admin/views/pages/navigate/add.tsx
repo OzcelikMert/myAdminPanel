@@ -27,67 +27,51 @@ import moment from "moment";
 
 type PageState = {
     formActiveKey: string
-    postTerms: { value: number, label: string }[]
+    navigates: { value: number, label: string }[]
     status: { value: number, label: string }[]
     isSubmitting: boolean
     mainTitle: string
     formData: {
-        termId: number
-        typeId: number
-        postTypeId: number
+        navigateId: number
         langId: number
         mainId: number
         statusId: number
-        image: string
         title: string
         order: number
         url: string
-        seoTitle: string
-        seoContent: string
-        isFixed: 1 | 0
     },
     isSuccessMessage: boolean
-    isSelectionImage: boolean
 };
 
 type PageProps = {} & PagePropCommonDocument;
 
-export class PagePostTermAdd extends Component<PageProps, PageState> {
+export class PageNavigateAdd extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
             formActiveKey: `general`,
-            postTerms: [],
+            navigates: [],
             status: [],
             isSubmitting: false,
             mainTitle: "",
             formData: {
-                termId: getPageData().searchParams.termId,
-                postTypeId: getPageData().searchParams.postTypeId,
-                typeId: getPageData().searchParams.termTypeId,
+                navigateId: getPageData().searchParams.navigateId,
                 langId: getPageData().mainLangId,
                 mainId: 0,
                 statusId: 0,
-                image: "",
                 title: "",
                 order: 0,
                 url: "",
-                seoTitle: "",
-                seoContent: "",
-                isFixed: 0
             },
             isSuccessMessage: false,
-            isSelectionImage: false
         }
     }
 
     setPageTitle() {
         setPageData({
             title: `
-                ${GlobalFunctions.getStaticContent(PostTypeContents, "typeId", getPageData().searchParams.postTypeId, getSessionData().langId)} 
-                - 
-                ${GlobalFunctions.getStaticContent(PostTermTypeContents, "typeId", getPageData().searchParams.termTypeId, getSessionData().langId)} 
-                ${this.state.formData.termId > 0 ? ` -> ${this.state.mainTitle} ` : ""}
+                ${this.props.router.t("navigates")} 
+                ${this.state.formData.navigateId > 0 ? `- ${this.props.router.t("edit")} -> ${this.state.mainTitle} ` : ` - ${this.props.router.t("add")}`}
             `
         })
     }
@@ -122,7 +106,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
     }
 
     getTerms() {
-        let params: PostTermGetParamDocument = {
+       /* let params: PostTermGetParamDocument = {
             typeId: this.state.formData.typeId,
             postTypeId: this.state.formData.postTypeId,
             langId: getPageData().mainLangId,
@@ -140,11 +124,11 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 });
                 return state;
             })
-        }
+        }*/
     }
 
     getTerm() {
-        let params: PostTermGetParamDocument = {
+       /* let params: PostTermGetParamDocument = {
             postTypeId: this.state.formData.postTypeId,
             termId: this.state.formData.termId,
             langId: this.state.formData.langId,
@@ -171,7 +155,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                         seoContent: term.postTermContentSEO || "",
                     }
 
-                    if(state.formData.langId == getPageData().mainLangId) {
+                    if(state.formData.langId == 1) {
                         state.mainTitle = state.formData.title;
                     }
                     return state;
@@ -179,7 +163,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
             } else {
                 this.navigateTermPage();
             }
-        }
+        }*/
     }
 
     navigateTermPage() {
@@ -206,19 +190,13 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 this.setState((state: PageState) => {
                     if (resData.status) {
                         state.formData = {
-                            postTypeId: state.formData.postTypeId,
-                            termId: state.formData.termId,
+                            navigateId: 0,
                             langId: state.formData.langId,
-                            typeId: state.formData.typeId,
                             mainId: state.formData.mainId,
                             statusId: state.formData.statusId,
-                            image: "",
                             title: "",
                             order: 0,
-                            isFixed: 0,
-                            url: "",
-                            seoTitle: "",
-                            seoContent: ""
+                            url: ""
                         }
                         state.isSuccessMessage = true;
                     }
@@ -252,40 +230,6 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         )
     }
 
-    TabSEO = () => {
-        return (
-            <div className="row">
-                <div className="col-md-7 mb-3">
-                    <ThemeFormType
-                        title={this.props.router.t("url")}
-                        name="url"
-                        type="text"
-                        value={this.state.formData.url}
-                        onChange={e => HandleForm.onChangeInput(e, this)}
-                    />
-                </div>
-                <div className="col-md-7 mb-3">
-                    <ThemeFormType
-                        title={this.props.router.t("title")}
-                        name="seoTitle"
-                        type="text"
-                        value={this.state.formData.seoTitle}
-                        onChange={e => HandleForm.onChangeInput(e, this)}
-                    />
-                </div>
-                <div className="col-md-7 mb-3">
-                    <ThemeFormType
-                        title={this.props.router.t("content")}
-                        name="seoContent"
-                        type="textarea"
-                        value={this.state.formData.seoContent}
-                        onChange={e => HandleForm.onChangeInput(e, this)}
-                    />
-                </div>
-            </div>
-        );
-    }
-
     TabOptions = () => {
         return (
             <div className="row">
@@ -308,14 +252,6 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
-                <div className="col-md-7 mb-3">
-                    <ThemeFormCheckBox
-                        title={this.props.router.t("isFixed")}
-                        name="isFixed"
-                        checked={Boolean(this.state.formData.isFixed)}
-                        onChange={e => HandleForm.onChangeInput(e, this)}
-                    />
-                </div>
             </div>
         );
     }
@@ -323,26 +259,6 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
     TabGeneral = () => {
         return (
             <div className="row">
-                <div className="col-md-7 mb-3">
-                    <img
-                        src={
-                            !V.isEmpty(this.state.formData.image)
-                                ? (this.state.formData.image.isUrl())
-                                    ? this.state.formData.image
-                                    : GlobalPaths.uploads.images + this.state.formData.image
-                                : emptyImage
-                        }
-                        alt="Empty Image"
-                        className="post-image"
-                    />
-                    <button
-                        type="button"
-                        className="btn btn-gradient-warning btn-xs ms-1"
-                        onClick={() => {
-                            this.setState({isSelectionImage: true})
-                        }}
-                    ><i className="fa fa-pencil-square-o"></i></button>
-                </div>
                 <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={`${this.props.router.t("title")}*`}
@@ -361,9 +277,18 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                        `}
                         name="mainId"
                         placeholder="Choose Main Term"
-                        options={this.state.postTerms}
-                        value={this.state.postTerms?.findSingle("value", this.state.formData.mainId)}
+                        options={this.state.navigates}
+                        value={this.state.navigates.findSingle("value", this.state.formData.mainId)}
                         onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
+                    />
+                </div>
+                <div className="col-md-7 mb-3">
+                    <ThemeFormType
+                        title={this.props.router.t("url")}
+                        name="url"
+                        type="text"
+                        value={this.state.formData.url}
+                        onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
             </div>
@@ -375,17 +300,6 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         return (
             <div className="page-post-term">
                 <this.Messages/>
-                <ThemeChooseImage
-                    isShow={this.state.isSelectionImage}
-                    onHide={() => this.setState({isSelectionImage: false})}
-                    router={this.props.router}
-                    result={this.state.formData.image}
-                    onSelected={images => this.setState((state: PageState) => {
-                        state.formData.image = images[0];
-                        return state
-                    })}
-                    isMulti={false}
-                />
                 <div className="navigate-buttons mb-3">
                     <button className="btn btn-gradient-dark btn-lg btn-icon-text"
                             onClick={() => this.navigateTermPage()}>
@@ -414,9 +328,6 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                                         <Tab eventKey="options" title={this.props.router.t("options")}>
                                             <this.TabOptions/>
                                         </Tab>
-                                        <Tab eventKey="seo" title={this.props.router.t("seo")}>
-                                            <this.TabSEO/>
-                                        </Tab>
                                     </Tabs>
                                 </div>
                             </ThemeForm>
@@ -428,4 +339,4 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
     }
 }
 
-export default PagePostTermAdd;
+export default PageNavigateAdd;

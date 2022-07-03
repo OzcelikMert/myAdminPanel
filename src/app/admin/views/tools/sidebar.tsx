@@ -18,7 +18,7 @@ type PageState = {
         users: boolean,
         gallery: boolean,
         themeContents: boolean,
-        blogCategory: boolean
+        navigates,
     }
 };
 
@@ -46,7 +46,7 @@ class Sidebar extends Component<PageProps, PageState> {
         users: false,
         gallery: false,
         themeContents: false,
-        blogCategory: false
+        navigates: false
     }
   };
 
@@ -82,6 +82,11 @@ class Sidebar extends Component<PageProps, PageState> {
             {path: pageRoutes.gallery.upload.path(), icon: `upload`, title: this.props.router.t("upload")},
             {path: pageRoutes.gallery.list.path(), title: this.props.router.t("list")}
           ]
+        },
+        {path: pageRoutes.navigate.path(), icon: `navigation-variant`, title: this.props.router.t("navigates"), state: `navigates`, subPaths: [
+                {path: pageRoutes.navigate.add.path(), title: this.props.router.t("add")},
+                {path: pageRoutes.navigate.list.path(), title: this.props.router.t("list")}
+            ]
         },
         {path: pageRoutes.post.path(PostTypeId.Page), icon: `note-multiple`, title: this.props.router.t("pages"), state: `pages`, subPaths: [
             {path: pageRoutes.post.add.path(), title: this.props.router.t("add")},

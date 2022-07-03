@@ -74,6 +74,8 @@
   "websiteMainLanguage": "Website main language",
   "type": "Type",
   "image": "Image",
+  "navigates": "Navigates",
+  "permissions": "Permissions",
 
   "toastMessageLoadingPostTitle": "Creating...",
   "toastMessageLoadingPostContent": "Creating please wait",

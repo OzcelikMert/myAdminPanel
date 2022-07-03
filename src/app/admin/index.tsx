@@ -124,6 +124,8 @@ export function withRouter(Component: any) {
         let {t} = useTranslation();
 
         const routes: RouteObject[] = [
+            // Navigate
+            {path: pageRoutes.navigate.path() + pageRoutes.navigate.edit.path()},
             // User
             {path: pageRoutes.settings.path() + pageRoutes.settings.user.path() + pageRoutes.settings.user.edit.path()},
             // Post

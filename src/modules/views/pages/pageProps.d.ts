@@ -1,8 +1,10 @@
 import {NavigateFunction, Params, PathMatch, URLSearchParamsInit} from "react-router-dom";
 import LanguageKeys from "../../app/admin/languages";
+import AppProviders from "../../../app/admin/providers";
 
 interface PagePropCommonDocument {
     router: PagePropRouterDocument,
+    provider?: AppProviders
 }
 
 type PagePropRouterLocationDocument = {

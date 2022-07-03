@@ -87,6 +87,8 @@ type LanguageKeys =
     "websiteTitleSeparator" |
     "websiteMainLanguage" |
     "type" |
-    "image"
+    "image" |
+    "navigates" |
+    "permissions"
 
 export default LanguageKeys;

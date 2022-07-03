@@ -4,7 +4,7 @@ import AppRoutes, {pageRoutes} from "./routes";
 import Services from "../../services";
 import {ErrorCodes, ServicePages} from "../../public/ajax";
 import {LanguageDocument, UserDocument} from "../../modules/ajax/result/data";
-import {LanguageId, SettingId, StatusContents} from "../../public/static";
+import {LanguageId, SettingId, StatusContents, UserRoleId} from "../../public/static";
 import Statement from "../../library/statement";
 import {getPageData, getSessionData, GlobalFunctions, setPageData, setSessionData} from "../../config/global/";
 import {Navigate} from "react-router-dom";
@@ -16,6 +16,7 @@ import {UsersGetParamDocument} from "../../modules/services/get/user";
 import {ThemeFormSelect} from "./views/components/form";
 import {GlobalPaths} from "../../config/global";
 import HandleForm from "../../library/react/handles/form";
+import SearchParamDocument from "../../modules/app/admin/providers";
 
 type PageState = {
     isAuth: boolean
@@ -25,6 +26,21 @@ type PageState = {
     contentLanguages: {label: string | JSX.Element, value: any}[],
     formData: {
         contentLanguageId: number
+    }
+    pageData: {
+        searchParams: SearchParamDocument,
+        langId: number,
+        mainLangId: number,
+        title: string,
+    },
+    sessionData: {
+        id: number,
+        langId: LanguageId,
+        image: string,
+        name: string,
+        email: string,
+        roleId: UserRoleId,
+        permissions: number[]
     }
 };
 
@@ -41,6 +57,21 @@ class AppProviders extends Component<PageProps, PageState> {
             contentLanguages: [],
             formData: {
                 contentLanguageId: 1
+            },
+            pageData: {
+                searchParams: {},
+                langId: 1,
+                mainLangId: 1,
+                title: "",
+            },
+            sessionData: {
+                id: 0,
+                langId: LanguageId.English,
+                image: "",
+                name: "",
+                email: "",
+                roleId: 1,
+                permissions: []
             }
         }
     }
@@ -63,6 +94,25 @@ class AppProviders extends Component<PageProps, PageState> {
         if(this.state.formData.contentLanguageId != getPageData().langId){
 
         }
+    }
+
+    setPageTitle() {
+        this.setState({
+            pageTitle: getPageData().title
+        })
+    }
+
+    initPageData() {
+        let searchParams: any = {};
+        if (this.props.router.match !== null) {
+            Statement.Foreach(this.props.router.match?.params, (key, value) => {
+                searchParams[key] = value;
+            })
+        }
+        setPageData({
+            searchParams: searchParams,
+            langId: this.state.formData.contentLanguageId
+        })
     }
 
     getContentLanguages() {
@@ -109,12 +159,6 @@ class AppProviders extends Component<PageProps, PageState> {
         this.setPageTitle();
     }
 
-    setPageTitle() {
-        this.setState({
-            pageTitle: getPageData().title
-        })
-    }
-
     checkSession() {
         let isRefresh = getSessionData().id < 1;
         let params: UsersGetParamDocument = {
@@ -148,19 +192,6 @@ class AppProviders extends Component<PageProps, PageState> {
         }
     }
 
-    initPageData() {
-        let searchParams: any = {};
-        if (this.props.router.match !== null) {
-            Statement.Foreach(this.props.router.match?.params, (key, value) => {
-                searchParams[key] = value;
-            })
-        }
-        setPageData({
-            searchParams: searchParams,
-            langId: this.state.formData.contentLanguageId
-        })
-    }
-
     ContentLanguageItem = (props: LanguageDocument) => (
         <div className="row p-0">
             <div className="col-6 text-end">
@@ -174,6 +205,7 @@ class AppProviders extends Component<PageProps, PageState> {
 
     ContentLanguage = () => {
         const showingPages = [
+            pageRoutes.navigate.path() + pageRoutes.navigate.edit.path(),
             pageRoutes.post.path() + pageRoutes.post.edit.path(),
             pageRoutes.postTerm.path() + pageRoutes.postTerm.edit.path(),
             pageRoutes.settings.path() + pageRoutes.settings.seo.path()
@@ -239,7 +271,7 @@ class AppProviders extends Component<PageProps, PageState> {
                                 <div className="main-panel">
                                     <div className="content-wrapper">
                                         {pageTitle}
-                                        <AppRoutes router={this.props.router}/>
+                                        <AppRoutes router={this.props.router} provider={this}/>
                                     </div>
                                     {footerComponent}
                                 </div>
