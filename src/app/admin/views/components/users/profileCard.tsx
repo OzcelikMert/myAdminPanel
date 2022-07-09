@@ -10,10 +10,6 @@ import {
     StatusId,
     UserRoleContents
 } from "../../../../../public/static";
-import {ThemeFieldSet, ThemeFormCheckBox} from "../form";
-import V from "../../../../../library/variable";
-import {emptyImage} from "../chooseImage";
-import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 
 type PageState = {};
 
@@ -141,15 +137,10 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                                 </h5>
                                 <div className="card-block text-center text-light">
                                     <div className="mb-4">
-                                        <img src={
-                                            !V.isEmpty(this.props.userInfo.userImage)
-                                                ? (this.props.userInfo.userImage.isUrl())
-                                                    ? this.props.userInfo.userImage
-                                                    : GlobalPaths.uploads.images + this.props.userInfo.userImage
-                                                : emptyImage
-                                        }
-                                             className="user-img"
-                                             alt={this.props.userInfo.userName}
+                                        <img
+                                            src={GlobalFunctions.getUploadedImageSrc(this.props.userInfo.userImage)}
+                                            className="user-img"
+                                            alt={this.props.userInfo.userName}
                                         />
                                     </div>
                                     <h4 className="fw-bold pt-3">{this.props.userInfo.userName}</h4>

@@ -25,7 +25,6 @@ import Footer from "./views/tools/footer";
 import {LanguageDocument} from "../../modules/ajax/result/data";
 import {ThemeFormSelect} from "./views/components/form";
 import Services from "../../services";
-import SearchParamDocument from "../../modules/app/admin/providers";
 import Statement from "../../library/statement";
 import {AppAdminGetState, AppAdminSetState} from "../../modules/app/admin/views";
 
@@ -88,9 +87,9 @@ class AppAdmin extends Component<PageProps, PageState> {
 
     componentDidMount() {
         this.initRequestToast();
+        this.getContentLanguages();
+        this.getContentMainLanguage();
         this.onRouteChanged();
-        this.getContentLanguages();
-        this.getContentLanguages();
     }
 
     componentDidUpdate(prevProps: Readonly<PageProps>, prevState: Readonly<PageState>) {
@@ -102,24 +101,25 @@ class AppAdmin extends Component<PageProps, PageState> {
     onRouteChanged() {
         this.setState({
             isPageLoading: true,
+        }, () => {
+            this.setState((state: PageState) => {
+                state.pageData.langId = state.pageData.mainLangId;
+                state.pageData.searchParams = {
+                    postId: 0,
+                    navigateId: 0,
+                    termTypeId: 0,
+                    postTypeId: 0,
+                    termId: 0,
+                    userId: 0
+                };
+                if (this.props.router.match !== null) {
+                    Statement.Foreach(this.props.router.match?.params, (key, value) => {
+                        state.pageData.searchParams[key] = value;
+                    })
+                }
+                return state;
+            }, () => this.setState({isPageLoading: false}))
         })
-        this.setState((state: PageState) => {
-            state.pageData.langId = state.pageData.mainLangId;
-            state.pageData.searchParams = {
-                postId: 0,
-                navigateId: 0,
-                termTypeId: 0,
-                postTypeId: 0,
-                termId: 0,
-                userId: 0
-            };
-            if (this.props.router.match !== null) {
-                Statement.Foreach(this.props.router.match?.params, (key, value) => {
-                    state.pageData.searchParams[key] = value;
-                })
-            }
-            return state;
-        }, () => this.setState({isPageLoading: false}))
     }
 
     initRequestToast() {
@@ -189,17 +189,25 @@ class AppAdmin extends Component<PageProps, PageState> {
         })
     }
 
-    setSessionData(data: AppAdminSetState["sessionData"]){
+    setSessionData(data: AppAdminSetState["sessionData"], callBack?: () => void){
         this.setState((state: PageState) => {
             state.sessionData = Object.assign(state.sessionData, data);
             return state;
+        }, () => {
+            if(callBack) {
+                callBack();
+            }
         })
     }
 
-    setPageData(data: AppAdminSetState["pageData"]){
+    setPageData(data: AppAdminSetState["pageData"], callBack?: () => void){
         this.setState((state: PageState) => {
             state.pageData = Object.assign(state.pageData, data);
             return state;
+        }, () => {
+            if(callBack) {
+                callBack();
+            }
         })
     }
 
@@ -208,18 +216,25 @@ class AppAdmin extends Component<PageProps, PageState> {
     }
 
     getContentLanguages() {
+        this.setState({
+            isPageLoading: true,
+        });
         let resData = Services.Get.languages({})
         if (resData.status) {
             this.setState({
                 pageLanguages: resData.data.map((lang, index) => ({
                     label: <this.ContentLanguageItem {...lang} key={index}/>,
                     value: lang.langId
-                }))
+                })),
+                isPageLoading: false
             })
         }
     }
 
     getContentMainLanguage() {
+        this.setState({
+            isPageLoading: true,
+        });
         let resData = Services.Get.settings({
             id: SettingId.WebsiteMainLanguage
         })
@@ -227,7 +242,9 @@ class AppAdmin extends Component<PageProps, PageState> {
             this.setState((state: PageState) => {
                 resData.data.forEach(setting => {
                     state.pageData.mainLangId = Number(setting.settingValue);
+                    state.pageData.langId = state.pageData.mainLangId;
                 })
+                state.isPageLoading = false;
                 return state;
             })
         }
@@ -296,7 +313,10 @@ class AppAdmin extends Component<PageProps, PageState> {
     );
 
     render() {
-        const fullPageLayoutRoutes = [pageRoutes.login.path()];
+        const fullPageLayoutRoutes = [
+            pageRoutes.login.path(),
+            pageRoutes.lock.path()
+        ];
         let isFullPageLayout = fullPageLayoutRoutes.includes(this.props.router.location.pathname);
 
         if(this.oldLocation !== this.props.router.location.pathname) {
@@ -308,14 +328,14 @@ class AppAdmin extends Component<PageProps, PageState> {
         const commonProps: PagePropCommonDocument = {
             router: this.props.router,
             setBreadCrumb: titles => this.setBreadCrumb(titles),
-            setSessionData: data => this.setSessionData(data),
+            setSessionData: (data, callBack) => this.setSessionData(data, callBack),
             getSessionData: this.state.sessionData,
             getPageData: this.state.pageData,
-            setPageData: data => this.setPageData(data)
+            setPageData: (data, callBack) => this.setPageData(data, callBack)
         };
 
         let breadCrumb = !isFullPageLayout ? <this.BreadCrumb/> : '';
-        let navbarComponent = !isFullPageLayout ? <Navbar/> : '';
+        let navbarComponent = !isFullPageLayout ? <Navbar {...commonProps}/> : '';
         let sidebarComponent = !isFullPageLayout ? <Sidebar {...commonProps}/> : '';
         let footerComponent = !isFullPageLayout ? <Footer/> : '';
         return (

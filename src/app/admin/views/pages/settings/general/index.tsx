@@ -82,7 +82,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
             })
             if(resData.status){
                 this.props.setPageData({
-                    langId: this.state.formData.langId
+                    mainLangId: this.state.formData.langId
                 });
             }
         })

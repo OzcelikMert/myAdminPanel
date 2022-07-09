@@ -21,7 +21,7 @@ import {PostTermGetParamDocument} from "../../../../../modules/services/get/post
 import {PostPostParamDocument} from "../../../../../modules/services/post/post";
 import {PostPutParamDocument} from "../../../../../modules/services/put/post";
 import {PostGetParamDocument} from "../../../../../modules/services/get/post";
-import ThemeChooseImage, {emptyImage} from "../../components/chooseImage";
+import ThemeChooseImage from "../../components/chooseImage";
 
 type PageState = {
     formActiveKey: string
@@ -32,6 +32,7 @@ type PageState = {
     mainTitle: string,
     formData: {
         postId: number
+        typeId: number
         langId: number
         image: string
         title: string
@@ -64,7 +65,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             isSubmitting: false,
             mainTitle: "",
             formData: {
-                postId: 0,
+                postId: this.props.getPageData.searchParams.postId,
+                typeId: this.props.getPageData.searchParams.postTypeId,
                 langId: this.props.getPageData.langId,
                 image: "",
                 title: "",
@@ -147,11 +149,11 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 resData.data.orderBy("postTermOrder", "asc").forEach((item: PostTermDocument) => {
                     if (item.postTermTypeId == PostTermTypeId.Category) state.categoryTerms?.push({
                         value: item.postTermId,
-                        label: item.postTermContentTitle || ""
+                        label: item.postTermContentTitle || this.props.router.t("[noLangAdd]")
                     });
                     else if (item.postTermTypeId == PostTermTypeId.Tag) state.tagTerms?.push({
                         value: item.postTermId,
-                        label: item.postTermContentTitle || ""
+                        label: item.postTermContentTitle || this.props.router.t("[noLangAdd]")
                     });
                 });
                 return state;
@@ -180,8 +182,9 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     });
 
                     state.formData = {
-                        postId: state.formData.postId,
                         langId: state.formData.langId,
+                        postId: post.postId,
+                        typeId: post.postTypeId,
                         dateStart: post.postDateStart,
                         order: post.postOrder,
                         statusId: post.postStatusId,
@@ -222,12 +225,11 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         })
         let params: PostPostParamDocument & PostPutParamDocument = Object.assign({
             termId: this.state.formData.tagTermId.concat(this.state.formData.categoryTermId),
-            typeId: this.props.getPageData.searchParams.postTypeId,
         }, this.state.formData);
 
-        ((V.isEmpty(params.postId))
-            ? Services.Post.post(params)
-            : Services.Put.post(params)).then(resData => {
+        ((params.postId > 0)
+            ? Services.Put.post(params)
+            : Services.Post.post(params)).then(resData => {
             this.setState((state: PageState) => {
                 if (resData.status) {
                     state.isSuccessMessage = true;
@@ -373,13 +375,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             <div className="row">
                 <div className="col-md-7 mb-3">
                     <img
-                        src={
-                            !V.isEmpty(this.state.formData.image)
-                                ? (this.state.formData.image.isUrl())
-                                    ? this.state.formData.image
-                                    : GlobalPaths.uploads.images + this.state.formData.image
-                                : emptyImage
-                        }
+                        src={GlobalFunctions.getUploadedImageSrc(this.state.formData.image)}
                         alt="Empty Image"
                         className="post-image"
                     />

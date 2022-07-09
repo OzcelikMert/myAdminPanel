@@ -18,7 +18,6 @@ import Swal from "sweetalert2";
 import {UserDeleteParamDocument} from "../../../../../../modules/services/delete/user";
 import ThemeUsersProfileCard from "../../../components/users/profileCard";
 import V from "../../../../../../library/variable";
-import {emptyImage} from "../../../components/chooseImage";
 
 type PageState = {
     users: UserDocument[]
@@ -108,13 +107,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                 cell: row => (
                     <div className="image pt-2 pb-2">
                         <img
-                            src={
-                                !V.isEmpty(row.userImage)
-                                    ? (row.userImage.isUrl())
-                                        ? row.userImage
-                                        : GlobalPaths.uploads.images + row.userImage
-                                    : emptyImage
-                            }
+                            src={GlobalFunctions.getUploadedImageSrc(row.userImage)}
                             alt={row.userName}
                         />
                     </div>

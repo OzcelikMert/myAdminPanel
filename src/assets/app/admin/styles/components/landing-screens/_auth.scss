@@ -16,8 +16,10 @@
 		background-size: cover;
 	}
 	&.lock-full-bg {
-		background: url("../../../../../images/auth/lockscreen-bg.jpg");
+		background: url("../../../../../images/auth/lock.webp");
+		background-repeat: no-repeat;
 		background-size: cover;
+		background-position: bottom;
 	}
 	.login-half-form {
 		position: relative;
@@ -93,5 +95,23 @@
 				color: initial;
 			}
 		}
+	}
+}
+
+.page-lock {
+	.field {
+		border: 1px solid #ffffffba;
+		color: white;
+		&:focus,
+		&:not(:placeholder-shown) {
+			border: 0;
+		}
+		&:hover {
+			border-color: unset;
+		}
+	}
+	.label {
+		background: transparent;
+		color: white;
 	}
 }

@@ -46,7 +46,7 @@ class AppProviders extends Component<PageProps, PageState> {
         let params: UsersGetParamDocument = {
             isRefresh: isRefresh,
             isCheckSession: true,
-            requestType: "session"
+            requestType: "getSession"
         };
         let isAuth = false;
         let resData = Services.Get.users(params);
@@ -75,9 +75,17 @@ class AppProviders extends Component<PageProps, PageState> {
 
     render() {
         return this.state.isPageLoading ? <Spinner/>
-            : (!this.state.isAuth && this.props.router.location.pathname !== pageRoutes.login.path())
+            : (
+                !this.state.isAuth &&
+                this.props.router.location.pathname !== pageRoutes.login.path() &&
+                this.props.router.location.pathname !== pageRoutes.lock.path()
+            )
                 ? <Navigate to={pageRoutes.login.path()}/>
-                : (this.state.isAuth && this.props.router.location.pathname === pageRoutes.login.path())
+                : (
+                    this.state.isAuth &&
+                    this.props.router.location.pathname === pageRoutes.login.path() &&
+                    this.props.router.location.pathname === pageRoutes.lock.path()
+                )
                     ? <Navigate to={pageRoutes.dashboard.path()}/>
                     : this.props.children
     }

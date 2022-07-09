@@ -50,7 +50,7 @@ class PageLogin extends Component<PageProps, PageState> {
             isSubmitting: true
         })
         let params: UsersGetParamDocument = {
-            requestType: "session"
+            requestType: "createSession"
         };
         params = Object.assign(params, this.state.formData);
         let resData = Services.Get.users(params);
@@ -61,7 +61,7 @@ class PageLogin extends Component<PageProps, PageState> {
                 langId: LanguageId.English,
                 roleId: user.userRoleId,
                 email: user.userEmail,
-                image: user.userEmail,
+                image: user.userImage,
                 name: user.userName,
                 permissions: user.userPermissions,
             });

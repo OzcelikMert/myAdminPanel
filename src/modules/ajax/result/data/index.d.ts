@@ -5,6 +5,7 @@ import {PostTermLinkDocument} from "./postTermLinks";
 import {SeoDocument} from "./seo";
 import {SettingsDocument} from "./settings";
 import {LanguageDocument} from "./languages";
+import {NavigateDocument} from "./navigates";
 
 export {
     PostDocument,
@@ -13,5 +14,6 @@ export {
     PostTermLinkDocument,
     SeoDocument,
     SettingsDocument,
-    LanguageDocument
+    LanguageDocument,
+    NavigateDocument
 }

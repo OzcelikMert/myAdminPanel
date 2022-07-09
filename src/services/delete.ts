@@ -4,6 +4,7 @@ import {PostTermDeleteParamDocument} from "../modules/services/delete/postTerm";
 import {PostDeleteParamDocument} from "../modules/services/delete/post";
 import {UserDeleteParamDocument} from "../modules/services/delete/user";
 import {GalleryDeleteParamDocument} from "../modules/services/delete/gallery";
+import {NavigateDeleteParamDocument} from "../modules/services/delete/navigate";
 
 const Delete = {
     postTerm(params: PostTermDeleteParamDocument) {
@@ -17,7 +18,10 @@ const Delete = {
     },
     gallery(params: GalleryDeleteParamDocument) {
         return Api.delete(ServicePages.gallery, params);
-    }
+    },
+    navigate(params: NavigateDeleteParamDocument) {
+        return Api.delete(ServicePages.navigate, params);
+    },
 }
 
 export default Delete;

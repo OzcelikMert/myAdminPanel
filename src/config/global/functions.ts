@@ -7,6 +7,9 @@ import {
     UserRoleId,
     UserRoles
 } from "../../public/static";
+import V from "../../library/variable";
+import {GlobalPaths} from "./index";
+import {emptyImage} from "../../app/admin/views/components/chooseImage";
 
 const GlobalFunctions = {
     getStatusForSelect(statusId: StatusId[], langId: number) {
@@ -69,6 +72,13 @@ const GlobalFunctions = {
     },
     getStaticContent(contents: any[], searchKey: string, searchValue: any, langId: number): string {
         return contents.findSingle(searchKey, searchValue).contents.findSingle("langId", langId).content;
+    },
+    getUploadedImageSrc(imageName?: string) : any {
+        return imageName && !V.isEmpty(imageName)
+            ? (imageName.isUrl())
+                ? imageName
+                : GlobalPaths.uploads.images + imageName
+            : emptyImage
     }
 }
 

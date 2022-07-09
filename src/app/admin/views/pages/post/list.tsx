@@ -11,8 +11,6 @@ import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../components/form";
 import {ThemeTableToggleMenu} from "../../components/table";
 import Swal from "sweetalert2";
-import V from "../../../../../library/variable";
-import {emptyImage} from "../../components/chooseImage";
 import {PostGetParamDocument} from "../../../../../modules/services/get/post";
 
 
@@ -79,9 +77,9 @@ export class PagePostList extends Component<PageProps, PageState> {
         event.preventDefault();
         const params: PostPutParamDocument = {
             postId: this.state.selectedPosts,
-            statusId: statusId,
-            langId: this.props.getPageData.langId
+            statusId: statusId
         }
+
         if (statusId === StatusId.Deleted && this.state.listMode === "deleted") {
             Swal.fire({
                 title: this.props.router.t("deleteAction"),
@@ -164,13 +162,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                 cell: row => (
                     <div className="image pt-2 pb-2">
                         <img
-                            src={
-                                row.postContentImage && !V.isEmpty(row.postContentImage)
-                                    ? (row.postContentImage.isUrl())
-                                        ? row.postContentImage
-                                        : GlobalPaths.uploads.images + row.postContentImage
-                                    : emptyImage
-                            }
+                            src={GlobalFunctions.getUploadedImageSrc(row.postContentImage)}
                             alt={row.postContentTitle}
                             className="post-image"
                         />
@@ -179,7 +171,7 @@ export class PagePostList extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("title"),
-                selector: row => row.postContentTitle || "",
+                selector: row => row.postContentTitle || this.props.router.t("[noLangAdd]"),
                 sortable: true
             },
             {
@@ -189,7 +181,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                         ? <label
                             onClick={() => this.navigateTermPage("termEdit", item.postTermId, PostTermTypeId.Category)}
                             className={`badge badge-gradient-success me-1 cursor-pointer category-badge`}
-                        >{item.postTermContentTitle}</label>
+                        >{item.postTermContentTitle || this.props.router.t("[noLangAdd]")}</label>
                         : null
                     )
                 )

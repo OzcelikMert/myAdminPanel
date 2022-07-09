@@ -1,6 +1,6 @@
 export interface PostTermPutParamDocument {
     termId: number | number[]
-    langId: number
+    langId?: number
     mainId?: number
     statusId?: number
     order?: number

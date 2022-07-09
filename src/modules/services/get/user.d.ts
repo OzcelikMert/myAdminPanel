@@ -4,5 +4,5 @@ export interface UsersGetParamDocument {
     userId?: number
     isCheckSession?: boolean
     isRefresh?: boolean
-    requestType: "list" | "session"
+    requestType: "list" | "getSession" | "createSession"
 }

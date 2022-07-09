@@ -7,7 +7,8 @@ const PermissionGroups: Array<PermissionGroupDocument> = [
     {id: 4, order: 4},
     {id: 5, order: 5},
     {id: 6, order: 6},
-    {id: 7, order: 7}
+    {id: 7, order: 7},
+    {id: 8, order: 8}
 ]
 
 enum PermissionGroupId {
@@ -17,7 +18,8 @@ enum PermissionGroupId {
     Reference,
     Gallery,
     User,
-    Page
+    Page,
+    Navigate
 }
 
 export {PermissionGroups, PermissionGroupId}

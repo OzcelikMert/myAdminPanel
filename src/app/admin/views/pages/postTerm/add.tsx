@@ -22,7 +22,7 @@ import V from "../../../../../library/variable";
 import SweetAlert from "react-sweetalert2";
 import {PostTermGetParamDocument} from '../../../../../modules/services/get/postTerm';
 import HandleForm from "../../../../../library/react/handles/form";
-import ThemeChooseImage, {emptyImage} from "../../components/chooseImage";
+import ThemeChooseImage from "../../components/chooseImage";
 
 type PageState = {
     formActiveKey: string
@@ -137,7 +137,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                     if (!V.isEmpty(this.props.getPageData.searchParams.termId)) {
                         if (this.props.getPageData.searchParams.termId == item.postTermId) return;
                     }
-                    state.postTerms?.push({value: item.postTermId, label: item.postTermContentTitle || ""});
+                    state.postTerms?.push({value: item.postTermId, label: item.postTermContentTitle || this.props.router.t("[noLangAdd]")});
                 });
                 return state;
             })
@@ -192,14 +192,11 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
     onSubmit(event: FormEvent) {
         event.preventDefault();
         let params: any = Object.assign({
-            termId: this.props.getPageData.searchParams.termId,
-            typeId: this.props.getPageData.searchParams.termTypeId,
-            postTypeId: this.props.getPageData.searchParams.postTypeId,
-            langId: this.props.getPageData.langId,
+
         }, this.state.formData);
-        ((V.isEmpty(params.termId))
-            ? Services.Post.postTerm(params)
-            : Services.Put.postTerm(params)).then(resData => {
+        ((params.termId > 0)
+            ? Services.Put.postTerm(params)
+            : Services.Post.postTerm(params)).then(resData => {
                 if (resData.status) {
                     this.getTerms();
                 }
@@ -326,13 +323,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
             <div className="row">
                 <div className="col-md-7 mb-3">
                     <img
-                        src={
-                            !V.isEmpty(this.state.formData.image)
-                                ? (this.state.formData.image.isUrl())
-                                    ? this.state.formData.image
-                                    : GlobalPaths.uploads.images + this.state.formData.image
-                                : emptyImage
-                        }
+                        src={GlobalFunctions.getUploadedImageSrc(this.state.formData.image)}
                         alt="Empty Image"
                         className="post-image"
                     />

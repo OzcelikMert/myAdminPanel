@@ -4,7 +4,7 @@ import {UsersGetParamDocument} from "../modules/services/get/user";
 import {PostTermGetParamDocument} from "../modules/services/get/postTerm";
 import {PostGetParamDocument} from "../modules/services/get/post";
 import {
-    LanguageDocument,
+    LanguageDocument, NavigateDocument,
     PostDocument,
     PostTermDocument,
     SeoDocument,
@@ -16,6 +16,7 @@ import {GalleryDocument} from "../modules/ajax/result/data/gallery";
 import {SeoGetParamDocument} from "../modules/services/get/seo";
 import {SettingGetParamDocument} from "../modules/services/get/setting";
 import {LanguageGetParamDocument} from "../modules/services/get/language";
+import {NavigateGetParamDocument} from "../modules/services/get/navigate";
 
 const Get = {
     users(params: UsersGetParamDocument): ResultDocument<UserDocument[]> {
@@ -38,6 +39,9 @@ const Get = {
     },
     languages(params: LanguageGetParamDocument): ResultDocument<LanguageDocument[]> {
         return Api.get(ServicePages.language, params);
+    },
+    navigate(params: NavigateGetParamDocument): ResultDocument<NavigateDocument[]> {
+        return Api.get(ServicePages.navigate, params);
     }
 }
 

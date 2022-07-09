@@ -89,6 +89,7 @@ type LanguageKeys =
     "type" |
     "image" |
     "navigates" |
-    "permissions"
+    "permissions" |
+    "[noLangAdd]"
 
 export default LanguageKeys;

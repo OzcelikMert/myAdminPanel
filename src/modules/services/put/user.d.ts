@@ -1,7 +1,8 @@
 export interface UserPutParamDocument {
     userId: number
+    isSignOut?: boolean
     roleId?: number
-    statusId: number
+    statusId?: number
     image?: string,
     name?: string
     email?: string

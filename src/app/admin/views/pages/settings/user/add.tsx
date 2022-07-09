@@ -55,7 +55,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
             mainTitle: "",
             isSubmitting: false,
             formData: {
-                userId: 0,
+                userId: this.props.getPageData.searchParams.userId,
                 image: "",
                 name: "",
                 email: "",
@@ -74,7 +74,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         this.setPageTitle();
         this.getRoles();
         this.getStatus();
-        if (this.props.getPageData.searchParams.userId > 0) {
+        if (this.state.formData.userId > 0) {
             this.getUser();
         }
     }
@@ -161,9 +161,9 @@ export class PageUserAdd extends Component<PageProps, PageState> {
             userId: this.props.getPageData.searchParams.userId,
         }, this.state.formData);
 
-        ((V.isEmpty(params.userId))
-            ? Services.Post.user(params)
-            : Services.Put.user(params)).then(resData => {
+        ((params.userId > 0)
+            ? Services.Put.user(params)
+            : Services.Post.user(params)).then(resData => {
                 this.setState((state: PageState) => {
                     if (resData.status) {
                         state.isSuccessMessage = true;

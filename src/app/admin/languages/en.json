@@ -76,6 +76,7 @@
   "image": "Image",
   "navigates": "Navigates",
   "permissions": "Permissions",
+  "[noLangAdd]": "[No language added]",
 
   "toastMessageLoadingPostTitle": "Creating...",
   "toastMessageLoadingPostContent": "Creating please wait",

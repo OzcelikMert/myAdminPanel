@@ -23,7 +23,7 @@ export interface PostDocument {
     postTermContents: {
         postTermId: number,
         postTermTypeId: number,
-        postTermContentTitle: string,
-        postTermContentUrl: string
+        postTermContentTitle?: string,
+        postTermContentUrl?: string
     }[]
 }

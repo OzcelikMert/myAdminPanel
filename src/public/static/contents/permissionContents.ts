@@ -20,6 +20,9 @@ const PermissionContents: Array<PermissionContentDocument> = [
     { permId: 17, contents: [{langId: 1, content: "Sayfa Ekle"}, {langId: 2, content: "Page Add"}] },
     { permId: 18, contents: [{langId: 1, content: "Sayfa Düzenle"}, {langId: 2, content: "Page Edit"}] },
     { permId: 19, contents: [{langId: 1, content: "Sayfa Sil"}, {langId: 2, content: "Page Delete"}] },
+    { permId: 20, contents: [{langId: 1, content: "Yönlendirici Ekle"}, {langId: 2, content: "Navigate Add"}] },
+    { permId: 21, contents: [{langId: 1, content: "Yönlendirici Düzenle"}, {langId: 2, content: "Navigate Edit"}] },
+    { permId: 22, contents: [{langId: 1, content: "Yönlendirici Sil"}, {langId: 2, content: "Navigate Delete"}] },
 ]
 
 export {PermissionContents}

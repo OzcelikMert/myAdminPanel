@@ -1,18 +1,14 @@
 import React, {Component} from 'react';
 import {GlobalFunctions, GlobalPaths} from "../../../../../config/global";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
-import {Bar, Doughnut} from "react-chartjs-2";
 import ThemeChartBar from "../../components/charts/bar";
 import ThemeChartDonut from "../../components/charts/donut";
 import {PostDocument} from "../../../../../modules/ajax/result/data";
 import Services from "../../../../../services";
 import {PostGetParamDocument} from "../../../../../modules/services/get/post";
 import DataTable, {TableColumn} from "react-data-table-component";
-import {ThemeFormCheckBox} from "../../components/form";
 import {PostTermTypeId, PostTypeContents, PostTypeId, StatusContents} from "../../../../../public/static";
 import {pageRoutes} from "../../../routes";
-import V from "../../../../../library/variable";
-import {emptyImage} from "../../components/chooseImage";
 
 type PageState = {
     chartData: {
@@ -200,13 +196,7 @@ class PageDashboard extends Component<PageProps, PageState> {
                 cell: row => (
                     <div className="image pt-2 pb-2">
                         <img
-                            src={
-                                row.postContentImage && !V.isEmpty(row.postContentImage)
-                                    ? (row.postContentImage.isUrl())
-                                        ? row.postContentImage
-                                        : GlobalPaths.uploads.images + row.postContentImage
-                                    : emptyImage
-                            }
+                            src={GlobalFunctions.getUploadedImageSrc(row.postContentImage)}
                             alt={row.postContentTitle}
                             className="post-image"
                         />
@@ -230,7 +220,7 @@ class PageDashboard extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("title"),
-                selector: row => row.postContentTitle || "",
+                selector: row => row.postContentTitle || this.props.router.t("[noLangAdd]"),
                 sortable: true
             },
             {
@@ -240,7 +230,7 @@ class PageDashboard extends Component<PageProps, PageState> {
                         ? <label
                             onClick={() => this.navigateTermPage("termEdit", row.postTypeId, item.postTermId, PostTermTypeId.Category)}
                             className={`badge badge-gradient-success me-1 cursor-pointer`}
-                        >{item.postTermContentTitle}</label>
+                        >{item.postTermContentTitle || this.props.router.t("[noLangAdd]")}</label>
                         : null
                     )
                 )

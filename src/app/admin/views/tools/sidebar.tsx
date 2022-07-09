@@ -7,7 +7,6 @@ import router, {pageRoutes} from "../../routes";
 import {PagePropCommonDocument} from "../../../../modules/views/pages/pageProps";
 import {GlobalFunctions, GlobalPaths} from '../../../../config/global';
 import V from "../../../../library/variable";
-import {emptyImage} from "../components/chooseImage";
 
 type PageState = {
     isMenuOpen: {
@@ -281,17 +280,10 @@ class Sidebar extends Component<PageProps, PageState> {
                         <a href="!#" className="nav-link" onClick={evt => evt.preventDefault()}>
                             <div className="nav-profile-image">
                                 <img
-                                    src={
-                                    this.props.getSessionData.image && !V.isEmpty(this.props.getSessionData.image)
-                                        ? (this.props.getSessionData.image.isUrl())
-                                            ? this.props.getSessionData.image
-                                            : GlobalPaths.uploads.images + this.props.getSessionData.image
-                                        : emptyImage
-                                    }
+                                    src={GlobalFunctions.getUploadedImageSrc(this.props.getSessionData.image)}
                                     alt={this.props.getSessionData.name}
                                 />
-                                <span
-                                    className="login-status online"></span> {/* change to offline or busy as needed */}
+                                <span className="login-status online"></span>
                             </div>
                             <div className="nav-profile-text">
                 <span className="font-weight-bold mb-2">

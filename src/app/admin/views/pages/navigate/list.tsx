@@ -1,28 +1,24 @@
 import React, {Component, FormEvent} from 'react'
-import {Dropdown} from 'react-bootstrap';
 import {
-    PostTermTypeContents,
-    PostTypeContents,
     StatusContents,
     StatusId
 } from "../../../../../public/static";
 import {pageRoutes} from "../../../routes";
 import Services from "../../../../../services";
-import {PostTermDocument} from "../../../../../modules/ajax/result/data";
-import {GlobalFunctions, GlobalPaths} from "../../../../../config/global";
+import {NavigateDocument} from "../../../../../modules/ajax/result/data";
+import {GlobalFunctions} from "../../../../../config/global";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../components/form";
-import {PostTermPutParamDocument} from "../../../../../modules/services/put/postTerm";
 import {ThemeTableToggleMenu} from "../../components/table";
-import V from "../../../../../library/variable";
 import Swal from "sweetalert2";
-import {emptyImage} from "../../components/chooseImage";
+import {NavigateGetParamDocument} from "../../../../../modules/services/get/navigate";
+import {NavigatePutParamDocument} from "../../../../../modules/services/put/navigate";
 
 type PageState = {
-    postTerms: PostTermDocument[],
-    showingPostTerms: PageState["postTerms"]
-    selectedPostTerms: number[]
+    navigates: NavigateDocument[],
+    showingNavigates: PageState["navigates"]
+    selectedNavigates: number[]
     listMode: "list" | "deleted"
     isShowToggleMenu: boolean
     checkedRowsClear: boolean
@@ -33,19 +29,17 @@ type PageProps = {} & PagePropCommonDocument;
 export class PageNavigateList extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
-        let params = {
-            typeId: this.props.getPageData.searchParams.termTypeId,
-            postTypeId: this.props.getPageData.searchParams.postTypeId,
+        let params: NavigateGetParamDocument = {
             langId: this.props.getPageData.mainLangId
         };
-        let postTerms: PageState["postTerms"] = Services.Get.postTerms(params).data;
+        let navigates = Services.Get.navigate(params).data;
         this.state = {
             checkedRowsClear: false,
-            selectedPostTerms: [],
+            selectedNavigates: [],
             listMode: "list",
             isShowToggleMenu: false,
-            postTerms: postTerms,
-            showingPostTerms: postTerms.filter(value => value.postTermStatusId !== StatusId.Deleted)
+            navigates: navigates,
+            showingNavigates: navigates.filter(item => item.navigateStatusId !== StatusId.Deleted)
         }
     }
 
@@ -62,10 +56,9 @@ export class PageNavigateList extends Component<PageProps, PageState> {
 
     onChangeStatus(event: any, statusId: number) {
         event.preventDefault();
-        const params: PostTermPutParamDocument = {
-            termId: this.state.selectedPostTerms,
-            statusId: statusId,
-            langId:this.props.getPageData.langId
+        const params: NavigatePutParamDocument = {
+            navigateId: this.state.selectedNavigates,
+            statusId: statusId
         }
 
         if (statusId === StatusId.Deleted && this.state.listMode === "deleted") {
@@ -78,10 +71,10 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                 showCancelButton: true
             }).then(result => {
                 if (result.isConfirmed) {
-                    Services.Delete.postTerm(params).then(resData => {
+                    Services.Delete.navigate(params).then(resData => {
                         if (resData.status) {
                             this.setState((state: PageState) => {
-                                state.postTerms = state.postTerms.filter(item => !state.selectedPostTerms.includes(item.postTermId))
+                                state.navigates = state.navigates.filter(item => !state.selectedNavigates.includes(item.navigateId))
                                 return state;
                             })
                             this.onChangeListMode(this.state.listMode);
@@ -90,12 +83,12 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                 }
             })
         } else {
-            Services.Put.postTerm(params).then(resData => {
+            Services.Put.navigate(params).then(resData => {
                 if (resData.status) {
                     this.setState((state: PageState) => {
-                        state.postTerms.map((item, index) => {
-                            if (state.selectedPostTerms.includes(item.postTermId)) {
-                                item.postTermStatusId = statusId;
+                        state.navigates.map((item, index) => {
+                            if (state.selectedNavigates.includes(item.navigateId)) {
+                                item.navigateStatusId = statusId;
                             }
                         })
                         return state;
@@ -106,10 +99,10 @@ export class PageNavigateList extends Component<PageProps, PageState> {
         }
     }
 
-    onSelect(allSelected: boolean, selectedCount: number, selectedRows: PageState["showingPostTerms"]) {
+    onSelect(allSelected: boolean, selectedCount: number, selectedRows: PageState["navigates"]) {
         this.setState((state: PageState) => {
-            state.selectedPostTerms = [];
-            selectedRows.forEach(item => state.selectedPostTerms.push(item.postTermId))
+            state.selectedNavigates = [];
+            selectedRows.forEach(item => state.selectedNavigates.push(item.navigateId))
             state.isShowToggleMenu = selectedCount > 0;
             return state;
         })
@@ -118,58 +111,37 @@ export class PageNavigateList extends Component<PageProps, PageState> {
     onChangeListMode(mode: PageState["listMode"]) {
         this.setState((state: PageState) => {
             state.listMode = mode;
-            state.showingPostTerms = [];
-            state.selectedPostTerms = [];
+            state.showingNavigates = [];
+            state.selectedNavigates = [];
             state.isShowToggleMenu = false;
-            state.postTerms.map(value => {
+            state.navigates.map(value => {
                 if (
-                    (mode === "list" && value.postTermStatusId !== StatusId.Deleted) ||
-                    (mode === "deleted" && value.postTermStatusId === StatusId.Deleted)
-                ) state.showingPostTerms.push(value);
+                    (mode === "list" && value.navigateStatusId !== StatusId.Deleted) ||
+                    (mode === "deleted" && value.navigateStatusId === StatusId.Deleted)
+                ) state.showingNavigates.push(value);
             });
             state.checkedRowsClear = !this.state.checkedRowsClear;
             return state;
         })
     }
 
-    navigateTermPage(type: "add" | "back" | "edit", postTermId = 0) {
-        let path = (type === "add")
-            ? pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, this.props.getPageData.searchParams.termTypeId) + pageRoutes.postTerm.add.path()
-            : (type === "edit")
-                ? pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, this.props.getPageData.searchParams.termTypeId) + pageRoutes.postTerm.edit.path(postTermId)
-                : pageRoutes.post.path(this.props.getPageData.searchParams.postTypeId) + pageRoutes.post.list.path();
-        path = (this.props.router.location.pathname.search(pageRoutes.themeContent.path()) > -1) ? pageRoutes.themeContent.path() + path : path;
+    navigateTermPage(type: "edit", navigateId = 0) {
+        let path = (type === "edit")
+                ? pageRoutes.navigate.path() + pageRoutes.navigate.edit.path(navigateId)
+                : "";
         this.props.router.navigate(path, {replace: true});
     }
 
-    get getTableColumns(): TableColumn<PageState["showingPostTerms"][0]>[] {
+    get getTableColumns(): TableColumn<PageState["navigates"][0]>[] {
         return [
             {
-                name: this.props.router.t("image"),
-                width: "75px",
-                cell: row => (
-                    <div className="image pt-2 pb-2">
-                        <img
-                            src={
-                                row.postTermContentImage && !V.isEmpty(row.postTermContentImage)
-                                    ? (row.postTermContentImage.isUrl())
-                                        ? row.postTermContentImage
-                                        : GlobalPaths.uploads.images + row.postTermContentImage
-                                    : emptyImage
-                            }
-                            alt={row.postTermContentTitle}
-                        />
-                    </div>
-                )
-            },
-            {
                 name: this.props.router.t("name"),
-                selector: row => row.postTermContentTitle || "",
+                selector: row => row.navigateContentTitle || this.props.router.t("[noLangAdd]"),
                 sortable: true,
             },
             {
-                name: this.props.router.t("views"),
-                selector: row => row.postTermViews,
+                name: this.props.router.t("main"),
+                selector: row => this.state.navigates.findSingle("navigateId", row.navigateMainId)?.navigateContentTitle || this.props.router.t("[noLangAdd]"),
                 sortable: true
             },
             {
@@ -177,9 +149,9 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                 sortable: true,
                 cell: row => (
                     <label
-                        className={`badge badge-gradient-${GlobalFunctions.getStatusClassName(row.postTermStatusId)}`}>
+                        className={`badge badge-gradient-${GlobalFunctions.getStatusClassName(row.navigateStatusId)}`}>
                         {
-                            GlobalFunctions.getStaticContent(StatusContents, "statusId", row.postTermStatusId, this.props.getSessionData.langId)
+                            GlobalFunctions.getStaticContent(StatusContents, "statusId", row.navigateStatusId, this.props.getSessionData.langId)
                         }
                     </label>
                 )
@@ -191,7 +163,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                 cell: row => (
                     <button
                         className="btn btn-gradient-warning"
-                        onClick={() => this.navigateTermPage("edit", row.postTermId)}
+                        onClick={() => this.navigateTermPage("edit", row.navigateId)}
                     ><i className="fa fa-pencil-square-o"></i></button>
                 )
             }
@@ -202,18 +174,13 @@ export class PageNavigateList extends Component<PageProps, PageState> {
         return (
             <div className="page-post-term">
                 <div className="navigate-buttons mb-3">
-                    <button className="btn btn-gradient-dark btn-lg" onClick={() => this.navigateTermPage("back")}>
-                        <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
-                    </button>
-                    <button className="btn btn-gradient-info btn-lg ms-3"
-                            onClick={() => this.navigateTermPage("add")}>+ {this.props.router.t("addNew")}</button>
                     {
                         this.state.listMode === "list"
-                            ? <button className="btn btn-gradient-danger btn-lg ms-3"
+                            ? <button className="btn btn-gradient-danger btn-lg"
                                       onClick={() => this.onChangeListMode("deleted")}>
                                 <i className="mdi mdi-delete"></i> {this.props.router.t("trash")}
                             </button>
-                            : <button className="btn btn-gradient-success btn-lg ms-3"
+                            : <button className="btn btn-gradient-success btn-lg"
                                       onClick={() => this.onChangeListMode("list")}>
                                 <i className="mdi mdi-view-list"></i> {this.props.router.t("list")}
                             </button>
@@ -238,7 +205,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                                 <div className="table-responsive">
                                     <DataTable
                                         columns={this.getTableColumns}
-                                        data={this.state.showingPostTerms}
+                                        data={this.state.showingNavigates}
                                         noHeader
                                         fixedHeader
                                         defaultSortAsc={false}

@@ -8,6 +8,7 @@ import Spinner from './views/tools/spinner';
 import {PagePropCommonDocument} from "../../modules/views/pages/pageProps";
 
 import PageLogin from "./views/pages/login";
+import PageLock from "./views/pages/lock";
 import PageDashboard from "./views/pages/dashboard";
 import PageGalleryList from "./views/pages/gallery/list";
 import PageGalleryUpload from "./views/pages/gallery/upload";
@@ -26,6 +27,11 @@ export const pageRoutes = {
     login: {
         path() {
             return "/login"
+        }
+    },
+    lock: {
+        path() {
+            return "/lock"
         }
     },
     dashboard: {
@@ -162,6 +168,8 @@ class AppRoutes extends Component<PageProps, PageState> {
             <Suspense fallback={<Spinner/>}>
                 <Routes>
                     <Route path={pageRoutes.login.path()} element={<PageLogin {...this.props}/>}/>
+
+                    <Route path={pageRoutes.lock.path()} element={<PageLock {...this.props}/>}/>
 
                     <Route path={pageRoutes.dashboard.path()} element={<PageDashboard {...this.props}/>}/>
 

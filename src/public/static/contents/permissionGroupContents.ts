@@ -7,7 +7,8 @@ const PermissionGroupsContents: Array<PermissionGroupContentDocument> = [
     { groupId: 4, contents: [{langId: 1, content: "Referenaslar"}, {langId: 2, content: "Reference"}] },
     { groupId: 5, contents: [{langId: 1, content: "Galeri"}, {langId: 2, content: "Gallery"}] },
     { groupId: 6, contents: [{langId: 1, content: "Kullanıcı"}, {langId: 2, content: "User"}] },
-    { groupId: 7, contents: [{langId: 1, content: "Sayfa"}, {langId: 2, content: "Page"}] }
+    { groupId: 7, contents: [{langId: 1, content: "Sayfa"}, {langId: 2, content: "Page"}] },
+    { groupId: 8, contents: [{langId: 1, content: "Yönlendirici"}, {langId: 2, content: "Navigate"}] }
 ]
 
 export {PermissionGroupsContents}

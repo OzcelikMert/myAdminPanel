@@ -5,9 +5,9 @@ import {AppAdminGetState, AppAdminSetState} from "../../app/admin/views";
 interface PagePropCommonDocument {
     router: PagePropRouterDocument,
     setBreadCrumb: (titles: string[]) => void
-    setSessionData: (data: AppAdminSetState["sessionData"]) => void
+    setSessionData: (data: AppAdminSetState["sessionData"], callBack?: () => void) => void
     getSessionData: AppAdminGetState["sessionData"],
-    setPageData: (data: AppAdminSetState["pageData"]) => void
+    setPageData: (data: AppAdminSetState["pageData"], callBack?: () => void) => void
     getPageData: AppAdminGetState["pageData"],
 
 }
