@@ -91,7 +91,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
     render() {
         return (
             <div className="page-settings">
-                <div className="gird-margin stretch-card">
+                <div className="grid-margin stretch-card">
                     <div className="card">
                         <div className="card-body">
                             <ThemeForm

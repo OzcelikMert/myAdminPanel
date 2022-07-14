@@ -85,7 +85,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
             this.props.router.t("users"),
             this.props.router.t((this.state.formData.userId) > 0 ? "edit" : "add")
         ];
-        if(this.state.formData.userId > 0) {
+        if (this.state.formData.userId > 0) {
             titles.push(this.state.mainTitle)
         }
         this.props.setBreadCrumb(titles);
@@ -139,10 +139,11 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                         permissionId: user.userPermissions
                     }
 
-                    if(this.props.getPageData.langId == this.props.getPageData.mainLangId) {
-                        state.mainTitle = state.formData.name;
-                    }
+                    state.mainTitle = user.userName;
+
                     return state;
+                }, () => {
+                    this.setPageTitle();
                 })
             } else {
                 this.navigateTermPage();
@@ -164,14 +165,14 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         ((params.userId > 0)
             ? Services.Put.user(params)
             : Services.Post.user(params)).then(resData => {
-                this.setState((state: PageState) => {
-                    if (resData.status) {
-                        state.isSuccessMessage = true;
-                    }
+            this.setState((state: PageState) => {
+                if (resData.status) {
+                    state.isSuccessMessage = true;
+                }
 
-                    state.isSubmitting = false;
-                    return state;
-                })
+                state.isSubmitting = false;
+                return state;
+            })
         });
     }
 
@@ -225,12 +226,13 @@ export class PageUserAdd extends Component<PageProps, PageState> {
             <div className="row">
                 {
                     PermissionGroups.map((group, index) => (
-                        <ThemeFieldSet
-                            key={index}
-                            legend={GlobalFunctions.getStaticContent(PermissionGroupsContents, "groupId", group.id, this.props.getSessionData.langId)}
-                        >
-                            {
-                                Permissions.findMulti("groupId", group.id).map((perm, index) => (
+                        <div className="col-md-6 mb-3">
+                            <ThemeFieldSet
+                                key={index}
+                                legend={GlobalFunctions.getStaticContent(PermissionGroupsContents, "groupId", group.id, this.props.getSessionData.langId)}
+                            >
+                                {
+                                    Permissions.findMulti("groupId", group.id).map((perm, index) => (
                                         <div className="col-md-4" key={index}>
                                             <ThemeFormCheckBox
                                                 key={index}
@@ -240,9 +242,10 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                                                 onChange={e => this.onPermissionSelected(e.target.checked, perm.id)}
                                             />
                                         </div>
-                                ))
-                            }
-                        </ThemeFieldSet>
+                                    ))
+                                }
+                            </ThemeFieldSet>
+                        </div>
                     ))
                 }
             </div>
@@ -350,7 +353,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                         <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
                     </button>
                 </div>
-                <div className="gird-margin stretch-card">
+                <div className="grid-margin stretch-card">
                     <div className="card">
                         <ThemeForm
                             isActiveSaveButton={true}

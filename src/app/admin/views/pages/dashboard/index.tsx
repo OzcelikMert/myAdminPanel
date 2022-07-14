@@ -73,6 +73,12 @@ class PageDashboard extends Component<PageProps, PageState> {
     getLastPosts() {
         let params: PostGetParamDocument = {
             langId: this.props.getPageData.mainLangId,
+            typeId: [
+                PostTypeId.Blog,
+                PostTypeId.Portfolio,
+                PostTypeId.Slider,
+                PostTypeId.Reference
+            ],
             maxCount: 10
         }
         let resData = Services.Get.posts(params);

@@ -3,11 +3,12 @@ import {PagePropCommonDocument} from "../../../../../../modules/views/pages/page
 import {PostDocument, UserDocument} from "../../../../../../modules/ajax/result/data";
 import {GlobalFunctions, GlobalPaths} from "../../../../../../config/global";
 import {
+    PermissionId,
     PostTermTypeId,
     PostTypeContents, Status,
     StatusContents,
     StatusId,
-    UserRoleContents,
+    UserRoleContents, UserRoleId,
     UserRoles
 } from "../../../../../../public/static";
 import Services from "../../../../../../services";
@@ -56,7 +57,20 @@ export class PageUserList extends Component<PageProps, PageState> {
         };
         let users: PageState["users"] = Services.Get.users(params).data;
         this.setState((state: PageState) => {
-            state.users = users.filter(user => user.userId != this.props.getSessionData.id);
+            state.users = state.users.sort(user => {
+                let sort = 0;
+                if(user.userId == this.props.getSessionData.id) {
+                    sort = 1;
+                }
+                return sort;
+            })
+            state.users = users.map(user => {
+                if (user.userRoleId == UserRoleId.Admin) {
+                    user.userPermissions = []
+                    user.userPermissions = Object.keys(PermissionId).map(permKey => PermissionId[permKey]);
+                }
+                return user;
+            });
             return state;
         });
     }
@@ -194,7 +208,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                         />
                         : null
                 }
-                <div className="gird-margin stretch-card">
+                <div className="grid-margin stretch-card">
                     <div className="card">
                         <div className="card-body">
                             <div className="table-user">

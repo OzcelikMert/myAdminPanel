@@ -148,7 +148,7 @@ class Sidebar extends Component<PageProps, PageState> {
                                 {path: pageRoutes.post.add.path(), title: this.props.router.t("add")},
                                 {path: pageRoutes.post.list.path(), title: this.props.router.t("list")}
                             ]
-                        }
+                        },
                     ]
                 },
                 {
@@ -169,6 +169,8 @@ class Sidebar extends Component<PageProps, PageState> {
                         },
                         {path: pageRoutes.settings.seo.path(), icon: `magnify`, title: this.props.router.t("seo")},
                         {path: pageRoutes.settings.general.path(), title: this.props.router.t("general")},
+                        {path: pageRoutes.settings.profile.path(), icon: `account`, title: this.props.router.t("profile")},
+                        {path: pageRoutes.settings.changePassword.path(), title: this.props.router.t("changePassword")}
                     ]
                 },
             ]
@@ -291,7 +293,7 @@ class Sidebar extends Component<PageProps, PageState> {
                         this.props.getSessionData.name
                     }
                 </span>
-                                <span className="text-secondary text-small">
+                <span className="text-secondary text-small">
                     <label
                         className={`badge badge-gradient-${GlobalFunctions.getUserRolesClassName(this.props.getSessionData.roleId)} float-end`}>
                         {

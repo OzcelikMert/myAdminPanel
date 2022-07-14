@@ -9,13 +9,15 @@ import {PagePropCommonDocument} from "../../modules/views/pages/pageProps";
 
 import PageLogin from "./views/pages/login";
 import PageLock from "./views/pages/lock";
+import PageSettingsProfile from "./views/pages/settings/profile";
+import PageSettingsChangePassword from "./views/pages/settings/changePassword";
 import PageDashboard from "./views/pages/dashboard";
 import PageGalleryList from "./views/pages/gallery/list";
 import PageGalleryUpload from "./views/pages/gallery/upload";
 import PagePostList from "./views/pages/post/list";
 import PagePostAdd from "./views/pages/post/add";
-import PagePostTermAdd from "./views/pages/postTerm/add";
-import PagePostTermList from "./views/pages/postTerm/list";
+import PagePostTermAdd from "./views/pages/post/term/add";
+import PagePostTermList from "./views/pages/post/term/list";
 import PageUserAdd from "./views/pages/settings/user/add";
 import PageUserList from "./views/pages/settings/user/list";
 import PageSettingsSEO from "./views/pages/settings/seo";
@@ -153,6 +155,16 @@ export const pageRoutes = {
                 return "general"
             }
         },
+        profile: {
+            path() {
+                return "profile"
+            }
+        },
+        changePassword: {
+            path() {
+                return "changePassword"
+            }
+        },
     }
 }
 
@@ -228,6 +240,10 @@ class AppRoutes extends Component<PageProps, PageState> {
                                element={<PageSettingsSEO {...this.props}/>}/>
                         <Route path={pageRoutes.settings.general.path()}
                                element={<PageSettingsGeneral {...this.props}/>}/>
+                        <Route path={pageRoutes.settings.profile.path()}
+                               element={<PageSettingsProfile {...this.props}/>}/>
+                        <Route path={pageRoutes.settings.changePassword.path()}
+                               element={<PageSettingsChangePassword {...this.props}/>}/>
                     </Route>
 
                     <Route path="*" element={<Navigate to={pageRoutes.dashboard.path()}/>}/>

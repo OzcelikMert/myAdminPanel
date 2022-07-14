@@ -63,12 +63,12 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
+        this.setPageTitle();
         this.getNavigates();
         this.getStatus();
         if (this.props.getPageData.searchParams.navigateId > 0) {
             this.getNavigate();
         }
-        this.setPageTitle();
     }
 
     componentDidUpdate(prevProps: Readonly<PageProps>) {
@@ -149,6 +149,8 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
                         state.mainTitle = state.formData.title;
                     }
                     return state;
+                }, () => {
+                    this.setPageTitle();
                 })
             } else {
                 this.navigateTermPage();
@@ -184,7 +186,8 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
         this.setState({
             isSuccessMessage: false
         });
-        if (!V.isEmpty(this.props.getPageData.searchParams.termId)) {
+
+        if (this.state.formData.navigateId === 0) {
             this.navigateTermPage()
         }
     }
@@ -279,7 +282,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
                         <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
                     </button>
                 </div>
-                <div className="gird-margin stretch-card">
+                <div className="grid-margin stretch-card">
                     <div className="card">
                         <div className="card-body">
                             <ThemeForm

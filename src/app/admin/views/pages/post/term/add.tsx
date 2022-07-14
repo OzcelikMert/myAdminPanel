@@ -5,24 +5,23 @@ import {
     ThemeFormSelect,
     ThemeForm,
     ThemeFormCheckBox
-} from "../../components/form"
-import {GlobalPaths} from "../../../../../config/global/";
-import {PostTermDocument} from "../../../../../modules/ajax/result/data";
-import Services from "../../../../../services";
-import {pageRoutes} from "../../../routes";
-import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
+} from "../../../components/form"
+import {PostTermDocument} from "../../../../../../modules/ajax/result/data";
+import Services from "../../../../../../services";
+import {pageRoutes} from "../../../../routes";
+import {PagePropCommonDocument} from "../../../../../../modules/views/pages/pageProps";
 import {
     PostTermTypeContents,
     PostTermTypeId,
     PostTypeContents,
     StatusId
-} from "../../../../../public/static";
-import {GlobalFunctions} from "../../../../../config/global";
-import V from "../../../../../library/variable";
+} from "../../../../../../public/static";
+import {GlobalFunctions} from "../../../../../../config/global";
+import V from "../../../../../../library/variable";
 import SweetAlert from "react-sweetalert2";
-import {PostTermGetParamDocument} from '../../../../../modules/services/get/postTerm';
-import HandleForm from "../../../../../library/react/handles/form";
-import ThemeChooseImage from "../../components/chooseImage";
+import {PostTermGetParamDocument} from '../../../../../../modules/services/get/postTerm';
+import HandleForm from "../../../../../../library/react/handles/form";
+import ThemeChooseImage from "../../../components/chooseImage";
 
 type PageState = {
     formActiveKey: string
@@ -176,6 +175,8 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                         state.mainTitle = state.formData.title;
                     }
                     return state;
+                }, () => {
+                    this.setPageTitle();
                 })
             } else {
                 this.navigateTermPage();
@@ -231,9 +232,6 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         this.setState({
             isSuccessMessage: false
         });
-        if (!V.isEmpty(this.props.getPageData.searchParams.termId)) {
-            this.navigateTermPage()
-        }
     }
 
     Messages = () => {
@@ -383,7 +381,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                         <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
                     </button>
                 </div>
-                <div className="gird-margin stretch-card">
+                <div className="grid-margin stretch-card">
                     <div className="card">
                         <div className="card-body">
                             <ThemeForm

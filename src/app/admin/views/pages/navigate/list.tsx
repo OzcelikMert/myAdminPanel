@@ -186,7 +186,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                             </button>
                     }
                 </div>
-                <div className="gird-margin stretch-card">
+                <div className="grid-margin stretch-card">
                     <div className="card">
                         <div className="card-body">
                             <div className="table-post">

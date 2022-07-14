@@ -65,7 +65,7 @@ class PageLock extends Component<PageProps, PageState> {
                         isWrong: true
                     })
                 }
-            }, 1)
+            }, 100)
         })
     }
 

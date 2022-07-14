@@ -5,17 +5,16 @@ import {
     PostTypeContents,
     StatusContents,
     StatusId
-} from "../../../../../public/static";
-import {pageRoutes} from "../../../routes";
-import Services from "../../../../../services";
-import {PostTermDocument} from "../../../../../modules/ajax/result/data";
-import {GlobalFunctions, GlobalPaths} from "../../../../../config/global";
-import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
+} from "../../../../../../public/static";
+import {pageRoutes} from "../../../../routes";
+import Services from "../../../../../../services";
+import {PostTermDocument} from "../../../../../../modules/ajax/result/data";
+import {GlobalFunctions, GlobalPaths} from "../../../../../../config/global";
+import {PagePropCommonDocument} from "../../../../../../modules/views/pages/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
-import {ThemeFormCheckBox} from "../../components/form";
-import {PostTermPutParamDocument} from "../../../../../modules/services/put/postTerm";
-import {ThemeTableToggleMenu} from "../../components/table";
-import V from "../../../../../library/variable";
+import {ThemeFormCheckBox} from "../../../components/form";
+import {PostTermPutParamDocument} from "../../../../../../modules/services/put/postTerm";
+import {ThemeTableToggleMenu} from "../../../components/table";
 import Swal from "sweetalert2";
 
 type PageState = {
@@ -220,7 +219,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                             </button>
                     }
                 </div>
-                <div className="gird-margin stretch-card">
+                <div className="grid-margin stretch-card">
                     <div className="card">
                         <div className="card-body">
                             <div className="table-post">

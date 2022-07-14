@@ -19,7 +19,9 @@ class Navbar extends Component<PageProps, PageState> {
 
     profileEvents(event: "profile" | "lock" | "signOut") {
         switch(event) {
-            case "profile": break;
+            case "profile":
+                this.props.router.navigate(pageRoutes.settings.path() + pageRoutes.settings.profile.path(), {replace: true})
+                break;
             case "lock":
                 Services.Put.user({
                     userId: this.props.getSessionData.id,
@@ -205,17 +207,17 @@ class Navbar extends Component<PageProps, PageState> {
                     <i className="mdi mdi-account-circle me-2 text-primary"></i>
                     Profile
                 </Dropdown.Item>
-                <Dropdown.Item onClick={evt => evt.preventDefault()}>
+                <Dropdown.Item onClick={() => {}}>
                     <i className="mdi mdi-cached me-2 text-success"></i>
-                    <Trans>Activity Log</Trans>
+                    Activity Log
                 </Dropdown.Item>
-                <Dropdown.Item onClick={evt => this.profileEvents("lock")}>
+                <Dropdown.Item onClick={() => this.profileEvents("lock")}>
                     <i className="mdi mdi-lock me-2 text-primary"></i>
                     Lock
                 </Dropdown.Item>
-                <Dropdown.Item onClick={evt => this.profileEvents("signOut")}>
+                <Dropdown.Item onClick={() => this.profileEvents("signOut")}>
                     <i className="mdi mdi-logout me-2 text-primary"></i>
-                    <Trans>Signout</Trans>
+                    Signout
                 </Dropdown.Item>
             </Dropdown.Menu>
         </Dropdown>

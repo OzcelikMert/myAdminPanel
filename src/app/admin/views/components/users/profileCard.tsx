@@ -24,17 +24,17 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
     SocialMedia = () => (
         <ul className="social-link list-unstyled">
             <li>
-                <a href={this.props.userInfo.userName}>
+                <a href={this.props.userInfo.userFacebook} target="_blank">
                     <i className="mdi mdi-facebook"></i>
                 </a>
             </li>
             <li>
-                <a href={this.props.userInfo.userName}>
+                <a href={this.props.userInfo.userTwitter} target="_blank">
                     <i className="mdi mdi-twitter"></i>
                 </a>
             </li>
             <li>
-                <a href={this.props.userInfo.userName}>
+                <a href={this.props.userInfo.userInstagram} target="_blank">
                     <i className="mdi mdi-instagram"></i>
                 </a>
             </li>
@@ -46,34 +46,34 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
             <h6 className="pb-1 border-bottom fw-bold text-end">General</h6>
             <div className="row">
                 <div className="col-sm-12">
-                    <p className="mb-2 fw-bold">Email:
+                    <span className="mb-2 fw-bold">Email:
                         <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.userEmail}</h6>
-                    </p>
+                    </span>
                 </div>
                 <div className="col-sm-12">
-                    <p className="mb-2 fw-bold">Phone:
-                        <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.userEmail}</h6>
-                    </p>
+                    <span className="mb-2 fw-bold">Phone:
+                        <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.userPhone}</h6>
+                    </span>
                 </div>
                 <div className="col-sm-12">
-                    <p className="mb-2 fw-bold">Role:
+                    <span className="mb-2 fw-bold">Role:
                         <label
                             className={`badge badge-gradient-${GlobalFunctions.getUserRolesClassName(this.props.userInfo.userRoleId)} ms-1`}>
                             {
                                 GlobalFunctions.getStaticContent(UserRoleContents, "roleId", this.props.userInfo.userRoleId, this.props.langId)
                             }
                         </label>
-                    </p>
+                    </span>
                 </div>
                 <div className="col-sm-12">
-                    <p className="mb-2 fw-bold">Status:
+                    <span className="mb-2 fw-bold">Status:
                         <label
                             className={`badge badge-gradient-${GlobalFunctions.getStatusClassName(this.props.userInfo.userStatusId)} ms-1`}>
                             {
                                 GlobalFunctions.getStaticContent(StatusContents, "statusId", this.props.userInfo.userStatusId, this.props.langId)
                             }
                         </label>
-                    </p>
+                    </span>
                 </div>
                 {
                     (this.props.userInfo.userStatusId == StatusId.Banned)
@@ -131,7 +131,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                 <Modal.Body className="m-0 p-0">
                     <div className="card user-card">
                         <div className="row ms-0 me-0 user-card-body">
-                            <div className="col-sm-4 user-profile bg-gradient-danger">
+                            <div className="col-sm-4 user-profile bg-gradient-primary">
                                 <h5 className="exit-icon" onClick={this.props.onClose}>
                                     <i className="mdi mdi-close"></i>
                                 </h5>
@@ -144,6 +144,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                                         />
                                     </div>
                                     <h4 className="fw-bold pt-3">{this.props.userInfo.userName}</h4>
+                                    <small className="fw-bold pt-3">{this.props.userInfo.userComment}</small>
                                     <this.SocialMedia/>
                                 </div>
                             </div>

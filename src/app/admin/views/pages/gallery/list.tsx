@@ -23,7 +23,7 @@ type PageState = {
 type PageProps = {
     isModal?: boolean
     isMulti?: boolean
-    onSelected?: (images: string[]) => void
+    onSubmit?: (images: string[]) => void
     uploadedImages?: string[]
 } & PagePropCommonDocument;
 
@@ -142,8 +142,8 @@ export class PageGalleryList extends Component<PageProps, PageState> {
     }
 
     onSubmit() {
-        if(this.props.onSelected){
-            this.props.onSelected(this.state.selectedImages);
+        if(this.props.onSubmit){
+            this.props.onSubmit(this.state.selectedImages);
         }
     }
 
@@ -211,7 +211,7 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                         </Modal>
                     ) : null}
                 </ModalGateway>
-                <div className="gird-margin stretch-card">
+                <div className="grid-margin stretch-card">
                     <div className="card">
                         <div className="card-body">
                             <div className="row">

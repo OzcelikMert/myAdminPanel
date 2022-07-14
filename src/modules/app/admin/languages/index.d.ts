@@ -90,6 +90,12 @@ type LanguageKeys =
     "image" |
     "navigates" |
     "permissions" |
-    "[noLangAdd]"
+    "[noLangAdd]" |
+    "profile" |
+    "confirmPassword" |
+    "newPassword" |
+    "comment" |
+    "phone" |
+    "changePassword"
 
 export default LanguageKeys;

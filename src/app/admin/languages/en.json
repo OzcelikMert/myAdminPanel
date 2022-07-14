@@ -77,6 +77,12 @@
   "navigates": "Navigates",
   "permissions": "Permissions",
   "[noLangAdd]": "[No language added]",
+  "profile": "Profile",
+  "confirmPassword": "Confirm password",
+  "newPassword": "New password",
+  "comment": "Comment",
+  "phone": "Phone",
+  "changePassword": "Change password",
 
   "toastMessageLoadingPostTitle": "Creating...",
   "toastMessageLoadingPostContent": "Creating please wait",

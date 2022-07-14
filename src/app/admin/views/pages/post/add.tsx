@@ -92,7 +92,6 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         this.getTerms();
         this.getStatus();
         if (this.props.getPageData.searchParams.postId > 0) {
-            console.log("did mount")
             this.getPost();
         }
     }
@@ -205,6 +204,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     }
 
                     return state;
+                }, () => {
+                    this.setPageTitle();
                 })
             }
         }else {
@@ -245,7 +246,10 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         this.setState({
             isSuccessMessage: false
         });
-        this.navigateTermPage()
+
+        if(this.state.formData.postId === 0) {
+            this.navigateTermPage();
+        }
     }
 
     onChangeJoeEditor(newContent: string) {
@@ -455,7 +459,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
                     </button>
                 </div>
-                <div className="gird-margin stretch-card">
+                <div className="grid-margin stretch-card">
                     <div className="card">
                         <div className="card-body">
                             <ThemeForm
