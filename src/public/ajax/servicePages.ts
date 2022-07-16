@@ -6,7 +6,8 @@ const ServicePages = {
     seo: "seo",
     setting: "setting",
     language: "language",
-    navigate: "navigate"
+    navigate: "navigate",
+    serverDetail: "serverDetail"
 }
 
 export default ServicePages;

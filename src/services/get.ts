@@ -17,6 +17,7 @@ import {SeoGetParamDocument} from "../modules/services/get/seo";
 import {SettingGetParamDocument} from "../modules/services/get/setting";
 import {LanguageGetParamDocument} from "../modules/services/get/language";
 import {NavigateGetParamDocument} from "../modules/services/get/navigate";
+import {ServerDetailsDocument} from "../modules/ajax/result/data/serverDetails";
 
 const Get = {
     users(params: UsersGetParamDocument): ResultDocument<UserDocument[]> {
@@ -42,6 +43,9 @@ const Get = {
     },
     navigate(params: NavigateGetParamDocument): ResultDocument<NavigateDocument[]> {
         return Api.get(ServicePages.navigate, params);
+    },
+    serverDetails(): ResultDocument<ServerDetailsDocument> {
+        return Api.get(ServicePages.serverDetail);
     }
 }
 

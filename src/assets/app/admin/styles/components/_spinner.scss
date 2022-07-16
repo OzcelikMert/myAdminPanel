@@ -2,11 +2,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 60px);
+  height: calc(100% - 35%);
   position: fixed;
-  width: 100%;
+  width: 85%;
   @media (max-width: 991px) {
-    width: 100%;
+    width: 85%;
   }
   .donut {
     width: 4rem;

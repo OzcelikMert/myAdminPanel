@@ -9,6 +9,9 @@ import {PostGetParamDocument} from "../../../../../modules/services/get/post";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {PostTermTypeId, PostTypeContents, PostTypeId, StatusContents} from "../../../../../public/static";
 import {pageRoutes} from "../../../routes";
+import {ServerDetailsDocument} from "../../../../../modules/ajax/result/data/serverDetails";
+import Thread from "../../../../../library/thread";
+import Spinner from "../../tools/spinner";
 
 type PageState = {
     chartData: {
@@ -38,6 +41,8 @@ type PageState = {
         }
     }
     lastPosts: PostDocument[]
+    serverDetails: ServerDetailsDocument
+    isLoading: boolean
 };
 
 type PageProps = {} & PagePropCommonDocument;
@@ -56,18 +61,43 @@ class PageDashboard extends Component<PageProps, PageState> {
                     data: []
                 }
             },
-            lastPosts: []
+            lastPosts: [],
+            serverDetails: {
+                cpu: "0",
+                storage: "0",
+                memory: "0"
+            },
+            isLoading: true
         }
     }
 
     componentDidMount() {
-        this.setPageTitle()
-        this.chartInit();
-        this.getLastPosts();
+        this.setPageTitle();
+        Thread.start(() => {
+            this.getLastPosts();
+            this.getServerDetails();
+            this.setState({
+                isLoading: false
+            }, () => {
+                this.chartInit();
+            })
+        })
     }
 
     setPageTitle() {
         this.props.setBreadCrumb([this.props.router.t("dashboard")])
+    }
+
+    getServerDetails() {
+        let resData = Services.Get.serverDetails();
+        if(resData.status){
+            this.setState({
+                serverDetails: resData.data
+            })
+        }
+        this.setState({
+            isLoading: false
+        })
     }
 
     getLastPosts() {
@@ -274,33 +304,7 @@ class PageDashboard extends Component<PageProps, PageState> {
     VisitorWithNumber = () => {
         return (
             <div className="row">
-                <div className="col-md-4 stretch-card grid-margin">
-                    <div className="card bg-gradient-danger card-img-holder text-white">
-                        <div className="card-body">
-                            <img src={require("../../../../../assets/images/dashboard/circle.png")}
-                                 className="card-img-absolute" alt="circle"/>
-                            <h4 className="font-weight-normal mb-3">Weekly Sales <i
-                                className="mdi mdi-chart-line mdi-24px float-end"></i>
-                            </h4>
-                            <h2 className="mb-5">$ 15,0000</h2>
-                            <h6 className="card-text">Increased by 60%</h6>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4 stretch-card grid-margin">
-                    <div className="card bg-gradient-info card-img-holder text-white">
-                        <div className="card-body">
-                            <img src={require("../../../../../assets/images/dashboard/circle.png")}
-                                 className="card-img-absolute" alt="circle"/>
-                            <h4 className="font-weight-normal mb-3">Weekly Orders <i
-                                className="mdi mdi-bookmark-outline mdi-24px float-end"></i>
-                            </h4>
-                            <h2 className="mb-5">45,6334</h2>
-                            <h6 className="card-text">Decreased by 10%</h6>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4 stretch-card grid-margin">
+                <div className="col-md-3 stretch-card grid-margin">
                     <div className="card bg-gradient-success card-img-holder text-white">
                         <div className="card-body">
                             <img src={require("../../../../../assets/images/dashboard/circle.png")}
@@ -310,6 +314,42 @@ class PageDashboard extends Component<PageProps, PageState> {
                             </h4>
                             <h2 className="mb-5">95,5741</h2>
                             <h6 className="card-text">Increased by 5%</h6>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-3 stretch-card grid-margin">
+                    <div className="card bg-gradient-info card-img-holder text-white">
+                        <div className="card-body">
+                            <img src={require("../../../../../assets/images/dashboard/circle.png")}
+                                 className="card-img-absolute" alt="circle"/>
+                            <h4 className="font-weight-normal mb-3">Storage
+                                <i className="mdi mdi-harddisk mdi-24px float-end"></i>
+                            </h4>
+                            <h2 className="mb-5">{this.state.serverDetails.storage}%</h2>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-3 stretch-card grid-margin">
+                    <div className="card bg-gradient-primary card-img-holder text-white">
+                        <div className="card-body">
+                            <img src={require("../../../../../assets/images/dashboard/circle.png")}
+                                 className="card-img-absolute" alt="circle"/>
+                            <h4 className="font-weight-normal mb-3">Memory
+                                <i className="mdi mdi-memory mdi-24px float-end"></i>
+                            </h4>
+                            <h2 className="mb-5">{this.state.serverDetails.memory}%</h2>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-3 stretch-card grid-margin">
+                    <div className="card bg-gradient-danger card-img-holder text-white">
+                        <div className="card-body">
+                            <img src={require("../../../../../assets/images/dashboard/circle.png")}
+                                 className="card-img-absolute" alt="circle"/>
+                            <h4 className="font-weight-normal mb-3">Processor
+                                <i className="fa fa-microchip mdi-24px float-end"></i>
+                            </h4>
+                            <h2 className="mb-5">{this.state.serverDetails.cpu}%</h2>
                         </div>
                     </div>
                 </div>
@@ -422,7 +462,7 @@ class PageDashboard extends Component<PageProps, PageState> {
     }
 
     render() {
-        return (
+        return this.state.isLoading ? <Spinner /> : (
             <div className="page-dashboard">
                 <this.VisitorWithNumber/>
                 <this.VisitorWithChart/>
