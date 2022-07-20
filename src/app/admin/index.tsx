@@ -22,11 +22,12 @@ import cogoToast, {CTReturn} from "cogo-toast";
 import Navbar from "./views/tools/navbar";
 import Sidebar from "./views/tools/sidebar";
 import Footer from "./views/tools/footer";
-import {LanguageDocument} from "../../modules/ajax/result/data";
 import {ThemeFormSelect} from "./views/components/form";
-import Services from "../../services";
 import Statement from "../../library/statement";
 import {AppAdminGetState, AppAdminSetState} from "../../modules/app/admin/views";
+import langaugeService from "../../services/langauge.service";
+import settingService from "../../services/setting.service";
+import LanguageDocument from "../../modules/services/language";
 
 const language = i18n.use(initReactI18next);
 language.init({
@@ -219,7 +220,7 @@ class AppAdmin extends Component<PageProps, PageState> {
         this.setState({
             isPageLoading: true,
         });
-        let resData = Services.Get.languages({})
+        let resData = langaugeService.get({});
         if (resData.status) {
             this.setState({
                 pageLanguages: resData.data.map((lang, index) => ({
@@ -235,7 +236,7 @@ class AppAdmin extends Component<PageProps, PageState> {
         this.setState({
             isPageLoading: true,
         });
-        let resData = Services.Get.settings({
+        let resData = settingService.get({
             id: SettingId.WebsiteMainLanguage
         })
         if (resData.status) {

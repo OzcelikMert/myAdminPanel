@@ -5,7 +5,7 @@ import Services from "../../../../../services";
 import Carousel, {Modal, ModalGateway} from "react-images";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import Swal from "sweetalert2";
-import {GalleryDeleteParamDocument} from "../../../../../modules/services/delete/gallery";
+import {GalleryDeleteParamDocument} from "../../../../../modules/services/gallery";
 import {ThemeFormCheckBox} from "../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
 

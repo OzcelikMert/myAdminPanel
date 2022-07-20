@@ -1,9 +1,8 @@
 interface ApiRequestParamDocument {
-    url: string,
-    method: ApiRequestParamMethodDocument,
-    data?: object,
+    url: (string | undefined)[],
+    method?: ApiRequestParamMethodDocument,
     async?: boolean,
-    resolve?: any,
+    data?: object,
     processData?: boolean,
     contentType?: string | false
 }

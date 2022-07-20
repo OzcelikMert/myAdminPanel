@@ -1,4 +1,6 @@
 const ServicePages = {
+    auth: "auth",
+    profile: "profile",
     user: "user",
     gallery: "gallery",
     postTerm: "postTerm",
@@ -7,7 +9,7 @@ const ServicePages = {
     setting: "setting",
     language: "language",
     navigate: "navigate",
-    serverDetail: "serverDetail"
+    serverInfo: "serverInfo"
 }
 
 export default ServicePages;

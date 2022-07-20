@@ -16,7 +16,7 @@ import DataTable, {TableColumn} from "react-data-table-component";
 import {UsersGetParamDocument} from "../../../../../../modules/services/get/user";
 import {pageRoutes} from "../../../../routes";
 import Swal from "sweetalert2";
-import {UserDeleteParamDocument} from "../../../../../../modules/services/delete/user";
+import {UserDeleteParamDocument} from "../../../../../../modules/services/user";
 import ThemeUsersProfileCard from "../../../components/users/profileCard";
 import V from "../../../../../../library/variable";
 

@@ -6,8 +6,8 @@ import {GlobalFunctions} from "../../../../../../config/global";
 import {SeoTitleSeparators, SettingId} from "../../../../../../public/static";
 import Services from "../../../../../../services";
 import {SeoPostParamDocument} from "../../../../../../modules/services/post/seo";
-import {SeoGetParamDocument} from "../../../../../../modules/services/get/seo";
-import {SettingGetParamDocument} from "../../../../../../modules/services/get/setting";
+import {SeoGetParamDocument} from "../../../../../../modules/services/seo";
+import {SettingGetParamDocument} from "../../../../../../modules/services/setting";
 
 type PageState = {
     separators: { label: string, value: any }[]

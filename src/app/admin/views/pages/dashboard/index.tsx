@@ -3,13 +3,9 @@ import {GlobalFunctions, GlobalPaths} from "../../../../../config/global";
 import {PagePropCommonDocument} from "../../../../../modules/views/pages/pageProps";
 import ThemeChartBar from "../../components/charts/bar";
 import ThemeChartDonut from "../../components/charts/donut";
-import {PostDocument} from "../../../../../modules/ajax/result/data";
-import Services from "../../../../../services";
-import {PostGetParamDocument} from "../../../../../modules/services/get/post";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {PostTermTypeId, PostTypeContents, PostTypeId, StatusContents} from "../../../../../public/static";
 import {pageRoutes} from "../../../routes";
-import {ServerDetailsDocument} from "../../../../../modules/ajax/result/data/serverDetails";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../tools/spinner";
 

@@ -2,7 +2,7 @@ import React, {Component, Suspense} from 'react';
 import {
     Routes,
     Route,
-    Navigate, RouteObject, matchRoutes, useLocation,
+    Navigate
 } from "react-router-dom";
 import Spinner from './views/tools/spinner';
 import {PagePropCommonDocument} from "../../modules/views/pages/pageProps";

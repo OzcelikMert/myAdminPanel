@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import {PagePropCommonDocument} from "../../modules/views/pages/pageProps";
 import {pageRoutes} from "./routes";
-import Services from "../../services";
 import {ErrorCodes} from "../../public/ajax";
-import {UserDocument} from "../../modules/ajax/result/data";
 import {LanguageId} from "../../public/static";
 import {Navigate} from "react-router-dom";
-import {UsersGetParamDocument} from "../../modules/services/get/user";
 import Spinner from "./views/tools/spinner";
+import authService from "../../services/auth.service";
 
 type PageState = {
     isAuth: boolean
@@ -43,18 +41,13 @@ class AppProviders extends Component<PageProps, PageState> {
 
     checkSession() {
         let isRefresh = this.props.getSessionData.id < 1;
-        let params: UsersGetParamDocument = {
-            isRefresh: isRefresh,
-            isCheckSession: true,
-            requestType: "getSession"
-        };
         let isAuth = false;
-        let resData = Services.Get.users(params);
+        let resData = authService.getSession({isRefresh: isRefresh});
         if (resData.status && resData.errorCode == ErrorCodes.success) {
             isAuth = true;
             if (isRefresh) {
                 if (resData.data.length > 0) {
-                    let user: UserDocument = resData.data[0];
+                    let user = resData.data[0];
                     this.props.setSessionData( {
                         id: user.userId,
                         langId: LanguageId.English,

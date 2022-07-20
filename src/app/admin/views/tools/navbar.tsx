@@ -4,8 +4,8 @@ import {Link} from 'react-router-dom';
 import {Trans} from 'react-i18next';
 import {PagePropCommonDocument} from "../../../../modules/views/pages/pageProps";
 import {pageRoutes} from "../../routes";
-import Services from "../../../../services";
 import {GlobalFunctions} from "../../../../config/global";
+import authService from "../../../../services/auth.service";
 
 type PageState = {};
 
@@ -23,10 +23,7 @@ class Navbar extends Component<PageProps, PageState> {
                 this.props.router.navigate(pageRoutes.settings.path() + pageRoutes.settings.profile.path(), {replace: true})
                 break;
             case "lock":
-                Services.Put.user({
-                    userId: this.props.getSessionData.id,
-                    isSignOut: true
-                }).then(resData => {
+                authService.logOut().then(resData => {
                     if(resData.status) {
                         this.props.setSessionData({
                             id: 0
@@ -37,10 +34,7 @@ class Navbar extends Component<PageProps, PageState> {
                 })
                 break;
             case "signOut":
-                Services.Put.user({
-                    userId: this.props.getSessionData.id,
-                    isSignOut: true
-                }).then(resData => {
+                authService.logOut().then(resData => {
                     if(resData.status) {
                         this.props.setSessionData({
                             id: 0
