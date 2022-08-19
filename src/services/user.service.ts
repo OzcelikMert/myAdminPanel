@@ -10,7 +10,7 @@ import UserDocument, {
 
 export default {
     get(params: UsersGetParamDocument): ServiceResultDocument<UserDocument[]> {
-        return Api.get({
+        return Api.getSync({
             url: [ServicePages.user, params.userId?.toString()],
             data: params,
         });

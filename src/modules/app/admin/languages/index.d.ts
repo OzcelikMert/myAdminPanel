@@ -43,25 +43,12 @@ type LanguageKeys =
     "successful" |
     "itemAdded" |
     "itemEdited" |
+    "itemDeleted" |
     "options" |
     "chooseTag" |
     "chooseCategory" |
     "shortContent" |
     "startDate" |
-    "toastMessageLoadingPostTitle" |
-    "toastMessageLoadingPostContent" |
-    "toastMessageLoadingPutTitle" |
-    "toastMessageLoadingPutContent" |
-    "toastMessageLoadingDeleteTitle" |
-    "toastMessageLoadingDeleteContent" |
-    "toastMessageSuccessPostTitle" |
-    "toastMessageSuccessPostContent" |
-    "toastMessageSuccessPutTitle" |
-    "toastMessageSuccessPutContent" |
-    "toastMessageSuccessDeleteTitle" |
-    "toastMessageSuccessDeleteContent" |
-    "toastMessageErrorTitle" |
-    "toastMessageErrorContent" |
     "role" |
     "chooseRole" |
     "banDateEnd" |
@@ -96,6 +83,35 @@ type LanguageKeys =
     "newPassword" |
     "comment" |
     "phone" |
-    "changePassword"
+    "changePassword" |
+    "currentVisitors" |
+    "dailyAverageVisitors" |
+    "weeklyTotalVisitors" |
+    "lifeTimeVisitors" |
+    "weeklyVisitorsStatistics" |
+    "lastPosts" |
+    "okay" |
+    "chooseMainNavigate" |
+    "chooseMainCategory" |
+    "error" |
+    "passwordsNotEqual" |
+    "wrongPassword" |
+    "storage" |
+    "memory" |
+    "processor" |
+    "writeAndPressEnter" |
+    "messages" |
+    "lock" |
+    "signOut" |
+    "clickToSee" |
+    "deleting" |
+    "wrongEmailOrPassword" |
+    "yourAccountIsBanned" |
+    "profileUpdated" |
+    "seoUpdated" |
+    "settingsUpdated" |
+    "passwordUpdated" |
+    "statusUpdated" |
+    "updating"
 
 export default LanguageKeys;

@@ -47,7 +47,9 @@ enum PermissionId {
     PageDelete,
     NavigateAdd,
     NavigateEdit,
-    NavigateDelete
+    NavigateDelete,
+    SeoEdit,
+    SettingEdit
 }
 
 export {Permissions, PermissionId};

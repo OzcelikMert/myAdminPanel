@@ -9,7 +9,8 @@ const ServicePages = {
     setting: "setting",
     language: "language",
     navigate: "navigate",
-    serverInfo: "serverInfo"
+    serverInfo: "serverInfo",
+    view: "view"
 }
 
 export default ServicePages;

@@ -5,7 +5,7 @@ import SeoDocument, {SeoGetParamDocument, SeoUpdateParamDocument} from "../modul
 
 export default {
     get(params: SeoGetParamDocument): ServiceResultDocument<SeoDocument[]> {
-        return Api.get({
+        return Api.getSync({
             url: [ServicePages.seo],
             data: params,
         });

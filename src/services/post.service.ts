@@ -11,7 +11,7 @@ import PostDocument, {
 export default {
     get(params: PostGetParamDocument): ServiceResultDocument<PostDocument[]> {
         let url = Array.isArray(params.typeId) ? [] : [params.typeId?.toString(), params.postId?.toString()]
-        return Api.get({
+        return Api.getSync({
             url: [ServicePages.post, ...url],
             data: params
         });

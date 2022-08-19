@@ -15,7 +15,6 @@ class HandleForm {
     }
 
     static onChangeSelect(key: any, value: any, component: Component) {
-        console.log(key, value);
         component.setState((state: any) => {
             if(Array.isArray(value)){
                 state.formData[key] = [];

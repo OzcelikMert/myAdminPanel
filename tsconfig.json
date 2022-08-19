@@ -19,7 +19,7 @@
     "resolveJsonModule": true,
     "isolatedModules": false,
     "noEmit": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "jsx": "react",
     "outDir": "./dist"
   },

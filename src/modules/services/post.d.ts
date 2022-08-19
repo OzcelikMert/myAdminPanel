@@ -7,7 +7,7 @@ export default interface PostDocument {
     postDateStart: string,
     postOrder: number,
     postViews: number,
-    postIsFixed: boolean,
+    postIsFixed: 1 | 0,
     // Content
     postContentId?: number,
     postContentTags?: string,

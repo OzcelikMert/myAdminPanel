@@ -2,7 +2,7 @@ declare global {
     interface Array<T> {
         indexOfKey(key: keyof this[0] | "", value: any): number
         findSingle(key: keyof this[0] | "", value: this[0][keyof this[0]]): this[0]
-        findMulti(key: keyof this[0] | "", value: this[0][keyof this[0]] | this[0][keyof this[0]][]): this
+        findMulti(key: keyof this[0] | "", value: this[0][keyof this[0]] | this[0][keyof this[0]][], isLike?: boolean): this
         findMultiForObject(obj: Array<any>, find: any, type: 'number' | 'string'): Array<any>
         orderBy(key: keyof this[0] | "", sort_type: `asc` | `desc`): this
         serializeObject(): object,
@@ -26,12 +26,11 @@ Array.prototype.findSingle = function (key, value) {
         return ((key === "") ? data : data[key]) == value
     });
 }
-Array.prototype.findMulti = function (key, value) {
+Array.prototype.findMulti = function (key, value, isLike = true) {
     let founds = Array();
     this.find(function(data, index){
-        let query = ((Array.isArray(value)) ? value.includes(((key === "") ? data : data[key])) : ((key === "") ? data : data[key]) == value);
-        data = Object.assign(data, {_index: index});
-        if(query) founds.push(data);
+        let query = (Array.isArray(value) ? value.includes(((key === "") ? data : data[key])) : ((key === "") ? data : data[key]) == value);
+        if(query === isLike) founds.push(Object.assign(data, {_index: index}));
     });
     return founds;
 }

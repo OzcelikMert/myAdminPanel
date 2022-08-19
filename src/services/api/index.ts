@@ -3,18 +3,23 @@ import ServiceResultDocument from "../../modules/services/api/result";
 import ApiRequest from "./request";
 
 const Api = {
-    get(params: ApiRequestParamDocument): ServiceResultDocument<any> {
-        let result: any;
-        new Promise(resolve => {
+    getSync(params: ApiRequestParamDocument): ServiceResultDocument<any> {
+        return new ApiRequest({
+            ...params,
+            method: "GET",
+            async: false
+        }).initSync();
+    },
+    get(params: ApiRequestParamDocument): Promise<ServiceResultDocument<any>> {
+        return new Promise(resolve => {
             new ApiRequest({
                 ...params,
-                method: "GET"
+                method: "GET",
+                async: true,
             }).init().then(resData => {
-                result = resData;
-                resolve(0);
+                resolve(resData)
             })
-        })
-        return result;
+        });
     },
     post(params: ApiRequestParamDocument): Promise<ServiceResultDocument<any>> {
         return new Promise(resolve => {

@@ -10,7 +10,7 @@ import PostTermDocument, {
 
 export default {
     get(params: PostTermGetParamDocument): ServiceResultDocument<PostTermDocument[]> {
-        return Api.get({
+        return Api.getSync({
             url: [ServicePages.postTerm, params.postTypeId.toString(), params.typeId.toString(), params.termId?.toString()],
             data: params
         });

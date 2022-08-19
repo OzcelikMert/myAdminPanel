@@ -1,8 +1,8 @@
 import {ApiRequestConfigDocument} from "../../modules/services/api/config";
-import {GlobalPaths} from "../../config/global";
+import pathUtil from "../../utils/path.util";
 
 let ApiRequestConfig: ApiRequestConfigDocument = {
-    mainUrl: `${GlobalPaths.api}ajax/`
+    mainUrl: `${pathUtil.api}ajax/`
 }
 
 export default ApiRequestConfig;

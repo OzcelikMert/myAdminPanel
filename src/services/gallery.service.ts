@@ -5,7 +5,7 @@ import {GalleryDeleteParamDocument, GalleryAddParamDocument} from "../modules/se
 
 export default {
     get(): ServiceResultDocument<string[]> {
-        return Api.get({
+        return Api.getSync({
             url: [ServicePages.gallery],
         });
     },

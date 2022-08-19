@@ -10,7 +10,7 @@ import NavigateDocument, {
 
 export default {
     get(params: NavigateGetParamDocument): ServiceResultDocument<NavigateDocument[]> {
-        return Api.get({
+        return Api.getSync({
             url: [ServicePages.navigate, params.navigateId?.toString()],
             data: params
         });

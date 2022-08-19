@@ -6,7 +6,7 @@ import {AuthLoginParamDocument, AuthGetSessionParamDocument} from "../modules/se
 
 export default {
     getSession(params: AuthGetSessionParamDocument): ServiceResultDocument<UserDocument[]> {
-        return Api.get({
+        return Api.getSync({
             url: [ServicePages.auth],
             data: params,
         });

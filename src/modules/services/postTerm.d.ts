@@ -6,7 +6,7 @@ export default interface PostTermDocument {
     postTermOrder: number,
     postTermStatusId: number,
     postTermViews: number,
-    postTermIsFixed: boolean
+    postTermIsFixed: 1 | 0
     // Content
     postTermContentId?: number,
     postTermContentTermId?: number,
@@ -70,5 +70,4 @@ export interface PostTermDeleteParamDocument {
     termId: number[]
     typeId: number
     postTypeId: number
-    statusId: number
 }

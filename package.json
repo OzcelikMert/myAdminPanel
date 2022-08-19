@@ -1,11 +1,11 @@
 {
   "name": "My Admin Panel",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Admin Panel",
   "private": true,
   "main": "dist/main.bundle.js",
+  "proxy": "http://localhost:5001",
   "dependencies": {
-    "axios": "^0.27.2",
     "bootstrap": "^5.1.3",
     "chart.js": "^3.7.1",
     "cogo-toast": "^4.2.3",
@@ -28,19 +28,20 @@
     "react-i18next": "^11.16.9",
     "react-images": "^1.2.0-beta.7",
     "react-lazy-load-image-component": "^1.5.4",
+    "react-router": "^6.2.1",
     "react-router-dom": "^6.2.1",
-    "react-scripts": "^5.0.0",
+    "react-scripts": "^5.0.1",
     "react-select": "^5.2.2",
     "react-sweetalert2": "^0.5.2",
+    "react-svg-worldmap": "2.0.0-alpha.1",
     "sass": "^1.49.9",
     "typescript": "^4.5.5"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "sass": "sass src/assets/app/admin/styles:src/assets/assets/app/admin/css --watch --no-source-map"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

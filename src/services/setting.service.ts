@@ -8,7 +8,7 @@ import SettingsDocument, {
 
 export default {
     get(params: SettingGetParamDocument): ServiceResultDocument<SettingsDocument[]> {
-        return Api.get({
+        return Api.getSync({
             url: [ServicePages.setting],
             data: params,
         });
