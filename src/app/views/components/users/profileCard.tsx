@@ -8,8 +8,8 @@ import {
     StatusId,
     UserRoleContents
 } from "../../../../public/static";
-import UserDocument from "../../../../modules/services/user";
-import {PagePropCommonDocument} from "../../../../modules/app/admin/pageProps";
+import UserDocument from "../../../../types/services/user";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import classNameUtil from "../../../../utils/functions/className.util";
 import staticContentUtil from "../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";

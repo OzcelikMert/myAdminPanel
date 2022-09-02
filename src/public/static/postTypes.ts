@@ -1,4 +1,4 @@
-import {PostTypeDocument} from "../../modules/static";
+import {PostTypeDocument} from "../../types/static";
 
 const PostTypes: Array<PostTypeDocument> = [
     {id: 1, order: 1},

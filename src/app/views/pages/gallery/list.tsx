@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {PagePropCommonDocument} from "../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import Carousel, {Modal, ModalGateway} from "react-images";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import Swal from "sweetalert2";

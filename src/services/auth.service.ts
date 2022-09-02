@@ -1,8 +1,8 @@
 import Api from "./api";
 import {ServicePages} from "../public/ajax";
-import ServiceResultDocument from "../modules/services/api/result";
-import UserDocument from "../modules/services/user";
-import {AuthLoginParamDocument, AuthGetSessionParamDocument} from "../modules/services/auth";
+import ServiceResultDocument from "../types/services/api/result";
+import UserDocument from "../types/services/user";
+import {AuthLoginParamDocument, AuthGetSessionParamDocument} from "../types/services/auth";
 
 export default {
     getSession(params: AuthGetSessionParamDocument): ServiceResultDocument<UserDocument[]> {

@@ -1,10 +1,10 @@
 import Api from "./api";
 import {ServicePages} from "../public/ajax";
-import ServiceResultDocument from "../modules/services/api/result";
+import ServiceResultDocument from "../types/services/api/result";
 import SettingsDocument, {
     SettingGetParamDocument,
     SettingUpdateParamDocument
-} from "../modules/services/setting";
+} from "../types/services/setting";
 
 export default {
     get(params: SettingGetParamDocument): ServiceResultDocument<SettingsDocument[]> {

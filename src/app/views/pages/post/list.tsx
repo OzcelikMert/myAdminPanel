@@ -6,13 +6,13 @@ import {
     StatusId
 } from "../../../../public/static";
 import {pageRoutes} from "../../../routes";
-import {PagePropCommonDocument} from "../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../components/form";
 import {ThemeTableToggleMenu} from "../../components/table";
 import Swal from "sweetalert2";
 import postService from "../../../../services/post.service";
-import PostDocument from "../../../../modules/services/post";
+import PostDocument from "../../../../types/services/post";
 import Spinner from "../../tools/spinner";
 import Thread from "../../../../library/thread";
 import staticContentUtil from "../../../../utils/functions/staticContent.util";
@@ -65,6 +65,7 @@ export class PagePostList extends Component<PageProps, PageState> {
     }
 
     setPageTitle() {
+        console.log(this.props)
         this.props.setBreadCrumb([
             staticContentUtil.getStaticContent(
                 PostTypeContents,

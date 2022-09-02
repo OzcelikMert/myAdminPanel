@@ -1,4 +1,4 @@
-import {StatusContentDocument} from "../../../modules/static";
+import {StatusContentDocument} from "../../../types/static";
 
 const StatusContents: Array<StatusContentDocument> = [
     { statusId: 1, contents: [{langId: 1, content: "Aktif"}, {langId: 2, content: "Active"}] },

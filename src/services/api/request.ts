@@ -1,8 +1,8 @@
 import $ from "jquery";
 import {ErrorCodes, Timeouts} from "../../public/ajax";
-import {ApiRequestParamDocument} from "../../modules/services/api";
+import {ApiRequestParamDocument} from "../../types/services/api";
 import ApiRequestConfig from "./config";
-import ServiceResultDocument from "../../modules/services/api/result";
+import ServiceResultDocument from "../../types/services/api/result";
 
 class ApiRequest {
     constructor(params: ApiRequestParamDocument) {

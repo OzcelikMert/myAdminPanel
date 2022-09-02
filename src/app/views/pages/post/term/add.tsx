@@ -7,7 +7,7 @@ import {
     ThemeFormCheckBox
 } from "../../../components/form"
 import {pageRoutes} from "../../../../routes";
-import {PagePropCommonDocument} from "../../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {
     PostTermTypeContents,
     PostTermTypeId,

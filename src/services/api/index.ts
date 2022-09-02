@@ -1,5 +1,5 @@
-import {ApiRequestParamDocument} from "../../modules/services/api";
-import ServiceResultDocument from "../../modules/services/api/result";
+import {ApiRequestParamDocument} from "../../types/services/api";
+import ServiceResultDocument from "../../types/services/api/result";
 import ApiRequest from "./request";
 
 const Api = {

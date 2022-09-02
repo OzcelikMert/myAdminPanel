@@ -1,11 +1,11 @@
 import Api from "./api";
 import {ServicePages} from "../public/ajax";
-import ServiceResultDocument from "../modules/services/api/result";
+import ServiceResultDocument from "../types/services/api/result";
 import {
     ViewAddParamDocument,
     ViewNumberDocument,
     ViewStatisticsDocument
-} from "../modules/services/view";
+} from "../types/services/view";
 
 export default {
     getNumber(): Promise<ServiceResultDocument<ViewNumberDocument>> {

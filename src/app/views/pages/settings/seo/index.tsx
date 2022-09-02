@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {ThemeForm, ThemeFormSelect, ThemeFormTags, ThemeFormType} from "../../../components/form";
-import {PagePropCommonDocument} from "../../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import HandleForm from "../../../../../library/react/handles/form";
 import {PermissionId, SeoTitleSeparators, SettingId} from "../../../../../public/static";
 import seoService from "../../../../../services/seo.service";

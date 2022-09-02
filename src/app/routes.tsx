@@ -5,7 +5,7 @@ import {
     Navigate
 } from "react-router-dom";
 import Spinner from './views/tools/spinner';
-import {PagePropCommonDocument} from "../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../types/app/pageProps";
 
 import PageLogin from "./views/pages/login";
 import PageLock from "./views/pages/lock";

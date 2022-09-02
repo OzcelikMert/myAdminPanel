@@ -4,7 +4,7 @@ import {Collapse} from 'react-bootstrap';
 import {Trans} from 'react-i18next';
 import {PermissionId, PostTypeId, UserRoleContents} from "../../../public/static";
 import {pageRoutes} from "../../routes";
-import {PagePropCommonDocument} from "../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../types/app/pageProps";
 import permissionUtil from "../../../utils/functions/permission.util";
 import imageSourceUtil from "../../../utils/functions/imageSource.util";
 import classNameUtil from "../../../utils/functions/className.util";

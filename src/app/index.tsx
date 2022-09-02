@@ -6,7 +6,7 @@ import {
     useNavigate,
     useParams, useSearchParams, matchRoutes, RouteObject, BrowserRouter
 } from "react-router-dom";
-import {PagePropCommonDocument} from "../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../types/app/pageProps";
 import {useTranslation} from "react-i18next";
 import AppProviders from "./providers";
 
@@ -21,10 +21,10 @@ import Sidebar from "./views/tools/sidebar";
 import Footer from "./views/tools/footer";
 import {ThemeFormSelect} from "./views/components/form";
 import Statement from "../library/statement";
-import {AppAdminGetState, AppAdminSetState} from "../modules/app/admin/views";
+import {AppAdminGetState, AppAdminSetState} from "../types/app/views";
 import languageService from "../services/language.service";
 import settingService from "../services/setting.service";
-import LanguageDocument from "../modules/services/language";
+import LanguageDocument from "../types/services/language";
 import pathUtil from "../utils/path.util";
 import localStorageUtil from "../utils/localStorage.util";
 import {Helmet} from "react-helmet";
@@ -112,9 +112,9 @@ class AppAdmin extends Component<PageProps, PageState> {
                     userId: 0
                 };
                 if (this.props.router.match) {
-                    /* Statement.Foreach(this.props.router.match?.params, (key, value) => {
+                    Statement.Foreach(this.props.router.match?.params, (key, value) => {
                          state.pageData.searchParams[key] = value;
-                     })*/
+                     })
                 }
                 return state;
             }, () => this.setState({isPageLoading: false}))

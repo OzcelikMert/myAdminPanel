@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Modal, Tab, Tabs} from "react-bootstrap";
 import PageGalleryList from "../../pages/gallery/list";
 import PageGalleryUpload from "../../pages/gallery/upload";
-import {PagePropCommonDocument} from "../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 
 type PageState = {
     formActiveKey: string

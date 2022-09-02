@@ -1,7 +1,7 @@
 import Api from "./api";
 import {ServicePages} from "../public/ajax";
-import ServiceResultDocument from "../modules/services/api/result";
-import ServerInfoDocument from "../modules/services/serverInfo";
+import ServiceResultDocument from "../types/services/api/result";
+import ServerInfoDocument from "../types/services/serverInfo";
 
 export default {
     get(): ServiceResultDocument<ServerInfoDocument> {

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import ThemeInputType from "../../components/form/input/type";
 import {pageRoutes} from "../../../routes";
-import {PagePropCommonDocument} from "../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import {ThemeForm} from "../../components/form";
 import HandleForm from "../../../../library/react/handles/form";
 import V from "../../../../library/variable";

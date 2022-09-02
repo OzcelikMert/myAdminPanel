@@ -1,4 +1,4 @@
-import {PostTermTypeDocument} from "../../modules/static";
+import {PostTermTypeDocument} from "../../types/static";
 
 const PostTermTypes: Array<PostTermTypeDocument> = [
     {id: 1, order: 1},

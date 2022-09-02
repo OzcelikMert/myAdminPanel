@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
 import ThemeInputType from "../../components/form/input/type";
 import {pageRoutes} from "../../../routes";
-import {PagePropCommonDocument} from "../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import {LanguageId} from "../../../../public/static";
 import {ThemeForm, ThemeFormCheckBox} from "../../components/form";
 import HandleForm from "../../../../library/react/handles/form";
 import authService from "../../../../services/auth.service";
 import {ErrorCodes} from "../../../../public/ajax";
-import UserDocument from "../../../../modules/services/user";
+import UserDocument from "../../../../types/services/user";
 
 type PageState = {
     isSubmitting: boolean

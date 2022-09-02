@@ -2,7 +2,7 @@ import React, {Component, createRef, RefObject} from "react";
 import V from "../../../../library/variable";
 import {Modal, Tab, Tabs} from "react-bootstrap";
 import ThemeChooseImageUrl from "./url";
-import {PagePropCommonDocument} from "../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import ThemeChooseImageGallery from "./gallery";
 
 const emptyImage = require("../../../../assets/images/admin/empty.png");

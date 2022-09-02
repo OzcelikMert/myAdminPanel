@@ -1,7 +1,7 @@
 import React, {Component, FormEvent} from 'react'
 import {Tab, Tabs} from "react-bootstrap";
 import moment from "moment";
-import {PagePropCommonDocument} from "../../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {
     PermissionContents,
     PermissionGroups,

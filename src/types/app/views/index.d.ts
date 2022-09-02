@@ -1,5 +1,5 @@
 import SearchParamDocument from "../providers";
-import {LanguageId, UserRoleId} from "../../../../public/static";
+import {LanguageId, UserRoleId} from "../../../public/static";
 
 type AppAdminGetState = {
     pageData: {

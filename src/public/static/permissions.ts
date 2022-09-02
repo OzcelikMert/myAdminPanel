@@ -1,4 +1,4 @@
-import {PermissionDocument} from "../../modules/static";
+import {PermissionDocument} from "../../types/static";
 
 const Permissions: Array<PermissionDocument> = [
     {id: 1, groupId:1, defaultRoleRank: 2},

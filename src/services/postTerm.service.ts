@@ -1,12 +1,12 @@
 import Api from "./api";
 import {ServicePages} from "../public/ajax";
-import ServiceResultDocument from "../modules/services/api/result";
+import ServiceResultDocument from "../types/services/api/result";
 import PostTermDocument, {
     PostTermDeleteParamDocument,
     PostTermGetParamDocument,
     PostTermAddParamDocument,
     PostTermUpdateStatusParamDocument, PostTermUpdateParamDocument
-} from "../modules/services/postTerm";
+} from "../types/services/postTerm";
 
 export default {
     get(params: PostTermGetParamDocument): ServiceResultDocument<PostTermDocument[]> {

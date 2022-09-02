@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {PagePropCommonDocument} from "../../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {
     PermissionId, Status,
     StatusContents,
@@ -9,7 +9,7 @@ import {
 import DataTable, {TableColumn} from "react-data-table-component";
 import {pageRoutes} from "../../../../routes";
 import Swal from "sweetalert2";
-import UserDocument from "../../../../../modules/services/user";
+import UserDocument from "../../../../../types/services/user";
 import ThemeUsersProfileCard from "../../../components/users/profileCard";
 import userService from "../../../../../services/user.service";
 import Thread from "../../../../../library/thread";

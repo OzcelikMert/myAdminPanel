@@ -5,12 +5,12 @@ import {
     StatusId
 } from "../../../../public/static";
 import {pageRoutes} from "../../../routes";
-import {PagePropCommonDocument} from "../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../components/form";
 import {ThemeTableToggleMenu} from "../../components/table";
 import Swal from "sweetalert2";
-import NavigateDocument from "../../../../modules/services/navigate";
+import NavigateDocument from "../../../../types/services/navigate";
 import navigateService from "../../../../services/navigate.service";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";

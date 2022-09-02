@@ -1,22 +1,24 @@
 export default interface UserDocument {
-    userId: number
-    userRoleId: number
-    userStatusId: number
-    userImage: string
-    userName: string
-    userComment: string
-    userPhone: string
-    userEmail: string
-    userPermissions: number[]
-    userBanDateEnd: string
-    userBanComment: string
-    userFacebook: string
-    userInstagram: string
-    userTwitter: string
+    _id: string
+    roleId: number,
+    statusId: number,
+    image: string,
+    name: string,
+    comment: string,
+    phone: string,
+    email: string,
+    password: string,
+    permissions: number[],
+    banDateEnd: Date,
+    banComment: string,
+    facebook: string,
+    instagram: string,
+    twitter: string,
+    views: number,
 }
 
 export interface UsersGetParamDocument {
-    userId?: number
+    userId?: string
 }
 
 export interface UserAddParamDocument {
@@ -29,7 +31,7 @@ export interface UserAddParamDocument {
 }
 
 export interface UserUpdateParamDocument {
-    userId: number
+    userId: string
     roleId: number,
     statusId: number,
     name: string,
@@ -41,5 +43,5 @@ export interface UserUpdateParamDocument {
 }
 
 export interface UserDeleteParamDocument {
-    userId: number
+    userId: string
 }

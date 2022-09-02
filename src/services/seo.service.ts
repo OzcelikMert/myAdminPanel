@@ -1,7 +1,7 @@
 import Api from "./api";
 import {ServicePages} from "../public/ajax";
-import ServiceResultDocument from "../modules/services/api/result";
-import SeoDocument, {SeoGetParamDocument, SeoUpdateParamDocument} from "../modules/services/seo";
+import ServiceResultDocument from "../types/services/api/result";
+import SeoDocument, {SeoGetParamDocument, SeoUpdateParamDocument} from "../types/services/seo";
 
 export default {
     get(params: SeoGetParamDocument): ServiceResultDocument<SeoDocument[]> {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {PagePropCommonDocument} from "../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../types/app/pageProps";
 import {pageRoutes} from "./routes";
 import {ErrorCodes} from "../public/ajax";
 import {LanguageId} from "../public/static";

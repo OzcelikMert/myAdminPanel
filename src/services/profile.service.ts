@@ -1,6 +1,6 @@
 import Api from "./api";
 import {ServicePages} from "../public/ajax";
-import {ProfileChangePasswordParamDocument, ProfileUpdateParamDocument} from "../modules/services/profile";
+import {ProfileChangePasswordParamDocument, ProfileUpdateParamDocument} from "../types/services/profile";
 
 export default {
     update(params: ProfileUpdateParamDocument) {

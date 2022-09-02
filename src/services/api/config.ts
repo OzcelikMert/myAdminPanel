@@ -1,4 +1,4 @@
-import {ApiRequestConfigDocument} from "../../modules/services/api/config";
+import {ApiRequestConfigDocument} from "../../types/services/api/config";
 import pathUtil from "../../utils/path.util";
 
 let ApiRequestConfig: ApiRequestConfigDocument = {

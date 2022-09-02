@@ -1,4 +1,4 @@
-import {PermissionContentDocument} from "../../../modules/static";
+import {PermissionContentDocument} from "../../../types/static";
 
 const PermissionContents: Array<PermissionContentDocument> = [
     { permId: 1, contents: [{langId: 1, content: "Yazı Ekle"}, {langId: 2, content: "Blog Add"}] },

@@ -1,5 +1,5 @@
 import React, {Component, FormEvent} from 'react'
-import {PagePropCommonDocument} from "../../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeForm, ThemeFormType} from "../../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
 import {

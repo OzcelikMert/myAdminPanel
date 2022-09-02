@@ -1,7 +1,7 @@
 import Api from "./api";
 import {ServicePages} from "../public/ajax";
-import ServiceResultDocument from "../modules/services/api/result";
-import LanguageDocument, {LanguageGetParamDocument} from "../modules/services/language";
+import ServiceResultDocument from "../types/services/api/result";
+import LanguageDocument, {LanguageGetParamDocument} from "../types/services/language";
 
 export default {
     get(params: LanguageGetParamDocument): ServiceResultDocument<LanguageDocument[]> {

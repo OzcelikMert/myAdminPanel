@@ -6,12 +6,12 @@ import {
     StatusId
 } from "../../../../../public/static";
 import {pageRoutes} from "../../../../routes";
-import {PagePropCommonDocument} from "../../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../../components/form";
 import {ThemeTableToggleMenu} from "../../../components/table";
 import Swal from "sweetalert2";
-import PostTermDocument from "../../../../../modules/services/postTerm";
+import PostTermDocument from "../../../../../types/services/postTerm";
 import postTermService from "../../../../../services/postTerm.service";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";

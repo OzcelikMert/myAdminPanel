@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
-import {PagePropCommonDocument} from "../../../../../modules/app/admin/pageProps";
+import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeForm, ThemeFormSelect} from "../../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
 import {PermissionId, SettingId} from "../../../../../public/static";
 import settingService from "../../../../../services/setting.service";
 import languageService from "../../../../../services/language.service";
-import ServerInfoDocument from "../../../../../modules/services/serverInfo";
+import ServerInfoDocument from "../../../../../types/services/serverInfo";
 import serverInfoService from "../../../../../services/serverInfo.service";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
