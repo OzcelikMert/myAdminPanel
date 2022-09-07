@@ -3,7 +3,7 @@ import {
     PermissionId,
     StatusContents,
     StatusId
-} from "../../../../public/static";
+} from "../../../../constants";
 import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
@@ -22,7 +22,7 @@ import ThemeToast from "../../components/toast";
 type PageState = {
     navigates: NavigateDocument[],
     showingNavigates: PageState["navigates"]
-    selectedNavigates: number[]
+    selectedNavigates: string[]
     listMode: "list" | "deleted"
     isShowToggleMenu: boolean
     checkedRowsClear: boolean
@@ -70,7 +70,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
         if (resData.status) {
             this.setState({
                 navigates: resData.data,
-                showingNavigates: resData.data.filter(item => item.navigateStatusId !== StatusId.Deleted)
+                showingNavigates: resData.data.filter(item => item.statusId !== StatusId.Deleted)
             })
         }
     }
@@ -99,7 +99,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                         loadingToast.hide();
                         if (resData.status) {
                             this.setState((state: PageState) => {
-                                state.navigates = state.navigates.filter(item => !state.selectedNavigates.includes(item.navigateId))
+                                state.navigates = state.navigates.filter(item => !state.selectedNavigates.includes(item._id))
                                 return state;
                             }, () => {
                                 new ThemeToast({
@@ -127,8 +127,8 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                 if (resData.status) {
                     this.setState((state: PageState) => {
                         state.navigates.map((item, index) => {
-                            if (state.selectedNavigates.includes(item.navigateId)) {
-                                item.navigateStatusId = statusId;
+                            if (state.selectedNavigates.includes(item._id)) {
+                                item.statusId = statusId;
                             }
                         })
                         return state;
@@ -148,7 +148,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
     onSelect(allSelected: boolean, selectedCount: number, selectedRows: PageState["navigates"]) {
         this.setState((state: PageState) => {
             state.selectedNavigates = [];
-            selectedRows.forEach(item => state.selectedNavigates.push(item.navigateId))
+            selectedRows.forEach(item => state.selectedNavigates.push(item._id))
             state.isShowToggleMenu = selectedCount > 0;
             return state;
         })
@@ -161,16 +161,16 @@ export class PageNavigateList extends Component<PageProps, PageState> {
             state.selectedNavigates = [];
             state.isShowToggleMenu = false;
             if (mode === "list") {
-                state.showingNavigates = state.navigates.findMulti("navigateStatusId", StatusId.Deleted, false);
+                state.showingNavigates = state.navigates.findMulti("statusId", StatusId.Deleted, false);
             } else {
-                state.showingNavigates = state.navigates.findMulti("navigateStatusId", StatusId.Deleted);
+                state.showingNavigates = state.navigates.findMulti("statusId", StatusId.Deleted);
             }
             state.checkedRowsClear = !this.state.checkedRowsClear;
             return state;
         })
     }
 
-    navigateTermPage(type: "edit", navigateId = 0) {
+    navigateTermPage(type: "edit", navigateId = "") {
         let path = (type === "edit")
             ? pageRoutes.navigate.path() + pageRoutes.navigate.edit.path(navigateId)
             : "";
@@ -181,12 +181,15 @@ export class PageNavigateList extends Component<PageProps, PageState> {
         return [
             {
                 name: this.props.router.t("name"),
-                selector: row => row.navigateContentTitle || this.props.router.t("[noLangAdd]"),
+                selector: row => row.contents.length > 0 ? row.contents[0].title : this.props.router.t("[noLangAdd]"),
                 sortable: true,
             },
             {
                 name: this.props.router.t("main"),
-                selector: row => this.state.navigates.findSingle("navigateId", row.navigateMainId)?.navigateContentTitle || this.props.router.t("[noLangAdd]"),
+                selector: row => {
+                    let main = this.state.navigates.findSingle("_id", row.mainId?._id);
+                    return main?.contents.length > 0 ? main.contents[0].title : this.props.router.t("[noLangAdd]")
+                },
                 sortable: true
             },
             {
@@ -194,9 +197,9 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                 sortable: true,
                 cell: row => (
                     <label
-                        className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.navigateStatusId)}`}>
+                        className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
-                            staticContentUtil.getStaticContent(StatusContents, "statusId", row.navigateStatusId)
+                            staticContentUtil.getStaticContent(StatusContents, "statusId", row.statusId)
                         }
                     </label>
                 )
@@ -212,7 +215,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                 ) ? (
                     <button
                         className="btn btn-gradient-warning"
-                        onClick={() => this.navigateTermPage("edit", row.navigateId)}
+                        onClick={() => this.navigateTermPage("edit", row._id)}
                     ><i className="fa fa-pencil-square-o"></i></button>
                 ) : null
             }
@@ -229,11 +232,11 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                             this.state.listMode === "list"
                                 ? <button className="btn btn-gradient-danger btn-lg"
                                           onClick={() => this.onChangeListMode("deleted")}>
-                                    <i className="mdi mdi-delete"></i> {this.props.router.t("trash")} ({this.state.navigates.findMulti("navigateStatusId", StatusId.Deleted).length})
+                                    <i className="mdi mdi-delete"></i> {this.props.router.t("trash")} ({this.state.navigates.findMulti("statusId", StatusId.Deleted).length})
                                 </button>
                                 : <button className="btn btn-gradient-success btn-lg"
                                           onClick={() => this.onChangeListMode("list")}>
-                                    <i className="mdi mdi-view-list"></i> {this.props.router.t("list")} ({this.state.navigates.findMulti("navigateStatusId", StatusId.Deleted, false).length})
+                                    <i className="mdi mdi-view-list"></i> {this.props.router.t("list")} ({this.state.navigates.findMulti("statusId", StatusId.Deleted, false).length})
                                 </button>
                         }
                     </div>

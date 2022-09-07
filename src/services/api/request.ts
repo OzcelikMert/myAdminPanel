@@ -1,5 +1,5 @@
 import $ from "jquery";
-import {ErrorCodes, Timeouts} from "../../public/ajax";
+import {ErrorCodes, Timeouts} from "../../library/api";
 import {ApiRequestParamDocument} from "../../types/services/api";
 import ApiRequestConfig from "./config";
 import ServiceResultDocument from "../../types/services/api/result";
@@ -60,11 +60,8 @@ class ApiRequest {
 
                 return xhr;
             },
-            beforeSend: function () {
-                //if (typeof ApiRequestConfig.beforeSend !== "undefined") ApiRequestConfig.beforeSend(ApiRequestConfig.mainUrl + url, method);
-            },
+            beforeSend: function () {},
             complete: function () {
-                //if (typeof ApiRequestConfig.complete !== "undefined") ApiRequestConfig.complete(ApiRequestConfig.mainUrl + url, method, result, isRequestFailed);
                 if(resolve) resolve(self.result)
             },
             success: (resData) => {

@@ -1,5 +1,5 @@
 import {ApiRequestParamMethodDocument} from "./index";
-import {Result} from "../../../public/ajax";
+import {Result} from "../../../library/api";
 
 interface ApiRequestConfigDocument {
     mainUrl: string,

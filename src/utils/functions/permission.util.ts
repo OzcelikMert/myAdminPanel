@@ -1,4 +1,4 @@
-import {PermissionId, PostTypeId, UserRoleId} from "../../public/static";
+import {PermissionId, PostTypeId, UserRoleId} from "../../constants";
 import {NavigateFunction} from "react-router-dom";
 import {pageRoutes} from "../../app/routes";
 

@@ -5,8 +5,7 @@ import {PostTermTypes, PostTermTypeId} from "./postTermTypes";
 import {PostTypes, PostTypeId} from "./postTypes";
 import {Status, StatusId} from "./status";
 import {UserRoles, UserRoleId} from "./userRoles";
-import {SeoTitleSeparators} from "./seoTitleSeparators";
-import {SettingId} from "./settings";
+import ServicePages from "./servicePages";
 /* Contents */
 import {PermissionContents} from "./contents/permissionContents";
 import {PermissionGroupsContents} from "./contents/permissionGroupContents";
@@ -16,6 +15,7 @@ import {StatusContents} from "./contents/statusContents";
 import {UserRoleContents} from "./contents/userRoleContents";
 
 export {
+    ServicePages,
     Languages, LanguageId,
     PermissionGroups, PermissionGroupId,
     Permissions, PermissionId,
@@ -23,8 +23,6 @@ export {
     PostTypes, PostTypeId,
     Status, StatusId,
     UserRoles, UserRoleId,
-    SeoTitleSeparators,
-    SettingId,
     /* Contents */
     PermissionContents,
     PermissionGroupsContents,

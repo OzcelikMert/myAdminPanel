@@ -20,6 +20,15 @@ export default interface PostTermDocument {
     }[]
 }
 
+export interface PopulateTermsDocument {
+    _id: string,
+    typeId: number
+    contents: {
+        langId: string,
+        title: string,
+    }[]
+}
+
 export interface PostTermGetParamDocument {
     langId: string
     typeId: number
@@ -29,7 +38,6 @@ export interface PostTermGetParamDocument {
 }
 
 export interface PostTermAddParamDocument {
-    langId: string
     typeId: number,
     postTypeId: number
     order: number
@@ -37,6 +45,7 @@ export interface PostTermAddParamDocument {
     statusId: number
     isFixed: 1 | 0
     contents: {
+        langId: string
         title: string
         image?: string
         url?: string

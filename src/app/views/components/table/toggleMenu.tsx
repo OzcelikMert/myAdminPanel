@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Dropdown} from "react-bootstrap";
-import {LanguageId, Status, StatusContents, StatusId} from "../../../../public/static";
+import {LanguageId, Status, StatusContents, StatusId} from "../../../../constants";
 import staticContentUtil from "../../../../utils/functions/staticContent.util";
 import classNameUtil from "../../../../utils/functions/className.util";
 

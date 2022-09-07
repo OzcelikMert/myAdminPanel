@@ -5,7 +5,7 @@ import {
     StatusContents,
     UserRoleContents, UserRoleId,
     UserRoles
-} from "../../../../../public/static";
+} from "../../../../../constants";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {pageRoutes} from "../../../../routes";
 import Swal from "sweetalert2";
@@ -23,7 +23,7 @@ import ThemeToast from "../../../components/toast";
 type PageState = {
     users: UserDocument[]
     isViewUserInfo: boolean
-    selectedUserId: number
+    selectedUserId: string
     isLoading: boolean
 };
 
@@ -35,7 +35,7 @@ export class PageUserList extends Component<PageProps, PageState> {
         this.state = {
             users: [],
             isViewUserInfo: false,
-            selectedUserId: 0,
+            selectedUserId: "",
             isLoading: true
         }
     }
@@ -63,15 +63,14 @@ export class PageUserList extends Component<PageProps, PageState> {
         this.setState((state: PageState) => {
             state.users = state.users.sort(user => {
                 let sort = 0;
-                if(user.userId == this.props.getSessionData.id) {
+                if(user._id == this.props.getSessionData.id) {
                     sort = 1;
                 }
                 return sort;
             })
             state.users = users.map(user => {
-                if (user.userRoleId == UserRoleId.Admin) {
-                    user.userPermissions = []
-                    user.userPermissions = Object.keys(PermissionId).map(permKey => PermissionId[permKey]);
+                if (user.roleId == UserRoleId.Admin) {
+                    user.permissions = Object.keys(PermissionId).map(permKey => PermissionId[permKey]);
                 }
                 return user;
             });
@@ -79,11 +78,11 @@ export class PageUserList extends Component<PageProps, PageState> {
         });
     }
 
-    onDelete(userId: number) {
-        let user = this.state.users.findSingle("userId", userId);
+    onDelete(userId: string) {
+        let user = this.state.users.findSingle("_id", userId);
         Swal.fire({
             title: this.props.router.t("deleteAction"),
-            html: `<b>'${user.userName}'</b> ${this.props.router.t("deleteItemQuestionWithItemName")}`,
+            html: `<b>'${user.name}'</b> ${this.props.router.t("deleteItemQuestionWithItemName")}`,
             confirmButtonText: this.props.router.t("yes"),
             cancelButtonText: this.props.router.t("no"),
             icon: "question",
@@ -100,7 +99,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                     loadingToast.hide();
                     if (resData.status) {
                         this.setState((state: PageState) => {
-                            state.users = state.users.filter(item => userId !== item.userId);
+                            state.users = state.users.filter(item => userId !== item._id);
                             return state;
                         }, () => {
                             new ThemeToast({
@@ -115,14 +114,14 @@ export class PageUserList extends Component<PageProps, PageState> {
         })
     }
 
-    onViewUser(userId: number) {
+    onViewUser(userId: string) {
         this.setState({
             isViewUserInfo: true,
             selectedUserId: userId
         })
     }
 
-    navigateTermPage(type: "edit", itemId = 0) {
+    navigateTermPage(type: "edit", itemId = "") {
         let path = pageRoutes.settings.path() + pageRoutes.settings.user.path() + pageRoutes.settings.user.edit.path(itemId)
         this.props.router.navigate(path, {replace: true});
     }
@@ -135,41 +134,41 @@ export class PageUserList extends Component<PageProps, PageState> {
                 cell: row => (
                     <div className="image pt-2 pb-2">
                         <img
-                            src={imageSourceUtil.getUploadedImageSrc(row.userImage)}
-                            alt={row.userName}
+                            src={imageSourceUtil.getUploadedImageSrc(row.image)}
+                            alt={row.name}
                         />
                     </div>
                 )
             },
             {
                 name: this.props.router.t("name"),
-                selector: row => row.userName,
+                selector: row => row.name,
                 sortable: true,
                 cell: row => (
-                    <b>{row.userName}</b>
+                    <b>{row.name}</b>
                 )
             },
             {
                 id: "userRole",
                 name: this.props.router.t("role"),
-                selector: row => UserRoles.findSingle("id", row.userRoleId).rank,
+                selector: row => UserRoles.findSingle("id", row.roleId).rank,
                 sortable: true,
                 cell: row => (
-                    <label className={`badge badge-gradient-${classNameUtil.getUserRolesClassName(row.userRoleId)}`}>
+                    <label className={`badge badge-gradient-${classNameUtil.getUserRolesClassName(row.roleId)}`}>
                         {
-                            staticContentUtil.getStaticContent(UserRoleContents, "roleId", row.userRoleId)
+                            staticContentUtil.getStaticContent(UserRoleContents, "roleId", row.roleId)
                         }
                     </label>
                 )
             },
             {
                 name: this.props.router.t("status"),
-                selector: row => Status.findSingle("id", row.userRoleId).order,
+                selector: row => Status.findSingle("id", row.statusId).order,
                 sortable: true,
                 cell: row => (
-                    <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.userStatusId)}`}>
+                    <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
-                            staticContentUtil.getStaticContent(StatusContents, "statusId", row.userStatusId)
+                            staticContentUtil.getStaticContent(StatusContents, "statusId", row.statusId)
                         }
                     </label>
                 )
@@ -179,7 +178,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                 width: "70px",
                 cell: row => (
                     <button
-                        onClick={() => this.onViewUser(row.userId)}
+                        onClick={() => this.onViewUser(row._id)}
                         className="btn btn-gradient-info"
                     ><i className="mdi mdi-eye"></i></button>
                 )
@@ -188,14 +187,14 @@ export class PageUserList extends Component<PageProps, PageState> {
                 name: "",
                 button: true,
                 width: "70px",
-                cell: row => (UserRoles.findSingle("id", row.userRoleId).rank < UserRoles.findSingle("id", this.props.getSessionData.roleId).rank) &&
+                cell: row => (UserRoles.findSingle("id", row.roleId).rank < UserRoles.findSingle("id", this.props.getSessionData.roleId).rank) &&
                 permissionUtil.checkPermissionAndRedirect(
                     this.props.getSessionData.roleId,
                     this.props.getSessionData.permissions,
                     PermissionId.UserEdit,
                     this.props.router.navigate
                 ) ? <button
-                        onClick={() => this.navigateTermPage("edit", row.userId)}
+                        onClick={() => this.navigateTermPage("edit", row._id)}
                         className="btn btn-gradient-warning"
                     ><i className="fa fa-pencil-square-o"></i>
                 </button> : null
@@ -204,14 +203,14 @@ export class PageUserList extends Component<PageProps, PageState> {
                 name: "",
                 button: true,
                 width: "70px",
-                cell: row => (UserRoles.findSingle("id", row.userRoleId).rank < UserRoles.findSingle("id", this.props.getSessionData.roleId).rank) &&
+                cell: row => (UserRoles.findSingle("id", row.roleId).rank < UserRoles.findSingle("id", this.props.getSessionData.roleId).rank) &&
                 permissionUtil.checkPermissionAndRedirect(
                     this.props.getSessionData.roleId,
                     this.props.getSessionData.permissions,
                     PermissionId.UserDelete,
                     this.props.router.navigate
                 ) ? <button
-                        onClick={() => this.onDelete(row.userId)}
+                        onClick={() => this.onDelete(row._id)}
                         className="btn btn-gradient-danger"
                     ><i className="mdi mdi-trash-can-outline"></i>
                 </button> : null
@@ -223,12 +222,12 @@ export class PageUserList extends Component<PageProps, PageState> {
         return this.state.isLoading ? <Spinner /> : (
             <div className="page-user">
                 {
-                    (this.state.users.findSingle("userId", this.state.selectedUserId))
+                    (this.state.users.findSingle("_id", this.state.selectedUserId))
                         ? <ThemeUsersProfileCard
                             router={this.props.router}
                             onClose={()=> {this.setState({isViewUserInfo: false})}}
                             isShow={this.state.isViewUserInfo}
-                            userInfo={this.state.users.findSingle("userId", this.state.selectedUserId)}
+                            userInfo={this.state.users.findSingle("_id", this.state.selectedUserId)}
                             langId={this.props.getSessionData.langId}
                         />
                         : null

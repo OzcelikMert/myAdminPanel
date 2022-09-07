@@ -12,7 +12,7 @@ import DataTable, {TableColumn} from "react-data-table-component";
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";
 import ThemeToast from "../../components/toast";
 import permissionUtil from "../../../../utils/functions/permission.util";
-import {PermissionId} from "../../../../public/static";
+import {PermissionId} from "../../../../constants";
 
 type PageState = {
     isSelectedAll: boolean

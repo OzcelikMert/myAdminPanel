@@ -11,7 +11,7 @@ import {
     PermissionId,
     PostTermTypeId,
     StatusId
-} from "../../../../public/static";
+} from "../../../../constants";
 import V from "../../../../library/variable";
 import SweetAlert from "react-sweetalert2";
 import HandleForm from "../../../../library/react/handles/form";
@@ -23,19 +23,21 @@ import staticContentUtil from "../../../../utils/functions/staticContent.util";
 
 type PageState = {
     formActiveKey: string
-    navigates: { value: number, label: string }[]
+    navigates: { value: string, label: string }[]
     status: { value: number, label: string }[]
     isSubmitting: boolean
     isLoading: boolean
     mainTitle: string
     formData: {
-        navigateId: number
-        langId: number
-        mainId: number
+        navigateId: string
+        mainId: string
         statusId: number
-        title: string
         order: number
-        url: string
+        contents: {
+            langId: string
+            title: string
+            url: string
+        }
     },
     isSuccessMessage: boolean
 };
@@ -54,29 +56,31 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
             isLoading: true,
             formData: {
                 navigateId: this.props.getPageData.searchParams.navigateId,
-                langId: this.props.getPageData.mainLangId,
-                mainId: 0,
+                mainId: "",
                 statusId: 0,
-                title: "",
                 order: 0,
-                url: "",
+                contents: {
+                    langId: this.props.getPageData.mainLangId,
+                    title: "",
+                    url: "",
+                }
             },
             isSuccessMessage: false,
         }
     }
 
     componentDidMount() {
-        if(!permissionUtil.checkPermissionAndRedirect(
+        if (!permissionUtil.checkPermissionAndRedirect(
             this.props.getSessionData.roleId,
             this.props.getSessionData.permissions,
-            this.props.getPageData.searchParams.navigateId > 0 ? PermissionId.NavigateEdit : PermissionId.NavigateAdd,
+            this.props.getPageData.searchParams.navigateId ? PermissionId.NavigateEdit : PermissionId.NavigateAdd,
             this.props.router.navigate
         )) return;
         this.setPageTitle();
         Thread.start(() => {
             this.getNavigates();
             this.getStatus();
-            if (this.props.getPageData.searchParams.navigateId > 0) {
+            if (this.props.getPageData.searchParams.navigateId) {
                 this.getNavigate();
             }
             this.setState({
@@ -86,9 +90,9 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
     }
 
     componentDidUpdate(prevProps: Readonly<PageProps>) {
-        if(this.state.formData.langId != this.props.getPageData.langId){
+        if (this.state.formData.contents.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
-                state.formData.langId = this.props.getPageData.langId;
+                state.formData.contents.langId = this.props.getPageData.langId;
                 state.isLoading = true;
                 return state;
             }, () => {
@@ -105,9 +109,9 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
     setPageTitle() {
         let titles: string[] = [
             this.props.router.t("navigates"),
-            this.props.router.t((this.state.formData.navigateId) > 0 ? "edit" : "add")
+            this.props.router.t(this.state.formData.navigateId ? "edit" : "add")
         ];
-        if(this.state.formData.navigateId > 0) {
+        if (this.state.formData.navigateId) {
             titles.push(this.state.mainTitle)
         }
         this.props.setBreadCrumb(titles);
@@ -132,12 +136,15 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
         });
         if (resData.status) {
             this.setState((state: PageState) => {
-                state.navigates = [{value: 0, label: this.props.router.t("notSelected")}];
-                resData.data.orderBy("navigateOrder", "asc").forEach(item => {
+                state.navigates = [{value: "", label: this.props.router.t("notSelected")}];
+                resData.data.orderBy("order", "asc").forEach(item => {
                     if (!V.isEmpty(this.props.getPageData.searchParams.navigateId)) {
-                        if (this.props.getPageData.searchParams.navigateId == item.navigateId) return;
+                        if (this.props.getPageData.searchParams.navigateId == item._id) return;
                     }
-                    state.navigates.push({value: item.navigateId, label: item.navigateContentTitle || this.props.router.t("[noLangAdd]")});
+                    state.navigates.push({
+                        value: item._id,
+                        label: item.contents.length > 0 ? item.contents[0].title : this.props.router.t("[noLangAdd]")
+                    });
                 });
                 return state;
             })
@@ -147,23 +154,26 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
     getNavigate() {
         let resData = navigateService.get({
             navigateId: this.state.formData.navigateId,
-            langId: this.state.formData.langId,
-            getContents: true
+            langId: this.state.formData.contents.langId,
         });
         if (resData.status) {
             if (resData.data.length > 0) {
                 const navigate = resData.data[0];
                 this.setState((state: PageState) => {
-                    state.formData = Object.assign(state.formData, {
-                        mainId: navigate.navigateMainId,
-                        statusId: navigate.navigateStatusId,
-                        order: navigate.navigateOrder,
-                        title: navigate.navigateContentTitle || "",
-                        url: navigate.navigateContentUrl || "",
-                    });
+                    let contents = navigate.contents.length > 0 ? navigate.contents[0] : {};
+                    state.formData = {
+                        ...state.formData,
+                        mainId: navigate.mainId?._id || "",
+                        statusId: navigate.statusId,
+                        order: navigate.order,
+                        contents: {
+                            ...state.formData.contents,
+                            ...contents
+                        }
+                    };
 
-                    if(this.props.getPageData.langId == this.props.getPageData.mainLangId) {
-                        state.mainTitle = state.formData.title;
+                    if (this.props.getPageData.langId == this.props.getPageData.mainLangId) {
+                        state.mainTitle = state.formData.contents.title;
                     }
                     return state;
                 }, () => {
@@ -187,7 +197,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
         }, () => {
             let params = this.state.formData;
 
-            ((params.navigateId > 0)
+            ((params.navigateId)
                 ? navigateService.update(params)
                 : navigateService.add(params)).then(resData => {
                 this.setState((state: PageState) => {
@@ -207,7 +217,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
             isSuccessMessage: false
         });
 
-        if (this.state.formData.navigateId === 0) {
+        if (!this.state.formData.navigateId) {
             this.navigateTermPage()
         }
     }
@@ -258,20 +268,20 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
                 <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={`${this.props.router.t("title")}*`}
-                        name="title"
+                        name="contents.title"
                         type="text"
                         required={true}
-                        value={this.state.formData.title}
+                        value={this.state.formData.contents.title}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
                 <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={`${this.props.router.t("url")}*`}
-                        name="url"
+                        name="contents.url"
                         type="text"
                         required={true}
-                        value={this.state.formData.url}
+                        value={this.state.formData.contents.url}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
@@ -293,7 +303,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
     }
 
     render() {
-        return this.state.isLoading ? <Spinner /> : (
+        return this.state.isLoading ? <Spinner/> : (
             <div className="page-post-term">
                 <this.Messages/>
                 <div className="navigate-buttons mb-3">

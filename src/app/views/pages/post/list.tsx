@@ -4,7 +4,7 @@ import {
     PostTypeContents, PostTypeId,
     StatusContents,
     StatusId
-} from "../../../../public/static";
+} from "../../../../constants";
 import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";

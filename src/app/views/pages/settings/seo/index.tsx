@@ -2,25 +2,23 @@ import React, {Component} from 'react'
 import {ThemeForm, ThemeFormSelect, ThemeFormTags, ThemeFormType} from "../../../components/form";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import HandleForm from "../../../../../library/react/handles/form";
-import {PermissionId, SeoTitleSeparators, SettingId} from "../../../../../public/static";
-import seoService from "../../../../../services/seo.service";
+import {PermissionId} from "../../../../../constants";
 import settingService from "../../../../../services/setting.service";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
-import staticContentUtil from "../../../../../utils/functions/staticContent.util";
 import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
 
 type PageState = {
-    separators: { label: string, value: any }[]
     isSubmitting: boolean
     isLoading: boolean
     formData: {
-        langId: number
-        title: string
-        content: string
-        tags: string[]
-        separatorId: number
+        seoContents: {
+            langId: string
+            title: string
+            content: string
+            tags: string[]
+        }
     }
 };
 
@@ -30,21 +28,21 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
-            separators: staticContentUtil.getSeoTitleSeparatorForSelect(),
             isSubmitting: false,
             isLoading: true,
             formData: {
-                langId: this.props.getPageData.mainLangId,
-                title: "",
-                content: "",
-                tags: [],
-                separatorId: SeoTitleSeparators[0].id
+                seoContents: {
+                    langId: this.props.getPageData.mainLangId,
+                    title: "",
+                    content: "",
+                    tags: [],
+                }
             }
         }
     }
 
     componentDidMount() {
-        if(!permissionUtil.checkPermissionAndRedirect(
+        if (!permissionUtil.checkPermissionAndRedirect(
             this.props.getSessionData.roleId,
             this.props.getSessionData.permissions,
             PermissionId.SeoEdit,
@@ -53,7 +51,6 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
         this.setPageTitle()
         Thread.start(() => {
             this.getSeo();
-            this.getSettings();
             this.setState({
                 isLoading: false
             })
@@ -61,9 +58,9 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
     }
 
     componentDidUpdate(prevProps: Readonly<PageProps>) {
-        if(this.state.formData.langId != this.props.getPageData.langId){
+        if (this.state.formData.seoContents.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
-                state.formData.langId = this.props.getPageData.langId;
+                state.formData.seoContents.langId = this.props.getPageData.langId;
                 state.isLoading = true;
                 return state;
             }, () => {
@@ -82,42 +79,19 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
     }
 
     getSeo() {
-        let resData = seoService.get({
-            langId: this.state.formData.langId
-        });
+        let resData = settingService.get({langId: this.state.formData.seoContents.langId});
 
         if (resData.status) {
             this.setState((state: PageState) => {
-                if(resData.data.length > 0){
-                    let seo = resData.data[0];
-                    state.formData = Object.assign(state.formData, {
-                        title: seo.seoContentTitle,
-                        content: seo.seoContent,
-                        tags: seo.seoContentTags,
-                    });
-                }else {
-                    state.formData = Object.assign(state.formData, {
-                        title: "",
-                        content: "",
-                        tags: [],
-                    });
-                }
-
-                return state;
-            })
-        }
-    }
-
-    getSettings() {
-        let resData = settingService.get({
-            id: SettingId.WebsiteTitleSeparator
-        })
-
-        if (resData.status) {
-            this.setState((state: PageState) => {
-                if(resData.data.length > 0){
-                    let settings = resData.data;
-                    state.formData.separatorId = Number(settings.findSingle("settingId", SettingId.WebsiteTitleSeparator).settingValue);
+                if (resData.data.length > 0) {
+                    let setting = resData.data[0];
+                    let content = setting.seoContents.length > 0 ? setting.seoContents[0] : {}
+                    state.formData = {
+                        seoContents: {
+                            ...state.formData.seoContents,
+                            ...content
+                        }
+                    };
                 }
 
                 return state;
@@ -132,8 +106,8 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
             isSubmitting: true
         })
 
-        seoService.update(this.state.formData).then(resData => {
-            if(resData.status){
+        settingService.update(this.state.formData).then(resData => {
+            if (resData.status) {
                 new ThemeToast({
                     type: "success",
                     title: this.props.router.t("successful"),
@@ -148,7 +122,7 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
     }
 
     render() {
-        return this.state.isLoading ? <Spinner /> : (
+        return this.state.isLoading ? <Spinner/> : (
             <div className="page-settings">
                 <div className="grid-margin stretch-card">
                     <div className="card">
@@ -165,10 +139,10 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
                                         <ThemeFormType
                                             title={this.props.router.t("websiteTitle")}
                                             type="text"
-                                            name="title"
+                                            name="seoContents.title"
                                             required={true}
                                             maxLength={50}
-                                            value={this.state.formData.title}
+                                            value={this.state.formData.seoContents.title}
                                             onChange={(event) => HandleForm.onChangeInput(event, this)}
                                         />
                                     </div>
@@ -176,10 +150,10 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
                                         <ThemeFormType
                                             title={this.props.router.t("websiteDescription")}
                                             type="textarea"
-                                            name="content"
+                                            name="seoContents.content"
                                             required={true}
                                             maxLength={120}
-                                            value={this.state.formData.content}
+                                            value={this.state.formData.seoContents.content}
                                             onChange={(event) => HandleForm.onChangeInput(event, this)}
                                         />
                                     </div>
@@ -187,21 +161,9 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
                                         <ThemeFormTags
                                             title={this.props.router.t("websiteTags")}
                                             placeHolder={this.props.router.t("writeAndPressEnter")}
-                                            name="tags"
-                                            value={this.state.formData.tags}
+                                            name="seoContents.tags"
+                                            value={this.state.formData.seoContents.tags}
                                             onChange={(value, name) => HandleForm.onChangeSelect(name, value, this)}
-                                        />
-                                    </div>
-                                    <div className="col-md-7 mb-3">
-                                        <ThemeFormSelect
-                                            title={this.props.router.t("websiteTitleSeparator")}
-                                            placeholder={this.props.router.t("websiteTitleSeparator")}
-                                            name="separatorId"
-                                            isMulti={false}
-                                            isSearchable={false}
-                                            options={this.state.separators}
-                                            value={this.state.separators.findSingle("value", this.state.formData.separatorId)}
-                                            onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
                                         />
                                     </div>
                                 </div>

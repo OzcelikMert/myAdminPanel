@@ -15,7 +15,7 @@ import {initReactI18next} from "react-i18next";
 
 import English from "./languages/en.json"
 import Turkish from "./languages/tr.json"
-import {LanguageId, Languages, SettingId} from "../public/static";
+import {LanguageId, Languages} from "../constants";
 import Navbar from "./views/tools/navbar";
 import Sidebar from "./views/tools/sidebar";
 import Footer from "./views/tools/footer";
@@ -63,18 +63,18 @@ class AppAdmin extends Component<PageProps, PageState> {
             isPageLoading: true,
             pageData: {
                 searchParams: {
-                    postId: 0,
-                    navigateId: 0,
+                    postId: "",
+                    navigateId: "",
                     termTypeId: 0,
                     postTypeId: 0,
-                    termId: 0,
-                    userId: 0
+                    termId: "",
+                    userId: ""
                 },
-                langId: 1,
-                mainLangId: 1,
+                langId: "",
+                mainLangId: "1",
             },
             sessionData: {
-                id: 0,
+                id: "",
                 langId: LanguageId.English,
                 image: "",
                 name: "",
@@ -104,12 +104,12 @@ class AppAdmin extends Component<PageProps, PageState> {
             this.setState((state: PageState) => {
                 state.pageData.langId = state.pageData.mainLangId;
                 state.pageData.searchParams = {
-                    postId: 0,
-                    navigateId: 0,
+                    postId: "",
+                    navigateId: "",
                     termTypeId: 0,
                     postTypeId: 0,
-                    termId: 0,
-                    userId: 0
+                    termId: "",
+                    userId: ""
                 };
                 if (this.props.router.match) {
                     Statement.Foreach(this.props.router.match?.params, (key, value) => {
@@ -164,7 +164,7 @@ class AppAdmin extends Component<PageProps, PageState> {
             this.setState({
                 pageLanguages: resData.data.map((lang, index) => ({
                     label: <this.ContentLanguageItem {...lang} key={index}/>,
-                    value: lang.langId
+                    value: lang._id
                 })),
                 isPageLoading: false
             })
@@ -175,15 +175,12 @@ class AppAdmin extends Component<PageProps, PageState> {
         this.setState({
             isPageLoading: true,
         });
-        let resData = settingService.get({
-            id: SettingId.WebsiteMainLanguage
-        })
+        let resData = settingService.get({})
         if (resData.status) {
+            let data = resData.data[0];
             this.setState((state: PageState) => {
-                resData.data.forEach(setting => {
-                    state.pageData.mainLangId = Number(setting.settingValue);
-                    state.pageData.langId = state.pageData.mainLangId;
-                })
+                state.pageData.mainLangId = data.defaultLangId;
+                state.pageData.langId = data.defaultLangId;
                 state.isPageLoading = false;
                 return state;
             })
@@ -193,10 +190,10 @@ class AppAdmin extends Component<PageProps, PageState> {
     ContentLanguageItem = (props: LanguageDocument) => (
         <div className="row p-0">
             <div className="col-6 text-end">
-                <img width="35" src={pathUtil.uploads.flags + props.langImage} alt={props.langShortKey}/>
+                <img width="35" src={pathUtil.uploads.flags + props.image} alt={props.shortKey}/>
             </div>
             <div className="col-6 text-start">
-                <h6>{props.langTitle}</h6>
+                <h6>{props.title}</h6>
             </div>
         </div>
     )

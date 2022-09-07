@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeForm, ThemeFormSelect} from "../../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
-import {PermissionId, SettingId} from "../../../../../public/static";
+import {PermissionId} from "../../../../../constants";
 import settingService from "../../../../../services/setting.service";
 import languageService from "../../../../../services/language.service";
 import ServerInfoDocument from "../../../../../types/services/serverInfo";
@@ -13,12 +13,12 @@ import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
 
 type PageState = {
-    languages: {label: string, value: any}[]
+    languages: {label: string, value: string}[]
     isSubmitting: boolean
     isLoading: boolean
     serverInfo: ServerInfoDocument
     formData: {
-        langId: number
+        langId: string
     }
 };
 
@@ -37,7 +37,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                 memory: "0"
             },
             formData: {
-                langId: 1
+                langId: ""
             }
         }
     }
@@ -69,8 +69,8 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
         if (resData.status) {
             this.setState((state: PageState) => {
                 resData.data.forEach(setting => {
-                    switch(setting.settingId){
-                        case SettingId.WebsiteMainLanguage: state.formData.langId = Number(setting.settingValue); break;
+                    state.formData = {
+                        langId: setting.defaultLangId
                     }
                 })
                 return state;
@@ -83,8 +83,8 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
         if (resData.status) {
             this.setState({
                 languages: resData.data.map(lang => ({
-                    label: lang.langTitle,
-                    value: lang.langId
+                    label: lang.title,
+                    value: lang._id
                 }))
             })
         }
@@ -107,11 +107,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
         this.setState({
             isSubmitting: true
         })
-        settingService.update({
-            settings: [
-                {id: SettingId.WebsiteMainLanguage, value: this.state.formData.langId.toString()}
-            ]
-        }).then(resData => {
+        settingService.update({defaultLangId: this.state.formData.langId}).then(resData => {
             if(resData.status){
                 this.props.setPageData({
                     mainLangId: this.state.formData.langId

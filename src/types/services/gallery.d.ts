@@ -3,6 +3,4 @@ export interface GalleryDeleteParamDocument {
     videos?: string[]
 }
 
-export type GalleryAddParamDocument = {
-
-} & FormData
+export type GalleryAddParamDocument = {} & FormData

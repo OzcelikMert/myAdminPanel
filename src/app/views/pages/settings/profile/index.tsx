@@ -7,7 +7,7 @@ import {
     Permissions, StatusContents,
     UserRoleContents,
     UserRoleId
-} from "../../../../../public/static";
+} from "../../../../../constants";
 import Spinner from "../../../tools/spinner";
 import ThemeChooseImage from "../../../components/chooseImage";
 import userService from "../../../../../services/user.service";
@@ -90,24 +90,24 @@ export class PageSettingsProfile extends Component<PageProps, PageState> {
             const user = resData.data[0];
             this.setState((state: PageState) => {
                 state.data = {
-                    email: user.userEmail,
-                    roleId: user.userRoleId,
-                    statusId: user.userStatusId,
-                    permissionId: user.userPermissions
+                    email: user.email,
+                    roleId: user.roleId,
+                    statusId: user.statusId,
+                    permissionId: user.permissions
                 };
 
-                if (user.userRoleId == UserRoleId.Admin) {
+                if (user.roleId == UserRoleId.Admin) {
                     state.data.permissionId = Object.keys(PermissionId).map(permKey => PermissionId[permKey]);
                 }
 
                 state.formData = {
-                    image: user.userImage,
-                    name: user.userName,
-                    comment: user.userComment,
-                    phone: user.userPhone,
-                    facebook: user.userFacebook,
-                    instagram: user.userInstagram,
-                    twitter: user.userTwitter
+                    image: user.image,
+                    name: user.name,
+                    comment: user.comment,
+                    phone: user.phone,
+                    facebook: user.facebook,
+                    instagram: user.instagram,
+                    twitter: user.twitter
                 }
 
                 return state;

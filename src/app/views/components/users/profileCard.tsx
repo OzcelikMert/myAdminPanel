@@ -7,7 +7,7 @@ import {
     StatusContents,
     StatusId,
     UserRoleContents
-} from "../../../../public/static";
+} from "../../../../constants";
 import UserDocument from "../../../../types/services/user";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import classNameUtil from "../../../../utils/functions/className.util";

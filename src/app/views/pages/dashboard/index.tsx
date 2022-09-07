@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import ThemeChartBar from "../../components/charts/bar";
 import DataTable, {TableColumn} from "react-data-table-component";
-import {PostTermTypeId, PostTypeContents, PostTypeId, StatusContents} from "../../../../public/static";
+import {PostTermTypeId, PostTypeContents, PostTypeId, StatusContents} from "../../../../constants";
 import {pageRoutes} from "../../../routes";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";
@@ -153,7 +153,7 @@ class PageDashboard extends Component<PageProps, PageState> {
 
         this.setState((state: PageState) => {
             state.chartData.visitorStatisticsForDay = {
-                labels: this.state.visitorData.statistics.day.map(view => view.viewDate),
+                labels: this.state.visitorData.statistics.day.map(view => view._id),
                 data: [
                     {
                         borderColor: gradientBar,
@@ -172,7 +172,7 @@ class PageDashboard extends Component<PageProps, PageState> {
         })
     }
 
-    navigateTermPage(type: "termEdit" | "edit" | "listPost", postTypeId: number, itemId = 0, termTypeId = 0) {
+    navigateTermPage(type: "termEdit" | "edit" | "listPost", postTypeId: number, itemId = "", termTypeId = 0) {
         let path = (type === "edit")
             ? pageRoutes.post.path(postTypeId) + pageRoutes.post.edit.path(itemId)
             : (type === "listPost")
@@ -190,8 +190,8 @@ class PageDashboard extends Component<PageProps, PageState> {
                 cell: row => (
                     <div className="image pt-2 pb-2">
                         <img
-                            src={imageSourceUtil.getUploadedImageSrc(row.postContentImage)}
-                            alt={row.postContentTitle}
+                            src={imageSourceUtil.getUploadedImageSrc(row.contents[0].image)}
+                            alt={row.contents[0].title}
                             className="post-image"
                         />
                     </div>
@@ -199,48 +199,51 @@ class PageDashboard extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("type"),
-                selector: row => row.postTypeId,
+                selector: row => row.typeId,
                 sortable: true,
                 cell: row => (
                     <label
-                        onClick={() => this.navigateTermPage("listPost", row.postTypeId, row.postId)}
+                        onClick={() => this.navigateTermPage("listPost", row.typeId, row._id)}
                         className={`badge badge-gradient-primary cursor-pointer`}
                     >
                         {
-                            staticContentUtil.getStaticContent(PostTypeContents, "typeId", row.postTypeId)
+                            staticContentUtil.getStaticContent(PostTypeContents, "typeId", row.typeId)
                         }
                     </label>
                 )
             },
             {
                 name: this.props.router.t("title"),
-                selector: row => row.postContentTitle || this.props.router.t("[noLangAdd]"),
+                selector: row => row.contents[0].title || this.props.router.t("[noLangAdd]"),
                 sortable: true
             },
             {
                 name: this.props.router.t("category"),
                 cell: row => (
-                    row.postTermContents.map(item => (item.postTermTypeId == PostTermTypeId.Category)
-                        ? <label
-                            onClick={() => this.navigateTermPage("termEdit", row.postTypeId, item.postTermId, PostTermTypeId.Category)}
-                            className={`badge badge-gradient-success me-1 cursor-pointer`}
-                        >{item.postTermContentTitle || this.props.router.t("[noLangAdd]")}</label>
-                        : null
+                    row.terms.map(item => {
+                        if(item.typeId == PostTermTypeId.Category){
+                            return <label
+                                onClick={() => this.navigateTermPage("termEdit", row.typeId, item._id, item.typeId)}
+                                className={`badge badge-gradient-success me-1 cursor-pointer`}
+                            >{item.contents.length > 0 ? item.contents[0].title : this.props.router.t("[noLangAdd]")}</label>
+                        }
+                        return null;
+                    }
                     )
                 )
             },
             {
                 name: this.props.router.t("views"),
-                selector: row => row.postViews,
+                selector: row => row.views,
                 sortable: true
             },
             {
                 name: this.props.router.t("status"),
                 sortable: true,
                 cell: row => (
-                    <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.postStatusId)}`}>
+                    <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
-                            staticContentUtil.getStaticContent(StatusContents, "statusId", row.postStatusId)
+                            staticContentUtil.getStaticContent(StatusContents, "statusId", row.statusId)
                         }
                     </label>
                 )
@@ -252,10 +255,10 @@ class PageDashboard extends Component<PageProps, PageState> {
                 cell: row => permissionUtil.checkPermission(
                     this.props.getSessionData.roleId,
                     this.props.getSessionData.permissions,
-                    permissionUtil.getPermissionIdForPostType(row.postTypeId, "Edit")
+                    permissionUtil.getPermissionIdForPostType(row.typeId, "Edit")
                 ) ? (
                     <button
-                        onClick={() => this.navigateTermPage("edit", row.postTypeId, row.postId)}
+                        onClick={() => this.navigateTermPage("edit", row.typeId, row._id)}
                         className="btn btn-gradient-warning"
                     ><i className="fa fa-pencil-square-o"></i></button>
                 ) : null
@@ -360,7 +363,7 @@ class PageDashboard extends Component<PageProps, PageState> {
                                 value-suffix="people"
                                 size="lg"
                                 data={this.state.visitorData.statistics.country.map(view => ({
-                                    country: view.viewCountry.toLowerCase(),
+                                    country: view._id.toLowerCase(),
                                     value: view.total
                                 }))}
                             />

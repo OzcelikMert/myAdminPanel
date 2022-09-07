@@ -1,14 +1,14 @@
 import SearchParamDocument from "../providers";
-import {LanguageId, UserRoleId} from "../../../public/static";
+import {LanguageId, UserRoleId} from "../../../constants";
 
 type AppAdminGetState = {
     pageData: {
         searchParams: SearchParamDocument,
-        langId: number,
-        mainLangId: number,
+        langId: string,
+        mainLangId: string,
     },
     sessionData: {
-        id: number,
+        id: string,
         langId: LanguageId,
         image: string,
         name: string,
@@ -20,11 +20,11 @@ type AppAdminGetState = {
 
 type AppAdminSetState = {
     pageData: {
-        langId?: number,
-        mainLangId?: number,
+        langId?: string,
+        mainLangId?: string,
     },
     sessionData: {
-        id?: number,
+        id?: string,
         langId?: LanguageId,
         image?: string,
         name?: string,

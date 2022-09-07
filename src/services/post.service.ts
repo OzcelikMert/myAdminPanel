@@ -1,5 +1,5 @@
 import Api from "./api";
-import {ServicePages} from "../public/ajax";
+import {ServicePages} from "../constants";
 import ServiceResultDocument from "../types/services/api/result";
 import PostDocument, {
     PostDeleteParamDocument,

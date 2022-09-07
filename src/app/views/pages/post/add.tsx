@@ -7,7 +7,7 @@ import {
     PostTermTypeId,
     PostTypeContents, PostTypeId,
     StatusId
-} from "../../../../public/static";
+} from "../../../../constants";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import SweetAlert from "react-sweetalert2";
 import V, {DateMask} from "../../../../library/variable";

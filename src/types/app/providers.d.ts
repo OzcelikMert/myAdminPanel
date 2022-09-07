@@ -1,10 +1,10 @@
 type SearchParamDocument = {
     postTypeId: number,
     termTypeId: number,
-    termId: number,
-    userId: number,
-    postId: number,
-    navigateId: number,
+    termId: string,
+    userId: string,
+    postId: string,
+    navigateId: string,
 }
 
 

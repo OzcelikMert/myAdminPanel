@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {PagePropCommonDocument} from "../types/app/pageProps";
 import {pageRoutes} from "./routes";
-import {ErrorCodes} from "../public/ajax";
-import {LanguageId} from "../public/static";
+import {ErrorCodes} from "../library/api";
+import {LanguageId} from "../constants";
 import {Navigate} from "react-router-dom";
 import Spinner from "./views/tools/spinner";
 import authService from "../services/auth.service";
@@ -40,7 +40,7 @@ class AppProviders extends Component<PageProps, PageState> {
     }
 
     checkSession() {
-        let isRefresh = this.props.getSessionData.id < 1;
+        let isRefresh = this.props.getSessionData.id.length < 1;
         let isAuth = false;
         let resData = authService.getSession({isRefresh: isRefresh});
         if (resData.status && resData.errorCode == ErrorCodes.success) {
@@ -49,13 +49,13 @@ class AppProviders extends Component<PageProps, PageState> {
                 if (resData.data.length > 0) {
                     let user = resData.data[0];
                     this.props.setSessionData( {
-                        id: user.userId,
+                        id: user._id,
                         langId: LanguageId.English,
-                        roleId: user.userRoleId,
-                        email: user.userEmail,
-                        image: user.userImage,
-                        name: user.userName,
-                        permissions: user.userPermissions
+                        roleId: user.roleId,
+                        email: user.email,
+                        image: user.image,
+                        name: user.name,
+                        permissions: user.permissions
                     });
                 }
             }

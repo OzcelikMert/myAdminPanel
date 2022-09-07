@@ -1,4 +1,4 @@
-import {StatusId, UserRoleId} from "../../public/static";
+import {StatusId, UserRoleId} from "../../constants";
 
 export default {
     getStatusClassName(statusId: number): string {

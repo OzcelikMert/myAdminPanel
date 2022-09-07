@@ -13,7 +13,7 @@ import {
     PostTermTypeId,
     PostTypeContents,
     StatusId
-} from "../../../../../public/static";
+} from "../../../../../constants";
 import V from "../../../../../library/variable";
 import SweetAlert from "react-sweetalert2";
 import HandleForm from "../../../../../library/react/handles/form";

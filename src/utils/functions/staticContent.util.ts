@@ -1,12 +1,11 @@
 import {
-    SeoTitleSeparators,
     Status,
     StatusContents,
     StatusId,
     UserRoleContents,
     UserRoleId,
     UserRoles
-} from "../../public/static";
+} from "../../constants";
 import localStorageUtil from "../localStorage.util";
 
 export default {
@@ -20,12 +19,6 @@ export default {
         return UserRoles.findMulti("id", roleId).map(item => ({
             value: item.id,
             label: this.getStaticContent(UserRoleContents, "roleId", item.id)
-        }));
-    },
-    getSeoTitleSeparatorForSelect() {
-        return SeoTitleSeparators.map(item => ({
-            value: item.id,
-            label: item.value
         }));
     },
     getStaticContent(contents: any[], searchKey: string, searchValue: any): string {

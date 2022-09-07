@@ -17,6 +17,13 @@ export default interface UserDocument {
     views: number,
 }
 
+export interface PopulateAuthorIdDocument {
+    _id: string,
+    name: string,
+    email: string,
+    url: string
+}
+
 export interface UsersGetParamDocument {
     userId?: string
 }

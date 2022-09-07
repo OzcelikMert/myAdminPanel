@@ -4,8 +4,6 @@ import UploadingFilesDocument from "../../../../types/app/views/pages/gallery/up
 import ApiRequestConfig from "../../../../services/api/config";
 import Thread from "../../../../library/thread";
 import galleryService from "../../../../services/gallery.service";
-import {PermissionId} from "../../../../public/static";
-import permissionUtil from "../../../../utils/functions/permission.util";
 
 type PageState = {
     isDragging: boolean,

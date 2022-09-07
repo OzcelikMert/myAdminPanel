@@ -1,14 +1,17 @@
+import {PopulateTermsDocument} from "./postTerm";
+import {PopulateAuthorIdDocument} from "./user";
+
 export default interface PostDocument {
     _id: string
     typeId: number,
     statusId: number,
-    authorId: string
-    lastAuthorId: string
+    authorId: PopulateAuthorIdDocument
+    lastAuthorId: PopulateAuthorIdDocument
     dateStart: Date,
     order: number,
     views: number,
     isFixed: boolean,
-    terms: string[]
+    terms: PopulateTermsDocument[]
     contents: {
         langId: string
         image: string,
@@ -31,7 +34,6 @@ export interface PostGetParamDocument {
 }
 
 export interface PostAddParamDocument {
-    langId: string
     typeId: number
     statusId: number
     order: number
@@ -39,6 +41,7 @@ export interface PostAddParamDocument {
     dateStart: string
     termId: string[]
     contents: {
+        langId: string
         title: string
         image?: string,
         shortContent?: string

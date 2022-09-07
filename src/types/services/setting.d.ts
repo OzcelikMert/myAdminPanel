@@ -12,15 +12,15 @@ export default interface SettingsDocument {
 }
 
 export interface SettingGetParamDocument {
-    langId: string
+    langId?: string
 }
 
 export interface SettingUpdateParamDocument {
-    langId: string,
     defaultLangId?: string,
     icon?: string,
     logo?: string,
     seoContents?: {
+        langId: string,
         title: string,
         content?: string,
         tags?: string[]

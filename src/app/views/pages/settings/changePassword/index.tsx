@@ -2,7 +2,6 @@ import React, {Component, FormEvent} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeForm, ThemeFormType} from "../../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
-import cogoToast from "cogo-toast";
 import profileService from "../../../../../services/profile.service";
 import ThemeToast from "../../../components/toast";
 

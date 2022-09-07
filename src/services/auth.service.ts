@@ -1,5 +1,5 @@
 import Api from "./api";
-import {ServicePages} from "../public/ajax";
+import {ServicePages} from "../constants";
 import ServiceResultDocument from "../types/services/api/result";
 import UserDocument from "../types/services/user";
 import {AuthLoginParamDocument, AuthGetSessionParamDocument} from "../types/services/auth";
@@ -11,7 +11,7 @@ export default {
             data: params,
         });
     },
-    login(params: AuthLoginParamDocument) {
+    login(params: AuthLoginParamDocument): Promise<ServiceResultDocument<UserDocument[]>> {
         return Api.post({
             url: [ServicePages.auth],
             data: params,

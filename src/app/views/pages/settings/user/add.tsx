@@ -9,7 +9,7 @@ import {
     Permissions,
     StatusId,
     UserRoleId, UserRoles
-} from "../../../../../public/static";
+} from "../../../../../constants";
 import HandleForm from "../../../../../library/react/handles/form";
 import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../../components/form";
 import SweetAlert from "react-sweetalert2";
@@ -27,7 +27,7 @@ type PageState = {
     mainTitle: string,
     isSubmitting: boolean
     formData: {
-        userId: number
+        userId: string
         image: string
         name: string
         email: string
@@ -75,7 +75,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         Thread.start(() => {
             this.getRoles();
             this.getStatus();
-            if (this.state.formData.userId > 0) {
+            if (this.state.formData.userId) {
                 this.getUser();
             }
             this.setState({
@@ -88,9 +88,9 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         let titles: string[] = [
             this.props.router.t("settings"),
             this.props.router.t("users"),
-            this.props.router.t((this.state.formData.userId) > 0 ? "edit" : "add")
+            this.props.router.t(this.state.formData.userId ? "edit" : "add")
         ];
-        if (this.state.formData.userId > 0) {
+        if (this.state.formData.userId) {
             titles.push(this.state.mainTitle)
         }
         this.props.setBreadCrumb(titles);
@@ -130,18 +130,18 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                 const user = resData.data[0];
                 this.setState((state: PageState) => {
                     state.formData = Object.assign(state.formData, {
-                        image: user.userImage,
-                        name: user.userName,
-                        email: user.userEmail,
+                        image: user.image,
+                        name: user.name,
+                        email: user.email,
                         password: "",
-                        roleId: user.userRoleId,
-                        statusId: user.userStatusId,
-                        banDateEnd: user.userBanDateEnd,
-                        banComment: user.userBanComment,
-                        permissionId: user.userPermissions
+                        roleId: user.roleId,
+                        statusId: user.statusId,
+                        banDateEnd: user.banDateEnd,
+                        banComment: user.banComment,
+                        permissionId: user.permissions
                     });
 
-                    state.mainTitle = user.userName;
+                    state.mainTitle = user.name;
 
                     return state;
                 }, () => {
@@ -165,7 +165,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         }, () => {
             let params = this.state.formData;
 
-            ((params.userId > 0)
+            ((params.userId)
                 ? userService.update(params)
                 : userService.add(params)).then(resData => {
                 this.setState((state: PageState) => {

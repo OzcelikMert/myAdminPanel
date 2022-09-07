@@ -48,7 +48,7 @@ class PageLock extends Component<PageProps, PageState> {
                 if (resData.status && resData.data.length > 0) {
                     let user = resData.data[0];
                     this.props.setSessionData({
-                        id: user.userId
+                        id: user._id
                     }, () => {
                         this.props.router.navigate(pageRoutes.dashboard.path(), {replace: true});
                     });

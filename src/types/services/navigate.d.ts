@@ -1,9 +1,18 @@
+import {PopulateAuthorIdDocument} from "./user";
+
 export default interface NavigateDocument {
     _id: string
-    mainId: string
+    mainId?: {
+        _id: string
+        contents: {
+            langId: string
+            title: string,
+            url: string,
+        }[]
+    }
     statusId: number,
-    authorId: string
-    lastAuthorId: string
+    authorId: PopulateAuthorIdDocument
+    lastAuthorId: PopulateAuthorIdDocument
     order: number,
     contents: {
         langId: string
@@ -20,11 +29,11 @@ export interface NavigateGetParamDocument {
 }
 
 export interface NavigateAddParamDocument {
-    langId: string
     mainId?: string
     statusId: number
     order: number
     contents: {
+        langId: string
         title: string,
         url?: string
     }

@@ -1,4 +1,4 @@
-import {PermissionGroupDocument} from "../../types/static";
+import {PermissionGroupDocument} from "../types/constants";
 
 const PermissionGroups: Array<PermissionGroupDocument> = [
     {id: 1, order: 1},

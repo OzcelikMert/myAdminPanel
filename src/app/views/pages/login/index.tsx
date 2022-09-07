@@ -2,11 +2,11 @@ import React, {Component} from 'react'
 import ThemeInputType from "../../components/form/input/type";
 import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import {LanguageId} from "../../../../public/static";
+import {LanguageId} from "../../../../constants";
 import {ThemeForm, ThemeFormCheckBox} from "../../components/form";
 import HandleForm from "../../../../library/react/handles/form";
 import authService from "../../../../services/auth.service";
-import {ErrorCodes} from "../../../../public/ajax";
+import {ErrorCodes} from "../../../../library/api";
 import UserDocument from "../../../../types/services/user";
 
 type PageState = {
@@ -60,13 +60,13 @@ class PageLogin extends Component<PageProps, PageState> {
                     let user = resData.data[0];
                     if(resData.status){
                         this.props.setSessionData({
-                            id: user.userId,
+                            id: user._id,
                             langId: LanguageId.English,
-                            roleId: user.userRoleId,
-                            email: user.userEmail,
-                            image: user.userImage,
-                            name: user.userName,
-                            permissions: user.userPermissions,
+                            roleId: user.roleId,
+                            email: user.email,
+                            image: user.image,
+                            name: user.name,
+                            permissions: user.permissions,
                         });
                         this.props.router.navigate(pageRoutes.dashboard.path(), {replace: true});
                     }else {
@@ -146,13 +146,13 @@ class PageLogin extends Component<PageProps, PageState> {
                                                         <p className="fw-bold text-danger">
                                                             {this.props.router.t("banDateEnd")}:
                                                             <span className="text-muted ms-1">
-                                                                {new Date(this.state.user?.userBanDateEnd || "").toLocaleDateString()}
+                                                                {new Date(this.state.user?.banDateEnd || "").toLocaleDateString()}
                                                             </span>
                                                         </p>
                                                         <p className="fw-bold text-danger">
                                                             {this.props.router.t("banComment")}:
                                                             <span className="text-muted ms-1">
-                                                                {this.state.user?.userBanComment}
+                                                                {this.state.user?.banComment}
                                                             </span>
                                                         </p>
                                                     </div> : null
