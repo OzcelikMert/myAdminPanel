@@ -8,17 +8,17 @@ export default interface NavigateDocument {
             langId: string
             title: string,
             url: string,
-        }[]
+        }
     }
     statusId: number,
     authorId: PopulateAuthorIdDocument
     lastAuthorId: PopulateAuthorIdDocument
     order: number,
-    contents: {
+    contents?: {
         langId: string
         title: string,
         url: string,
-    }[]
+    }
 }
 
 export interface NavigateGetParamDocument {

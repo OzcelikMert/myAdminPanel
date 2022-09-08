@@ -143,7 +143,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
                     }
                     state.navigates.push({
                         value: item._id,
-                        label: item.contents.length > 0 ? item.contents[0].title : this.props.router.t("[noLangAdd]")
+                        label: item.contents?.title || this.props.router.t("[noLangAdd]")
                     });
                 });
                 return state;
@@ -160,16 +160,10 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
             if (resData.data.length > 0) {
                 const navigate = resData.data[0];
                 this.setState((state: PageState) => {
-                    let contents = navigate.contents.length > 0 ? navigate.contents[0] : {};
                     state.formData = {
                         ...state.formData,
+                        ...navigate,
                         mainId: navigate.mainId?._id || "",
-                        statusId: navigate.statusId,
-                        order: navigate.order,
-                        contents: {
-                            ...state.formData.contents,
-                            ...contents
-                        }
                     };
 
                     if (this.props.getPageData.langId == this.props.getPageData.mainLangId) {

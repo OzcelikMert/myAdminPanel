@@ -35,8 +35,8 @@ language.init({
         en: {translation: English},
         tr: {translation: Turkish}
     },
-    lng: Languages.findSingle("id", localStorageUtil.adminLanguage.get).code,
-    fallbackLng: Languages.findSingle("id", LanguageId.English).code,
+    lng: Languages.findSingle("id", localStorageUtil.adminLanguage.get)?.code,
+    fallbackLng: Languages.findSingle("id", LanguageId.English)?.code,
     interpolation: {
         escapeValue: false
     }

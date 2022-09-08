@@ -3,12 +3,12 @@ export default interface SettingsDocument {
     defaultLangId: string
     icon: string,
     logo: string,
-    seoContents: {
+    seoContents?: {
         langId: string
         title: string,
         content: string,
         tags: string[]
-    }[]
+    }
 }
 
 export interface SettingGetParamDocument {

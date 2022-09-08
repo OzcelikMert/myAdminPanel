@@ -28,17 +28,17 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
     SocialMedia = () => (
         <ul className="social-link list-unstyled">
             <li>
-                <a href={this.props.userInfo.userFacebook} target="_blank">
+                <a href={this.props.userInfo.facebook} target="_blank">
                     <i className="mdi mdi-facebook"></i>
                 </a>
             </li>
             <li>
-                <a href={this.props.userInfo.userTwitter} target="_blank">
+                <a href={this.props.userInfo.twitter} target="_blank">
                     <i className="mdi mdi-twitter"></i>
                 </a>
             </li>
             <li>
-                <a href={this.props.userInfo.userInstagram} target="_blank">
+                <a href={this.props.userInfo.instagram} target="_blank">
                     <i className="mdi mdi-instagram"></i>
                 </a>
             </li>
@@ -51,20 +51,20 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
             <div className="row">
                 <div className="col-sm-12">
                     <span className="mb-2 fw-bold">{this.props.router.t("email")}:
-                        <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.userEmail}</h6>
+                        <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.email}</h6>
                     </span>
                 </div>
                 <div className="col-sm-12">
                     <span className="mb-2 fw-bold">{this.props.router.t("phone")}:
-                        <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.userPhone}</h6>
+                        <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.phone}</h6>
                     </span>
                 </div>
                 <div className="col-sm-12">
                     <span className="mb-2 fw-bold">{this.props.router.t("role")}:
                         <label
-                            className={`badge badge-gradient-${classNameUtil.getUserRolesClassName(this.props.userInfo.userRoleId)} ms-1`}>
+                            className={`badge badge-gradient-${classNameUtil.getUserRolesClassName(this.props.userInfo.roleId)} ms-1`}>
                             {
-                                staticContentUtil.getStaticContent(UserRoleContents, "roleId", this.props.userInfo.userRoleId)
+                                staticContentUtil.getStaticContent(UserRoleContents, "roleId", this.props.userInfo.roleId)
                             }
                         </label>
                     </span>
@@ -72,26 +72,26 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                 <div className="col-sm-12">
                     <span className="mb-2 fw-bold">{this.props.router.t("status")}:
                         <label
-                            className={`badge badge-gradient-${classNameUtil.getStatusClassName(this.props.userInfo.userStatusId)} ms-1`}>
+                            className={`badge badge-gradient-${classNameUtil.getStatusClassName(this.props.userInfo.statusId)} ms-1`}>
                             {
-                                staticContentUtil.getStaticContent(StatusContents, "statusId", this.props.userInfo.userStatusId)
+                                staticContentUtil.getStaticContent(StatusContents, "statusId", this.props.userInfo.statusId)
                             }
                         </label>
                     </span>
                 </div>
                 {
-                    (this.props.userInfo.userStatusId == StatusId.Banned)
+                    (this.props.userInfo.statusId == StatusId.Banned)
                         ? (
                             <div className="col-sm-12">
                                 <div className="row">
                                     <div className="col-sm-12">
                                         <p className="mb-2 fw-bold">{this.props.router.t("banDateEnd")}:
-                                            <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.userBanDateEnd}</h6>
+                                            <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.banDateEnd}</h6>
                                         </p>
                                     </div>
                                     <div className="col-sm-12">
                                         <p className="mb-2 fw-bold">{this.props.router.t("banComment")}:
-                                            <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.userBanComment}</h6>
+                                            <h6 className="text-muted d-inline-block ms-1">{this.props.userInfo.banComment}</h6>
                                         </p>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                 }
                 <div className="col-sm-12">
                     <span className="mb-2 fw-bold">{this.props.router.t("comment")}:
-                        <small className="fw-bold ms-1 text-muted">{this.props.userInfo.userComment}</small>
+                        <small className="fw-bold ms-1 text-muted">{this.props.userInfo.comment}</small>
                     </span>
                 </div>
             </div>
@@ -120,7 +120,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
             <h6 className="pb-1 border-bottom fw-bold text-end">{this.props.router.t("permissions")}</h6>
             <div>
                 {
-                    Permissions.findMulti("id", this.props.userInfo.userPermissions).orderBy("groupId", "asc").map(perm =>
+                    Permissions.findMulti("id", this.props.userInfo.permissions).orderBy("groupId", "asc").map(perm =>
                         <this.PermissionItem id={perm.id}/>
                     )
                 }
@@ -147,12 +147,12 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                                 <div className="card-block text-center text-light mt-5">
                                     <div className="mb-4">
                                         <img
-                                            src={imageSourceUtil.getUploadedImageSrc(this.props.userInfo.userImage)}
+                                            src={imageSourceUtil.getUploadedImageSrc(this.props.userInfo.image)}
                                             className="user-img"
-                                            alt={this.props.userInfo.userName}
+                                            alt={this.props.userInfo.name}
                                         />
                                     </div>
-                                    <h4 className="fw-bold pt-3">{this.props.userInfo.userName}</h4>
+                                    <h4 className="fw-bold pt-3">{this.props.userInfo.name}</h4>
                                     <this.SocialMedia/>
                                 </div>
                             </div>

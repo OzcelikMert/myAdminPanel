@@ -25,7 +25,7 @@ import ThemeToast from "../../components/toast";
 type PageState = {
     posts: PostDocument[],
     showingPosts: PageState["posts"]
-    selectedPosts: number[]
+    selectedPosts: string[]
     listMode: "list" | "deleted"
     isShowToggleMenu: boolean
     checkedRowsClear: boolean
@@ -83,7 +83,7 @@ export class PagePostList extends Component<PageProps, PageState> {
         }).data;
         this.setState((state: PageState) => {
             state.posts = posts;
-            state.showingPosts = posts.filter(value => value.postStatusId !== StatusId.Deleted);
+            state.showingPosts = posts.filter(value => value.statusId !== StatusId.Deleted);
             return state;
         });
     }
@@ -112,7 +112,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                         loadingToast.hide();
                         if (resData.status) {
                             this.setState((state: PageState) => {
-                                state.posts = state.posts.filter(item => !state.selectedPosts.includes(item.postId));
+                                state.posts = state.posts.filter(item => !state.selectedPosts.includes(item._id));
                                 return state;
                             }, () => {
                                 new ThemeToast({
@@ -140,8 +140,8 @@ export class PagePostList extends Component<PageProps, PageState> {
                 if (resData.status) {
                     this.setState((state: PageState) => {
                         state.posts.map((item, index) => {
-                            if (state.selectedPosts.includes(item.postId)) {
-                                item.postStatusId = statusId;
+                            if (state.selectedPosts.includes(item._id)) {
+                                item.statusId = statusId;
                             }
                         })
                         return state;
@@ -161,7 +161,7 @@ export class PagePostList extends Component<PageProps, PageState> {
     onSelect(allSelected: boolean, selectedCount: number, selectedRows: PageState["showingPosts"]) {
         this.setState((state: PageState) => {
             state.selectedPosts = [];
-            selectedRows.forEach(item => state.selectedPosts.push(item.postId))
+            selectedRows.forEach(item => state.selectedPosts.push(item._id))
             state.isShowToggleMenu = selectedCount > 0;
             return state;
         })
@@ -174,19 +174,19 @@ export class PagePostList extends Component<PageProps, PageState> {
             state.selectedPosts = [];
             state.isShowToggleMenu = false;
             if (mode === "list") {
-                state.showingPosts = state.posts.findMulti("postStatusId", StatusId.Deleted, false);
+                state.showingPosts = state.posts.findMulti("statusId", StatusId.Deleted, false);
             } else {
-                state.showingPosts = state.posts.findMulti("postStatusId", StatusId.Deleted);
+                state.showingPosts = state.posts.findMulti("statusId", StatusId.Deleted);
             }
             state.checkedRowsClear = !this.state.checkedRowsClear;
             return state;
         })
     }
 
-    navigateTermPage(type: "termEdit" | "edit", itemId = 0, termTypeId = 0) {
+    navigateTermPage(type: "termEdit" | "edit", itemId = "", termTypeId = 0) {
         let path = (type === "edit")
             ? pageRoutes.post.path(this.props.getPageData.searchParams.postTypeId) + pageRoutes.post.edit.path(itemId)
-            : (itemId > 0)
+            : (itemId)
                 ? pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, termTypeId) + pageRoutes.postTerm.edit.path(itemId)
                 : pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, termTypeId) + pageRoutes.postTerm.list.path();
         path = (this.props.router.location.pathname.search(pageRoutes.themeContent.path()) > -1) ? pageRoutes.themeContent.path() + path : path;
@@ -198,48 +198,51 @@ export class PagePostList extends Component<PageProps, PageState> {
             {
                 name: this.props.router.t("image"),
                 width: "75px",
-                cell: row => (
-                    <div className="image pt-2 pb-2">
+                cell: row => {
+                    return <div className="image pt-2 pb-2">
                         <img
-                            src={imageSourceUtil.getUploadedImageSrc(row.postContentImage)}
-                            alt={row.postContentTitle}
+                            src={imageSourceUtil.getUploadedImageSrc(row.contents?.image)}
+                            alt={row.contents?.title}
                             className="post-image"
                         />
                     </div>
-                )
+                }
             },
             {
                 name: this.props.router.t("title"),
-                selector: row => row.postContentTitle || this.props.router.t("[noLangAdd]"),
+                selector: row => row.contents?.title || this.props.router.t("[noLangAdd]"),
                 sortable: true
             },
             {
                 name: this.props.router.t("category"),
-                cell: row => (
-                    row.postTermContents.map(item => (item.postTermTypeId == PostTermTypeId.Category)
-                        ? <label
-                            onClick={() => this.navigateTermPage("termEdit", item.postTermId, PostTermTypeId.Category)}
-                            className={`badge badge-gradient-success me-1 cursor-pointer category-badge`}
-                        >{item.postTermContentTitle || this.props.router.t("[noLangAdd]")}</label>
-                        : null
+                cell:  row => (
+                    row.terms.map(item => {
+                            if (item.typeId == PostTermTypeId.Category) {
+                                return <label
+                                    onClick={() => this.navigateTermPage("termEdit", item._id, row.typeId)}
+                                    className={`badge badge-gradient-success me-1 cursor-pointer`}
+                                >{item.contents?.title || this.props.router.t("[noLangAdd]")}</label>
+                            }
+                            return null;
+                        }
                     )
                 )
             },
             {
                 name: this.props.router.t("views"),
-                selector: row => row.postViews,
+                selector: row => row.views,
                 sortable: true
             },
             {
                 name: this.props.router.t("status"),
                 sortable: true,
                 cell: row => (
-                    <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.postStatusId)}`}>
+                    <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
                             staticContentUtil.getStaticContent(
                                 StatusContents,
                                 "statusId",
-                                row.postStatusId
+                                row.statusId
                             )
                         }
                     </label>
@@ -252,10 +255,10 @@ export class PagePostList extends Component<PageProps, PageState> {
                 cell: row => permissionUtil.checkPermission(
                     this.props.getSessionData.roleId,
                     this.props.getSessionData.permissions,
-                    permissionUtil.getPermissionIdForPostType(row.postTypeId, "Edit")
+                    permissionUtil.getPermissionIdForPostType(row.typeId, "Edit")
                 ) ? (
                     <button
-                        onClick={() => this.navigateTermPage("edit", row.postId)}
+                        onClick={() => this.navigateTermPage("edit", row._id)}
                         className="btn btn-gradient-warning"
                     ><i className="fa fa-pencil-square-o"></i></button>
                 ) : null
@@ -273,14 +276,14 @@ export class PagePostList extends Component<PageProps, PageState> {
                                 this.props.getPageData.searchParams.postTypeId != PostTypeId.Page
                                     ? <div className="col-6">
                                         <button className="btn btn-gradient-info btn-lg w-100"
-                                                onClick={() => this.navigateTermPage("termEdit", 0, PostTermTypeId.Category)}>
+                                                onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Category)}>
                                             <i className="fa fa-pencil-square-o"></i> {this.props.router.t("editCategories").toCapitalizeCase()}
                                         </button>
                                     </div> : null
                             }
                             <div className="col-6 text-end">
                                 <button className="btn btn-gradient-primary btn-lg w-100"
-                                        onClick={() => this.navigateTermPage("termEdit", 0, PostTermTypeId.Tag)}>
+                                        onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Tag)}>
                                     <i className="fa fa-pencil-square-o"></i> {this.props.router.t("editTags").toCapitalizeCase()}
                                 </button>
                             </div>
@@ -291,11 +294,11 @@ export class PagePostList extends Component<PageProps, PageState> {
                             this.state.listMode === "list"
                                 ? <button className="btn btn-gradient-danger btn-lg list-mode-btn"
                                           onClick={() => this.onChangeListMode("deleted")}>
-                                    <i className="mdi mdi-delete"></i> {this.props.router.t("trash")} ({this.state.posts.findMulti("postStatusId", StatusId.Deleted).length})
+                                    <i className="mdi mdi-delete"></i> {this.props.router.t("trash")} ({this.state.posts.findMulti("statusId", StatusId.Deleted).length})
                                 </button>
                                 : <button className="btn btn-gradient-success btn-lg list-mode-btn"
                                           onClick={() => this.onChangeListMode("list")}>
-                                    <i className="mdi mdi-view-list"></i> {this.props.router.t("list")} ({this.state.posts.findMulti("postStatusId", StatusId.Deleted, false).length})
+                                    <i className="mdi mdi-view-list"></i> {this.props.router.t("list")} ({this.state.posts.findMulti("statusId", StatusId.Deleted, false).length})
                                 </button>
                         }
                     </div>

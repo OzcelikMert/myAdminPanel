@@ -93,8 +93,9 @@ class PageDashboard extends Component<PageProps, PageState> {
     }
 
     timer: any;
+
     timerReportOne() {
-        if(this.timer) {
+        if (this.timer) {
             clearInterval(this.timer)
         }
         this.timer = setInterval(() => {
@@ -104,8 +105,8 @@ class PageDashboard extends Component<PageProps, PageState> {
 
     getViewNumber() {
         viewService.getNumber().then(resData => {
-            if(resData.status) {
-                if(JSON.stringify(this.state.visitorData.number) != JSON.stringify(resData.data)){
+            if (resData.status) {
+                if (JSON.stringify(this.state.visitorData.number) != JSON.stringify(resData.data)) {
                     this.setState((state: PageState) => {
                         state.visitorData.number = resData.data;
                         return state;
@@ -118,7 +119,7 @@ class PageDashboard extends Component<PageProps, PageState> {
     getViewStatistics() {
         let resData = viewService.getStatistics();
 
-        if(resData.status) {
+        if (resData.status) {
             this.setState((state: PageState) => {
                 state.visitorData.statistics = resData.data;
                 return state;
@@ -190,8 +191,8 @@ class PageDashboard extends Component<PageProps, PageState> {
                 cell: row => (
                     <div className="image pt-2 pb-2">
                         <img
-                            src={imageSourceUtil.getUploadedImageSrc(row.contents[0].image)}
-                            alt={row.contents[0].title}
+                            src={imageSourceUtil.getUploadedImageSrc(row.contents?.image)}
+                            alt={row.contents?.title}
                             className="post-image"
                         />
                     </div>
@@ -214,21 +215,21 @@ class PageDashboard extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("title"),
-                selector: row => row.contents[0].title || this.props.router.t("[noLangAdd]"),
+                selector: row => row.contents?.title || this.props.router.t("[noLangAdd]"),
                 sortable: true
             },
             {
                 name: this.props.router.t("category"),
                 cell: row => (
                     row.terms.map(item => {
-                        if(item.typeId == PostTermTypeId.Category){
-                            return <label
-                                onClick={() => this.navigateTermPage("termEdit", row.typeId, item._id, item.typeId)}
-                                className={`badge badge-gradient-success me-1 cursor-pointer`}
-                            >{item.contents.length > 0 ? item.contents[0].title : this.props.router.t("[noLangAdd]")}</label>
+                            if (item.typeId == PostTermTypeId.Category) {
+                                return <label
+                                    onClick={() => this.navigateTermPage("termEdit", row.typeId, item._id, item.typeId)}
+                                    className={`badge badge-gradient-success me-1 cursor-pointer`}
+                                >{item.contents.title || this.props.router.t("[noLangAdd]")}</label>
+                            }
+                            return null;
                         }
-                        return null;
-                    }
                     )
                 )
             },

@@ -27,24 +27,26 @@ import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
 
 type PageState = {
     formActiveKey: string
-    postTerms: { value: number, label: string }[]
+    postTerms: { value: string, label: string }[]
     status: { value: number, label: string }[]
     isSubmitting: boolean
     mainTitle: string
     formData: {
-        termId: number
+        termId: string
         typeId: number
         postTypeId: number
-        langId: number
-        mainId: number
+        mainId: string
         statusId: number
-        image: string
-        title: string
         order: number
-        url: string
-        seoTitle: string
-        seoContent: string
         isFixed: 1 | 0
+        contents: {
+            langId: string
+            image: string
+            title: string
+            url: string
+            seoTitle: string
+            seoContent: string
+        }
     },
     isSuccessMessage: boolean
     isSelectionImage: boolean
@@ -66,16 +68,18 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 termId: this.props.getPageData.searchParams.termId,
                 postTypeId: this.props.getPageData.searchParams.postTypeId,
                 typeId: this.props.getPageData.searchParams.termTypeId,
-                langId: this.props.getPageData.mainLangId,
-                mainId: 0,
+                mainId: "",
                 statusId: 0,
-                image: "",
-                title: "",
                 order: 0,
-                url: "",
-                seoTitle: "",
-                seoContent: "",
-                isFixed: 0
+                isFixed: 0,
+                contents: {
+                    langId: this.props.getPageData.mainLangId,
+                    image: "",
+                    title: "",
+                    url: "",
+                    seoTitle: "",
+                    seoContent: "",
+                }
             },
             isSuccessMessage: false,
             isSelectionImage: false,
@@ -87,7 +91,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         if (!permissionUtil.checkPermissionAndRedirect(
             this.props.getSessionData.roleId,
             this.props.getSessionData.permissions,
-            this.props.getPageData.searchParams.postId > 0
+            this.props.getPageData.searchParams.postId
                 ? permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Edit")
                 : permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Add"),
             this.props.router.navigate
@@ -96,7 +100,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         Thread.start(() => {
             this.getTerms();
             this.getStatus();
-            if (this.props.getPageData.searchParams.termId > 0) {
+            if (this.props.getPageData.searchParams.termId) {
                 this.getTerm();
             }
             this.setState({
@@ -106,9 +110,9 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
     }
 
     componentDidUpdate(prevProps: Readonly<PageProps>) {
-        if (this.state.formData.langId != this.props.getPageData.langId) {
+        if (this.state.formData.contents.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
-                state.formData.langId = this.props.getPageData.langId;
+                state.formData.contents.langId = this.props.getPageData.langId;
                 state.isLoading = true;
                 return state;
             }, () => {
@@ -126,9 +130,9 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         let titles: string[] = [
             staticContentUtil.getStaticContent(PostTypeContents, "typeId", this.props.getPageData.searchParams.postTypeId),
             staticContentUtil.getStaticContent(PostTermTypeContents, "typeId", this.props.getPageData.searchParams.termTypeId),
-            this.props.router.t((this.state.formData.termId) > 0 ? "edit" : "add")
+            this.props.router.t(this.state.formData.termId ? "edit" : "add")
         ];
-        if (this.state.formData.termId > 0) {
+        if (this.state.formData.termId) {
             titles.push(this.state.mainTitle)
         }
         this.props.setBreadCrumb(titles);
@@ -155,14 +159,14 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         });
         if (resData.status) {
             this.setState((state: PageState) => {
-                state.postTerms = [{value: 0, label: this.props.router.t("notSelected")}];
-                resData.data.orderBy("postTermOrder", "asc").forEach(item => {
+                state.postTerms = [{value: "", label: this.props.router.t("notSelected")}];
+                resData.data.orderBy("order", "asc").forEach(item => {
                     if (!V.isEmpty(this.props.getPageData.searchParams.termId)) {
-                        if (this.props.getPageData.searchParams.termId == item.postTermId) return;
+                        if (this.props.getPageData.searchParams.termId == item._id) return;
                     }
                     state.postTerms?.push({
-                        value: item.postTermId,
-                        label: item.postTermContentTitle || this.props.router.t("[noLangAdd]")
+                        value: item._id,
+                        label: item.contents?.title || this.props.router.t("[noLangAdd]")
                     });
                 });
                 return state;
@@ -174,27 +178,21 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         let resData = postTermService.get({
             typeId: this.state.formData.typeId,
             postTypeId: this.state.formData.postTypeId,
-            langId: this.state.formData.langId,
-            getContents: true
+            langId: this.state.formData.contents.langId
         });
         if (resData.status) {
             if (resData.data.length > 0) {
                 const term = resData.data[0];
                 this.setState((state: PageState) => {
-                    state.formData = Object.assign(state.formData, {
-                        mainId: term.postTermMainId,
-                        statusId: term.postTermStatusId,
-                        order: term.postTermOrder,
-                        isFixed: term.postTermIsFixed,
-                        image: term.postTermContentImage || "",
-                        title: term.postTermContentTitle || "",
-                        url: term.postTermContentUrl || "",
-                        seoTitle: term.postTermContentSEOTitle || "",
-                        seoContent: term.postTermContentSEO || "",
-                    });
+                    state.formData = {
+                        ...state.formData,
+                        ...term,
+                        mainId: term.mainId?._id || "",
+                        isFixed: term.isFixed ? 1 : 0,
+                    }
 
                     if (this.props.getPageData.langId == this.props.getPageData.mainLangId) {
-                        state.mainTitle = state.formData.title;
+                        state.mainTitle = state.formData.contents.title;
                     }
                     return state;
                 }, () => {
@@ -219,7 +217,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         }, () => {
             let params = this.state.formData;
 
-            ((params.termId > 0)
+            ((params.termId)
                 ? postTermService.update(params)
                 : postTermService.add(params)).then(resData => {
                 if (resData.status) {
@@ -229,19 +227,19 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 this.setState((state: PageState) => {
                     if (resData.status) {
                         state.formData = {
-                            postTypeId: state.formData.postTypeId,
-                            termId: state.formData.termId,
-                            langId: state.formData.langId,
-                            typeId: state.formData.typeId,
-                            mainId: state.formData.mainId,
-                            statusId: state.formData.statusId,
-                            image: "",
-                            title: "",
+                            ...state.formData,
+                            mainId: "",
+                            statusId: StatusId.Active,
                             order: 0,
                             isFixed: 0,
-                            url: "",
-                            seoTitle: "",
-                            seoContent: ""
+                            contents: {
+                                langId: this.props.getPageData.mainLangId,
+                                image: "",
+                                title: "",
+                                url: "",
+                                seoTitle: "",
+                                seoContent: "",
+                            }
                         }
                         state.isSuccessMessage = true;
                     }
@@ -279,27 +277,27 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={this.props.router.t("url")}
-                        name="url"
+                        name="contents.url"
                         type="text"
-                        value={this.state.formData.url}
+                        value={this.state.formData.contents.url}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
                 <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={this.props.router.t("title")}
-                        name="seoTitle"
+                        name="contents.seoTitle"
                         type="text"
-                        value={this.state.formData.seoTitle}
+                        value={this.state.formData.contents.seoTitle}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
                 <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={this.props.router.t("content")}
-                        name="seoContent"
+                        name="contents.seoContent"
                         type="textarea"
-                        value={this.state.formData.seoContent}
+                        value={this.state.formData.contents.seoContent}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
@@ -346,8 +344,8 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
             <div className="row">
                 <div className="col-md-7 mb-3">
                     <img
-                        src={imageSourceUtil.getUploadedImageSrc(this.state.formData.image)}
-                        alt="Empty Image"
+                        src={imageSourceUtil.getUploadedImageSrc(this.state.formData.contents.image)}
+                        alt={this.state.formData.contents.title}
                         className="post-image"
                     />
                     <button
@@ -361,10 +359,10 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={`${this.props.router.t("title")}*`}
-                        name="title"
+                        name="contents.title"
                         type="text"
                         required={true}
-                        value={this.state.formData.title}
+                        value={this.state.formData.contents.title}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
@@ -397,9 +395,9 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                     {...this.props}
                     isShow={this.state.isSelectionImage}
                     onHide={() => this.setState({isSelectionImage: false})}
-                    result={this.state.formData.image}
+                    result={this.state.formData.contents.image}
                     onSelected={images => this.setState((state: PageState) => {
-                        state.formData.image = images[0];
+                        state.formData.contents.image = images[0];
                         return state
                     })}
                     isMulti={false}

@@ -12,7 +12,7 @@ export default interface PostDocument {
     views: number,
     isFixed: boolean,
     terms: PopulateTermsDocument[]
-    contents: {
+    contents?: {
         langId: string
         image: string,
         title: string,
@@ -21,7 +21,7 @@ export default interface PostDocument {
         url: string,
         seoTitle: string,
         seoContent: string
-    }[]
+    }
 }
 
 export interface PostGetParamDocument {

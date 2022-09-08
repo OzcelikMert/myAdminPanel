@@ -35,7 +35,7 @@ class Navbar extends Component<PageProps, PageState> {
                 authService.logOut().then(resData => {
                     if(resData.status) {
                         this.props.setSessionData({
-                            id: 0
+                            id: ""
                         }, () => {
                             this.props.router.navigate(pageRoutes.lock.path(), {replace: true})
                         })
@@ -46,7 +46,7 @@ class Navbar extends Component<PageProps, PageState> {
                 authService.logOut().then(resData => {
                     if(resData.status) {
                         this.props.setSessionData({
-                            id: 0
+                            id: ""
                         }, () => {
                             this.props.router.navigate(pageRoutes.login.path(), {replace: true})
                         })

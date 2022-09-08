@@ -22,7 +22,6 @@ export default {
         }));
     },
     getStaticContent(contents: any[], searchKey: string, searchValue: any): string {
-        console.log(contents, searchKey, searchValue, localStorageUtil.adminLanguage.get)
         return contents.findSingle(searchKey, searchValue).contents.findSingle("langId", localStorageUtil.adminLanguage.get).content;
     }
 }

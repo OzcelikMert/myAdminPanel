@@ -85,11 +85,10 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
             this.setState((state: PageState) => {
                 if (resData.data.length > 0) {
                     let setting = resData.data[0];
-                    let content = setting.seoContents.length > 0 ? setting.seoContents[0] : {}
                     state.formData = {
                         seoContents: {
                             ...state.formData.seoContents,
-                            ...content
+                            ...setting.seoContents
                         }
                     };
                 }

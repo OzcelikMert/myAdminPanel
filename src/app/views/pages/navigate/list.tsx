@@ -181,15 +181,12 @@ export class PageNavigateList extends Component<PageProps, PageState> {
         return [
             {
                 name: this.props.router.t("name"),
-                selector: row => row.contents.length > 0 ? row.contents[0].title : this.props.router.t("[noLangAdd]"),
+                selector: row => row.contents?.title || this.props.router.t("[noLangAdd]"),
                 sortable: true,
             },
             {
                 name: this.props.router.t("main"),
-                selector: row => {
-                    let main = this.state.navigates.findSingle("_id", row.mainId?._id);
-                    return main?.contents.length > 0 ? main.contents[0].title : this.props.router.t("[noLangAdd]")
-                },
+                selector: row => row.mainId?.contents?.title || this.props.router.t("[noLangAdd]"),
                 sortable: true
             },
             {
