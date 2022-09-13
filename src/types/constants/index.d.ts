@@ -5,7 +5,6 @@ import {PostTermTypeDocument} from "./postTermTypes";
 import {PostTypeDocument} from "./postTypes";
 import {StatusDocument} from "./status";
 import {UserRoleDocument} from "./userRoles";
-import {SeoTitleSeparatorDocument} from "./seoTitleSeparators";
 // Contents
 import {PermissionContentDocument, PermissionContentLangDocument} from "./contents/permissionContents";
 import {PermissionGroupContentDocument, PermissionGroupContentLangDocument} from "./contents/permissionGroupContents";
@@ -22,7 +21,6 @@ export {
     PostTypeDocument,
     StatusDocument,
     UserRoleDocument,
-    SeoTitleSeparatorDocument,
     // Contents
     PermissionContentDocument, PermissionContentLangDocument,
     PermissionGroupContentDocument, PermissionGroupContentLangDocument,

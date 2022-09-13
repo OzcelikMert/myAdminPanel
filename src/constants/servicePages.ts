@@ -5,7 +5,6 @@ const ServicePages = {
     gallery: "gallery",
     postTerm: "postTerm",
     post: "post",
-    seo: "seo",
     setting: "setting",
     language: "language",
     navigate: "navigate",
