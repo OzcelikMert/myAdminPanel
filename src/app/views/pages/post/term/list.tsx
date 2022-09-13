@@ -206,6 +206,11 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                 sortable: true,
             },
             {
+                name: this.props.router.t("main"),
+                selector: row => row.mainId ? row.mainId.contents?.title || this.props.router.t("[noLangAdd]") : this.props.router.t("notSelected"),
+                sortable: true
+            },
+            {
                 name: this.props.router.t("views"),
                 selector: row => row.views,
                 sortable: true
@@ -311,6 +316,12 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                                     <DataTable
                                         columns={this.getTableColumns}
                                         data={this.state.showingPostTerms}
+                                        conditionalRowStyles={[
+                                            {
+                                                when: row => row.statusId != StatusId.Active,
+                                                classNames: ["bg-gradient-danger-light"]
+                                            }
+                                        ]}
                                         noHeader
                                         fixedHeader
                                         defaultSortAsc={false}

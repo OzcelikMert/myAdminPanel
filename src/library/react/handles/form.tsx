@@ -9,7 +9,7 @@ class HandleForm {
             }else{
                 value = event.target.value;
             }
-            state.formData[event.target.name] = value;
+            eval(`state.formData${event.target.name.split(".").map(name => `['${name}']`).join("")} = value`);
             return state;
         })
     }

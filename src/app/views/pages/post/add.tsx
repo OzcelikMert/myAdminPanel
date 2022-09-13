@@ -192,7 +192,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             postId: this.state.formData.postId,
             typeId: this.props.getPageData.searchParams.postTypeId,
             langId: this.state.formData.contents.langId,
-            getContents: true
+            getContents: 1
         });
         if (resData.status) {
             if (resData.data.length > 0) {
@@ -216,6 +216,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         dateStart: new Date(post.dateStart).toLocaleDateString(),
                         contents: {
                             ...state.formData.contents,
+                            ...post.contents,
                             content: post.contents?.content || ""
                         }
                     };

@@ -20,7 +20,7 @@ import imageSourceUtil from "../../../../utils/functions/imageSource.util";
 import classNameUtil from "../../../../utils/functions/className.util";
 import permissionUtil from "../../../../utils/functions/permission.util";
 import ThemeToast from "../../components/toast";
-
+import {Simulate} from "react-dom/test-utils";
 
 type PageState = {
     posts: PostDocument[],
@@ -215,8 +215,8 @@ export class PagePostList extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("category"),
-                cell:  row => (
-                    row.terms.map(item => {
+                cell: row => row.terms.findMulti("typeId", PostTermTypeId.Category).length > 0
+                    ? row.terms.map(item => {
                             if (item.typeId == PostTermTypeId.Category) {
                                 return <label
                                     onClick={() => this.navigateTermPage("termEdit", item._id, row.typeId)}
@@ -225,8 +225,8 @@ export class PagePostList extends Component<PageProps, PageState> {
                             }
                             return null;
                         }
-                    )
-                )
+                    ) : this.props.router.t("notSelected")
+
             },
             {
                 name: this.props.router.t("views"),
@@ -336,6 +336,12 @@ export class PagePostList extends Component<PageProps, PageState> {
                                     <DataTable
                                         columns={this.getTableColumns}
                                         data={this.state.showingPosts}
+                                        conditionalRowStyles={[
+                                            {
+                                                when: row => row.statusId != StatusId.Active || new Date().diffDays(new Date(row.dateStart)) > 0,
+                                                classNames: ["bg-gradient-danger-light"]
+                                            }
+                                        ]}
                                         noHeader
                                         fixedHeader
                                         defaultSortAsc={false}

@@ -186,7 +186,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("main"),
-                selector: row => row.mainId?.contents?.title || this.props.router.t("[noLangAdd]"),
+                selector: row => row.mainId ? row.mainId.contents?.title || this.props.router.t("[noLangAdd]") : this.props.router.t("notSelected"),
                 sortable: true
             },
             {
@@ -271,6 +271,12 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                                     <DataTable
                                         columns={this.getTableColumns}
                                         data={this.state.showingNavigates}
+                                        conditionalRowStyles={[
+                                            {
+                                                when: row => row.statusId != StatusId.Active,
+                                                classNames: ["bg-gradient-danger-light"]
+                                            }
+                                        ]}
                                         noHeader
                                         fixedHeader
                                         defaultSortAsc={false}

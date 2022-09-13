@@ -6,6 +6,7 @@ declare global {
         addYears(n: any): void
         getStringWithMask(mask: string | DateMask, utc?: boolean) : string
         diffMinutes(date: Date): Number
+        diffDays(date: Date): Number
     }
 }
 
@@ -117,7 +118,12 @@ Date.prototype.getStringWithMask = function (mask, utc = false) {
 Date.prototype.diffMinutes = function (date) {
     let diff =(date.getTime() - this.getTime()) / 1000;
     diff /= 60;
-    return Math.abs(Math.round(diff));
+    return Math.round(diff);
+}
+Date.prototype.diffDays = function (date) {
+    let diff = (date.getTime() - this.getTime()) / 1000;
+    diff /= (60 * 60 * 24);
+    return Math.ceil(diff);
 }
 
 export default {}

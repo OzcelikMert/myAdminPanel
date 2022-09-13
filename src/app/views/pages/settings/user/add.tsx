@@ -36,7 +36,7 @@ type PageState = {
         statusId: number
         banDateEnd: string
         banComment: string
-        permissionId: number[]
+        permissions: number[]
     },
     isSuccessMessage: boolean,
     isLoading: boolean
@@ -63,7 +63,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                 statusId: 0,
                 banDateEnd: new Date().getStringWithMask(DateMask.DATE),
                 banComment: "",
-                permissionId: []
+                permissions: []
             },
             isSuccessMessage: false,
             isLoading: true
@@ -138,7 +138,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                         statusId: user.statusId,
                         banDateEnd: user.banDateEnd,
                         banComment: user.banComment,
-                        permissionId: user.permissions
+                        permissions: user.permissions
                     });
 
                     state.mainTitle = user.name;
@@ -183,10 +183,10 @@ export class PageUserAdd extends Component<PageProps, PageState> {
     onPermissionSelected(isSelected: boolean, permId: number) {
         this.setState((state: PageState) => {
             if (isSelected) {
-                state.formData.permissionId.push(permId);
+                state.formData.permissions.push(permId);
             } else {
-                let findIndex = state.formData.permissionId.indexOfKey("", permId);
-                if (findIndex > -1) state.formData.permissionId.remove(findIndex);
+                let findIndex = state.formData.permissions.indexOfKey("", permId);
+                if (findIndex > -1) state.formData.permissions.remove(findIndex);
             }
             return state;
         })
@@ -196,9 +196,9 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         let role = UserRoles.findSingle("id", roleId);
         let permsForRole = Permissions.filter(perm => perm.defaultRoleRank <= role.rank);
         this.setState((state: PageState) => {
-            state.formData.permissionId = [];
+            state.formData.permissions = [];
             permsForRole.forEach(perm => {
-                state.formData.permissionId.push(perm.id);
+                state.formData.permissions.push(perm.id);
             })
             return state;
         });
@@ -241,8 +241,8 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                                             <ThemeFormCheckBox
                                                 key={index}
                                                 title={staticContentUtil.getStaticContent(PermissionContents, "permId", perm.id)}
-                                                name="permissionId"
-                                                checked={this.state.formData.permissionId.includes(perm.id)}
+                                                name="permissions"
+                                                checked={this.state.formData.permissions.includes(perm.id)}
                                                 onChange={e => this.onPermissionSelected(e.target.checked, perm.id)}
                                             />
                                         </div>

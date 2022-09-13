@@ -164,7 +164,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                     if (!V.isEmpty(this.props.getPageData.searchParams.termId)) {
                         if (this.props.getPageData.searchParams.termId == item._id) return;
                     }
-                    state.postTerms?.push({
+                    state.postTerms.push({
                         value: item._id,
                         label: item.contents?.title || this.props.router.t("[noLangAdd]")
                     });
@@ -377,7 +377,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                                 name="mainId"
                                 placeholder={this.props.router.t("chooseMainCategory")}
                                 options={this.state.postTerms}
-                                value={this.state.postTerms?.findSingle("value", this.state.formData.mainId)}
+                                value={this.state.postTerms.findSingle("value", this.state.formData.mainId)}
                                 onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
                             />
                         </div> : null

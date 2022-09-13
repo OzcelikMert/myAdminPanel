@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import ThemeChartBar from "../../components/charts/bar";
 import DataTable, {TableColumn} from "react-data-table-component";
-import {PostTermTypeId, PostTypeContents, PostTypeId, StatusContents} from "../../../../constants";
+import {PostTermTypeId, PostTypeContents, PostTypeId, StatusContents, StatusId} from "../../../../constants";
 import {pageRoutes} from "../../../routes";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";
@@ -387,6 +387,12 @@ class PageDashboard extends Component<PageProps, PageState> {
                                     <DataTable
                                         columns={this.getTableColumns}
                                         data={this.state.lastPosts}
+                                        conditionalRowStyles={[
+                                            {
+                                                when: row => row.statusId != StatusId.Active || new Date().diffDays(new Date(row.dateStart)) > 0,
+                                                classNames: ["bg-gradient-danger-light"]
+                                            }
+                                        ]}
                                         noHeader
                                         fixedHeader
                                         defaultSortAsc={false}

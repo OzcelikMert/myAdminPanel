@@ -34,20 +34,14 @@ export interface UserAddParamDocument {
     name: string,
     email: string,
     password: string,
-    permissionId: number[]
-}
-
-export interface UserUpdateParamDocument {
-    userId: string
-    roleId: number,
-    statusId: number,
-    name: string,
-    email: string
-    password: string
-    permissionId: number[]
     banDateEnd: string
     banComment: string
+    permissions: number[]
 }
+
+export type UserUpdateParamDocument = {
+    userId: string
+} & UserAddParamDocument
 
 export interface UserDeleteParamDocument {
     userId: string

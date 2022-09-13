@@ -29,7 +29,7 @@ export interface PostGetParamDocument {
     postId?: string
     typeId?: number | number[]
     statusId?: number
-    getContents?: boolean
+    getContents?: 1 | 0
     maxCount?: number
 }
 
