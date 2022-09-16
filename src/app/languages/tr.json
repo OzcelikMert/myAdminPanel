@@ -112,5 +112,6 @@
   "settingsUpdated": "Ayarlar güncellendi!",
   "passwordUpdated": "Şifre güncellendi!",
   "statusUpdated": "Durum güncellendi!",
-  "updating": "Güncelleniyor"
+  "updating": "Güncelleniyor",
+  "theme": "Tema"
 }

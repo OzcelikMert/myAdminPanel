@@ -112,6 +112,7 @@ type LanguageKeys =
     "settingsUpdated" |
     "passwordUpdated" |
     "statusUpdated" |
-    "updating"
+    "updating" |
+    "theme"
 
 export default LanguageKeys;

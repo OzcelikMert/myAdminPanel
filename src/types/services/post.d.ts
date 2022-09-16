@@ -1,5 +1,38 @@
 import {PopulateTermsDocument} from "./postTerm";
 import {PopulateAuthorIdDocument} from "./user";
+import LanguageKeys from "../app/languages";
+import {ThemeGroupTypeId} from "../../constants/themeGroupType.const";
+
+export interface PostThemeGroupTypeContentDocument {
+    langId: string
+    content: string
+}
+
+export interface PostThemeGroupTypeDocument {
+    _id: string
+    elementId: string
+    typeId: ThemeGroupTypeId,
+    langKey: LanguageKeys,
+    contents: PostThemeGroupTypeContentDocument
+}
+
+export interface PostThemeGroupDocument {
+    _id: string
+    elementId: string
+    langKey: LanguageKeys,
+    types: PostThemeGroupTypeDocument[]
+}
+
+export interface PostContentDocument {
+    langId: string
+    image?: string,
+    title: string,
+    content?: string,
+    shortContent?: string,
+    url?: string,
+    seoTitle?: string,
+    seoContent?: string
+}
 
 export default interface PostDocument {
     _id: string
@@ -12,16 +45,12 @@ export default interface PostDocument {
     views: number,
     isFixed: boolean,
     terms: PopulateTermsDocument[]
-    contents?: {
-        langId: string
-        image: string,
-        title: string,
-        content?: string,
-        shortContent: string,
-        url: string,
-        seoTitle: string,
-        seoContent: string
-    }
+    contents?: PostContentDocument,
+    themeGroups?: (Omit<PostThemeGroupDocument, "types"> & {
+        types: (Omit<PostThemeGroupTypeDocument, "contents"> & {
+            contents?: PostThemeGroupTypeContentDocument
+        })[]
+    })[]
 }
 
 export interface PostGetParamDocument {
@@ -33,28 +62,25 @@ export interface PostGetParamDocument {
     maxCount?: number
 }
 
-export interface PostAddParamDocument {
-    typeId: number
-    statusId: number
-    order: number
+export type PostAddParamDocument = {
     isFixed: 1 | 0
-    dateStart: string
+    contents: PostContentDocument
     termId: string[]
-    contents: {
-        langId: string
-        title: string
-        image?: string,
-        shortContent?: string
-        content?: string
-        url?: string
-        seoTitle?: string
-        seoContent?: string
-    }
-}
+    themeGroups?: (Omit<PostThemeGroupDocument, "types"|"_id"> & {
+        types: (Omit<PostThemeGroupTypeDocument, "contents"|"_id"> & {
+            contents: Omit<PostThemeGroupTypeContentDocument, "_id">
+        })[]
+    })[]
+} & Omit<PostDocument, "authorId"|"lastAuthorId"|"views"|"terms"|"_id"|"contents"|"isFixed">
 
 export type PostUpdateParamDocument = {
     postId: string
-} & PostAddParamDocument
+    themeGroups?: (Omit<PostThemeGroupDocument, "types"> & {
+        types: (Omit<PostThemeGroupTypeDocument, "contents"> & {
+            contents: PostThemeGroupTypeContentDocument
+        })[]
+    })[]
+} & Omit<PostAddParamDocument, "themeGroups">
 
 export interface PostUpdateStatusParamDocument {
     postId: string[],

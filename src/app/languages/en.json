@@ -112,5 +112,6 @@
   "settingsUpdated": "Settings updated!",
   "passwordUpdated": "Password updated!",
   "statusUpdated": "Status updated!",
-  "updating": "Updating"
+  "updating": "Updating",
+  "theme": "Theme"
 }

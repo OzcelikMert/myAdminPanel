@@ -2,15 +2,11 @@ import React, {Component, FormEvent} from 'react'
 import {Tab, Tabs} from "react-bootstrap";
 import JoditEditor from "jodit-react";
 import moment from "moment";
-import {ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
-import {
-    PostTermTypeId,
-    PostTypeContents, PostTypeId,
-    StatusId
-} from "../../../../constants";
+import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
+import {PostTermTypeId, PostTypeContents, PostTypeId, StatusId} from "../../../../constants";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import SweetAlert from "react-sweetalert2";
-import V, {DateMask} from "../../../../library/variable";
+import V from "../../../../library/variable";
 import {pageRoutes} from "../../../routes";
 import HandleForm from "../../../../library/react/handles/form";
 import ThemeChooseImage from "../../components/chooseImage";
@@ -21,6 +17,12 @@ import Spinner from "../../tools/spinner";
 import permissionUtil from "../../../../utils/functions/permission.util";
 import staticContentUtil from "../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";
+import {
+    PostThemeGroupDocument,
+    PostThemeGroupTypeDocument,
+    PostUpdateParamDocument
+} from "../../../../types/services/post";
+import {ThemeGroupTypeId} from "../../../../constants/themeGroupType.const";
 
 type PageState = {
     formActiveKey: string
@@ -30,25 +32,9 @@ type PageState = {
     isSubmitting: boolean
     mainTitle: string,
     isLoading: boolean
-    formData: {
-        postId: string
-        typeId: number
+    formData: Omit<PostUpdateParamDocument, "termId"> & {
         categoryTermId: string[]
         tagTermId: string[]
-        statusId: number
-        order: number
-        dateStart: string
-        isFixed: 1 | 0
-        contents: {
-            langId: string
-            image: string
-            title: string
-            content: string,
-            shortContent: string
-            url: string
-            seoTitle: string
-            seoContent: string
-        }
     },
     isSuccessMessage: boolean
     isSelectionImage: boolean
@@ -74,7 +60,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 tagTermId: [],
                 statusId: 0,
                 order: 0,
-                dateStart: new Date().toLocaleDateString(),
+                dateStart: new Date(),
                 isFixed: 0,
                 contents: {
                     langId: this.props.getPageData.langId,
@@ -85,7 +71,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     url: "",
                     seoTitle: "",
                     seoContent: "",
-                }
+                },
+                themeGroups: []
             },
             isSuccessMessage: false,
             isSelectionImage: false
@@ -174,7 +161,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             value: term._id,
                             label: term.contents?.title || this.props.router.t("[noLangAdd]")
                         });
-                    }else if(term.typeId == PostTermTypeId.Tag) {
+                    } else if (term.typeId == PostTermTypeId.Tag) {
                         state.tagTerms.push({
                             value: term._id,
                             label: term.contents?.title || this.props.router.t("[noLangAdd]")
@@ -213,12 +200,24 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         categoryTermId: categoryTermId,
                         tagTermId: tagTermId,
                         isFixed: post.isFixed ? 1 : 0,
-                        dateStart: new Date(post.dateStart).toLocaleDateString(),
+                        dateStart: new Date(post.dateStart),
                         contents: {
                             ...state.formData.contents,
                             ...post.contents,
                             content: post.contents?.content || ""
-                        }
+                        },
+                        themeGroups: post.themeGroups
+                            ? post.themeGroups.map(themeGroup => ({
+                                ...themeGroup,
+                                types: themeGroup.types.map(themeGroupType => ({
+                                    ...themeGroupType,
+                                    contents: {
+                                        ...themeGroupType.contents,
+                                        langId: state.formData.contents.langId,
+                                        content: state.formData.contents.content || ""
+                                    }
+                                }))
+                            })) : []
                     };
 
                     if (this.props.getPageData.langId == this.props.getPageData.mainLangId) {
@@ -294,6 +293,86 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 didClose={() => this.onCloseSuccessMessage()}
             />
         )
+    }
+
+    TabTheme = () => {
+        const Group = (props: PostThemeGroupDocument) => {
+            const Type = (props: PostThemeGroupTypeDocument) => {
+                let input = <div>{this.props.router.t("type")}</div>;
+
+                switch (props.typeId) {
+                    case ThemeGroupTypeId.Text:
+                        input = <ThemeFormType
+                            type={"text"}
+                            title={this.props.router.t(props.langKey)}
+                            value={props.contents.content}
+                        />
+                        break;
+                    case ThemeGroupTypeId.TextArea:
+                        input = <ThemeFormType
+                            type={"textarea"}
+                            title={this.props.router.t(props.langKey)}
+                            value={props.contents.content}
+                        />
+                        break;
+                    case ThemeGroupTypeId.Image:
+                        input = <ThemeFieldSet legend={this.props.router.t(props.langKey)}>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <img
+                                        src={imageSourceUtil.getUploadedImageSrc(props.contents.content)}
+                                        alt="Empty Image"
+                                        className="post-image"
+                                    />
+                                </div>
+                                <div className="col-md-6">
+                                    <button
+                                        type="button"
+                                        className="btn btn-gradient-warning btn-xs ms-1"
+                                        onClick={() => {
+                                            this.setState({isSelectionImage: true})
+                                        }}
+                                    ><i className="fa fa-pencil-square-o"></i> {this.props.router.t("select")}</button>
+                                </div>
+                            </div>
+                        </ThemeFieldSet>
+                        break;
+                }
+
+                return (
+                    <div className="col-md-12">
+                        {input}
+                    </div>
+                )
+            }
+
+            return (
+                <div className="col-md-12">
+                    <ThemeFieldSet legend={this.props.router.t(props.langKey)}>
+                        <div className="row">
+                            {
+                                props.types.map(themeGroupType => Type(themeGroupType))
+                            }
+                        </div>
+                    </ThemeFieldSet>
+                </div>
+            )
+        }
+
+        return (
+            <div className="row">
+                <div className="col-md-12">
+                    <button className="btn btn-gradient-success btn-lg">+ Grup Olustur</button>
+                </div>
+                <div className="col-md-12">
+                    <div className="row">
+                        {
+                            this.state.formData.themeGroups?.map(themeGroup => Group(themeGroup))
+                        }
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     TabSEO = () => {
@@ -378,7 +457,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             <div className="row">
                 <div className="col-md-7 mb-3">
                     <JoditEditor
-                        value={this.state.formData.contents.content}
+                        value={this.state.formData.contents.content || ""}
                         config={{
                             uploader: {insertImageAsBase64URI: true},
                             showXPathInStatusbar: false,
@@ -473,7 +552,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     {...this.props}
                     isShow={this.state.isSelectionImage}
                     onHide={() => this.setState({isSelectionImage: false})}
-                    result={this.state.formData.contents.image}
+                    result={this.state.formData.contents.image || ""}
                     onSelected={images => this.setState((state: PageState) => {
                         state.formData.contents.image = images[0];
                         return state
@@ -512,6 +591,12 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                                     : ""
                                             }
                                         </Tab>
+                                        {
+                                            this.state.formData.typeId == PostTypeId.Page
+                                                ? <Tab eventKey="theme" title={this.props.router.t("theme")}>
+                                                    <this.TabTheme/>
+                                                </Tab> : null
+                                        }
                                         <Tab eventKey="options" title={this.props.router.t("options")}>
                                             <this.TabOptions/>
                                         </Tab>
