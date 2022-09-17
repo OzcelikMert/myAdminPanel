@@ -113,5 +113,9 @@
   "passwordUpdated": "Password updated!",
   "statusUpdated": "Status updated!",
   "updating": "Updating",
-  "theme": "Theme"
+  "theme": "Theme",
+  "newGroup": "New Group",
+  "elementId": "Element Id",
+  "langKey": "Lang Key",
+  "typeId": "Type Id"
 }

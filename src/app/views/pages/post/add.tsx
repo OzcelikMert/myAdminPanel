@@ -23,14 +23,17 @@ import {
     PostUpdateParamDocument
 } from "../../../../types/services/post";
 import {ThemeGroupTypeId} from "../../../../constants/themeGroupType.const";
+import {LanguageKeysArray} from "../../../../constants/languageKeys";
 
 type PageState = {
+    langKeys: { value: string, label: string }[]
     formActiveKey: string
     categoryTerms: { value: string, label: string }[]
     tagTerms: { value: string, label: string }[]
     status: { value: number, label: string }[]
     isSubmitting: boolean
     mainTitle: string,
+    newThemeGroups: PostThemeGroupDocument[],
     isLoading: boolean
     formData: Omit<PostUpdateParamDocument, "termId"> & {
         categoryTermId: string[]
@@ -48,8 +51,10 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         this.state = {
             formActiveKey: `general`,
             categoryTerms: [],
+            langKeys: [],
             tagTerms: [],
             status: [],
+            newThemeGroups: [],
             isSubmitting: false,
             mainTitle: "",
             isLoading: true,
@@ -90,6 +95,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         )) return;
         this.setPageTitle();
         Thread.start(() => {
+            this.getLangKeys();
             this.getTerms();
             this.getStatus();
             if (this.props.getPageData.searchParams.postId) {
@@ -131,6 +137,13 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             titles.push(this.state.mainTitle)
         }
         this.props.setBreadCrumb(titles);
+    }
+
+    getLangKeys() {
+       this.setState((state: PageState) => {
+           state.langKeys = LanguageKeysArray.map(langKey => ({label: langKey, value: langKey}))
+           return state;
+       })
     }
 
     getStatus() {
@@ -296,6 +309,60 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     }
 
     TabTheme = () => {
+        let self = this;
+
+        const events  = {
+            onInputChange(data: any, key: string, value: any) {
+                self.setState((state: PageState) => {
+                    data[key] = value;
+                    return state;
+                }, () => {
+                    console.log(self.state)
+                })
+            },
+            onCreateGroup() {
+                self.setState((state: PageState) => {
+                    state.newThemeGroups.push({
+                        _id: String.createId(),
+                        elementId: "",
+                        langKey: "[noLangAdd]",
+                        types: []
+                    })
+                    return state;
+                })
+            },
+            onCreateGroupType(_id: string) {
+                self.setState((state: PageState) => {
+                    let findIndex = state.newThemeGroups.indexOfKey("_id", _id);
+                    if(findIndex > -1){
+                        state.newThemeGroups[findIndex].types.push({
+                            _id: String.createId(),
+                            elementId: "",
+                            langKey: "[noLangAdd]",
+                            typeId: ThemeGroupTypeId.Text,
+                            contents: {
+                                langId: state.formData.contents.langId,
+                                content: ""
+                            }
+                        })
+                    }
+
+                    return state;
+                })
+            },
+            onAcceptNewGroup(_id: string) {
+                self.setState((state: PageState) => {
+                    let findIndex = state.newThemeGroups.indexOfKey("_id", _id);
+                    if(findIndex > -1){
+                        state.formData.themeGroups?.push(state.newThemeGroups[findIndex]);
+                        state.newThemeGroups = state.newThemeGroups.filter(themeGroup => themeGroup._id != state.newThemeGroups[findIndex]._id);
+                    }
+
+                    return state;
+                })
+            }
+        }
+
         const Group = (props: PostThemeGroupDocument) => {
             const Type = (props: PostThemeGroupTypeDocument) => {
                 let input = <div>{this.props.router.t("type")}</div>;
@@ -359,12 +426,92 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             )
         }
 
+        const NewGroup = (props: PostThemeGroupDocument) => {
+            const TypeInfo = (props: PostThemeGroupTypeDocument) => {
+                return (
+                    <div className="row">
+                        <div className="col-md-12">
+                            <ThemeFormType
+                                title={`${this.props.router.t("elementId")}*`}
+                                type="text"
+                                required={true}
+                                value={props.elementId}
+                                onChange={e => events.onInputChange(props, "elementId", e.target.value)}
+                            />
+                        </div>
+                        <div className="col-md-12">
+                            <ThemeFormSelect
+                                title={this.props.router.t("langKey")}
+                                placeholder={this.props.router.t("langKey")}
+                                options={this.state.langKeys}
+                                value={this.state.langKeys.filter(item => item.value == props.langKey)}
+                                onChange={(item: any, e) => events.onInputChange(props, "langKey", item.value)}
+                            />
+                        </div>
+                        <div className="col-md-12">
+                            <ThemeFormSelect
+                                title={this.props.router.t("typeId")}
+                                placeholder={this.props.router.t("typeId")}
+                                options={this.state.langKeys}
+                                value={this.state.langKeys.filter(item => item.value == props.langKey)}
+                                onChange={(item: any, e) => events.onInputChange(props, "langKey", item.value)}
+                            />
+                        </div>
+                    </div>
+                )
+            }
+
+            return (
+                <div className="col-md-12">
+                    <ThemeFieldSet legend={this.props.router.t("newGroup")}>
+                        <div className="row mt-3">
+                            <div className="col-md-12">
+                                <ThemeFormType
+                                    title={`${this.props.router.t("elementId")}*`}
+                                    type="text"
+                                    required={true}
+                                    value={props.elementId}
+                                    onChange={e => events.onInputChange(props, "elementId", e.target.value)}
+                                />
+                            </div>
+                            <div className="col-md-12">
+                                <ThemeFormSelect
+                                    title={this.props.router.t("langKey")}
+                                    placeholder={this.props.router.t("langKey")}
+                                    options={this.state.langKeys}
+                                    value={this.state.langKeys.filter(item => item.value == props.langKey)}
+                                    onChange={(item: any, e) => events.onInputChange(props, "langKey", item.value)}
+                                />
+                            </div>
+                            <div className="col-md-12">
+                                <button type={"button"} className="btn btn-gradient-primary btn-lg" onClick={() => events.onCreateGroupType(props._id)}>+ Tip Olustur</button>
+                            </div>
+                            <div className="col-md-12">
+                                {
+                                    props.types.map(themeGroupType => TypeInfo(themeGroupType))
+                                }
+                            </div>
+                            <div className="col-md-12">
+                                <button type={"button"} className="btn btn-gradient-success btn-lg" onClick={() => events.onAcceptNewGroup(props._id)}>Tamam</button>
+                            </div>
+                        </div>
+                    </ThemeFieldSet>
+                </div>
+            )
+        }
+
+
         return (
             <div className="row">
                 <div className="col-md-12">
-                    <button className="btn btn-gradient-success btn-lg">+ Grup Olustur</button>
+                    <button type={"button"} className="btn btn-gradient-success btn-lg" onClick={() => events.onCreateGroup()}>+ Grup Olustur</button>
                 </div>
-                <div className="col-md-12">
+                <div className="col-md-12 mt-2">
+                    <div className="row">
+                        {
+                            this.state.newThemeGroups.map(themeGroup => NewGroup(themeGroup))
+                        }
+                    </div>
                     <div className="row">
                         {
                             this.state.formData.themeGroups?.map(themeGroup => Group(themeGroup))

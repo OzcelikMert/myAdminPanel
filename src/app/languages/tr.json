@@ -113,5 +113,10 @@
   "passwordUpdated": "Şifre güncellendi!",
   "statusUpdated": "Durum güncellendi!",
   "updating": "Güncelleniyor",
-  "theme": "Tema"
+  "theme": "Tema",
+  "newGroup": "Yeni Grup",
+  "elementId": "Eleman Kimliği",
+  "langKey": "Dil Anahtarı",
+  "typeId": "Tip Kimliği"
+
 }
