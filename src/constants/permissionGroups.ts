@@ -1,16 +1,5 @@
 import {PermissionGroupDocument} from "../types/constants";
 
-const PermissionGroups: Array<PermissionGroupDocument> = [
-    {id: 1, order: 1},
-    {id: 2, order: 2},
-    {id: 3, order: 3},
-    {id: 4, order: 4},
-    {id: 5, order: 5},
-    {id: 6, order: 6},
-    {id: 7, order: 7},
-    {id: 8, order: 8}
-]
-
 enum PermissionGroupId {
     Blog = 1,
     Portfolio,
@@ -19,7 +8,20 @@ enum PermissionGroupId {
     Gallery,
     User,
     Page,
-    Navigate
+    Navigate,
+    Settings
 }
+
+const PermissionGroups: Array<PermissionGroupDocument> = [
+    {id: PermissionGroupId.Blog, order: 1, langKey: "blogs"},
+    {id: PermissionGroupId.Portfolio, order: 2, langKey: "portfolios"},
+    {id: PermissionGroupId.Slider, order: 3, langKey: "sliders"},
+    {id: PermissionGroupId.Reference, order: 4, langKey: "references"},
+    {id: PermissionGroupId.Gallery, order: 5, langKey: "gallery"},
+    {id: PermissionGroupId.User, order: 6, langKey: "users"},
+    {id: PermissionGroupId.Page, order: 7, langKey: "pages"},
+    {id: PermissionGroupId.Navigate, order: 8, langKey: "navigates"},
+    {id: PermissionGroupId.Settings, order: 8, langKey: "settings"}
+]
 
 export {PermissionGroups, PermissionGroupId}

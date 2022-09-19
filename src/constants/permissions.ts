@@ -1,31 +1,7 @@
 import {PermissionDocument} from "../types/constants";
-
-const Permissions: Array<PermissionDocument> = [
-    {id: 1, groupId:1, defaultRoleRank: 2},
-    {id: 2, groupId:1, defaultRoleRank: 3},
-    {id: 3, groupId:1, defaultRoleRank: 3},
-    {id: 4, groupId:2, defaultRoleRank: 2},
-    {id: 5, groupId:2, defaultRoleRank: 3},
-    {id: 6, groupId:2, defaultRoleRank: 3},
-    {id: 7, groupId:3, defaultRoleRank: 2},
-    {id: 8, groupId:3, defaultRoleRank: 3},
-    {id: 9, groupId:3, defaultRoleRank: 3},
-    {id: 10, groupId:4, defaultRoleRank: 2},
-    {id: 11, groupId:4, defaultRoleRank: 3},
-    {id: 12, groupId:4, defaultRoleRank: 3},
-    {id: 13, groupId:5, defaultRoleRank: 3},
-    {id: 14, groupId:6, defaultRoleRank: 3},
-    {id: 15, groupId:6, defaultRoleRank: 3},
-    {id: 16, groupId:6, defaultRoleRank: 3},
-    {id: 17, groupId:7, defaultRoleRank: 2},
-    {id: 18, groupId:7, defaultRoleRank: 3},
-    {id: 19, groupId:7, defaultRoleRank: 3},
-    {id: 20, groupId:8, defaultRoleRank: 2},
-    {id: 21, groupId:8, defaultRoleRank: 3},
-    {id: 22, groupId:8, defaultRoleRank: 3}
-]
-
+import {PermissionGroupId} from "./permissionGroups";
 enum PermissionId {
+
     BlogAdd = 1,
     BlogEdit,
     BlogDelete,
@@ -51,5 +27,32 @@ enum PermissionId {
     SeoEdit,
     SettingEdit
 }
+
+const Permissions: Array<PermissionDocument> = [
+    {id: PermissionId.BlogAdd, groupId: PermissionGroupId.Blog, defaultRoleRank: 2, langKey: "add"},
+    {id: PermissionId.BlogEdit, groupId: PermissionGroupId.Blog, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.BlogDelete, groupId: PermissionGroupId.Blog, defaultRoleRank: 3, langKey: "delete"},
+    {id: PermissionId.PortfolioAdd, groupId: PermissionGroupId.Portfolio, defaultRoleRank: 2, langKey: "add"},
+    {id: PermissionId.PortfolioEdit, groupId: PermissionGroupId.Portfolio, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.PortfolioDelete, groupId: PermissionGroupId.Portfolio, defaultRoleRank: 3, langKey: "delete"},
+    {id: PermissionId.SliderAdd, groupId: PermissionGroupId.Slider, defaultRoleRank: 2, langKey: "add"},
+    {id: PermissionId.SliderEdit, groupId: PermissionGroupId.Slider, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.SliderDelete, groupId: PermissionGroupId.Slider, defaultRoleRank: 3, langKey: "delete"},
+    {id: PermissionId.ReferenceAdd, groupId: PermissionGroupId.Reference, defaultRoleRank: 2, langKey: "add"},
+    {id: PermissionId.ReferenceEdit, groupId: PermissionGroupId.Reference, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.ReferenceDelete, groupId: PermissionGroupId.Reference, defaultRoleRank: 3, langKey: "delete"},
+    {id: PermissionId.GalleryEdit, groupId: PermissionGroupId.Gallery, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.UserAdd, groupId: PermissionGroupId.User, defaultRoleRank: 3, langKey: "add"},
+    {id: PermissionId.UserEdit, groupId: PermissionGroupId.User, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.UserDelete, groupId: PermissionGroupId.User, defaultRoleRank: 3, langKey: "delete"},
+    {id: PermissionId.PageAdd, groupId: PermissionGroupId.Page, defaultRoleRank: 2, langKey: "add"},
+    {id: PermissionId.PageEdit, groupId: PermissionGroupId.Page, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.PageDelete, groupId: PermissionGroupId.Page, defaultRoleRank: 3, langKey: "delete"},
+    {id: PermissionId.NavigateAdd, groupId: PermissionGroupId.Navigate, defaultRoleRank: 2, langKey: "add"},
+    {id: PermissionId.NavigateEdit, groupId: PermissionGroupId.Navigate, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.NavigateDelete, groupId: PermissionGroupId.Navigate, defaultRoleRank: 3, langKey: "delete"},
+    {id: PermissionId.SeoEdit, groupId: PermissionGroupId.Settings, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.SettingEdit, groupId: PermissionGroupId.Settings, defaultRoleRank: 3, langKey: "edit"}
+]
 
 export {Permissions, PermissionId};

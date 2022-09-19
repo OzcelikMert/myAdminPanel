@@ -3,9 +3,7 @@ import {Tab, Tabs} from "react-bootstrap";
 import moment from "moment";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {
-    PermissionContents,
     PermissionGroups,
-    PermissionGroupsContents,
     Permissions,
     StatusId,
     UserRoleId, UserRoles
@@ -103,7 +101,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                 StatusId.Pending,
                 StatusId.Disabled,
                 StatusId.Banned
-            ]);
+            ], this.props.router.t);
             state.formData.statusId = StatusId.Active;
             return state;
         })
@@ -115,7 +113,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                 UserRoleId.User,
                 UserRoleId.Author,
                 UserRoleId.Editor
-            ]);
+            ], this.props.router.t);
             state.formData.roleId = UserRoleId.User;
             return state;
         })
@@ -233,14 +231,14 @@ export class PageUserAdd extends Component<PageProps, PageState> {
                         <div className="col-md-6 mb-3">
                             <ThemeFieldSet
                                 key={index}
-                                legend={staticContentUtil.getStaticContent(PermissionGroupsContents, "groupId", group.id)}
+                                legend={this.props.router.t(group.langKey)}
                             >
                                 {
                                     Permissions.findMulti("groupId", group.id).map((perm, index) => (
                                         <div className="col-md-4" key={index}>
                                             <ThemeFormCheckBox
                                                 key={index}
-                                                title={staticContentUtil.getStaticContent(PermissionContents, "permId", perm.id)}
+                                                title={this.props.router.t(perm.langKey)}
                                                 name="permissions"
                                                 checked={this.state.formData.permissions.includes(perm.id)}
                                                 onChange={e => this.onPermissionSelected(e.target.checked, perm.id)}

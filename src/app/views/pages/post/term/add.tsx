@@ -9,9 +9,7 @@ import {
 import {pageRoutes} from "../../../../routes";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {
-    PostTermTypeContents,
-    PostTermTypeId,
-    PostTypeContents,
+    PostTermTypeId, PostTermTypes, PostTypes,
     StatusId
 } from "../../../../../constants";
 import V from "../../../../../library/variable";
@@ -128,8 +126,8 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
 
     setPageTitle() {
         let titles: string[] = [
-            staticContentUtil.getStaticContent(PostTypeContents, "typeId", this.props.getPageData.searchParams.postTypeId),
-            staticContentUtil.getStaticContent(PostTermTypeContents, "typeId", this.props.getPageData.searchParams.termTypeId),
+            this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId).langKey),
+            this.props.router.t(PostTermTypes.findSingle("id", this.props.getPageData.searchParams.termTypeId).langKey),
             this.props.router.t(this.state.formData.termId ? "edit" : "add")
         ];
         if (this.state.formData.termId) {
@@ -144,7 +142,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 StatusId.Active,
                 StatusId.InProgress,
                 StatusId.Pending
-            ]);
+            ], this.props.router.t);
             state.formData.statusId = StatusId.Active;
             return state;
         })

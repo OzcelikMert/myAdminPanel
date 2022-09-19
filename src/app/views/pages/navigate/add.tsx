@@ -123,7 +123,7 @@ export class PageNavigateAdd extends Component<PageProps, PageState> {
                 StatusId.Active,
                 StatusId.InProgress,
                 StatusId.Pending
-            ]);
+            ], this.props.router.t);
             state.formData.statusId = StatusId.Active;
             return state;
         })

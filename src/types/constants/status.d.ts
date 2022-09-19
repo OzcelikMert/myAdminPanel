@@ -1,6 +1,10 @@
+import {StatusId} from "../../constants";
+import LanguageKeys from "../app/languages";
+
 interface StatusDocument {
-    id: number,
-    order: number
+    id: StatusId,
+    order: number,
+    langKey: LanguageKeys
 }
 
 export {

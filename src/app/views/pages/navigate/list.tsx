@@ -1,8 +1,8 @@
 import React, {Component, FormEvent} from 'react'
 import {
     PermissionId,
-    StatusContents,
-    StatusId
+    StatusId,
+    Status
 } from "../../../../constants";
 import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
@@ -196,7 +196,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                     <label
                         className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
-                            staticContentUtil.getStaticContent(StatusContents, "statusId", row.statusId)
+                            this.props.router.t(Status.findSingle("id", row.statusId).langKey)
                         }
                     </label>
                 )
@@ -249,6 +249,7 @@ export class PageNavigateList extends Component<PageProps, PageState> {
                                             this.props.getSessionData.permissions,
                                             PermissionId.NavigateEdit
                                         ) ? <ThemeTableToggleMenu
+                                                t={this.props.router.t}
                                                 status={
                                                     [
                                                         StatusId.Active,

@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {
     PostTermTypeId,
-    PostTypeContents, PostTypeId,
-    StatusContents,
+    PostTypeId, PostTypes, Status,
     StatusId
 } from "../../../../constants";
 import {pageRoutes} from "../../../routes";
@@ -67,11 +66,7 @@ export class PagePostList extends Component<PageProps, PageState> {
     setPageTitle() {
         console.log(this.props)
         this.props.setBreadCrumb([
-            staticContentUtil.getStaticContent(
-                PostTypeContents,
-                "typeId",
-                this.props.getPageData.searchParams.postTypeId
-            ),
+            this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId).langKey),
             this.props.router.t("list")
         ])
     }
@@ -239,11 +234,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                 cell: row => (
                     <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
-                            staticContentUtil.getStaticContent(
-                                StatusContents,
-                                "statusId",
-                                row.statusId
-                            )
+                            this.props.router.t(Status.findSingle("id", row.statusId).langKey)
                         }
                     </label>
                 )
@@ -314,6 +305,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                                             this.props.getSessionData.permissions,
                                             permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Edit")
                                         ) ? <ThemeTableToggleMenu
+                                            t={this.props.router.t}
                                             status={
                                                 [
                                                     StatusId.Active,

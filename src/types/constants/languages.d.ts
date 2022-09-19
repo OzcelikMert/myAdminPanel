@@ -1,5 +1,7 @@
+import {LanguageId} from "../../constants";
+
 interface LanguageDocument {
-    id: number,
+    id: LanguageId,
     code: string,
     title: string,
     order: number,

@@ -1,6 +1,10 @@
+import {PostTermTypeId} from "../../constants";
+import LanguageKeys from "../app/languages";
+
 interface PostTermTypeDocument {
-    id: number,
-    order: number
+    id: PostTermTypeId,
+    order: number,
+    langKey: LanguageKeys
 }
 
 export {

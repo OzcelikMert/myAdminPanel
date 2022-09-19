@@ -2,11 +2,8 @@ import React, {Component} from "react";
 import {Modal} from "react-bootstrap";
 import {
     LanguageId,
-    PermissionContents,
-    Permissions,
-    StatusContents,
-    StatusId,
-    UserRoleContents
+    Permissions, Status,
+    StatusId, UserRoles,
 } from "../../../../constants";
 import UserDocument from "../../../../types/services/user";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
@@ -64,7 +61,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                         <label
                             className={`badge badge-gradient-${classNameUtil.getUserRolesClassName(this.props.userInfo.roleId)} ms-1`}>
                             {
-                                staticContentUtil.getStaticContent(UserRoleContents, "roleId", this.props.userInfo.roleId)
+                                this.props.router.t(UserRoles.findSingle("id", this.props.userInfo.roleId).langKey)
                             }
                         </label>
                     </span>
@@ -74,7 +71,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                         <label
                             className={`badge badge-gradient-${classNameUtil.getStatusClassName(this.props.userInfo.statusId)} ms-1`}>
                             {
-                                staticContentUtil.getStaticContent(StatusContents, "statusId", this.props.userInfo.statusId)
+                                this.props.router.t(Status.findSingle("id", this.props.userInfo.statusId).langKey)
                             }
                         </label>
                     </span>
@@ -110,7 +107,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
     PermissionItem = (props: { id: number }) => (
         <label className="badge badge-outline-info ms-1 mb-1">
             {
-                staticContentUtil.getStaticContent(PermissionContents, "permId", props.id)
+                this.props.router.t(Permissions.findSingle("id", props.id).langKey)
             }
         </label>
     )

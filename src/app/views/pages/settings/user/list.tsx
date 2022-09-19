@@ -2,8 +2,7 @@ import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {
     PermissionId, Status,
-    StatusContents,
-    UserRoleContents, UserRoleId,
+    UserRoleId,
     UserRoles
 } from "../../../../../constants";
 import DataTable, {TableColumn} from "react-data-table-component";
@@ -156,7 +155,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                 cell: row => (
                     <label className={`badge badge-gradient-${classNameUtil.getUserRolesClassName(row.roleId)}`}>
                         {
-                            staticContentUtil.getStaticContent(UserRoleContents, "roleId", row.roleId)
+                            this.props.router.t(UserRoles.findSingle("id", row.roleId).langKey)
                         }
                     </label>
                 )
@@ -168,7 +167,7 @@ export class PageUserList extends Component<PageProps, PageState> {
                 cell: row => (
                     <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
-                            staticContentUtil.getStaticContent(StatusContents, "statusId", row.statusId)
+                            this.props.router.t(Status.findSingle("id", row.statusId).langKey)
                         }
                     </label>
                 )

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import ThemeChartBar from "../../components/charts/bar";
 import DataTable, {TableColumn} from "react-data-table-component";
-import {PostTermTypeId, PostTypeContents, PostTypeId, StatusContents, StatusId} from "../../../../constants";
+import {PostTermTypeId, PostTypeId, PostTypes, Status, StatusId} from "../../../../constants";
 import {pageRoutes} from "../../../routes";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";
@@ -208,7 +208,7 @@ class PageDashboard extends Component<PageProps, PageState> {
                         className={`badge badge-gradient-primary cursor-pointer`}
                     >
                         {
-                            staticContentUtil.getStaticContent(PostTypeContents, "typeId", row.typeId)
+                            this.props.router.t(PostTypes.findSingle("id", row.typeId).langKey)
                         }
                     </label>
                 )
@@ -244,7 +244,7 @@ class PageDashboard extends Component<PageProps, PageState> {
                 cell: row => (
                     <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
-                            staticContentUtil.getStaticContent(StatusContents, "statusId", row.statusId)
+                            this.props.router.t(Status.findSingle("id", row.statusId).langKey)
                         }
                     </label>
                 )

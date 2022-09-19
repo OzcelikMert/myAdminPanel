@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {
-    PostTermTypeContents,
-    PostTypeContents,
-    StatusContents,
+    PostTermTypes,
+    PostTypes, Status,
     StatusId
 } from "../../../../../constants";
 import {pageRoutes} from "../../../../routes";
@@ -60,8 +59,8 @@ export class PagePostTermList extends Component<PageProps, PageState> {
 
     setPageTitle() {
         this.props.setBreadCrumb([
-            staticContentUtil.getStaticContent(PostTypeContents, "typeId", this.props.getPageData.searchParams.postTypeId),
-            staticContentUtil.getStaticContent(PostTermTypeContents, "typeId", this.props.getPageData.searchParams.termTypeId)
+            this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId).langKey),
+            this.props.router.t(PostTermTypes.findSingle("id", this.props.getPageData.searchParams.termTypeId).langKey)
         ])
     }
 
@@ -166,9 +165,9 @@ export class PagePostTermList extends Component<PageProps, PageState> {
             state.showingPostTerms = [];
             state.selectedPostTerms = [];
             state.isShowToggleMenu = false;
-            if(mode === "list") {
+            if (mode === "list") {
                 state.showingPostTerms = state.postTerms.findMulti("statusId", StatusId.Deleted, false);
-            }else {
+            } else {
                 state.showingPostTerms = state.postTerms.findMulti("statusId", StatusId.Deleted);
             }
             state.checkedRowsClear = !this.state.checkedRowsClear;
@@ -222,7 +221,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                     <label
                         className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
-                            staticContentUtil.getStaticContent(StatusContents, "statusId", row.statusId)
+                            this.props.router.t(Status.findSingle("id", row.statusId).langKey)
                         }
                     </label>
                 )
@@ -246,13 +245,14 @@ export class PagePostTermList extends Component<PageProps, PageState> {
     }
 
     render() {
-        return this.state.isLoading ? <Spinner /> : (
+        return this.state.isLoading ? <Spinner/> : (
             <div className="page-post-term">
                 <div className="row">
                     <div className="col-md-3 mb-3">
                         <div className="row">
                             <div className="col-6">
-                                <button className="btn btn-gradient-dark btn-lg w-100" onClick={() => this.navigateTermPage("back")}>
+                                <button className="btn btn-gradient-dark btn-lg w-100"
+                                        onClick={() => this.navigateTermPage("back")}>
                                     <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
                                 </button>
                             </div>
@@ -262,7 +262,8 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                                         this.props.getSessionData.roleId,
                                         this.props.getSessionData.permissions,
                                         permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Add")
-                                    ) ? <button className="btn btn-gradient-info btn-lg w-100" onClick={() => this.navigateTermPage("add")}>
+                                    ) ? <button className="btn btn-gradient-info btn-lg w-100"
+                                                onClick={() => this.navigateTermPage("add")}>
                                         + {this.props.router.t("addNew")}
                                     </button> : null
                                 }
@@ -294,6 +295,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                                             this.props.getSessionData.permissions,
                                             permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Edit")
                                         ) ? <ThemeTableToggleMenu
+                                            t={this.props.router.t}
                                             status={
                                                 [
                                                     StatusId.Active,

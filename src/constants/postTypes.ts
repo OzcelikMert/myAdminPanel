@@ -1,13 +1,5 @@
 import {PostTypeDocument} from "../types/constants";
 
-const PostTypes: Array<PostTypeDocument> = [
-    {id: 1, order: 1},
-    {id: 2, order: 2},
-    {id: 3, order: 3},
-    {id: 4, order: 4},
-    {id: 5, order: 5}
-]
-
 enum PostTypeId {
     Blog = 1,
     Portfolio,
@@ -15,5 +7,13 @@ enum PostTypeId {
     Slider,
     Reference
 }
+
+const PostTypes: Array<PostTypeDocument> = [
+    {id: PostTypeId.Blog, order: 1, langKey: "blogs"},
+    {id: PostTypeId.Portfolio, order: 2, langKey: "portfolios"},
+    {id: PostTypeId.Page, order: 3, langKey: "pages"},
+    {id: PostTypeId.Slider, order: 4, langKey: "sliders"},
+    {id: PostTypeId.Reference, order: 5, langKey: "references"}
+]
 
 export {PostTypes, PostTypeId};

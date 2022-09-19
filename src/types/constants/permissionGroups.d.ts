@@ -1,6 +1,10 @@
+import LanguageKeys from "../app/languages";
+import {PermissionGroupId} from "../../constants";
+
 interface PermissionGroupDocument {
-    id: number,
-    order: number
+    id: PermissionGroupId,
+    order: number,
+    langKey: LanguageKeys
 }
 
 export {PermissionGroupDocument}

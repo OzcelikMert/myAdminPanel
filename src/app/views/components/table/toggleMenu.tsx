@@ -1,12 +1,14 @@
 import React, {Component} from "react";
 import {Dropdown} from "react-bootstrap";
-import {LanguageId, Status, StatusContents, StatusId} from "../../../../constants";
+import {LanguageId, Status, StatusId} from "../../../../constants";
 import staticContentUtil from "../../../../utils/functions/staticContent.util";
 import classNameUtil from "../../../../utils/functions/className.util";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 
 type PageState = {};
 
 type PageProps = {
+    t: PagePropCommonDocument["router"]["t"]
     status: StatusId[],
     langId: LanguageId,
     onChange: (event:   React.MouseEvent<HTMLElement, MouseEvent>, statusId: number) => void
@@ -21,13 +23,9 @@ class ThemeTableToggleMenu extends Component<PageProps, PageState> {
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="bg-gradient-light table-dropdown-menu">
                     {
-                        this.props.status.map((item, index) =>
-                            <Dropdown.Item onClick={(event) => this.props.onChange(event, item)} key={index}>
-                                <button className={`btn btn-gradient-${classNameUtil.getStatusClassName(item)} w-100`}>
-                                    {
-                                        staticContentUtil.getStaticContent(StatusContents, "statusId", item)
-                                    }
-                                </button>
+                        Status.findMulti("id", this.props.status).map((item, index) =>
+                            <Dropdown.Item onClick={(event) => this.props.onChange(event, item.id)} key={index}>
+                                <button className={`btn btn-gradient-${classNameUtil.getStatusClassName(item.id)} w-100`}>{this.props.t(item.langKey)}</button>
                             </Dropdown.Item>
                         )
                     }

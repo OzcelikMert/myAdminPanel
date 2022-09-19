@@ -117,5 +117,18 @@
   "newGroup": "New Group",
   "elementId": "Element Id",
   "langKey": "Lang Key",
-  "typeId": "Type Id"
+  "typeId": "Type Id",
+  "active": "Active",
+  "inProgress": "In Progress",
+  "pending": "Pending",
+  "disabled": "Disabled",
+  "banned": "Banned",
+  "deleted": "Deleted",
+  "user": "User",
+  "author": "Author",
+  "editor": "Editor",
+  "admin": "Admin",
+  "text": "Text",
+  "textArea": "Text Area",
+  "groupType": "Group Type"
 }

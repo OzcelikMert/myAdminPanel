@@ -3,10 +3,9 @@ import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeForm, ThemeFormType} from "../../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
 import {
-    PermissionContents, PermissionId,
-    Permissions, StatusContents,
-    UserRoleContents,
-    UserRoleId
+    PermissionId,
+    Permissions, Status,
+    UserRoleId, UserRoles
 } from "../../../../../constants";
 import Spinner from "../../../tools/spinner";
 import ThemeChooseImage from "../../../components/chooseImage";
@@ -182,7 +181,7 @@ export class PageSettingsProfile extends Component<PageProps, PageState> {
                                 <label
                                     className={`badge badge-gradient-${classNameUtil.getUserRolesClassName(this.state.data.roleId)} ms-1`}>
                                     {
-                                        staticContentUtil.getStaticContent(UserRoleContents, "roleId", this.state.data.roleId)
+                                        this.props.router.t(UserRoles.findSingle("id", this.state.data.roleId).langKey)
                                     }
                                 </label>
                             </span>
@@ -192,7 +191,7 @@ export class PageSettingsProfile extends Component<PageProps, PageState> {
                                 <label
                                     className={`badge badge-gradient-${classNameUtil.getStatusClassName(this.state.data.statusId)} ms-1`}>
                                     {
-                                        staticContentUtil.getStaticContent(StatusContents, "statusId", this.state.data.statusId)
+                                        this.props.router.t(Status.findSingle("id", this.state.data.statusId).langKey)
                                     }
                                 </label>
                             </span>
@@ -207,7 +206,7 @@ export class PageSettingsProfile extends Component<PageProps, PageState> {
         const PermissionItem = (props: { id: number }) => (
             <label className="badge badge-outline-info ms-1 mb-1">
                 {
-                    staticContentUtil.getStaticContent(PermissionContents, "permId", props.id)
+                    this.props.router.t(Permissions.findSingle("id", props.id).langKey)
                 }
             </label>
         )

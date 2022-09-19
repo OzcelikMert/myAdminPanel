@@ -1,13 +1,13 @@
 import {LanguageDocument} from "../types/constants";
 
-const Languages: Array<LanguageDocument> = [
-    { id: 1, code: "tr", title: "Türkçe", order: 1, image: "tr.webp" },
-    { id: 2, code: "en", title: "English", order: 2, image: "gb.webp" },
-]
-
 enum LanguageId {
     Turkish = 1,
     English
 }
+
+const Languages: Array<LanguageDocument> = [
+    { id: LanguageId.Turkish, code: "tr", title: "Türkçe", order: 1, image: "tr.webp" },
+    { id: LanguageId.English, code: "en", title: "English", order: 2, image: "gb.webp" },
+]
 
 export {Languages, LanguageId}

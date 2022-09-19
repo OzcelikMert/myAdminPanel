@@ -2,13 +2,10 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Collapse} from 'react-bootstrap';
 import {Trans} from 'react-i18next';
-import {PermissionId, PostTypeId, UserRoleContents} from "../../../constants";
+import {PermissionId, PostTypeId} from "../../../constants";
 import {pageRoutes} from "../../routes";
 import {PagePropCommonDocument} from "../../../types/app/pageProps";
 import permissionUtil from "../../../utils/functions/permission.util";
-import imageSourceUtil from "../../../utils/functions/imageSource.util";
-import classNameUtil from "../../../utils/functions/className.util";
-import staticContentUtil from "../../../utils/functions/staticContent.util";
 
 type PageState = {
     isMenuOpen: {

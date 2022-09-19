@@ -1,7 +1,7 @@
 import {PopulateTermsDocument} from "./postTerm";
 import {PopulateAuthorIdDocument} from "./user";
 import LanguageKeys from "../app/languages";
-import {ThemeGroupTypeId} from "../../constants/themeGroupType.const";
+import {ThemeGroupTypeId} from "../../constants/themeGroupTypes";
 
 export interface PostThemeGroupTypeContentDocument {
     langId: string

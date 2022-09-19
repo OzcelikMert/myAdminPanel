@@ -117,5 +117,18 @@ export const LanguageKeysArray = [
     "newGroup",
     "elementId",
     "langKey",
-    "typeId"
+    "typeId",
+    "active",
+    "inProgress",
+    "pending",
+    "disabled",
+    "banned",
+    "deleted",
+    "user",
+    "author",
+    "editor",
+    "admin",
+    "text",
+    "textArea",
+    "groupType"
 ] as const;

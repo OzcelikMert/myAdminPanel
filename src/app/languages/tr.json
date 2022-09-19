@@ -117,6 +117,18 @@
   "newGroup": "Yeni Grup",
   "elementId": "Eleman Kimliği",
   "langKey": "Dil Anahtarı",
-  "typeId": "Tip Kimliği"
-
+  "typeId": "Tip Kimliği",
+  "active": "Aktif",
+  "inProgress": "İşlemde",
+  "pending": "Beklemede",
+  "disabled": "Devre Dışı",
+  "banned": "Yasaklı",
+  "deleted": "Silindi",
+  "user": "Kullanıcı",
+  "author": "Yazar",
+  "editor": "Editör",
+  "admin": "Yetkili",
+  "text": "Yazı",
+  "textArea": "Uzun Yazı",
+  "groupType": "Grup Tipi"
 }

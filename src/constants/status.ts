@@ -1,14 +1,5 @@
 import {StatusDocument} from "../types/constants";
 
-const Status: Array<StatusDocument> = [
-    {id: 1, order: 1},
-    {id: 2, order: 2},
-    {id: 3, order: 3},
-    {id: 4, order: 4},
-    {id: 5, order: 5},
-    {id: 6, order: 6}
-]
-
 enum StatusId {
     Active = 1,
     InProgress,
@@ -17,5 +8,14 @@ enum StatusId {
     Banned,
     Deleted
 }
+
+const Status: Array<StatusDocument> = [
+    {id: StatusId.Active, order: 1, langKey: "active"},
+    {id: StatusId.InProgress, order: 2, langKey: "inProgress"},
+    {id: StatusId.Pending, order: 3, langKey: "pending"},
+    {id: StatusId.Disabled, order: 4, langKey: "disabled"},
+    {id: StatusId.Banned, order: 5, langKey: "banned"},
+    {id: StatusId.Deleted, order: 6, langKey: "deleted"}
+]
 
 export {Status, StatusId};

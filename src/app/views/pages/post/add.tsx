@@ -3,7 +3,15 @@ import {Tab, Tabs} from "react-bootstrap";
 import JoditEditor from "jodit-react";
 import moment from "moment";
 import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
-import {PostTermTypeId, PostTypeContents, PostTypeId, StatusId} from "../../../../constants";
+import {
+    PostTermTypeId,
+    PostTypeId,
+    PostTypes,
+    StatusId,
+    ThemeGroupTypeId,
+    LanguageKeysArray,
+    ThemeGroupTypes
+} from "../../../../constants";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import SweetAlert from "react-sweetalert2";
 import V from "../../../../library/variable";
@@ -22,11 +30,10 @@ import {
     PostThemeGroupTypeDocument,
     PostUpdateParamDocument
 } from "../../../../types/services/post";
-import {ThemeGroupTypeId} from "../../../../constants/themeGroupType.const";
-import {LanguageKeysArray} from "../../../../constants/languageKeys";
 
 type PageState = {
     langKeys: { value: string, label: string }[]
+    themeGroupTypes: { value: number, label: string }[]
     formActiveKey: string
     categoryTerms: { value: string, label: string }[]
     tagTerms: { value: string, label: string }[]
@@ -52,6 +59,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             formActiveKey: `general`,
             categoryTerms: [],
             langKeys: [],
+            themeGroupTypes: [],
             tagTerms: [],
             status: [],
             newThemeGroups: [],
@@ -96,6 +104,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         this.setPageTitle();
         Thread.start(() => {
             this.getLangKeys();
+            this.getThemeGroupTypes();
             this.getTerms();
             this.getStatus();
             if (this.props.getPageData.searchParams.postId) {
@@ -126,11 +135,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
 
     setPageTitle() {
         let titles: string[] = [
-            staticContentUtil.getStaticContent(
-                PostTypeContents,
-                "typeId",
-                this.props.getPageData.searchParams.postTypeId,
-            ),
+            this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId).langKey),
             this.props.router.t(this.state.formData.postId ? "edit" : "add")
         ];
         if (this.state.formData.postId) {
@@ -146,13 +151,20 @@ export class PagePostAdd extends Component<PageProps, PageState> {
        })
     }
 
+    getThemeGroupTypes() {
+        this.setState((state: PageState) => {
+            state.themeGroupTypes = ThemeGroupTypes.map(themeGroupType => ({label: this.props.router.t(themeGroupType.langKey), value: themeGroupType.id}))
+            return state;
+        })
+    }
+
     getStatus() {
         this.setState((state: PageState) => {
             state.status = staticContentUtil.getStatusForSelect([
                 StatusId.Active,
                 StatusId.InProgress,
                 StatusId.Pending
-            ]);
+            ], this.props.router.t);
             state.formData.statusId = StatusId.Active;
             return state;
         })
@@ -426,38 +438,41 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             )
         }
 
-        const NewGroup = (props: PostThemeGroupDocument) => {
-            const TypeInfo = (props: PostThemeGroupTypeDocument) => {
+        const NewGroup = (groupProps: PostThemeGroupDocument) => {
+            const TypeInfo = (groupTypeProps: PostThemeGroupTypeDocument) => {
+                let groupIndex = this.state.newThemeGroups.indexOfKey("_id", groupProps._id);
                 return (
-                    <div className="row">
-                        <div className="col-md-12">
-                            <ThemeFormType
-                                title={`${this.props.router.t("elementId")}*`}
-                                type="text"
-                                required={true}
-                                value={props.elementId}
-                                onChange={e => events.onInputChange(props, "elementId", e.target.value)}
-                            />
+                    <ThemeFieldSet legend={`${this.props.router.t("groupType")}#${groupIndex > -1 ? groupIndex + 1 : 0}`}>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <ThemeFormType
+                                    title={`${this.props.router.t("elementId")}*`}
+                                    type="text"
+                                    required={true}
+                                    value={groupTypeProps.elementId}
+                                    onChange={e => events.onInputChange(groupTypeProps, "elementId", e.target.value)}
+                                />
+                            </div>
+                            <div className="col-md-12">
+                                <ThemeFormSelect
+                                    title={this.props.router.t("langKey")}
+                                    placeholder={this.props.router.t("langKey")}
+                                    options={this.state.langKeys}
+                                    value={this.state.langKeys.filter(item => item.value == groupTypeProps.langKey)}
+                                    onChange={(item: any, e) => events.onInputChange(groupTypeProps, "langKey", item.value)}
+                                />
+                            </div>
+                            <div className="col-md-12">
+                                <ThemeFormSelect
+                                    title={this.props.router.t("typeId")}
+                                    placeholder={this.props.router.t("typeId")}
+                                    options={this.state.themeGroupTypes}
+                                    value={this.state.themeGroupTypes.filter(item => item.value == groupTypeProps.typeId)}
+                                    onChange={(item: any, e) => events.onInputChange(groupTypeProps, "typeId", item.value)}
+                                />
+                            </div>
                         </div>
-                        <div className="col-md-12">
-                            <ThemeFormSelect
-                                title={this.props.router.t("langKey")}
-                                placeholder={this.props.router.t("langKey")}
-                                options={this.state.langKeys}
-                                value={this.state.langKeys.filter(item => item.value == props.langKey)}
-                                onChange={(item: any, e) => events.onInputChange(props, "langKey", item.value)}
-                            />
-                        </div>
-                        <div className="col-md-12">
-                            <ThemeFormSelect
-                                title={this.props.router.t("typeId")}
-                                placeholder={this.props.router.t("typeId")}
-                                options={this.state.langKeys}
-                                value={this.state.langKeys.filter(item => item.value == props.langKey)}
-                                onChange={(item: any, e) => events.onInputChange(props, "langKey", item.value)}
-                            />
-                        </div>
-                    </div>
+                    </ThemeFieldSet>
                 )
             }
 
@@ -470,8 +485,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                     title={`${this.props.router.t("elementId")}*`}
                                     type="text"
                                     required={true}
-                                    value={props.elementId}
-                                    onChange={e => events.onInputChange(props, "elementId", e.target.value)}
+                                    value={groupProps.elementId}
+                                    onChange={e => events.onInputChange(groupProps, "elementId", e.target.value)}
                                 />
                             </div>
                             <div className="col-md-12">
@@ -479,20 +494,20 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                     title={this.props.router.t("langKey")}
                                     placeholder={this.props.router.t("langKey")}
                                     options={this.state.langKeys}
-                                    value={this.state.langKeys.filter(item => item.value == props.langKey)}
-                                    onChange={(item: any, e) => events.onInputChange(props, "langKey", item.value)}
+                                    value={this.state.langKeys.filter(item => item.value == groupProps.langKey)}
+                                    onChange={(item: any, e) => events.onInputChange(groupProps, "langKey", item.value)}
                                 />
                             </div>
                             <div className="col-md-12">
-                                <button type={"button"} className="btn btn-gradient-primary btn-lg" onClick={() => events.onCreateGroupType(props._id)}>+ Tip Olustur</button>
+                                <button type={"button"} className="btn btn-gradient-primary btn-lg" onClick={() => events.onCreateGroupType(groupProps._id)}>+ Tip Olustur</button>
                             </div>
                             <div className="col-md-12">
                                 {
-                                    props.types.map(themeGroupType => TypeInfo(themeGroupType))
+                                    groupProps.types.map(themeGroupType => TypeInfo(themeGroupType))
                                 }
                             </div>
                             <div className="col-md-12">
-                                <button type={"button"} className="btn btn-gradient-success btn-lg" onClick={() => events.onAcceptNewGroup(props._id)}>Tamam</button>
+                                <button type={"button"} className="btn btn-gradient-success btn-lg" onClick={() => events.onAcceptNewGroup(groupProps._id)}>Tamam</button>
                             </div>
                         </div>
                     </ThemeFieldSet>

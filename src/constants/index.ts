@@ -6,15 +6,11 @@ import {PostTypes, PostTypeId} from "./postTypes";
 import {Status, StatusId} from "./status";
 import {UserRoles, UserRoleId} from "./userRoles";
 import ServicePages from "./servicePages";
-/* Contents */
-import {PermissionContents} from "./contents/permissionContents";
-import {PermissionGroupsContents} from "./contents/permissionGroupContents";
-import {PostTermTypeContents} from "./contents/postTermTypeContents";
-import {PostTypeContents} from "./contents/postTypeContents";
-import {StatusContents} from "./contents/statusContents";
-import {UserRoleContents} from "./contents/userRoleContents";
+import {ThemeGroupTypeId, ThemeGroupTypes} from "./themeGroupTypes";
+import {LanguageKeysArray} from "./languageKeys";
 
 export {
+    LanguageKeysArray,
     ServicePages,
     Languages, LanguageId,
     PermissionGroups, PermissionGroupId,
@@ -23,12 +19,6 @@ export {
     PostTypes, PostTypeId,
     Status, StatusId,
     UserRoles, UserRoleId,
-    /* Contents */
-    PermissionContents,
-    PermissionGroupsContents,
-    PostTermTypeContents,
-    PostTypeContents,
-    StatusContents,
-    UserRoleContents,
+    ThemeGroupTypeId, ThemeGroupTypes
 };
 
