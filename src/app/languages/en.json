@@ -130,5 +130,6 @@
   "admin": "Admin",
   "text": "Text",
   "textArea": "Text Area",
-  "groupType": "Group Type"
+  "groupType": "Group Type",
+  "cancel": "Cancel"
 }

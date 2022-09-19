@@ -130,5 +130,6 @@
   "admin": "Yetkili",
   "text": "Yazı",
   "textArea": "Uzun Yazı",
-  "groupType": "Grup Tipi"
+  "groupType": "Grup Tipi",
+  "cancel": "İptal"
 }

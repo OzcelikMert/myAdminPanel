@@ -130,5 +130,6 @@ export const LanguageKeysArray = [
     "admin",
     "text",
     "textArea",
-    "groupType"
+    "groupType",
+    "cancel"
 ] as const;

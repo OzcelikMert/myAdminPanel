@@ -3,11 +3,14 @@ import React, {Component, RefObject} from 'react'
 type PageState = {} & any;
 
 type PageProps = {
-    title: string,
+    title?: string,
+    titleElement?: JSX.Element
 } & React.InputHTMLAttributes<HTMLInputElement> & React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 const ThemeFormType = React.forwardRef((props: PageProps, ref: any ) => {
     let input: JSX.Element;
+    const title = props.title;
+
     switch (props.type) {
         case `textarea`:
             input = <textarea
@@ -26,7 +29,7 @@ const ThemeFormType = React.forwardRef((props: PageProps, ref: any ) => {
     return (
         <label className="theme-input">
             {input}
-            <span className="label">{props.title}</span>
+            <span className="label">{title} {props.titleElement}</span>
         </label>
     );
 });
