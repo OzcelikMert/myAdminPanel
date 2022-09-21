@@ -145,15 +145,18 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     }
 
     getLangKeys() {
-       this.setState((state: PageState) => {
-           state.langKeys = LanguageKeysArray.map(langKey => ({label: langKey, value: langKey}))
-           return state;
-       })
+        this.setState((state: PageState) => {
+            state.langKeys = LanguageKeysArray.map(langKey => ({label: langKey, value: langKey}))
+            return state;
+        })
     }
 
     getThemeGroupTypes() {
         this.setState((state: PageState) => {
-            state.themeGroupTypes = ThemeGroupTypes.map(themeGroupType => ({label: this.props.router.t(themeGroupType.langKey), value: themeGroupType.id}))
+            state.themeGroupTypes = ThemeGroupTypes.map(themeGroupType => ({
+                label: this.props.router.t(themeGroupType.langKey),
+                value: themeGroupType.id
+            }))
             return state;
         })
     }
@@ -239,7 +242,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                     contents: {
                                         ...themeGroupType.contents,
                                         langId: state.formData.contents.langId,
-                                        content: state.formData.contents.content || ""
+                                        content: themeGroupType.contents?.content || ""
                                     }
                                 }))
                             })) : []
@@ -306,24 +309,9 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         })
     }
 
-    Messages = () => {
-        return (
-            <SweetAlert
-                show={this.state.isSuccessMessage}
-                title={this.props.router.t("successful")}
-                text={`${this.props.router.t((V.isEmpty(this.state.formData.postId)) ? "itemAdded" : "itemEdited")}!`}
-                icon="success"
-                timer={1000}
-                timerProgressBar={true}
-                didClose={() => this.onCloseSuccessMessage()}
-            />
-        )
-    }
-
-    TabTheme = () => {
+    get TabThemeEvents() {
         let self = this;
-
-        const events  = {
+        return {
             onInputChange(data: any, key: string, value: any) {
                 self.setState((state: PageState) => {
                     data[key] = value;
@@ -337,6 +325,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     state.newThemeGroups.push({
                         _id: String.createId(),
                         elementId: "",
+                        order: state.newThemeGroups.length,
                         langKey: "[noLangAdd]",
                         types: []
                     })
@@ -346,10 +335,11 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             onCreateGroupType(_id: string) {
                 self.setState((state: PageState) => {
                     let findIndex = state.newThemeGroups.indexOfKey("_id", _id);
-                    if(findIndex > -1){
+                    if (findIndex > -1) {
                         state.newThemeGroups[findIndex].types.push({
                             _id: String.createId(),
                             elementId: "",
+                            order: state.newThemeGroups[findIndex].types.length,
                             langKey: "[noLangAdd]",
                             typeId: ThemeGroupTypeId.Text,
                             contents: {
@@ -365,17 +355,11 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             onAcceptNewGroup(_id: string) {
                 self.setState((state: PageState) => {
                     let findIndex = state.newThemeGroups.indexOfKey("_id", _id);
-                    if(findIndex > -1){
+                    if (findIndex > -1) {
                         state.formData.themeGroups?.push(state.newThemeGroups[findIndex]);
                         state.newThemeGroups = state.newThemeGroups.filter(themeGroup => themeGroup._id != state.newThemeGroups[findIndex]._id);
                     }
 
-                    return state;
-                })
-            },
-            onCancelNewGroup(_id: string) {
-                self.setState((state: PageState) => {
-                    state.newThemeGroups = state.newThemeGroups.filter(group => group._id != _id);
                     return state;
                 })
             },
@@ -384,33 +368,55 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     data.splice(index, 1);
                     return state;
                 })
+            },
+            onEdit(data: any, index: number) {
+                self.setState((state: PageState) => {
+                    state.newThemeGroups.push(data[index]);
+                    data.splice(index, 1);
+                    return state;
+                })
             }
         }
+    }
 
+    Messages = () => {
+        return (
+            <SweetAlert
+                show={this.state.isSuccessMessage}
+                title={this.props.router.t("successful")}
+                text={`${this.props.router.t((V.isEmpty(this.state.formData.postId)) ? "itemAdded" : "itemEdited")}!`}
+                icon="success"
+                timer={1000}
+                timerProgressBar={true}
+                didClose={() => this.onCloseSuccessMessage()}
+            />
+        )
+    }
+
+    TabTheme = () => {
         const Group = (groupProps: PostThemeGroupDocument, groupIndex: number) => {
             const Type = (groupTypeProps: PostThemeGroupTypeDocument, groupTypeIndex: number) => {
                 let input = <div>{this.props.router.t("type")}</div>;
-                const deleteGroupType = <i className="mdi mdi-trash-can text-danger fs-3 cursor-pointer" onClick={() => events.onDelete(groupProps.types, groupTypeIndex)}></i>;
-
                 switch (groupTypeProps.typeId) {
                     case ThemeGroupTypeId.TextArea:
                         input = <ThemeFormType
                             type={"textarea"}
                             title={this.props.router.t(groupTypeProps.langKey)}
-                            titleElement={deleteGroupType}
                             value={groupTypeProps.contents.content}
-                            onChange={e => events.onInputChange(groupTypeProps.contents, "content", e.target.value)}
+                            onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps.contents, "content", e.target.value)}
                         />
                         break;
                     case ThemeGroupTypeId.Image:
                         input = <ThemeFieldSet
                             legend={this.props.router.t(groupTypeProps.langKey)}
-                            legendElement={deleteGroupType}
                         >
                             <ThemeChooseImage
                                 {...this.props}
                                 isShow={this.state[groupTypeProps._id]}
-                                onHide={() => this.setState((state) => { state[groupTypeProps._id] = false; return state;})}
+                                onHide={() => this.setState((state) => {
+                                    state[groupTypeProps._id] = false;
+                                    return state;
+                                })}
                                 onSelected={images => this.setState((state: PageState) => {
                                     groupTypeProps.contents.content = images[0];
                                     return state;
@@ -426,7 +432,10 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                 <button
                                     type="button"
                                     className="btn btn-gradient-warning btn-xs ms-1"
-                                    onClick={() => this.setState((state) => { state[groupTypeProps._id] = true; return state;})}
+                                    onClick={() => this.setState((state) => {
+                                        state[groupTypeProps._id] = true;
+                                        return state;
+                                    })}
                                 ><i className="fa fa-pencil-square-o"></i> {this.props.router.t("select")}</button>
                             </div>
                         </ThemeFieldSet>
@@ -435,9 +444,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         input = <ThemeFormType
                             type={"text"}
                             title={this.props.router.t(groupTypeProps.langKey)}
-                            titleElement={deleteGroupType}
                             value={groupTypeProps.contents.content}
-                            onChange={e => events.onInputChange(groupTypeProps.contents, "content", e.target.value)}
+                            onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps.contents, "content", e.target.value)}
                         />
                         break;
                 }
@@ -453,11 +461,12 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 <div className="col-md-12 mt-4">
                     <ThemeFieldSet
                         legend={this.props.router.t(groupProps.langKey)}
-                        legendElement={<i className="mdi mdi-trash-can text-danger fs-3 cursor-pointer" onClick={() => events.onDelete(this.state.formData.themeGroups, groupIndex)}></i>}
+                        legendElement={<i className="mdi mdi-pencil-box text-warning fs-3 cursor-pointer"
+                                          onClick={() => this.TabThemeEvents.onEdit(this.state.formData.themeGroups, groupIndex)}></i>}
                     >
                         <div className="row">
                             {
-                                groupProps.types.map((themeGroupType, index) => Type(themeGroupType, index))
+                                groupProps.types.orderBy("order", "asc").map((themeGroupType, index) => Type(themeGroupType, index))
                             }
                         </div>
                     </ThemeFieldSet>
@@ -465,13 +474,14 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             )
         }
 
-        const NewGroup = (groupProps: PostThemeGroupDocument) => {
+        const NewGroup = (groupProps: PostThemeGroupDocument, groupIndex: number) => {
             const TypeInfo = (groupTypeProps: PostThemeGroupTypeDocument, groupTypeIndex: number) => {
                 return (
                     <div className="mt-4">
                         <ThemeFieldSet
                             legend={`${this.props.router.t("groupType")}#${groupTypeIndex + 1}`}
-                            legendElement={<i className="mdi mdi-trash-can text-danger fs-3 cursor-pointer" onClick={() => events.onDelete(groupProps.types, groupTypeIndex)}></i>}
+                            legendElement={<i className="mdi mdi-trash-can text-danger fs-3 cursor-pointer"
+                                              onClick={() => this.TabThemeEvents.onDelete(groupProps.types, groupTypeIndex)}></i>}
                         >
                             <div className="row mt-3">
                                 <div className="col-md-12">
@@ -480,7 +490,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                         type="text"
                                         required={true}
                                         value={groupTypeProps.elementId}
-                                        onChange={e => events.onInputChange(groupTypeProps, "elementId", e.target.value)}
+                                        onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps, "elementId", e.target.value)}
                                     />
                                 </div>
                                 <div className="col-md-12 mt-3">
@@ -489,7 +499,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                         placeholder={this.props.router.t("langKey")}
                                         options={this.state.langKeys}
                                         value={this.state.langKeys.filter(item => item.value == groupTypeProps.langKey)}
-                                        onChange={(item: any, e) => events.onInputChange(groupTypeProps, "langKey", item.value)}
+                                        onChange={(item: any, e) => this.TabThemeEvents.onInputChange(groupTypeProps, "langKey", item.value)}
                                     />
                                 </div>
                                 <div className="col-md-12 mt-3">
@@ -498,7 +508,16 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                         placeholder={this.props.router.t("typeId")}
                                         options={this.state.themeGroupTypes}
                                         value={this.state.themeGroupTypes.filter(item => item.value == groupTypeProps.typeId)}
-                                        onChange={(item: any, e) => events.onInputChange(groupTypeProps, "typeId", item.value)}
+                                        onChange={(item: any, e) => this.TabThemeEvents.onInputChange(groupTypeProps, "typeId", item.value)}
+                                    />
+                                </div>
+                                <div className="col-md-12 mt-3">
+                                    <ThemeFormType
+                                        title={`${this.props.router.t("order")}*`}
+                                        type="number"
+                                        required={true}
+                                        value={groupTypeProps.order}
+                                        onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps, "order", e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -517,7 +536,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                     type="text"
                                     required={true}
                                     value={groupProps.elementId}
-                                    onChange={e => events.onInputChange(groupProps, "elementId", e.target.value)}
+                                    onChange={e => this.TabThemeEvents.onInputChange(groupProps, "elementId", e.target.value)}
                                 />
                             </div>
                             <div className="col-md-12 mt-3">
@@ -526,20 +545,33 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                     placeholder={this.props.router.t("langKey")}
                                     options={this.state.langKeys}
                                     value={this.state.langKeys.filter(item => item.value == groupProps.langKey)}
-                                    onChange={(item: any, e) => events.onInputChange(groupProps, "langKey", item.value)}
+                                    onChange={(item: any, e) => this.TabThemeEvents.onInputChange(groupProps, "langKey", item.value)}
                                 />
                             </div>
                             <div className="col-md-12 mt-3">
-                                <button type={"button"} className="btn btn-gradient-primary btn-lg float-end" onClick={() => events.onCreateGroupType(groupProps._id)}>+ Tip Olustur</button>
+                                <ThemeFormType
+                                    title={`${this.props.router.t("order")}*`}
+                                    type="number"
+                                    required={true}
+                                    value={groupProps.order}
+                                    onChange={e => this.TabThemeEvents.onInputChange(groupProps, "order", e.target.value)}
+                                />
+                            </div>
+                            <div className="col-md-12 mt-3">
+                                <button type={"button"} className="btn btn-gradient-primary btn-lg float-end"
+                                        onClick={() => this.TabThemeEvents.onCreateGroupType(groupProps._id)}>+ Tip Olustur
+                                </button>
                             </div>
                             <div className="col-md-12 mt-3">
                                 {
-                                    groupProps.types.map((themeGroupType, index) => TypeInfo(themeGroupType, index))
+                                    groupProps.types.orderBy("order", "asc").map((themeGroupType, index) => TypeInfo(themeGroupType, index))
                                 }
                             </div>
                             <div className="col-md-12 mt-3">
-                                <button type={"button"} className="btn btn-gradient-success btn-lg" onClick={() => events.onAcceptNewGroup(groupProps._id)}>{this.props.router.t("okay")}</button>
-                                <button type={"button"} className="btn btn-gradient-danger btn-lg" onClick={() => events.onCancelNewGroup(groupProps._id)}>{this.props.router.t("cancel")}</button>
+                                <button type={"button"} className="btn btn-gradient-success btn-lg"
+                                        onClick={() => this.TabThemeEvents.onAcceptNewGroup(groupProps._id)}>{this.props.router.t("okay")}</button>
+                                <button type={"button"} className="btn btn-gradient-danger btn-lg"
+                                        onClick={() => this.TabThemeEvents.onDelete(this.state.newThemeGroups, groupIndex)}>{this.props.router.t("delete")}</button>
                             </div>
                         </div>
                     </ThemeFieldSet>
@@ -551,17 +583,19 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         return (
             <div className="row mb-3">
                 <div className="col-md-7">
-                    <button type={"button"} className="btn btn-gradient-success btn-lg" onClick={() => events.onCreateGroup()}>+ Grup Olustur</button>
+                    <button type={"button"} className="btn btn-gradient-success btn-lg"
+                            onClick={() => this.TabThemeEvents.onCreateGroup()}>+ Grup Olustur
+                    </button>
                 </div>
                 <div className="col-md-7 mt-2">
                     <div className="row">
                         {
-                            this.state.newThemeGroups.map(themeGroup => NewGroup(themeGroup))
+                            this.state.newThemeGroups.orderBy("order", "asc").map((themeGroup, index) => NewGroup(themeGroup, index))
                         }
                     </div>
                     <div className="row">
                         {
-                            this.state.formData.themeGroups?.map((themeGroup, index) => Group(themeGroup, index))
+                            this.state.formData.themeGroups?.orderBy("order", "asc").map((themeGroup, index) => Group(themeGroup, index))
                         }
                     </div>
                 </div>

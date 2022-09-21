@@ -13,6 +13,7 @@ export interface PostThemeGroupTypeDocument {
     elementId: string
     typeId: ThemeGroupTypeId,
     langKey: LanguageKeys,
+    order: number
     contents: PostThemeGroupTypeContentDocument
 }
 
@@ -20,6 +21,7 @@ export interface PostThemeGroupDocument {
     _id: string
     elementId: string
     langKey: LanguageKeys,
+    order: number
     types: PostThemeGroupTypeDocument[]
 }
 

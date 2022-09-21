@@ -9,19 +9,19 @@ type PageProps = {
 
 const ThemeFormType = React.forwardRef((props: PageProps, ref: any ) => {
     let input: JSX.Element;
-    const title = props.title;
-
+    const elementProps = Object.assign({}, props);
+    delete elementProps.titleElement;
     switch (props.type) {
         case `textarea`:
             input = <textarea
-                {...props}
-                className={`field textarea ${typeof props.className !== "undefined" ? props.className : ``}`}
-            >{props.value}</textarea>;
+                {...elementProps}
+                className={`field textarea ${typeof elementProps.className !== "undefined" ? elementProps.className : ``}`}
+            >{elementProps.value}</textarea>;
             break;
         default:
             input = <input
-                {...props}
-                className={`field ${typeof props.className !== "undefined" ? props.className : ``}`}
+                {...elementProps}
+                className={`field ${typeof elementProps.className !== "undefined" ? elementProps.className : ``}`}
                 placeholder=" "
             />;
             break;
@@ -29,7 +29,7 @@ const ThemeFormType = React.forwardRef((props: PageProps, ref: any ) => {
     return (
         <label className="theme-input">
             {input}
-            <span className="label">{title} {props.titleElement}</span>
+            <span className="label">{props.title} {props.titleElement}</span>
         </label>
     );
 });
