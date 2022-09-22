@@ -20,6 +20,7 @@ import classNameUtil from "../../../../utils/functions/className.util";
 import permissionUtil from "../../../../utils/functions/permission.util";
 import ThemeToast from "../../components/toast";
 import {Simulate} from "react-dom/test-utils";
+import {Tab} from "react-bootstrap";
 
 type PageState = {
     posts: PostDocument[],
@@ -264,7 +265,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                     <div className="col-md-3 mb-3">
                         <div className="row">
                             {
-                                this.props.getPageData.searchParams.postTypeId != PostTypeId.Page
+                                ![PostTypeId.Slider, PostTypeId.Page].includes(Number(this.props.getPageData.searchParams.postTypeId))
                                     ? <div className="col-6">
                                         <button className="btn btn-gradient-info btn-lg w-100"
                                                 onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Category)}>
@@ -272,12 +273,15 @@ export class PagePostList extends Component<PageProps, PageState> {
                                         </button>
                                     </div> : null
                             }
-                            <div className="col-6 text-end">
-                                <button className="btn btn-gradient-primary btn-lg w-100"
-                                        onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Tag)}>
-                                    <i className="fa fa-pencil-square-o"></i> {this.props.router.t("editTags").toCapitalizeCase()}
-                                </button>
-                            </div>
+                            {
+                                ![PostTypeId.Slider].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                                    ? <div className="col-6 text-end">
+                                        <button className="btn btn-gradient-primary btn-lg w-100"
+                                                onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Tag)}>
+                                            <i className="fa fa-pencil-square-o"></i> {this.props.router.t("editTags").toCapitalizeCase()}
+                                        </button>
+                                    </div> : null
+                            }
                         </div>
                     </div>
                     <div className="col-md-9 mb-3 text-end">
@@ -327,7 +331,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                                 <div className="table-responsive">
                                     <DataTable
                                         columns={this.getTableColumns}
-                                        data={this.state.showingPosts}
+                                        data={this.state.showingPosts.orderBy("order", "asc")}
                                         conditionalRowStyles={[
                                             {
                                                 when: row => row.statusId != StatusId.Active || new Date().diffDays(new Date(row.dateStart)) > 0,

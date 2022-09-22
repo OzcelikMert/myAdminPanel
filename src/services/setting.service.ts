@@ -1,13 +1,13 @@
 import Api from "./api";
 import {ServicePages} from "../constants";
 import ServiceResultDocument from "../types/services/api/result";
-import SettingsDocument, {
+import SettingDocument, {
     SettingGetParamDocument,
     SettingUpdateParamDocument
 } from "../types/services/setting";
 
 export default {
-    get(params: SettingGetParamDocument): ServiceResultDocument<SettingsDocument[]> {
+    get(params: SettingGetParamDocument): ServiceResultDocument<SettingDocument[]> {
         return Api.getSync({
             url: [ServicePages.setting],
             data: params,

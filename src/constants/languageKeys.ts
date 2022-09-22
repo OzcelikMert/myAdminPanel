@@ -131,5 +131,13 @@ export const LanguageKeysArray = [
     "text",
     "textArea",
     "groupType",
-    "cancel"
+    "cancel",
+    "icon",
+    "button",
+    "isPrimary",
+    "logo",
+    "contact",
+    "socialMedia",
+    "address",
+    "addressMap"
 ] as const;

@@ -4,12 +4,12 @@ import JoditEditor from "jodit-react";
 import moment from "moment";
 import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
 import {
+    LanguageKeysArray,
     PostTermTypeId,
     PostTypeId,
     PostTypes,
     StatusId,
     ThemeGroupTypeId,
-    LanguageKeysArray,
     ThemeGroupTypes
 } from "../../../../constants";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
@@ -440,6 +440,28 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             </div>
                         </ThemeFieldSet>
                         break;
+                    case ThemeGroupTypeId.Button:
+                        input = (
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <ThemeFormType
+                                        type={"text"}
+                                        title={this.props.router.t(groupTypeProps.langKey)}
+                                        value={groupTypeProps.contents.content}
+                                        onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps.contents, "content", e.target.value)}
+                                    />
+                                </div>
+                                <div className="col-md-6 mt-3 mt-lg-0">
+                                    <ThemeFormType
+                                        type={"text"}
+                                        title={this.props.router.t("url")}
+                                        value={groupTypeProps.contents.url || ""}
+                                        onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps.contents, "url", e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                        )
+                        break;
                     default:
                         input = <ThemeFormType
                             type={"text"}
@@ -559,7 +581,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             </div>
                             <div className="col-md-12 mt-3">
                                 <button type={"button"} className="btn btn-gradient-primary btn-lg float-end"
-                                        onClick={() => this.TabThemeEvents.onCreateGroupType(groupProps._id)}>+ Tip Olustur
+                                        onClick={() => this.TabThemeEvents.onCreateGroupType(groupProps._id)}>+ Tip
+                                    Olustur
                                 </button>
                             </div>
                             <div className="col-md-12 mt-3">
@@ -668,7 +691,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
-                <div className="col-md-7 mb-3">
+                <div className="col-md-7">
                     <ThemeFormCheckBox
                         title={this.props.router.t("isFixed")}
                         name="isFixed"
@@ -676,6 +699,17 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
+                {
+                    this.state.formData.typeId == PostTypeId.Page
+                        ? <div className="col-md-7">
+                            <ThemeFormCheckBox
+                                title={this.props.router.t("isPrimary")}
+                                name="isPrimary"
+                                checked={Boolean(this.state.formData.isPrimary)}
+                                onChange={e => HandleForm.onChangeInput(e, this)}
+                            />
+                        </div> : null
+                }
             </div>
         );
     }
@@ -751,9 +785,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
-
                 {
-                    this.state.formData.typeId != PostTypeId.Page
+                    ![PostTypeId.Page, PostTypeId.Slider].includes(Number(this.state.formData.typeId))
                         ? <div className="col-md-7 mb-3">
                             <ThemeFormSelect
                                 title={this.props.router.t("category")}
@@ -767,18 +800,21 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             />
                         </div> : null
                 }
-                <div className="col-md-7 mb-3">
-                    <ThemeFormSelect
-                        title={this.props.router.t("tag")}
-                        name="tagTermId"
-                        placeholder={this.props.router.t("chooseTag")}
-                        isMulti
-                        closeMenuOnSelect={false}
-                        options={this.state.tagTerms}
-                        value={this.state.tagTerms?.filter(item => this.state.formData.tagTermId.includes(item.value))}
-                        onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item, this)}
-                    />
-                </div>
+                {
+                    ![PostTypeId.Slider].includes(Number(this.state.formData.typeId))
+                        ? <div className="col-md-7 mb-3">
+                            <ThemeFormSelect
+                                title={this.props.router.t("tag")}
+                                name="tagTermId"
+                                placeholder={this.props.router.t("chooseTag")}
+                                isMulti
+                                closeMenuOnSelect={false}
+                                options={this.state.tagTerms}
+                                value={this.state.tagTerms?.filter(item => this.state.formData.tagTermId.includes(item.value))}
+                                onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item, this)}
+                            />
+                        </div> : null
+                }
             </div>
         );
     }
@@ -812,13 +848,16 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                         <Tab eventKey="general" title={this.props.router.t("general")}>
                                             <this.TabGeneral/>
                                         </Tab>
-                                        <Tab eventKey="content" title={this.props.router.t("content")}>
-                                            {
-                                                (this.state.formActiveKey === "content")
-                                                    ? <this.TabContent/>
-                                                    : ""
-                                            }
-                                        </Tab>
+                                        {
+                                            ![PostTypeId.Slider].includes(Number(this.state.formData.typeId))
+                                                ? <Tab eventKey="content" title={this.props.router.t("content")}>
+                                                    {
+                                                        (this.state.formActiveKey === "content")
+                                                            ? <this.TabContent/>
+                                                            : ""
+                                                    }
+                                                </Tab> : null
+                                        }
                                         {
                                             this.state.formData.typeId == PostTypeId.Page
                                                 ? <Tab eventKey="theme" title={this.props.router.t("theme")}>
@@ -828,9 +867,12 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                         <Tab eventKey="options" title={this.props.router.t("options")}>
                                             <this.TabOptions/>
                                         </Tab>
-                                        <Tab eventKey="seo" title={this.props.router.t("seo")}>
-                                            <this.TabSEO/>
-                                        </Tab>
+                                        {
+                                            ![PostTypeId.Slider].includes(Number(this.state.formData.typeId))
+                                                ? <Tab eventKey="seo" title={this.props.router.t("seo")}>
+                                                    <this.TabSEO/>
+                                                </Tab> : null
+                                        }
                                     </Tabs>
                                 </div>
                             </ThemeForm>

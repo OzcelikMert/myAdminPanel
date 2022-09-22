@@ -6,6 +6,7 @@ import {ThemeGroupTypeId} from "../../constants/themeGroupTypes";
 export interface PostThemeGroupTypeContentDocument {
     langId: string
     content: string
+    url?: string
 }
 
 export interface PostThemeGroupTypeDocument {
@@ -46,6 +47,7 @@ export default interface PostDocument {
     order: number,
     views: number,
     isFixed: boolean,
+    isPrimary?: boolean,
     terms: PopulateTermsDocument[]
     contents?: PostContentDocument,
     themeGroups?: (Omit<PostThemeGroupDocument, "types"> & {
