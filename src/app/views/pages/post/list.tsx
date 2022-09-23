@@ -207,6 +207,24 @@ export class PagePostList extends Component<PageProps, PageState> {
             {
                 name: this.props.router.t("title"),
                 selector: row => row.contents?.title || this.props.router.t("[noLangAdd]"),
+                cell: row => (
+                    <div className="row w-100">
+                        <div className="col-md-8">{row.contents?.title || this.props.router.t("[noLangAdd]")}</div>
+                        <div className="col-md-4">
+                            {
+                                row.isPrimary
+                                    ? <i className="mdi mdi-home text-primary fs-5"></i>
+                                    : null
+                            }
+                            {
+                                row.isFixed
+                                    ? <i className="mdi mdi-pin text-success fs-5"></i>
+                                    : null
+                            }
+                        </div>
+                    </div>
+                ),
+                width: "250px",
                 sortable: true
             },
             {

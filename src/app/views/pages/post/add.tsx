@@ -30,6 +30,7 @@ import {
     PostThemeGroupTypeDocument,
     PostUpdateParamDocument
 } from "../../../../types/services/post";
+import LanguageKeys from "../../../../types/app/languages";
 
 type PageState = {
     langKeys: { value: string, label: string }[]
@@ -225,9 +226,11 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     state.formData = {
                         ...state.formData,
                         ...post,
+                        isPrimary: undefined,
                         categoryTermId: categoryTermId,
                         tagTermId: tagTermId,
                         isFixed: post.isFixed ? 1 : 0,
+                        ...(post.isPrimary ? {isPrimary: post.isPrimary ? 1 : 0} : {}),
                         dateStart: new Date(post.dateStart),
                         contents: {
                             ...state.formData.contents,
@@ -356,7 +359,10 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 self.setState((state: PageState) => {
                     let findIndex = state.newThemeGroups.indexOfKey("_id", _id);
                     if (findIndex > -1) {
-                        state.formData.themeGroups?.push(state.newThemeGroups[findIndex]);
+                        if(typeof state.formData.themeGroups === "undefined"){
+                            state.formData.themeGroups = [];
+                        }
+                        state.formData.themeGroups.push(state.newThemeGroups[findIndex]);
                         state.newThemeGroups = state.newThemeGroups.filter(themeGroup => themeGroup._id != state.newThemeGroups[findIndex]._id);
                     }
 
@@ -376,6 +382,49 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     return state;
                 })
             }
+        }
+    }
+
+    get TabButtonEvents() {
+        let self = this;
+        return {
+            onCreateNewButton() {
+                self.setState((state: PageState) => {
+                    if(typeof state.formData.themeGroups === "undefined" || !Array.isArray(state.formData.themeGroups) || state.formData.themeGroups.length === 0){
+                        state.formData.themeGroups = [
+                            {
+                                _id: String.createId(),
+                                elementId: String.createId(),
+                                order: state.newThemeGroups.length,
+                                langKey: "[noLangAdd]",
+                                types: []
+                            }
+                        ];
+                    }
+
+                    state.formData.themeGroups[0].types.push({
+                        _id: String.createId(),
+                        elementId: String.createId(),
+                        order: state.formData.themeGroups[0].types.length,
+                        langKey: "button",
+                        typeId: ThemeGroupTypeId.Button,
+                        contents: {
+                            langId: state.formData.contents.langId,
+                            content: ""
+                        }
+                    })
+
+                    return state;
+                })
+            },
+            onDelete(index: number) {
+                self.setState((state: PageState) => {
+                    if(state.formData.themeGroups && state.formData.themeGroups.length > 0){
+                        state.formData.themeGroups[0].types.splice(index, 1);
+                    }
+                    return state;
+                })
+            },
         }
     }
 
@@ -581,8 +630,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             </div>
                             <div className="col-md-12 mt-3">
                                 <button type={"button"} className="btn btn-gradient-primary btn-lg float-end"
-                                        onClick={() => this.TabThemeEvents.onCreateGroupType(groupProps._id)}>+ Tip
-                                    Olustur
+                                        onClick={() => this.TabThemeEvents.onCreateGroupType(groupProps._id)}>+ {this.props.router.t("newGroupType")}
                                 </button>
                             </div>
                             <div className="col-md-12 mt-3">
@@ -607,7 +655,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             <div className="row mb-3">
                 <div className="col-md-7">
                     <button type={"button"} className="btn btn-gradient-success btn-lg"
-                            onClick={() => this.TabThemeEvents.onCreateGroup()}>+ Grup Olustur
+                            onClick={() => this.TabThemeEvents.onCreateGroup()}>+ {this.props.router.t("newGroup")}
                     </button>
                 </div>
                 <div className="col-md-7 mt-2">
@@ -619,6 +667,57 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     <div className="row">
                         {
                             this.state.formData.themeGroups?.orderBy("order", "asc").map((themeGroup, index) => Group(themeGroup, index))
+                        }
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    TabButton = () => {
+        const Type = (groupTypeProps: PostThemeGroupTypeDocument, index: number) => {
+            return (
+                <div className="col-md-12 mt-4">
+                    <ThemeFieldSet
+                        legend={`${this.props.router.t("button")}#${index + 1}`}
+                        legendElement={<i className="mdi mdi-trash-can text-danger fs-3 cursor-pointer" onClick={() => this.TabButtonEvents.onDelete(index)}></i>}
+                    >
+                        <div className="row mt-3">
+                            <div className="col-md-6">
+                                <ThemeFormType
+                                    type={"text"}
+                                    title={this.props.router.t(groupTypeProps.langKey)}
+                                    value={groupTypeProps.contents.content}
+                                    onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps.contents, "content", e.target.value)}
+                                />
+                            </div>
+                            <div className="col-md-6 mt-3 mt-lg-0">
+                                <ThemeFormType
+                                    type={"text"}
+                                    title={this.props.router.t("url")}
+                                    value={groupTypeProps.contents.url || ""}
+                                    onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps.contents, "url", e.target.value)}
+                                />
+                            </div>
+                        </div>
+                    </ThemeFieldSet>
+                </div>
+            )
+        }
+
+        return (
+            <div className="row mb-3">
+                <div className="col-md-7">
+                    <button type={"button"} className="btn btn-gradient-success btn-lg"
+                            onClick={() => this.TabButtonEvents.onCreateNewButton()}>+ {this.props.router.t("newButton")}
+                    </button>
+                </div>
+                <div className="col-md-7 mt-2">
+                    <div className="row">
+                        {
+                            this.state.formData.themeGroups?.map(themeGroup => {
+                                return themeGroup.types.map((themeGroupType, index) => Type(themeGroupType, index))
+                            })
                         }
                     </div>
                 </div>
@@ -862,6 +961,12 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                             this.state.formData.typeId == PostTypeId.Page
                                                 ? <Tab eventKey="theme" title={this.props.router.t("theme")}>
                                                     <this.TabTheme/>
+                                                </Tab> : null
+                                        }
+                                        {
+                                            [PostTypeId.Slider].includes(Number(this.state.formData.typeId))
+                                                ? <Tab eventKey="button" title={this.props.router.t("button")}>
+                                                    <this.TabButton/>
                                                 </Tab> : null
                                         }
                                         <Tab eventKey="options" title={this.props.router.t("options")}>

@@ -139,5 +139,7 @@ export const LanguageKeysArray = [
     "contact",
     "socialMedia",
     "address",
-    "addressMap"
+    "addressMap",
+    "newGroupType",
+    "newButton"
 ] as const;

@@ -68,6 +68,7 @@ export interface PostGetParamDocument {
 
 export type PostAddParamDocument = {
     isFixed: 1 | 0
+    isPrimary?: 1 | 0
     contents: PostContentDocument
     termId: string[]
     themeGroups?: (Omit<PostThemeGroupDocument, "types"|"_id"> & {
@@ -75,7 +76,7 @@ export type PostAddParamDocument = {
             contents: Omit<PostThemeGroupTypeContentDocument, "_id">
         })[]
     })[]
-} & Omit<PostDocument, "authorId"|"lastAuthorId"|"views"|"terms"|"_id"|"contents"|"isFixed">
+} & Omit<PostDocument, "authorId"|"lastAuthorId"|"views"|"terms"|"_id"|"contents"|"isFixed"|"isPrimary">
 
 export type PostUpdateParamDocument = {
     postId: string

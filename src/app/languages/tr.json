@@ -139,5 +139,7 @@
   "contact": "İletişim",
   "socialMedia": "Sosyal Medya",
   "address": "Adres",
-  "addressMap": "Adres Haritası"
+  "addressMap": "Adres Haritası",
+  "newGroupType": "Yeni Grup Tipi",
+  "newButton": "Yeni Buton"
 }

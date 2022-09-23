@@ -139,5 +139,7 @@
   "contact": "Contact",
   "socialMedia": "Social Media",
   "address": "Address",
-  "addressMap": "Address Map"
+  "addressMap": "Address Map",
+  "newGroupType": "New Group Type",
+  "newButton": "New Button"
 }
