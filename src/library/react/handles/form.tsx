@@ -20,10 +20,10 @@ class HandleForm {
                 state.formData[key] = [];
                 value.forEach(item => {
                     let data = (typeof item.value !== "undefined") ? item.value : item;
-                    state.formData[key].push(data);
+                    eval(`state.formData${key.split(".").map(name => `['${name}']`).join("")}.push(data)`);
                 })
             }else {
-                state.formData[key] = value;
+                eval(`state.formData${key.split(".").map(name => `['${name}']`).join("")} = value`);
             }
             return state;
         });

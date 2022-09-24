@@ -120,30 +120,31 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
         event.preventDefault();
         this.setState({
             isSubmitting: true
-        })
-        settingService.update({
-            logo: this.state.formData.logo,
-            icon: this.state.formData.icon,
-            defaultLangId: this.state.formData.seoContents?.langId,
-            contact: {
-                ...this.state.formData.contact
-            }
-        }).then(resData => {
-            if(resData.status){
-                this.props.setPageData({
-                    mainLangId: this.state.formData.seoContents?.langId
-                }, () => {
-                    new ThemeToast({
-                        type: "success",
-                        title: this.props.router.t("successful"),
-                        content: this.props.router.t("settingsUpdated")
-                    })
-                });
-            }
+        }, () => {
+            settingService.update({
+                logo: this.state.formData.logo,
+                icon: this.state.formData.icon,
+                defaultLangId: this.state.formData.seoContents?.langId,
+                contact: {
+                    ...this.state.formData.contact
+                }
+            }).then(resData => {
+                if(resData.status){
+                    this.props.setPageData({
+                        mainLangId: this.state.formData.seoContents?.langId
+                    }, () => {
+                        new ThemeToast({
+                            type: "success",
+                            title: this.props.router.t("successful"),
+                            content: this.props.router.t("settingsUpdated")
+                        })
+                    });
+                }
 
-            this.setState((state: PageState) => {
-                state.isSubmitting = false;
-                return state;
+                this.setState((state: PageState) => {
+                    state.isSubmitting = false;
+                    return state;
+                })
             })
         })
     }
@@ -313,7 +314,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                 <div className="col-md-7 mb-3">
                     <ThemeFormSelect
                         title={this.props.router.t("websiteMainLanguage").toCapitalizeCase()}
-                        name="langId"
+                        name="seoContents.langId"
                         isMulti={false}
                         isSearchable={false}
                         options={this.state.languages}
