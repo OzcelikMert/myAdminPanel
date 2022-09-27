@@ -283,7 +283,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                     <div className="col-md-3 mb-3">
                         <div className="row">
                             {
-                                ![PostTypeId.Slider, PostTypeId.Page].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial].includes(Number(this.props.getPageData.searchParams.postTypeId))
                                     ? <div className="col-6">
                                         <button className="btn btn-gradient-info btn-lg w-100"
                                                 onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Category)}>
@@ -292,7 +292,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                                     </div> : null
                             }
                             {
-                                ![PostTypeId.Slider].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                                ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial].includes(Number(this.props.getPageData.searchParams.postTypeId))
                                     ? <div className="col-6 text-end">
                                         <button className="btn btn-gradient-primary btn-lg w-100"
                                                 onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Tag)}>

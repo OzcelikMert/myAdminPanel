@@ -141,5 +141,7 @@
   "address": "Address",
   "addressMap": "Address Map",
   "newGroupType": "New Group Type",
-  "newButton": "New Button"
+  "newButton": "New Button",
+  "services": "Services",
+  "testimonials": "Testimonials"
 }

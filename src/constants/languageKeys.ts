@@ -141,5 +141,7 @@ export const LanguageKeysArray = [
     "address",
     "addressMap",
     "newGroupType",
-    "newButton"
+    "newButton",
+    "services",
+    "testimonials"
 ] as const;

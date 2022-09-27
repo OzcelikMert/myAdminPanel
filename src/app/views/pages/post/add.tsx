@@ -885,7 +885,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     />
                 </div>
                 {
-                    ![PostTypeId.Page, PostTypeId.Slider].includes(Number(this.state.formData.typeId))
+                    ![PostTypeId.Page, PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial].includes(Number(this.state.formData.typeId))
                         ? <div className="col-md-7 mb-3">
                             <ThemeFormSelect
                                 title={this.props.router.t("category")}
@@ -900,7 +900,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         </div> : null
                 }
                 {
-                    ![PostTypeId.Slider].includes(Number(this.state.formData.typeId))
+                    ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial].includes(Number(this.state.formData.typeId))
                         ? <div className="col-md-7 mb-3">
                             <ThemeFormSelect
                                 title={this.props.router.t("tag")}
@@ -964,7 +964,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                                 </Tab> : null
                                         }
                                         {
-                                            [PostTypeId.Slider].includes(Number(this.state.formData.typeId))
+                                            [PostTypeId.Slider, PostTypeId.Service].includes(Number(this.state.formData.typeId))
                                                 ? <Tab eventKey="button" title={this.props.router.t("button")}>
                                                     <this.TabButton/>
                                                 </Tab> : null
@@ -973,7 +973,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                             <this.TabOptions/>
                                         </Tab>
                                         {
-                                            ![PostTypeId.Slider].includes(Number(this.state.formData.typeId))
+                                            ![PostTypeId.Slider, PostTypeId.Testimonial].includes(Number(this.state.formData.typeId))
                                                 ? <Tab eventKey="seo" title={this.props.router.t("seo")}>
                                                     <this.TabSEO/>
                                                 </Tab> : null

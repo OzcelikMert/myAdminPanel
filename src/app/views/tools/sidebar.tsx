@@ -222,6 +222,32 @@ class Sidebar extends Component<PageProps, PageState> {
                                 {path: pageRoutes.post.list.path(), title: this.props.router.t("list")}
                             ]
                         },
+                        {
+                            path: pageRoutes.post.path(PostTypeId.Service),
+                            title: this.props.router.t("services"),
+                            state: `services`,
+                            subPaths: [
+                                {
+                                    path: pageRoutes.post.add.path(),
+                                    title: this.props.router.t("add"),
+                                    permId: PermissionId.ServiceAdd
+                                },
+                                {path: pageRoutes.post.list.path(), title: this.props.router.t("list")}
+                            ]
+                        },
+                        {
+                            path: pageRoutes.post.path(PostTypeId.Testimonial),
+                            title: this.props.router.t("testimonials"),
+                            state: `testimonials`,
+                            subPaths: [
+                                {
+                                    path: pageRoutes.post.add.path(),
+                                    title: this.props.router.t("add"),
+                                    permId: PermissionId.TestimonialAdd
+                                },
+                                {path: pageRoutes.post.list.path(), title: this.props.router.t("list")}
+                            ]
+                        },
                     ]
                 },
                 {

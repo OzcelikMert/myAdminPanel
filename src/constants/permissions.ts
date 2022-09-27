@@ -1,7 +1,7 @@
 import {PermissionDocument} from "../types/constants";
 import {PermissionGroupId} from "./permissionGroups";
-enum PermissionId {
 
+enum PermissionId {
     BlogAdd = 1,
     BlogEdit,
     BlogDelete,
@@ -25,7 +25,13 @@ enum PermissionId {
     NavigateEdit,
     NavigateDelete,
     SeoEdit,
-    SettingEdit
+    SettingEdit,
+    ServiceAdd,
+    ServiceEdit,
+    ServiceDelete,
+    TestimonialAdd,
+    TestimonialEdit,
+    TestimonialDelete
 }
 
 const Permissions: Array<PermissionDocument> = [
@@ -52,7 +58,13 @@ const Permissions: Array<PermissionDocument> = [
     {id: PermissionId.NavigateEdit, groupId: PermissionGroupId.Navigate, defaultRoleRank: 3, langKey: "edit"},
     {id: PermissionId.NavigateDelete, groupId: PermissionGroupId.Navigate, defaultRoleRank: 3, langKey: "delete"},
     {id: PermissionId.SeoEdit, groupId: PermissionGroupId.Settings, defaultRoleRank: 3, langKey: "edit"},
-    {id: PermissionId.SettingEdit, groupId: PermissionGroupId.Settings, defaultRoleRank: 3, langKey: "edit"}
+    {id: PermissionId.SettingEdit, groupId: PermissionGroupId.Settings, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.ServiceAdd, groupId: PermissionGroupId.Service, defaultRoleRank: 2, langKey: "add"},
+    {id: PermissionId.ServiceEdit, groupId: PermissionGroupId.Service, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.ServiceDelete, groupId: PermissionGroupId.Service, defaultRoleRank: 3, langKey: "delete"},
+    {id: PermissionId.TestimonialAdd, groupId: PermissionGroupId.Testimonial, defaultRoleRank: 2, langKey: "add"},
+    {id: PermissionId.TestimonialEdit, groupId: PermissionGroupId.Testimonial, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.TestimonialDelete, groupId: PermissionGroupId.Testimonial, defaultRoleRank: 3, langKey: "delete"},
 ]
 
 export {Permissions, PermissionId};
