@@ -143,5 +143,10 @@
   "newGroupType": "New Group Type",
   "newButton": "New Button",
   "services": "Services",
-  "testimonials": "Testimonials"
+  "testimonials": "Testimonials",
+  "carousel":"Slider",
+  "about":"About Us",
+  "facts":"Facts",
+  "features":"Features",
+  "appointment":"Appointment"
 }

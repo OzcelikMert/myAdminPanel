@@ -143,5 +143,10 @@
   "newGroupType": "Yeni Grup Tipi",
   "newButton": "Yeni Buton",
   "services": "Servisler",
-  "testimonials": "Takdirler"
+  "testimonials": "Takdirler",
+  "carousel":"Kayan Resim",
+  "about":"Hakkımızda",
+  "facts":"Ayrıntılar",
+  "features":"Özelliklerimiz",
+  "appointment":"İletişim"
 }
