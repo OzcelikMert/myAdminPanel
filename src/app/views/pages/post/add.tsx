@@ -762,15 +762,18 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     TabOptions = () => {
         return (
             <div className="row">
-                <div className="col-md-7 mb-3">
-                    <ThemeFormType
-                        title={`${this.props.router.t("startDate").toCapitalizeCase()}*`}
-                        type="date"
-                        name="dateStart"
-                        value={moment(this.state.formData.dateStart).format("YYYY-MM-DD")}
-                        onChange={(event) => HandleForm.onChangeInput(event, this)}
-                    />
-                </div>
+                {
+                    ![PostTypeId.Footer].includes(Number(this.state.formData.typeId))
+                        ? <div className="col-md-7 mb-3">
+                            <ThemeFormType
+                                title={`${this.props.router.t("startDate").toCapitalizeCase()}*`}
+                                type="date"
+                                name="dateStart"
+                                value={moment(this.state.formData.dateStart).format("YYYY-MM-DD")}
+                                onChange={(event) => HandleForm.onChangeInput(event, this)}
+                            />
+                        </div> : null
+                }
                 <div className="col-md-7 mb-3">
                     <ThemeFormSelect
                         title={this.props.router.t("status")}
@@ -840,31 +843,34 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     TabGeneral = () => {
         return (
             <div className="row">
-                <ThemeChooseImage
-                    {...this.props}
-                    isShow={this.state.isSelectionImage}
-                    onHide={() => this.setState({isSelectionImage: false})}
-                    result={this.state.formData.contents.image || ""}
-                    onSelected={images => this.setState((state: PageState) => {
-                        state.formData.contents.image = images[0];
-                        return state
-                    })}
-                    isMulti={false}
-                />
-                <div className="col-md-7 mb-3">
-                    <img
-                        src={imageSourceUtil.getUploadedImageSrc(this.state.formData.contents.image)}
-                        alt="Empty Image"
-                        className="post-image"
-                    />
-                    <button
-                        type="button"
-                        className="btn btn-gradient-warning btn-xs ms-1"
-                        onClick={() => {
-                            this.setState({isSelectionImage: true})
-                        }}
-                    ><i className="fa fa-pencil-square-o"></i></button>
-                </div>
+                {
+                    ![PostTypeId.Footer].includes(Number(this.state.formData.typeId))
+                        ? <div className="col-md-7 mb-3">
+                            <ThemeChooseImage
+                                {...this.props}
+                                isShow={this.state.isSelectionImage}
+                                onHide={() => this.setState({isSelectionImage: false})}
+                                result={this.state.formData.contents.image || ""}
+                                onSelected={images => this.setState((state: PageState) => {
+                                    state.formData.contents.image = images[0];
+                                    return state
+                                })}
+                                isMulti={false}
+                            />
+                            <img
+                                src={imageSourceUtil.getUploadedImageSrc(this.state.formData.contents.image)}
+                                alt="Empty Image"
+                                className="post-image"
+                            />
+                            <button
+                                type="button"
+                                className="btn btn-gradient-warning btn-xs ms-1"
+                                onClick={() => {
+                                    this.setState({isSelectionImage: true})
+                                }}
+                            ><i className="fa fa-pencil-square-o"></i></button>
+                        </div> : null
+                }
                 <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={`${this.props.router.t("title")}*`}
@@ -875,17 +881,21 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
-                <div className="col-md-7 mb-3">
-                    <ThemeFormType
-                        title={this.props.router.t("shortContent").toCapitalizeCase()}
-                        name="contents.shortContent"
-                        type="textarea"
-                        value={this.state.formData.contents.shortContent}
-                        onChange={e => HandleForm.onChangeInput(e, this)}
-                    />
-                </div>
                 {
-                    ![PostTypeId.Page, PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial].includes(Number(this.state.formData.typeId))
+                    ![PostTypeId.Footer].includes(Number(this.state.formData.typeId))
+                        ? <div className="col-md-7 mb-3">
+                            <ThemeFormType
+                                title={this.props.router.t("shortContent").toCapitalizeCase()}
+                                name="contents.shortContent"
+                                type="textarea"
+                                value={this.state.formData.contents.shortContent}
+                                onChange={e => HandleForm.onChangeInput(e, this)}
+                            />
+                        </div> : null
+                }
+
+                {
+                    ![PostTypeId.Page, PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.state.formData.typeId))
                         ? <div className="col-md-7 mb-3">
                             <ThemeFormSelect
                                 title={this.props.router.t("category")}
@@ -900,7 +910,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         </div> : null
                 }
                 {
-                    ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial].includes(Number(this.state.formData.typeId))
+                    ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.state.formData.typeId))
                         ? <div className="col-md-7 mb-3">
                             <ThemeFormSelect
                                 title={this.props.router.t("tag")}
@@ -948,7 +958,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                             <this.TabGeneral/>
                                         </Tab>
                                         {
-                                            ![PostTypeId.Slider].includes(Number(this.state.formData.typeId))
+                                            ![PostTypeId.Slider, PostTypeId.Footer].includes(Number(this.state.formData.typeId))
                                                 ? <Tab eventKey="content" title={this.props.router.t("content")}>
                                                     {
                                                         (this.state.formActiveKey === "content")
@@ -958,7 +968,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                                 </Tab> : null
                                         }
                                         {
-                                            this.state.formData.typeId == PostTypeId.Page
+                                            [PostTypeId.Page, PostTypeId.Footer].includes(Number(this.state.formData.typeId))
                                                 ? <Tab eventKey="theme" title={this.props.router.t("theme")}>
                                                     <this.TabTheme/>
                                                 </Tab> : null
@@ -973,7 +983,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                             <this.TabOptions/>
                                         </Tab>
                                         {
-                                            ![PostTypeId.Slider, PostTypeId.Testimonial].includes(Number(this.state.formData.typeId))
+                                            ![PostTypeId.Slider, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.state.formData.typeId))
                                                 ? <Tab eventKey="seo" title={this.props.router.t("seo")}>
                                                     <this.TabSEO/>
                                                 </Tab> : null

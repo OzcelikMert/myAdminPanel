@@ -251,6 +251,20 @@ class Sidebar extends Component<PageProps, PageState> {
                     ]
                 },
                 {
+                    path: pageRoutes.post.path(PostTypeId.Footer),
+                    icon: `note-multiple`,
+                    title: this.props.router.t("footer"),
+                    state: `footer`,
+                    subPaths: [
+                        {
+                            path: pageRoutes.post.add.path(),
+                            title: this.props.router.t("add"),
+                            permId: PermissionId.FooterAdd
+                        },
+                        {path: pageRoutes.post.list.path(), title: this.props.router.t("list")}
+                    ]
+                },
+                {
                     path: pageRoutes.settings.path(),
                     icon: `cog`,
                     title: this.props.router.t("settings"),
