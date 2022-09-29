@@ -190,20 +190,25 @@ export class PagePostList extends Component<PageProps, PageState> {
     }
 
     get getTableColumns(): TableColumn<PageState["showingPosts"][0]>[] {
+
+
         return [
-            {
-                name: this.props.router.t("image"),
-                width: "75px",
-                cell: row => {
-                    return <div className="image pt-2 pb-2">
-                        <img
-                            src={imageSourceUtil.getUploadedImageSrc(row.contents?.image)}
-                            alt={row.contents?.title}
-                            className="post-image"
-                        />
-                    </div>
-                }
-            },
+            (
+                ![PostTypeId.Footer].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                    ? {
+                        name: this.props.router.t("image"),
+                        width: "75px",
+                        cell: row => {
+                            return <div className="image pt-2 pb-2">
+                                <img
+                                    src={imageSourceUtil.getUploadedImageSrc(row.contents?.image)}
+                                    alt={row.contents?.title}
+                                    className="post-image"
+                                />
+                            </div>
+                        }
+                    } : {}
+            ),
             {
                 name: this.props.router.t("title"),
                 selector: row => row.contents?.title || this.props.router.t("[noLangAdd]"),
@@ -227,26 +232,32 @@ export class PagePostList extends Component<PageProps, PageState> {
                 width: "250px",
                 sortable: true
             },
-            {
-                name: this.props.router.t("category"),
-                cell: row => row.terms.findMulti("typeId", PostTermTypeId.Category).length > 0
-                    ? row.terms.map(item => {
-                            if (item.typeId == PostTermTypeId.Category) {
-                                return <label
-                                    onClick={() => this.navigateTermPage("termEdit", item._id, row.typeId)}
-                                    className={`badge badge-gradient-success me-1 cursor-pointer`}
-                                >{item.contents?.title || this.props.router.t("[noLangAdd]")}</label>
-                            }
-                            return null;
-                        }
-                    ) : this.props.router.t("notSelected")
+            (
+                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                    ? {
+                        name: this.props.router.t("category"),
+                        cell: row => row.terms.findMulti("typeId", PostTermTypeId.Category).length > 0
+                            ? row.terms.map(item => {
+                                    if (item.typeId == PostTermTypeId.Category) {
+                                        return <label
+                                            onClick={() => this.navigateTermPage("termEdit", item._id, row.typeId)}
+                                            className={`badge badge-gradient-success me-1 cursor-pointer`}
+                                        >{item.contents?.title || this.props.router.t("[noLangAdd]")}</label>
+                                    }
+                                    return null;
+                                }
+                            ) : this.props.router.t("notSelected")
 
-            },
-            {
-                name: this.props.router.t("views"),
-                selector: row => row.views,
-                sortable: true
-            },
+                    } : {}
+            ),
+            (
+                ![PostTypeId.Slider, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                    ?  {
+                        name: this.props.router.t("views"),
+                        selector: row => row.views,
+                        sortable: true
+                    } : {}
+            ),
             {
                 name: this.props.router.t("status"),
                 sortable: true,
@@ -273,7 +284,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                     ><i className="fa fa-pencil-square-o"></i></button>
                 ) : null
             }
-        ];
+        ].filter(column => typeof column.name !== "undefined");
     }
 
     render() {
@@ -283,7 +294,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                     <div className="col-md-3 mb-3">
                         <div className="row">
                             {
-                                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.props.getPageData.searchParams.postTypeId))
                                     ? <div className="col-6">
                                         <button className="btn btn-gradient-info btn-lg w-100"
                                                 onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Category)}>
@@ -292,7 +303,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                                     </div> : null
                             }
                             {
-                                ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                                ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.props.getPageData.searchParams.postTypeId))
                                     ? <div className="col-6 text-end">
                                         <button className="btn btn-gradient-primary btn-lg w-100"
                                                 onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Tag)}>

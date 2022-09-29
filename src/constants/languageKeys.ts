@@ -149,4 +149,5 @@ export const LanguageKeysArray = [
     "facts",
     "features",
     "appointment",
+    "footer"
 ] as const;
