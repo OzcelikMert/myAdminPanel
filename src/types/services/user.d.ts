@@ -1,7 +1,9 @@
+import {StatusId, UserRoleId} from "../../constants";
+
 export default interface UserDocument {
     _id: string
-    roleId: number,
-    statusId: number,
+    roleId: UserRoleId,
+    statusId: StatusId,
     image: string,
     name: string,
     comment: string,
@@ -29,8 +31,8 @@ export interface UsersGetParamDocument {
 }
 
 export interface UserAddParamDocument {
-    roleId: number,
-    statusId: number,
+    roleId: UserRoleId,
+    statusId: StatusId,
     name: string,
     email: string,
     password: string,

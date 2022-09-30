@@ -1,6 +1,8 @@
+import {PostTermTypeId, PostTypeId} from "../../constants";
+
 type SearchParamDocument = {
-    postTypeId: number,
-    termTypeId: number,
+    postTypeId: PostTypeId,
+    termTypeId: PostTermTypeId,
     termId: string,
     userId: string,
     postId: string

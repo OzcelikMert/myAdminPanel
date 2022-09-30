@@ -1,9 +1,10 @@
 import {PopulateAuthorIdDocument} from "./user";
+import {PostTermTypeId, PostTypeId, StatusId} from "../../constants";
 
 export default interface PostTermDocument {
     _id: string
-    postTypeId: number,
-    typeId: number,
+    postTypeId: PostTypeId,
+    typeId: PostTermTypeId,
     mainId?: {
         _id: string
         contents: {
@@ -12,7 +13,7 @@ export default interface PostTermDocument {
             url: string,
         }
     }
-    statusId: number,
+    statusId: StatusId,
     authorId: PopulateAuthorIdDocument
     lastAuthorId: PopulateAuthorIdDocument
     order: number,
@@ -31,7 +32,7 @@ export default interface PostTermDocument {
 
 export interface PopulateTermsDocument {
     _id: string,
-    typeId: number
+    typeId: PostTermTypeId
     contents: {
         langId: string,
         title: string,
@@ -40,18 +41,18 @@ export interface PopulateTermsDocument {
 
 export interface PostTermGetParamDocument {
     langId: string
-    typeId?: number
-    postTypeId: number
+    typeId?: PostTermTypeId
+    postTypeId: PostTypeId
     termId?: string
-    statusId?: number
+    statusId?: StatusId
 }
 
 export interface PostTermAddParamDocument {
-    typeId: number,
-    postTypeId: number
+    typeId: PostTermTypeId,
+    postTypeId: PostTypeId
     order: number
     mainId?: string
-    statusId: number
+    statusId: StatusId
     isFixed: 1 | 0
     contents: {
         langId: string
@@ -69,13 +70,13 @@ export type PostTermUpdateParamDocument = {
 
 export interface PostTermUpdateStatusParamDocument {
     termId: string[]
-    typeId: number
-    postTypeId: number
-    statusId: number
+    typeId: PostTermTypeId
+    postTypeId: PostTypeId
+    statusId: StatusId
 }
 
 export interface PostTermDeleteParamDocument {
     termId: string[]
-    typeId: number
-    postTypeId: number
+    typeId: PostTermTypeId
+    postTypeId: PostTypeId
 }

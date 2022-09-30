@@ -2,6 +2,7 @@ import {PopulateTermsDocument} from "./postTerm";
 import {PopulateAuthorIdDocument} from "./user";
 import LanguageKeys from "../app/languages";
 import {ThemeGroupTypeId} from "../../constants/themeGroupTypes";
+import {PostTypeId, StatusId} from "../../constants";
 
 export interface PostThemeGroupTypeContentDocument {
     langId: string
@@ -39,7 +40,7 @@ export interface PostContentDocument {
 
 export default interface PostDocument {
     _id: string
-    typeId: number,
+    typeId: PostTypeId,
     mainId?: {
         _id: string
         contents: {
@@ -48,7 +49,7 @@ export default interface PostDocument {
             url: string,
         }
     },
-    statusId: number,
+    statusId: StatusId,
     authorId: PopulateAuthorIdDocument
     lastAuthorId: PopulateAuthorIdDocument
     dateStart: Date,
@@ -68,8 +69,8 @@ export default interface PostDocument {
 export interface PostGetParamDocument {
     langId: string
     postId?: string
-    typeId?: number | number[]
-    statusId?: number
+    typeId?: PostTypeId | PostTypeId[]
+    statusId?: StatusId
     getContents?: 1 | 0
     maxCount?: number
 }
@@ -98,11 +99,11 @@ export type PostUpdateParamDocument = {
 
 export interface PostUpdateStatusParamDocument {
     postId: string[],
-    typeId: number
-    statusId: number,
+    typeId: PostTypeId
+    statusId: StatusId,
 }
 
 export interface PostDeleteParamDocument {
     postId: string[],
-    typeId: number
+    typeId: PostTypeId
 }
