@@ -4,7 +4,7 @@ import AppRoutes, {pageRoutes} from './routes';
 import {
     useLocation,
     useNavigate,
-    useParams, useSearchParams, matchRoutes, RouteObject, BrowserRouter
+    useParams, useSearchParams, matchRoutes, RouteObject, BrowserRouter, Link
 } from "react-router-dom";
 import {PagePropCommonDocument} from "../types/app/pageProps";
 import {useTranslation} from "react-i18next";
@@ -236,9 +236,10 @@ class AppAdmin extends Component<PageProps, PageState> {
             <div className="row w-100 m-0">
                 <div className="col-md-8 p-0">
                     <h3 className="page-title">
+                        <Link to="/dashboard">
                         <span className="page-title-icon bg-gradient-primary text-white me-2">
                             <i className="mdi mdi-home"></i>
-                        </span>
+                        </span></Link>
                         {this.state.breadCrumbTitle}
                     </h3>
                 </div>
