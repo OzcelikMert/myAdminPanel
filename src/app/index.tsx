@@ -64,7 +64,6 @@ class AppAdmin extends Component<PageProps, PageState> {
             pageData: {
                 searchParams: {
                     postId: "",
-                    navigateId: "",
                     termTypeId: 0,
                     postTypeId: 0,
                     termId: "",
@@ -105,7 +104,6 @@ class AppAdmin extends Component<PageProps, PageState> {
                 state.pageData.langId = state.pageData.mainLangId;
                 state.pageData.searchParams = {
                     postId: "",
-                    navigateId: "",
                     termTypeId: 0,
                     postTypeId: 0,
                     termId: "",
@@ -200,7 +198,6 @@ class AppAdmin extends Component<PageProps, PageState> {
 
     ContentLanguage = () => {
         const showingPages = [
-            pageRoutes.navigate.path() + pageRoutes.navigate.edit.path(),
             pageRoutes.post.path() + pageRoutes.post.edit.path(),
             pageRoutes.postTerm.path() + pageRoutes.postTerm.edit.path(),
             pageRoutes.settings.path() + pageRoutes.settings.seo.path()
@@ -308,8 +305,6 @@ export function withRouter(Component: any) {
         let {t, i18n} = useTranslation();
 
         const routes: RouteObject[] = [
-            // Navigate
-            {path: pageRoutes.navigate.path() + pageRoutes.navigate.edit.path()},
             // User
             {path: pageRoutes.settings.path() + pageRoutes.settings.user.path() + pageRoutes.settings.user.edit.path()},
             // Post

@@ -82,7 +82,6 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
                 }
                 resolve(uploadedImages);
             }).then(result => {
-                console.log(result)
                 this.setState({
                     isUploading: false
                 });

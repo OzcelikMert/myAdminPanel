@@ -22,8 +22,6 @@ import PageUserAdd from "./views/pages/settings/user/add";
 import PageUserList from "./views/pages/settings/user/list";
 import PageSettingsSEO from "./views/pages/settings/seo";
 import PageSettingsGeneral from "./views/pages/settings/general";
-import PageNavigateList from "./views/pages/navigate/list";
-import PageNavigateAdd from "./views/pages/navigate/add";
 
 export const pageRoutes = {
     login: {
@@ -58,26 +56,6 @@ export const pageRoutes = {
         list: {
             path() {
                 return "list"
-            }
-        },
-    },
-    navigate: {
-        path() {
-            return `navigate/`
-        },
-        add: {
-            path() {
-                return `add`
-            }
-        },
-        edit: {
-            path(navigateId: string | number = ":navigateId") {
-                return `edit/${navigateId}`
-            }
-        },
-        list: {
-            path() {
-                return `list`
             }
         },
     },
@@ -190,15 +168,6 @@ class AppRoutes extends Component<PageProps, PageState> {
                                element={<PageGalleryUpload {...this.props}/>}/>
                         <Route path={pageRoutes.gallery.list.path()}
                                element={<PageGalleryList {...this.props}/>}/>
-                    </Route>
-
-                    <Route path={pageRoutes.navigate.path()}>
-                        <Route path={pageRoutes.navigate.add.path()}
-                               element={<PageNavigateAdd {...this.props}/>}/>
-                        <Route path={pageRoutes.navigate.edit.path()}
-                               element={<PageNavigateAdd {...this.props}/>}/>
-                        <Route path={pageRoutes.navigate.list.path()}
-                               element={<PageNavigateList {...this.props}/>}/>
                     </Route>
 
                     {

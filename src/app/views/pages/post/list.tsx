@@ -194,7 +194,7 @@ export class PagePostList extends Component<PageProps, PageState> {
 
         return [
             (
-                ![PostTypeId.Footer].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                ![PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
                     ? {
                         name: this.props.router.t("image"),
                         width: "75px",
@@ -233,7 +233,15 @@ export class PagePostList extends Component<PageProps, PageState> {
                 sortable: true
             },
             (
-                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                [PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                    ? {
+                        name: this.props.router.t("main"),
+                        selector: row => row.mainId ? row.mainId.contents?.title || this.props.router.t("[noLangAdd]") : this.props.router.t("notSelected"),
+                        sortable: true
+                    } : {}
+            ),
+            (
+                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
                     ? {
                         name: this.props.router.t("category"),
                         cell: row => row.terms.findMulti("typeId", PostTermTypeId.Category).length > 0
@@ -251,8 +259,8 @@ export class PagePostList extends Component<PageProps, PageState> {
                     } : {}
             ),
             (
-                ![PostTypeId.Slider, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.props.getPageData.searchParams.postTypeId))
-                    ?  {
+                ![PostTypeId.Slider, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                    ? {
                         name: this.props.router.t("views"),
                         selector: row => row.views,
                         sortable: true
@@ -294,7 +302,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                     <div className="col-md-3 mb-3">
                         <div className="row">
                             {
-                                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
                                     ? <div className="col-6">
                                         <button className="btn btn-gradient-info btn-lg w-100"
                                                 onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Category)}>
@@ -303,7 +311,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                                     </div> : null
                             }
                             {
-                                ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                                ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
                                     ? <div className="col-6 text-end">
                                         <button className="btn btn-gradient-primary btn-lg w-100"
                                                 onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Tag)}>
@@ -333,12 +341,19 @@ export class PagePostList extends Component<PageProps, PageState> {
                             <div className="table-post">
                                 <div className={`ms-2 ${!this.state.isShowToggleMenu ? "invisible" : ""}`}>
                                     {
-                                        permissionUtil.checkPermission(
-                                            this.props.getSessionData.roleId,
-                                            this.props.getSessionData.permissions,
-                                            permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Edit")
+                                        (
+                                            permissionUtil.checkPermission(
+                                                this.props.getSessionData.roleId,
+                                                this.props.getSessionData.permissions,
+                                                permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Edit")
+                                            ) ||
+                                            permissionUtil.checkPermission(
+                                                this.props.getSessionData.roleId,
+                                                this.props.getSessionData.permissions,
+                                                permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Delete")
+                                            )
                                         ) ? <ThemeTableToggleMenu
-                                            t={this.props.router.t}
+                                            {...this.props}
                                             status={
                                                 [
                                                     StatusId.Active,

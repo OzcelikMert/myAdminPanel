@@ -290,12 +290,19 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                             <div className="table-post">
                                 <div className={`ms-2 ${!this.state.isShowToggleMenu ? "invisible" : ""}`}>
                                     {
-                                        permissionUtil.checkPermission(
-                                            this.props.getSessionData.roleId,
-                                            this.props.getSessionData.permissions,
-                                            permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Edit")
+                                        (
+                                            permissionUtil.checkPermission(
+                                                this.props.getSessionData.roleId,
+                                                this.props.getSessionData.permissions,
+                                                permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Edit")
+                                            ) ||
+                                            permissionUtil.checkPermission(
+                                                this.props.getSessionData.roleId,
+                                                this.props.getSessionData.permissions,
+                                                permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Delete")
+                                            )
                                         ) ? <ThemeTableToggleMenu
-                                            t={this.props.router.t}
+                                            {...this.props}
                                             status={
                                                 [
                                                     StatusId.Active,

@@ -3,6 +3,8 @@ import {Modal, Tab, Tabs} from "react-bootstrap";
 import PageGalleryList from "../../pages/gallery/list";
 import PageGalleryUpload from "../../pages/gallery/upload";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
+import {PermissionId} from "../../../../constants";
+import permissionUtil from "../../../../utils/functions/permission.util";
 
 type PageState = {
     formActiveKey: string
@@ -51,13 +53,19 @@ class ThemeChooseImageGallery extends Component<PageProps, PageState> {
                                     activeKey={this.state.formActiveKey}
                                     className="mb-5"
                                     transition={false}>
-                                    <Tab eventKey="upload" title={"Upload"}>
-                                        <PageGalleryUpload
-                                            {...this.props}
-                                            uploadedImages={uploadedImages => this.setState({uploadedImages: uploadedImages})}
-                                            isModal
-                                        />
-                                    </Tab>
+                                    {
+                                        permissionUtil.checkPermission(
+                                            this.props.getSessionData.roleId,
+                                            this.props.getSessionData.permissions,
+                                            PermissionId.GalleryEdit
+                                        ) ? <Tab eventKey="upload" title={"Upload"}>
+                                            <PageGalleryUpload
+                                                {...this.props}
+                                                uploadedImages={uploadedImages => this.setState({uploadedImages: uploadedImages})}
+                                                isModal
+                                            />
+                                        </Tab> : null
+                                    }
                                     <Tab eventKey="list" title={"List"}>
                                         <PageGalleryList
                                             {...this.props}

@@ -83,12 +83,14 @@ export class PageGalleryList extends Component<PageProps, PageState> {
     componentDidUpdate(prevProps: Readonly<PageProps>, prevState: Readonly<PageState>) {
         if (
             this.props.uploadedImages &&
-            JSON.stringify(this.props.uploadedImages) !== JSON.stringify(prevProps.uploadedImages) &&
-            this.props.uploadedImages.length > 0
+            JSON.stringify(this.props.uploadedImages) !== JSON.stringify(prevProps.uploadedImages)
         ) {
             this.setState((state: PageState) => {
                 state.images = state.images.concat(this.props.uploadedImages || []).orderBy("", "desc");
+                state.images = state.images.filter((image, index) => state.images.indexOfKey("", image) === index);
                 return state;
+            }, () => {
+                this.onSearch();
             })
         }
     }

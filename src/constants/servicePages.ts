@@ -7,7 +7,6 @@ const ServicePages = {
     post: "post",
     setting: "setting",
     language: "language",
-    navigate: "navigate",
     serverInfo: "serverInfo",
     view: "view"
 }

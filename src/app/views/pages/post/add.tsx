@@ -34,6 +34,7 @@ import LanguageKeys from "../../../../types/app/languages";
 
 type PageState = {
     langKeys: { value: string, label: string }[]
+    posts: { value: string, label: string }[]
     themeGroupTypes: { value: number, label: string }[]
     formActiveKey: string
     categoryTerms: { value: string, label: string }[]
@@ -58,6 +59,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         super(props);
         this.state = {
             formActiveKey: `general`,
+            posts: [],
             categoryTerms: [],
             langKeys: [],
             themeGroupTypes: [],
@@ -106,7 +108,12 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         Thread.start(() => {
             this.getLangKeys();
             this.getThemeGroupTypes();
-            this.getTerms();
+            if([PostTypeId.Navigate].includes(Number(this.state.formData.typeId))){
+                this.getPosts();
+            }
+            if(![PostTypeId.Page, PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))){
+                this.getTerms();
+            }
             this.getStatus();
             if (this.props.getPageData.searchParams.postId) {
                 this.getPost();
@@ -203,6 +210,29 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         }
     }
 
+    getPosts() {
+        let resData = postService.get({
+            langId: this.props.getPageData.mainLangId,
+            statusId: StatusId.Active,
+            typeId: PostTypeId.Navigate
+        });
+        if (resData.status) {
+            this.setState((state: PageState) => {
+                state.posts = [{value: "", label: this.props.router.t("notSelected")}];
+                resData.data.orderBy("order", "asc").forEach(item => {
+                    if (!V.isEmpty(this.props.getPageData.searchParams.postId)) {
+                        if (this.props.getPageData.searchParams.postId == item._id) return;
+                    }
+                    state.posts.push({
+                        value: item._id,
+                        label: item.contents?.title || this.props.router.t("[noLangAdd]")
+                    });
+                });
+                return state;
+            })
+        }
+    }
+
     getPost() {
         let resData = postService.get({
             postId: this.state.formData.postId,
@@ -226,6 +256,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     state.formData = {
                         ...state.formData,
                         ...post,
+                        mainId: post.mainId?._id || "",
                         isPrimary: undefined,
                         categoryTermId: categoryTermId,
                         tagTermId: tagTermId,
@@ -763,7 +794,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         return (
             <div className="row">
                 {
-                    ![PostTypeId.Footer].includes(Number(this.state.formData.typeId))
+                    ![PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))
                         ? <div className="col-md-7 mb-3">
                             <ThemeFormType
                                 title={`${this.props.router.t("startDate").toCapitalizeCase()}*`}
@@ -844,7 +875,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         return (
             <div className="row">
                 {
-                    ![PostTypeId.Footer].includes(Number(this.state.formData.typeId))
+                    ![PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))
                         ? <div className="col-md-7 mb-3">
                             <ThemeChooseImage
                                 {...this.props}
@@ -882,7 +913,20 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     />
                 </div>
                 {
-                    ![PostTypeId.Footer].includes(Number(this.state.formData.typeId))
+                    [PostTypeId.Navigate].includes(Number(this.state.formData.typeId))
+                        ? <div className="col-md-7 mb-3">
+                            <ThemeFormType
+                                title={`${this.props.router.t("url")}*`}
+                                name="contents.url"
+                                type="text"
+                                required={true}
+                                value={this.state.formData.contents.url}
+                                onChange={e => HandleForm.onChangeInput(e, this)}
+                            />
+                        </div>: null
+                }
+                {
+                    ![PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))
                         ? <div className="col-md-7 mb-3">
                             <ThemeFormType
                                 title={this.props.router.t("shortContent").toCapitalizeCase()}
@@ -893,9 +937,21 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             />
                         </div> : null
                 }
-
                 {
-                    ![PostTypeId.Page, PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.state.formData.typeId))
+                    [PostTypeId.Navigate].includes(Number(this.state.formData.typeId))
+                        ? <div className="col-md-7 mb-3">
+                            <ThemeFormSelect
+                                title={this.props.router.t("main")}
+                                name="mainId"
+                                placeholder={this.props.router.t("chooseMain")}
+                                options={this.state.posts}
+                                value={this.state.posts.findSingle("value", this.state.formData.mainId || "")}
+                                onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
+                            />
+                        </div> : null
+                }
+                {
+                    ![PostTypeId.Page, PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))
                         ? <div className="col-md-7 mb-3">
                             <ThemeFormSelect
                                 title={this.props.router.t("category")}
@@ -910,7 +966,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         </div> : null
                 }
                 {
-                    ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.state.formData.typeId))
+                    ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))
                         ? <div className="col-md-7 mb-3">
                             <ThemeFormSelect
                                 title={this.props.router.t("tag")}
@@ -958,7 +1014,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                             <this.TabGeneral/>
                                         </Tab>
                                         {
-                                            ![PostTypeId.Slider, PostTypeId.Footer].includes(Number(this.state.formData.typeId))
+                                            ![PostTypeId.Slider, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))
                                                 ? <Tab eventKey="content" title={this.props.router.t("content")}>
                                                     {
                                                         (this.state.formActiveKey === "content")
@@ -983,7 +1039,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                             <this.TabOptions/>
                                         </Tab>
                                         {
-                                            ![PostTypeId.Slider, PostTypeId.Testimonial, PostTypeId.Footer].includes(Number(this.state.formData.typeId))
+                                            ![PostTypeId.Slider, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))
                                                 ? <Tab eventKey="seo" title={this.props.router.t("seo")}>
                                                     <this.TabSEO/>
                                                 </Tab> : null

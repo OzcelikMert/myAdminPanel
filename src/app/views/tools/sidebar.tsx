@@ -137,17 +137,17 @@ class Sidebar extends Component<PageProps, PageState> {
                     ]
                 },
                 {
-                    path: pageRoutes.navigate.path(),
+                    path: pageRoutes.post.path(PostTypeId.Navigate),
                     icon: `navigation-variant`,
                     title: this.props.router.t("navigates"),
                     state: `navigates`,
                     subPaths: [
                         {
-                            path: pageRoutes.navigate.add.path(),
+                            path: pageRoutes.post.add.path(),
                             title: this.props.router.t("add"),
                             permId: PermissionId.NavigateAdd
                         },
-                        {path: pageRoutes.navigate.list.path(), title: this.props.router.t("list")}
+                        {path: pageRoutes.post.list.path(), title: this.props.router.t("list")}
                     ]
                 },
                 {

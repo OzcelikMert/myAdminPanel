@@ -3,8 +3,7 @@ type SearchParamDocument = {
     termTypeId: number,
     termId: string,
     userId: string,
-    postId: string,
-    navigateId: string,
+    postId: string
 }
 
 

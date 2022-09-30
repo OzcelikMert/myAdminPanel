@@ -12,7 +12,6 @@ import WorldMap from "react-svg-worldmap";
 import viewService from "../../../../services/view.service";
 import {ViewNumberDocument, ViewStatisticsDocument} from "../../../../types/services/view";
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";
-import staticContentUtil from "../../../../utils/functions/staticContent.util";
 import classNameUtil from "../../../../utils/functions/className.util";
 import permissionUtil from "../../../../utils/functions/permission.util";
 
@@ -130,12 +129,6 @@ class PageDashboard extends Component<PageProps, PageState> {
     getLastPosts() {
         let resData = postService.get({
             langId: this.props.getPageData.mainLangId,
-            typeId: [
-                PostTypeId.Blog,
-                PostTypeId.Portfolio,
-                PostTypeId.Slider,
-                PostTypeId.Reference
-            ],
             maxCount: 10
         });
         if (resData.status) {

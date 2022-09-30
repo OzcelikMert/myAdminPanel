@@ -40,6 +40,14 @@ export interface PostContentDocument {
 export default interface PostDocument {
     _id: string
     typeId: number,
+    mainId?: {
+        _id: string
+        contents: {
+            langId: string
+            title: string,
+            url: string,
+        }
+    },
     statusId: number,
     authorId: PopulateAuthorIdDocument
     lastAuthorId: PopulateAuthorIdDocument
@@ -67,6 +75,7 @@ export interface PostGetParamDocument {
 }
 
 export type PostAddParamDocument = {
+    mainId?: string
     isFixed: 1 | 0
     isPrimary?: 1 | 0
     contents: PostContentDocument
@@ -76,7 +85,7 @@ export type PostAddParamDocument = {
             contents: Omit<PostThemeGroupTypeContentDocument, "_id">
         })[]
     })[]
-} & Omit<PostDocument, "authorId"|"lastAuthorId"|"views"|"terms"|"_id"|"contents"|"isFixed"|"isPrimary">
+} & Omit<PostDocument, "mainId"|"authorId"|"lastAuthorId"|"views"|"terms"|"_id"|"contents"|"isFixed"|"isPrimary">
 
 export type PostUpdateParamDocument = {
     postId: string

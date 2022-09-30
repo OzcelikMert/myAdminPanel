@@ -60,7 +60,7 @@ const Permissions: Array<PermissionDocument> = [
     {id: PermissionId.NavigateAdd, groupId: PermissionGroupId.Navigate, defaultRoleRank: 2, langKey: "add"},
     {id: PermissionId.NavigateEdit, groupId: PermissionGroupId.Navigate, defaultRoleRank: 3, langKey: "edit"},
     {id: PermissionId.NavigateDelete, groupId: PermissionGroupId.Navigate, defaultRoleRank: 3, langKey: "delete"},
-    {id: PermissionId.SeoEdit, groupId: PermissionGroupId.Settings, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.SeoEdit, groupId: PermissionGroupId.Settings, defaultRoleRank: 3, langKey: "seoEdit"},
     {id: PermissionId.SettingEdit, groupId: PermissionGroupId.Settings, defaultRoleRank: 3, langKey: "edit"},
     {id: PermissionId.ServiceAdd, groupId: PermissionGroupId.Service, defaultRoleRank: 2, langKey: "add"},
     {id: PermissionId.ServiceEdit, groupId: PermissionGroupId.Service, defaultRoleRank: 3, langKey: "edit"},
