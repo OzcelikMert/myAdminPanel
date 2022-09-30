@@ -7,3 +7,5 @@ Things to do:
 - profilde boş bırakma özellikleri yok.
 - Kullanıcılarda aktif dışındakiler yasaklanmış şeklinde gözüküyor.
 - Sitenin genel ayarlarına navbar için küçük logo eklenecek.
+- Tema grup içeriklerini boş bırakma özelliği
+- Tablolarda en son güncelleyen kişinin ismi
