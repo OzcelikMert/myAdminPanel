@@ -1,8 +1,9 @@
 import React, {Component, FormEvent} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
-import {ThemeForm, ThemeFormType} from "../../../components/form";
+import {ThemeFieldSet, ThemeForm, ThemeFormType} from "../../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
 import {
+    PermissionGroups,
     PermissionId,
     Permissions, Status,
     UserRoleId, UserRoles
@@ -16,6 +17,7 @@ import classNameUtil from "../../../../../utils/functions/className.util";
 import staticContentUtil from "../../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
 import ThemeToast from "../../../components/toast";
+import {PermissionDocument, PermissionGroupDocument} from "../../../../../types/constants";
 
 type PageState = {
     isLoading: boolean,
@@ -26,7 +28,7 @@ type PageState = {
         email: string
         roleId: number
         statusId: number
-        permissionId: number[]
+        permissions: number[]
     }
     formData: {
         image: string
@@ -53,7 +55,7 @@ export class PageSettingsProfile extends Component<PageProps, PageState> {
                 email: "",
                 roleId: 0,
                 statusId: 0,
-                permissionId: []
+                permissions: []
             },
             formData: {
                 image: "",
@@ -92,11 +94,11 @@ export class PageSettingsProfile extends Component<PageProps, PageState> {
                     email: user.email,
                     roleId: user.roleId,
                     statusId: user.statusId,
-                    permissionId: user.permissions
+                    permissions: user.permissions
                 };
 
                 if (user.roleId == UserRoleId.Admin) {
-                    state.data.permissionId = Object.keys(PermissionId).map(permKey => PermissionId[permKey]);
+                    state.data.permissions = Object.keys(PermissionId).map(permKey => PermissionId[permKey]);
                 }
 
                 state.formData = {
@@ -203,12 +205,32 @@ export class PageSettingsProfile extends Component<PageProps, PageState> {
     )
 
     Permissions = () => {
-        const PermissionItem = (props: { id: number }) => (
-            <label className="badge badge-outline-info ms-1 mb-1">
-                {
-                    this.props.router.t(Permissions.findSingle("id", props.id).langKey)
-                }
-            </label>
+        let permissions = Permissions.findMulti("id", this.state.data.permissions);
+        let permissionGroups = PermissionGroups.findMulti("id", permissions.map(permission => permission.groupId));
+        permissionGroups = permissionGroups.filter((group, index) => permissionGroups.indexOfKey("id", group.id) === index);
+
+        const PermissionGroup = (props: PermissionGroupDocument) => (
+            <div className="col-md-12 mt-3">
+                <ThemeFieldSet legend={this.props.router.t(props.langKey)}>
+                    <div className="row">
+                        {
+                            permissions.findMulti("groupId", props.id).map(permission =>
+                                <PermissionItem {...permission}/>
+                            )
+                        }
+                    </div>
+                </ThemeFieldSet>
+            </div>
+        )
+
+        const PermissionItem = (props: PermissionDocument) => (
+            <div className="col-3 mt-2">
+                <label className="badge badge-outline-info ms-1 mb-1">
+                    {
+                        this.props.router.t(props.langKey)
+                    }
+                </label>
+            </div>
         )
 
         return (
@@ -216,11 +238,13 @@ export class PageSettingsProfile extends Component<PageProps, PageState> {
                 <div className="card">
                     <div className="card-body">
                         <h6 className="pb-1 border-bottom fw-bold text-start">Permissions</h6>
-                        {
-                            Permissions.findMulti("id", this.state.data.permissionId).orderBy("groupId", "asc").map(perm =>
-                                <PermissionItem id={perm.id}/>
-                            )
-                        }
+                        <div className="row">
+                            {
+                                permissionGroups.orderBy("order", "asc").map(group =>
+                                    <PermissionGroup {...group} />
+                                )
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

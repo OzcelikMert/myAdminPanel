@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Modal} from "react-bootstrap";
 import {
-    LanguageId,
+    LanguageId, PermissionGroups,
     Permissions, Status,
     StatusId, UserRoles,
 } from "../../../../constants";
@@ -10,6 +10,8 @@ import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import classNameUtil from "../../../../utils/functions/className.util";
 import staticContentUtil from "../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";
+import {ThemeFieldSet} from "../form";
+import {PermissionDocument, PermissionGroupDocument} from "../../../../types/constants";
 
 type PageState = {};
 
@@ -42,7 +44,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
         </ul>
     )
 
-    InformationGeneral = () => (
+    General = () => (
         <>
             <h6 className="pb-1 border-bottom fw-bold text-end">{this.props.router.t("general")}</h6>
             <div className="row">
@@ -104,26 +106,48 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
         </>
     )
 
-    PermissionItem = (props: { id: number }) => (
-        <label className="badge badge-outline-info ms-1 mb-1">
-            {
-                this.props.router.t(Permissions.findSingle("id", props.id).langKey)
-            }
-        </label>
-    )
+    Permissions = () => {
+        let permissions = Permissions.findMulti("id", this.props.userInfo.permissions);
+        let permissionGroups = PermissionGroups.findMulti("id", permissions.map(permission => permission.groupId));
+        permissionGroups = permissionGroups.filter((group, index) => permissionGroups.indexOfKey("id", group.id) === index);
 
-    InformationPermissions = () => (
-        <>
-            <h6 className="pb-1 border-bottom fw-bold text-end">{this.props.router.t("permissions")}</h6>
-            <div>
-                {
-                    Permissions.findMulti("id", this.props.userInfo.permissions).orderBy("groupId", "asc").map(perm =>
-                        <this.PermissionItem id={perm.id}/>
-                    )
-                }
+        const PermissionGroup = (props: PermissionGroupDocument) => (
+            <div className="col-md-12 mt-3">
+                <ThemeFieldSet legend={this.props.router.t(props.langKey)}>
+                    <div className="row">
+                        {
+                            permissions.findMulti("groupId", props.id).map(permission =>
+                                <PermissionItem {...permission}/>
+                            )
+                        }
+                    </div>
+                </ThemeFieldSet>
             </div>
-        </>
-    )
+        )
+
+        const PermissionItem = (props: PermissionDocument) => (
+            <div className="col-3 mt-2">
+                <label className="badge badge-outline-info ms-1 mb-1">
+                    {
+                        this.props.router.t(props.langKey)
+                    }
+                </label>
+            </div>
+        )
+
+        return (
+            <>
+                <h6 className="pb-1 border-bottom fw-bold text-end">{this.props.router.t("permissions")}</h6>
+                <div className="row">
+                    {
+                        permissionGroups.orderBy("order", "asc").map(group =>
+                            <PermissionGroup {...group} />
+                        )
+                    }
+                </div>
+            </>
+        )
+    }
 
     render() {
         return (
@@ -155,8 +179,8 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                             </div>
                             <div className="col-sm-8 position-relative">
                                 <div className="p-2">
-                                    <this.InformationGeneral/>
-                                    <this.InformationPermissions/>
+                                    <this.General/>
+                                    <this.Permissions/>
                                 </div>
                             </div>
                         </div>

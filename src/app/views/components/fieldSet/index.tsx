@@ -10,10 +10,12 @@ type PageProps = {
 class ThemeFieldSet extends Component<PageProps, PageState> {
     render () {
         return (
-            <div className="input static">
-                <span className="label">{this.props.legend} {this.props.legendElement}</span>
-                <div className="field row d-flex">
-                    {this.props.children}
+            <div className="theme-form">
+                <div className="input static">
+                    <span className="label">{this.props.legend} {this.props.legendElement}</span>
+                    <div className="field row d-flex">
+                        {this.props.children}
+                    </div>
                 </div>
             </div>
         )
