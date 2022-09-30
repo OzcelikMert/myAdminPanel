@@ -24,6 +24,9 @@ export default {
     getUserRolesClassName(roleId: UserRoleId): string {
         let bg = ``;
         switch (roleId) {
+            case UserRoleId.SuperAdmin:
+                bg = `dark`;
+                break;
             case UserRoleId.Admin:
                 bg = `primary`;
                 break;

@@ -2,12 +2,7 @@ import React, {Component, FormEvent} from 'react'
 import {Tab, Tabs} from "react-bootstrap";
 import moment from "moment";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
-import {
-    PermissionGroups,
-    Permissions,
-    StatusId,
-    UserRoleId, UserRoles
-} from "../../../../../constants";
+import {PermissionGroups, Permissions, StatusId, UserRoleId, UserRoles} from "../../../../../constants";
 import HandleForm from "../../../../../library/react/handles/form";
 import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../../components/form";
 import SweetAlert from "react-sweetalert2";
@@ -109,11 +104,11 @@ export class PageUserAdd extends Component<PageProps, PageState> {
 
     getRoles() {
         this.setState((state: PageState) => {
-            state.userRoles = staticContentUtil.getUserRolesForSelect([
-                UserRoleId.User,
-                UserRoleId.Author,
-                UserRoleId.Editor
-            ], this.props.router.t);
+            let findUserRole = UserRoles.findSingle("id", this.props.getSessionData.roleId);
+            state.userRoles = staticContentUtil.getUserRolesForSelect(
+                UserRoles.map(userRole => findUserRole.rank > userRole.rank ? userRole.id : 0).filter(roleId => roleId !== 0),
+                this.props.router.t
+            );
             state.formData.roleId = UserRoleId.User;
             return state;
         })
@@ -190,6 +185,17 @@ export class PageUserAdd extends Component<PageProps, PageState> {
         })
     }
 
+    onPermissionAllSelected(isSelected: boolean) {
+        this.setState((state: PageState) => {
+            if (isSelected) {
+                state.formData.permissions = Permissions.map(perm => perm.id);
+            } else {
+                state.formData.permissions = [];
+            }
+            return state;
+        })
+    }
+
     onChangeUserRole(roleId: number) {
         let role = UserRoles.findSingle("id", roleId);
         let permsForRole = Permissions.filter(perm => perm.defaultRoleRank <= role.rank);
@@ -226,6 +232,14 @@ export class PageUserAdd extends Component<PageProps, PageState> {
     TabPermissions = (props: any) => {
         return (
             <div className="row">
+                <div className="col-md-12 mb-3">
+                    <ThemeFormCheckBox
+                        title={this.props.router.t("selectAll")}
+                        name="permAll"
+                        checked={Permissions.length === this.state.formData.permissions.length}
+                        onChange={e => this.onPermissionAllSelected(e.target.checked)}
+                    />
+                </div>
                 {
                     PermissionGroups.map((group, index) => (
                         <div className="col-md-6 mb-3">

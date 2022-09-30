@@ -10,7 +10,7 @@ import {
     PostTypes,
     StatusId,
     ThemeGroupTypeId,
-    ThemeGroupTypes
+    ThemeGroupTypes, UserRoleId
 } from "../../../../constants";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import SweetAlert from "react-sweetalert2";
@@ -108,10 +108,10 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         Thread.start(() => {
             this.getLangKeys();
             this.getThemeGroupTypes();
-            if([PostTypeId.Navigate].includes(Number(this.state.formData.typeId))){
+            if ([PostTypeId.Navigate].includes(Number(this.state.formData.typeId))) {
                 this.getPosts();
             }
-            if(![PostTypeId.Page, PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))){
+            if (![PostTypeId.Page, PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))) {
                 this.getTerms();
             }
             this.getStatus();
@@ -390,7 +390,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 self.setState((state: PageState) => {
                     let findIndex = state.newThemeGroups.indexOfKey("_id", _id);
                     if (findIndex > -1) {
-                        if(typeof state.formData.themeGroups === "undefined"){
+                        if (typeof state.formData.themeGroups === "undefined") {
                             state.formData.themeGroups = [];
                         }
                         state.formData.themeGroups.push(state.newThemeGroups[findIndex]);
@@ -421,7 +421,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         return {
             onCreateNewButton() {
                 self.setState((state: PageState) => {
-                    if(typeof state.formData.themeGroups === "undefined" || !Array.isArray(state.formData.themeGroups) || state.formData.themeGroups.length === 0){
+                    if (typeof state.formData.themeGroups === "undefined" || !Array.isArray(state.formData.themeGroups) || state.formData.themeGroups.length === 0) {
                         state.formData.themeGroups = [
                             {
                                 _id: String.createId(),
@@ -450,7 +450,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             },
             onDelete(index: number) {
                 self.setState((state: PageState) => {
-                    if(state.formData.themeGroups && state.formData.themeGroups.length > 0){
+                    if (state.formData.themeGroups && state.formData.themeGroups.length > 0) {
                         state.formData.themeGroups[0].types.splice(index, 1);
                     }
                     return state;
@@ -563,8 +563,12 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 <div className="col-md-12 mt-4">
                     <ThemeFieldSet
                         legend={this.props.router.t(groupProps.langKey)}
-                        legendElement={<i className="mdi mdi-pencil-box text-warning fs-3 cursor-pointer"
-                                          onClick={() => this.TabThemeEvents.onEdit(this.state.formData.themeGroups, groupIndex)}></i>}
+                        legendElement={
+                            this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                                ? <i className="mdi mdi-pencil-box text-warning fs-3 cursor-pointer"
+                                     onClick={() => this.TabThemeEvents.onEdit(this.state.formData.themeGroups, groupIndex)}></i>
+                                : undefined
+                        }
                     >
                         <div className="row">
                             {
@@ -684,11 +688,14 @@ export class PagePostAdd extends Component<PageProps, PageState> {
 
         return (
             <div className="row mb-3">
-                <div className="col-md-7">
-                    <button type={"button"} className="btn btn-gradient-success btn-lg"
-                            onClick={() => this.TabThemeEvents.onCreateGroup()}>+ {this.props.router.t("newGroup")}
-                    </button>
-                </div>
+                {
+                    this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                        ? <div className="col-md-7">
+                            <button type={"button"} className="btn btn-gradient-success btn-lg"
+                                    onClick={() => this.TabThemeEvents.onCreateGroup()}>+ {this.props.router.t("newGroup")}
+                            </button>
+                        </div> : null
+                }
                 <div className="col-md-7 mt-2">
                     <div className="row">
                         {
@@ -711,7 +718,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 <div className="col-md-12 mt-4">
                     <ThemeFieldSet
                         legend={`${this.props.router.t("button")}#${index + 1}`}
-                        legendElement={<i className="mdi mdi-trash-can text-danger fs-3 cursor-pointer" onClick={() => this.TabButtonEvents.onDelete(index)}></i>}
+                        legendElement={<i className="mdi mdi-trash-can text-danger fs-3 cursor-pointer"
+                                          onClick={() => this.TabButtonEvents.onDelete(index)}></i>}
                     >
                         <div className="row mt-3">
                             <div className="col-md-6">
@@ -923,7 +931,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                 value={this.state.formData.contents.url}
                                 onChange={e => HandleForm.onChangeInput(e, this)}
                             />
-                        </div>: null
+                        </div> : null
                 }
                 {
                     ![PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))

@@ -11,7 +11,7 @@ export default {
                 }
             }
         }else {
-            return userRoleId == UserRoleId.Admin || userPermissions.includes(permissionId);
+            return userRoleId == UserRoleId.SuperAdmin || userPermissions.includes(permissionId);
         }
     },
     checkPermissionAndRedirect(userRoleId: number, userPermissions: number[], permissionId: number, navigate: NavigateFunction) {
