@@ -212,26 +212,6 @@ class PageDashboard extends Component<PageProps, PageState> {
                 sortable: true
             },
             {
-                name: this.props.router.t("category"),
-                cell: row => (
-                    row.terms.map(item => {
-                            if (item.typeId == PostTermTypeId.Category) {
-                                return <label
-                                    onClick={() => this.navigateTermPage("termEdit", row.typeId, item._id, item.typeId)}
-                                    className={`badge badge-gradient-success me-1 cursor-pointer`}
-                                >{item.contents.title || this.props.router.t("[noLangAdd]")}</label>
-                            }
-                            return null;
-                        }
-                    )
-                )
-            },
-            {
-                name: this.props.router.t("views"),
-                selector: row => row.views,
-                sortable: true
-            },
-            {
                 name: this.props.router.t("status"),
                 sortable: true,
                 cell: row => (
@@ -241,6 +221,11 @@ class PageDashboard extends Component<PageProps, PageState> {
                         }
                     </label>
                 )
+            },
+            {
+                name: this.props.router.t("updatedBy"),
+                sortable: true,
+                selector: row => row.lastAuthorId.name
             },
             {
                 name: "",

@@ -14,13 +14,10 @@ import postService from "../../../../services/post.service";
 import PostDocument from "../../../../types/services/post";
 import Spinner from "../../tools/spinner";
 import Thread from "../../../../library/thread";
-import staticContentUtil from "../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";
 import classNameUtil from "../../../../utils/functions/className.util";
 import permissionUtil from "../../../../utils/functions/permission.util";
 import ThemeToast from "../../components/toast";
-import {Simulate} from "react-dom/test-utils";
-import {Tab} from "react-bootstrap";
 
 type PageState = {
     posts: PostDocument[],
@@ -189,9 +186,7 @@ export class PagePostList extends Component<PageProps, PageState> {
         this.props.router.navigate(path, {replace: true});
     }
 
-    get getTableColumns(): TableColumn<PageState["showingPosts"][0]>[] {
-
-
+    get getTableColumns(): TableColumn<PostDocument>[] {
         return [
             (
                 ![PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
@@ -276,6 +271,11 @@ export class PagePostList extends Component<PageProps, PageState> {
                         }
                     </label>
                 )
+            },
+            {
+                name: this.props.router.t("updatedBy"),
+                sortable: true,
+                selector: row => row.lastAuthorId.name
             },
             {
                 name: "",

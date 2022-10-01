@@ -152,5 +152,6 @@ export const LanguageKeysArray = [
     "footer",
     "seoEdit",
     "chooseMain",
-    "superAdmin"
+    "superAdmin",
+    "updatedBy"
 ] as const;

@@ -123,6 +123,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
         }, () => {
             settingService.update({
                 logo: this.state.formData.logo,
+                logoTwo: this.state.formData.logoTwo,
                 icon: this.state.formData.icon,
                 defaultLangId: this.state.formData.seoContents?.langId,
                 contact: {
@@ -273,6 +274,38 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                                 className="btn btn-gradient-warning btn-xs ms-1"
                                 onClick={() => this.setState((state) => {
                                     state["logo"] = true;
+                                    return state;
+                                })}
+                            ><i className="fa fa-pencil-square-o"></i></button>
+                        </div>
+                    </ThemeFieldSet>
+                </div>
+                <div className="col-md-7 mb-3">
+                    <ThemeFieldSet legend={this.props.router.t("logo") + " - 2"}>
+                        <ThemeChooseImage
+                            {...this.props}
+                            isShow={this.state["logoTwo"]}
+                            onHide={() => this.setState((state) => {
+                                state["logoTwo"] = false;
+                                return state;
+                            })}
+                            onSelected={images => this.setState((state: PageState) => {
+                                state.formData.logoTwo = images[0];
+                                return state;
+                            })}
+                            isMulti={false}
+                        />
+                        <div>
+                            <img
+                                src={imageSourceUtil.getUploadedImageSrc(this.state.formData.logoTwo)}
+                                alt="Empty Image"
+                                className="post-image"
+                            />
+                            <button
+                                type="button"
+                                className="btn btn-gradient-warning btn-xs ms-1"
+                                onClick={() => this.setState((state) => {
+                                    state["logoTwo"] = true;
                                     return state;
                                 })}
                             ><i className="fa fa-pencil-square-o"></i></button>
