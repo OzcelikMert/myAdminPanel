@@ -125,6 +125,8 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                 logo: this.state.formData.logo,
                 logoTwo: this.state.formData.logoTwo,
                 icon: this.state.formData.icon,
+                head: this.state.formData.head?.decode(),
+                script: this.state.formData.script?.decode(),
                 defaultLangId: this.state.formData.seoContents?.langId,
                 contact: {
                     ...this.state.formData.contact
@@ -158,7 +160,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                         title={this.props.router.t("head")}
                         name="head"
                         type="textarea"
-                        value={this.state.formData.head}
+                        value={this.state.formData.head?.decode()}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
@@ -167,7 +169,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                         title={this.props.router.t("script")}
                         name="script"
                         type="textarea"
-                        value={this.state.formData.script}
+                        value={this.state.formData.script?.decode()}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>

@@ -309,7 +309,13 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         }, () => {
             let params = Object.assign({
                 termId: this.state.formData.tagTermId.concat(this.state.formData.categoryTermId),
-            }, this.state.formData);
+            }, {
+                ...this.state.formData,
+                contents: {
+                    ...this.state.formData.contents,
+                    content: this.state.formData.contents.content?.decode()
+                }
+            });
 
             ((params.postId)
                 ? postService.update(params)
@@ -860,7 +866,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             <div className="row">
                 <div className="col-md-7 mb-3">
                     <JoditEditor
-                        value={this.state.formData.contents.content || ""}
+                        value={this.state.formData.contents.content?.decode() || ""}
                         config={{
                             uploader: {insertImageAsBase64URI: true},
                             showXPathInStatusbar: false,
