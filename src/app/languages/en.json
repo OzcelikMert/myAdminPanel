@@ -153,5 +153,8 @@
   "seoEdit": "Seo Edit",
   "chooseMain": "Choose Main",
   "superAdmin": "Super Admin",
-  "updatedBy": "Updated By"
+  "updatedBy": "Updated By",
+  "head":  "Head",
+  "script": "Script",
+  "tools": "Tools"
 }

@@ -23,6 +23,8 @@ export default interface SettingDocument {
     icon?: string,
     logo?: string,
     logoTwo?: string
+    head?: string,
+    script?: string
     seoContents?: SettingSeoContentDocument,
     contact?: SettingContactDocument
 }

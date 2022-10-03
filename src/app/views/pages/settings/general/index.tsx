@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "../../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
-import {PermissionId, PostTypeId} from "../../../../../constants";
+import {PermissionId, UserRoleId} from "../../../../../constants";
 import settingService from "../../../../../services/setting.service";
 import languageService from "../../../../../services/language.service";
 import ServerInfoDocument from "../../../../../types/services/serverInfo";
@@ -13,7 +13,7 @@ import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
 import ThemeChooseImage from "../../../components/chooseImage";
 import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
-import SettingsDocument, {SettingUpdateParamDocument} from "../../../../../types/services/setting";
+import {SettingUpdateParamDocument} from "../../../../../types/services/setting";
 import {Tab, Tabs} from "react-bootstrap";
 
 type PageState = {
@@ -148,6 +148,31 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                 })
             })
         })
+    }
+
+    TabTools = () => {
+        return (
+            <div className="row">
+                <div className="col-md-7 mb-3">
+                    <ThemeFormType
+                        title={this.props.router.t("head")}
+                        name="head"
+                        type="textarea"
+                        value={this.state.formData.head}
+                        onChange={e => HandleForm.onChangeInput(e, this)}
+                    />
+                </div>
+                <div className="col-md-7 mb-3">
+                    <ThemeFormType
+                        title={this.props.router.t("script")}
+                        name="script"
+                        type="textarea"
+                        value={this.state.formData.script}
+                        onChange={e => HandleForm.onChangeInput(e, this)}
+                    />
+                </div>
+            </div>
+        );
     }
 
     TabSocialMedia = () => {
@@ -438,6 +463,12 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                                         <Tab eventKey="socialMedia" title={this.props.router.t("socialMedia")}>
                                             <this.TabSocialMedia/>
                                         </Tab>
+                                        {
+                                            this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                                                ? <Tab eventKey="tools" title={this.props.router.t("tools")}>
+                                                    <this.TabTools/>
+                                                </Tab> : null
+                                        }
                                     </Tabs>
                                 </div>
                             </ThemeForm>
