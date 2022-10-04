@@ -494,7 +494,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         break;
                     case ThemeGroupTypeId.Image:
                         input = <ThemeFieldSet
-                            legend={this.props.router.t(groupTypeProps.langKey)}
+                            legend={`${this.props.router.t(groupTypeProps.langKey)} ${groupTypeProps.contents.comment ? `(${groupTypeProps.contents.comment})` : ""}`}
                         >
                             <ThemeChooseImage
                                 {...this.props}
@@ -532,7 +532,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                 <div className="col-md-6">
                                     <ThemeFormType
                                         type={"text"}
-                                        title={this.props.router.t(groupTypeProps.langKey)}
+                                        title={`${this.props.router.t(groupTypeProps.langKey)} ${groupTypeProps.contents.comment ? `(${groupTypeProps.contents.comment})` : ""}`}
                                         value={groupTypeProps.contents.content}
                                         onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps.contents, "content", e.target.value)}
                                     />
@@ -551,7 +551,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     default:
                         input = <ThemeFormType
                             type={"text"}
-                            title={this.props.router.t(groupTypeProps.langKey)}
+                            title={`${this.props.router.t(groupTypeProps.langKey)} ${groupTypeProps.contents.comment ? `(${groupTypeProps.contents.comment})` : ""}`}
                             value={groupTypeProps.contents.content}
                             onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps.contents, "content", e.target.value)}
                         />
@@ -621,6 +621,14 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                         options={this.state.themeGroupTypes}
                                         value={this.state.themeGroupTypes.filter(item => item.value == groupTypeProps.typeId)}
                                         onChange={(item: any, e) => this.TabThemeEvents.onInputChange(groupTypeProps, "typeId", item.value)}
+                                    />
+                                </div>
+                                <div className="col-md-12 mt-3">
+                                    <ThemeFormType
+                                        title={`${this.props.router.t("comment")}`}
+                                        type="text"
+                                        value={groupTypeProps.contents.comment}
+                                        onChange={e => this.TabThemeEvents.onInputChange(groupTypeProps.contents, "comment", e.target.value)}
                                     />
                                 </div>
                                 <div className="col-md-12 mt-3">

@@ -17,7 +17,7 @@ class HandleForm {
     static onChangeSelect(key: any, value: any, component: Component) {
         component.setState((state: any) => {
             if(Array.isArray(value)){
-                state.formData[key] = [];
+                eval(`state.formData${key.split(".").map(name => `['${name}']`).join("")}=[]`);
                 value.forEach(item => {
                     let data = (typeof item.value !== "undefined") ? item.value : item;
                     eval(`state.formData${key.split(".").map(name => `['${name}']`).join("")}.push(data)`);

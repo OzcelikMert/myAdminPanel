@@ -8,6 +8,7 @@ export interface PostThemeGroupTypeContentDocument {
     langId: string
     content: string
     url?: string
+    comment?: string
 }
 
 export interface PostThemeGroupTypeDocument {
