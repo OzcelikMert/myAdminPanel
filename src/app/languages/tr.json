@@ -107,6 +107,8 @@
   "deleting": "Siliniyor. Lütfen bekleyiniz!",
   "wrongEmailOrPassword": "Girdiğiniz Eposta veya şifre yanlış!",
   "yourAccountIsBanned": "Hesabınız yasaklanmış!",
+  "yourAccountIsPending": "Hesabınız beklemede!",
+  "yourAccountIsDisabled": "Hesabınız devre dışı!",
   "profileUpdated": "Profil güncellendi!",
   "seoUpdated": "Seo güncellendi!",
   "settingsUpdated": "Ayarlar güncellendi!",

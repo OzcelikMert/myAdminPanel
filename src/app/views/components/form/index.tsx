@@ -1,63 +1,196 @@
-import React, {Component, createRef, RefObject} from "react";
-import ThemeFormSelect from "./input/select";
-import ThemeFormTags from "./input/tags";
-import ThemeFormType from "./input/type";
-import ThemeFormCheckBox from "./input/checkbox";
-import ThemeFormLoadingButton from "./button/loadingButton";
-import ThemeFieldSet from "../fieldSet";
-import V from "../../../../library/variable";
+import React, {Component} from 'react'
+import ThemeInputType from "../../components/form/input/type";
+import {pageRoutes} from "../../../routes";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
+import {LanguageId, StatusId} from "../../../../constants";
+import {ThemeForm, ThemeFormCheckBox} from "../../components/form";
+import HandleForm from "../../../../library/react/handles/form";
+import authService from "../../../../services/auth.service";
+import {ErrorCodes} from "../../../../library/api";
+import UserDocument from "../../../../types/services/user";
 
 type PageState = {
-
+    isSubmitting: boolean
+    isWrong: boolean
+    user?: UserDocument
+    formData: {
+        email: string,
+        password: string,
+        keepMe: 1 | 0
+    }
 };
 
-type PageProps = {
-    isActiveSaveButton?: boolean
-    saveButtonText?: string
-    saveButtonLoadingText?: string
-    saveButtonClassName?: string
-    isSubmitting?: boolean,
-    formAttributes?: React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>
-};
+type PageProps = {} & PagePropCommonDocument;
 
-class ThemeForm extends Component<PageProps, PageState> {
-    constructor(props: PageProps) {
-        super(props);
+class PageLogin extends Component<PageProps, PageState> {
+    constructor(prop: any) {
+        super(prop);
+        this.state = {
+            isWrong: false,
+            isSubmitting: false,
+            formData: {
+                email: "",
+                password: "",
+                keepMe: 0
+            }
+        }
     }
 
-    onKeyDown(event: React.KeyboardEvent<HTMLFormElement>) {
-        if (event.key === "Enter" ) event.preventDefault();
+    componentDidMount() {
+        this.setPageTitle();
+    }
+
+    setPageTitle() {
+        this.props.setBreadCrumb([
+            this.props.router.t("login")
+        ])
+    }
+
+    onSubmit(event: React.FormEvent<HTMLFormElement>) {
+        console.log(this.state)
+        event.preventDefault();
+        this.setState({
+            isWrong: false,
+            isSubmitting: true
+        }, () => {
+            authService.login(this.state.formData).then(resData => {
+                if (resData.data.length > 0) {
+                    let user = resData.data[0];
+                    console.log(resData.status)
+                    if(resData.status){
+                        this.props.setSessionData({
+                            id: user._id,
+                            langId: LanguageId.English,
+                            roleId: user.roleId,
+                            email: user.email,
+                            image: user.image,
+                            name: user.name,
+                            permissions: user.permissions,
+                        });
+                        this.props.router.navigate(pageRoutes.dashboard.path(), {replace: true});
+                    }else {
+                        this.setState({
+                            user: user 
+                        })
+                    }
+                }else {
+                    this.setState({
+                        isWrong: true
+                    })
+                }
+                this.setState({
+                    isSubmitting: false
+                })
+            });
+        })
+        console.log(this.state)
     }
 
     render() {
+        console.log(this)
         return (
-            <form className="theme-form" {...this.props.formAttributes} onKeyDown={(event) => this.onKeyDown(event)}>
-                {this.props.children}
-                <div className="submit-btn-div mb-4">
-                    {
-                        this.props.isActiveSaveButton ?
-                            !this.props.isSubmitting
-                                ? <button
-                                    type={"submit"}
-                                    className={`btn btn-gradient-success float-end btn-save ${this.props.saveButtonClassName}`}
+            <div className="page-login">
+                <div className="d-flex align-items-stretch auth auth-img-bg h-100">
+                    <div className="row flex-grow">
+                        <div
+                            className="col-lg-6 d-flex align-items-center justify-content-center bg-white login-half-form">
+                            <div className="auth-form-transparent text-left p-3">
+                                <h4 className="text-center">{this.props.router.t("loginPanel")}</h4>
+                                <ThemeForm
+                                    isSubmitting={this.state.isSubmitting}
+                                    formAttributes={{onSubmit: (event) => this.onSubmit(event)}}
                                 >
-                                    {this.props.saveButtonText}
-                                </button>
-                                : <ThemeFormLoadingButton text={this.props.saveButtonLoadingText}/>
-                            : null
-                    }
+                                    <div className="row">
+                                        <div className="col-md-12 mb-3">
+                                            <ThemeInputType
+                                                title={this.props.router.t("email")}
+                                                type="email"
+                                                name="email"
+                                                required={true}
+                                                value={this.state.formData.email}
+                                                onChange={e => HandleForm.onChangeInput(e, this)}
+                                            />
+                                        </div>
+                                        <div className="col-md-12 mb-3">
+                                            <ThemeInputType
+                                                title={this.props.router.t("password")}
+                                                type="password"
+                                                name="password"
+                                                required={true}
+                                                value={this.state.formData.password}
+                                                onChange={e => HandleForm.onChangeInput(e, this)}
+                                            />
+                                        </div>
+                                        <div className="col-md-12 mb-3">
+                                            <ThemeFormCheckBox
+                                                name="keepMe"
+                                                title={this.props.router.t("keepMe")}
+                                                checked={Boolean(this.state.formData.keepMe)}
+                                                onChange={e => HandleForm.onChangeInput(e, this)}
+                                            />
+                                        </div>
+                                        <div className="col-md-12">
+                                            {
+                                                this.state.isWrong
+                                                    ? <p className="fw-bold text-danger">{this.props.router.t("wrongEmailOrPassword")}</p>
+                                                    : null
+                                            }
+                                            {
+                                                this.state.user?.statusId == StatusId.Banned
+                                                    ? <div>
+                                                        <p className="fw-bold text-danger">{this.props.router.t("yourAccountIsBanned")}</p>
+                                                        <p className="fw-bold text-danger">
+                                                            {this.props.router.t("banDateEnd")}:
+                                                            <span className="text-muted ms-1">
+                                                                {new Date(this.state.user?.banDateEnd || "").toLocaleDateString()}
+                                                            </span>
+                                                        </p>
+                                                        <p className="fw-bold text-danger">
+                                                            {this.props.router.t("banComment")}:
+                                                            <span className="text-muted ms-1">
+                                                                {this.state.user?.banComment}
+                                                            </span>
+                                                        </p>
+                                                    </div> : null
+                                            }
+                                            {
+                                                this.state.user?.statusId == StatusId.Pending
+                                                ? <div>
+                                                    <p className="fw-bold text-danger">{this.props.router.t("yourAccountIsPending")}</p>
+                                                </div> : null
+                                            }
+                                            {
+                                                this.state.user?.statusId == StatusId.Disabled
+                                                ? <div>
+                                                    <p className="fw-bold text-danger">{this.props.router.t("yourAccountIsDisabled")}</p>
+                                                </div> : null
+                                            }
+                                        </div>
+                                        <div className="col-md-12">
+                                            <button
+                                                type="submit"
+                                                className="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn w-100"
+                                                disabled={this.state.isSubmitting}
+                                            >
+                                                {this.props.router.t("login")}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </ThemeForm>
+                            </div>
+                        </div>
+                        <div className="col-lg-6 login-half-bg d-flex flex-row">
+                            <div className="brand-logo">
+                                {
+                                    <img src={require('../../../../assets/images/admin/ozcelikLogo.png')} alt="logo" />
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </form>
+            </div>
         )
     }
 }
 
-export {
-    ThemeForm,
-    ThemeFormSelect,
-    ThemeFormTags,
-    ThemeFormType,
-    ThemeFormCheckBox,
-    ThemeFormLoadingButton,
-    ThemeFieldSet
-}
+export default PageLogin;

@@ -107,6 +107,8 @@ export const LanguageKeysArray = [
     "deleting",
     "wrongEmailOrPassword",
     "yourAccountIsBanned",
+    "yourAccountIsPending",
+    "yourAccountIsDisabled",
     "profileUpdated",
     "seoUpdated",
     "settingsUpdated",

@@ -107,6 +107,8 @@
   "deleting": "Deleting. Please wait!",
   "wrongEmailOrPassword": "Your email or password is wrong!",
   "yourAccountIsBanned": "Your account is banned!",
+  "yourAccountIsPending": "Your account is pending!",
+  "yourAccountIsDisabled": "Your account is disabled!",
   "profileUpdated": "Profile updated!",
   "seoUpdated": "Seo updated!",
   "settingsUpdated": "Settings updated!",
