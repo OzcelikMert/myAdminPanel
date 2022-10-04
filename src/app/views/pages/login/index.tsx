@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import ThemeInputType from "../../components/form/input/type";
 import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import {LanguageId} from "../../../../constants";
+import {LanguageId, StatusId} from "../../../../constants";
 import {ThemeForm, ThemeFormCheckBox} from "../../components/form";
 import HandleForm from "../../../../library/react/handles/form";
 import authService from "../../../../services/auth.service";
@@ -11,7 +11,6 @@ import UserDocument from "../../../../types/services/user";
 
 type PageState = {
     isSubmitting: boolean
-    isBanned: boolean,
     isWrong: boolean
     user?: UserDocument
     formData: {
@@ -27,7 +26,6 @@ class PageLogin extends Component<PageProps, PageState> {
     constructor(prop: any) {
         super(prop);
         this.state = {
-            isBanned: false,
             isWrong: false,
             isSubmitting: false,
             formData: {
@@ -49,15 +47,16 @@ class PageLogin extends Component<PageProps, PageState> {
     }
 
     onSubmit(event: React.FormEvent<HTMLFormElement>) {
+        console.log(this.state)
         event.preventDefault();
         this.setState({
             isWrong: false,
-            isBanned: false,
             isSubmitting: true
         }, () => {
             authService.login(this.state.formData).then(resData => {
                 if (resData.data.length > 0) {
                     let user = resData.data[0];
+                    console.log(resData.status)
                     if(resData.status){
                         this.props.setSessionData({
                             id: user._id,
@@ -70,14 +69,9 @@ class PageLogin extends Component<PageProps, PageState> {
                         });
                         this.props.router.navigate(pageRoutes.dashboard.path(), {replace: true});
                     }else {
-                        this.setState((state: PageState) => {
-                            state.user = user;
-                            switch (Number(resData.errorCode)) {
-                                case ErrorCodes.noPerm: state.isBanned = true; break;
-                            }
-                            return state;
+                        this.setState({
+                            user: user
                         })
-
                     }
                 }else {
                     this.setState({
@@ -89,9 +83,11 @@ class PageLogin extends Component<PageProps, PageState> {
                 })
             });
         })
+        console.log(this.state)
     }
 
     render() {
+        console.log(this)
         return (
             <div className="page-login">
                 <div className="d-flex align-items-stretch auth auth-img-bg h-100">
@@ -108,7 +104,7 @@ class PageLogin extends Component<PageProps, PageState> {
                                         <div className="col-md-12 mb-3">
                                             <ThemeInputType
                                                 title={this.props.router.t("email")}
-                                                type="text"
+                                                type="email"
                                                 name="email"
                                                 required={true}
                                                 value={this.state.formData.email}
@@ -140,7 +136,7 @@ class PageLogin extends Component<PageProps, PageState> {
                                                     : null
                                             }
                                             {
-                                                this.state.isBanned
+                                                this.state.user?.statusId == StatusId.Banned
                                                     ? <div>
                                                         <p className="fw-bold text-danger">{this.props.router.t("yourAccountIsBanned")}</p>
                                                         <p className="fw-bold text-danger">
@@ -155,6 +151,18 @@ class PageLogin extends Component<PageProps, PageState> {
                                                                 {this.state.user?.banComment}
                                                             </span>
                                                         </p>
+                                                    </div> : null
+                                            }
+                                            {
+                                                this.state.user?.statusId == StatusId.Pending
+                                                    ? <div>
+                                                        <p className="fw-bold text-danger">{this.props.router.t("yourAccountIsPending")}</p>
+                                                    </div> : null
+                                            }
+                                            {
+                                                this.state.user?.statusId == StatusId.Disabled
+                                                    ? <div>
+                                                        <p className="fw-bold text-danger">{this.props.router.t("yourAccountIsDisabled")}</p>
                                                     </div> : null
                                             }
                                         </div>
