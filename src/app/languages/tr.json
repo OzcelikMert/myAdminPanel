@@ -156,5 +156,12 @@
   "updatedBy": "Güncelleyen",
   "head":  "Head",
   "script": "Script",
-  "tools": "Araçlar"
+  "tools": "Araçlar",
+  "contactForms": "İletişim Formları",
+  "newContactForm": "Yeni İletişim Formu",
+  "contactForm": "İletişim Formu",
+  "key": "Anahtar",
+  "outGoingServer": "Out Going Server",
+  "inComingServer": "In Coming Server",
+  "port": "Port"
 }

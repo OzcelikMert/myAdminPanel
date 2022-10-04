@@ -156,5 +156,12 @@ export const LanguageKeysArray = [
     "updatedBy",
     "head",
     "script",
-    "tools"
+    "tools",
+    "contactForms",
+    "newContactForm",
+    "contactForm",
+    "key",
+    "outGoingServer",
+    "inComingServer",
+    "port"
 ] as const;

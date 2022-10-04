@@ -156,5 +156,12 @@
   "updatedBy": "Updated By",
   "head":  "Head",
   "script": "Script",
-  "tools": "Tools"
+  "tools": "Tools",
+  "contactForms": "Contact Forms",
+  "newContactForm": "New Contact Form",
+  "contactForm": "Contact Form",
+  "key": "Key",
+  "outGoingServer": "Giden Sunucu",
+  "inComingServer": "Gelen Sunucu",
+  "port": "Port"
 }

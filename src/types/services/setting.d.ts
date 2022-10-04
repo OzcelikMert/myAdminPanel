@@ -5,6 +5,18 @@ export interface SettingSeoContentDocument {
     tags?: string[]
 }
 
+
+export interface SettingContactFormDocument {
+    _id?: string
+    name: string
+    key: string
+    email: string
+    password: string
+    outGoingServer: string
+    inComingServer: string
+    port: number
+}
+
 export interface SettingContactDocument {
     email?: string,
     phone?: string,
@@ -27,6 +39,7 @@ export default interface SettingDocument {
     script?: string
     seoContents?: SettingSeoContentDocument,
     contact?: SettingContactDocument
+    contactForms?: SettingContactFormDocument[]
 }
 
 export interface SettingGetParamDocument {
