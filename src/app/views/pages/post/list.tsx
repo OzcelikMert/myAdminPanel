@@ -313,7 +313,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                             {
                                 ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate, PostTypeId.Reference].includes(Number(this.props.getPageData.searchParams.postTypeId))
                                     ? <div className="col-6 text-end">
-                                        <button className="btn btn-gradient-primary btn-lg w-100"
+                                        <button className="btn btn-gradient-primary btn-edit-tag btn-lg w-100"
                                                 onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Tag)}>
                                             <i className="fa fa-pencil-square-o"></i> {this.props.router.t("editTags").toCapitalizeCase()}
                                         </button>
