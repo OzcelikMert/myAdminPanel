@@ -242,7 +242,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                             </div>
                             <div className="col-md-12 mt-4">
                                 <ThemeFormType
-                                    type="text"
+                                    type="password"
                                     title={this.props.router.t("password")}
                                     value={contactFormProps.password}
                                     onChange={e => this.TabContactFormEvents.onInputChange(contactFormProps, "password", e.target.value)}
