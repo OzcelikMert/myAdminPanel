@@ -9,7 +9,7 @@ class HandleForm {
             }else{
                 value = event.target.value;
             }
-            eval(`state.formData${event.target.name.split(".").map(name => `['${name}']`).join("")} = value`);
+            eval(`state.formData${event.target.name.split(".").map((name: any) => `['${name}']`).join("")} = value`);
             return state;
         })
     }
@@ -17,13 +17,13 @@ class HandleForm {
     static onChangeSelect(key: any, value: any, component: Component) {
         component.setState((state: any) => {
             if(Array.isArray(value)){
-                eval(`state.formData${key.split(".").map(name => `['${name}']`).join("")}=[]`);
+                eval(`state.formData${key.split(".").map((name: any) => `['${name}']`).join("")}=[]`);
                 value.forEach(item => {
                     let data = (typeof item.value !== "undefined") ? item.value : item;
-                    eval(`state.formData${key.split(".").map(name => `['${name}']`).join("")}.push(data)`);
+                    eval(`state.formData${key.split(".").map((name: any) => `['${name}']`).join("")}.push(data)`);
                 })
             }else {
-                eval(`state.formData${key.split(".").map(name => `['${name}']`).join("")} = value`);
+                eval(`state.formData${key.split(".").map((name: any) => `['${name}']`).join("")} = value`);
             }
             return state;
         });

@@ -165,5 +165,10 @@
   "key": "Key",
   "outGoingServer": "Giden Sunucu",
   "inComingServer": "Gelen Sunucu",
-  "port": "Port"
+  "port": "Port",
+  "companyName": "Company Name",
+  "budget": "Budget",
+  "unspecified": "Unspecified",
+  "orMore":  "or more",
+  "submit": "Submit"
 }

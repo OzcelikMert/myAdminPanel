@@ -684,7 +684,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             </div>
                             <div className="col-md-12 mt-3">
                                 {
-                                    groupProps.types.orderBy("order", "asc").map((themeGroupType, index) => TypeInfo(themeGroupType, index))
+                                    groupProps.types.map((themeGroupType, index) => TypeInfo(themeGroupType, index))
                                 }
                             </div>
                             <div className="col-md-12 mt-3">
@@ -713,7 +713,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 <div className="col-md-7 mt-2">
                     <div className="row">
                         {
-                            this.state.newThemeGroups.orderBy("order", "asc").map((themeGroup, index) => NewGroup(themeGroup, index))
+                            this.state.newThemeGroups.map((themeGroup, index) => NewGroup(themeGroup, index))
                         }
                     </div>
                     <div className="row">

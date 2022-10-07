@@ -165,5 +165,10 @@ export const LanguageKeysArray = [
     "key",
     "outGoingServer",
     "inComingServer",
-    "port"
+    "port",
+    "companyName",
+    "budget",
+    "unspecified",
+    "orMore",
+    "submit"
 ] as const;

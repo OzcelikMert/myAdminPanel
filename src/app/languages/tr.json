@@ -165,5 +165,10 @@
   "key": "Anahtar",
   "outGoingServer": "Out Going Server",
   "inComingServer": "In Coming Server",
-  "port": "Port"
+  "port": "Port",
+  "companyName": "Şirket İsimi",
+  "budget": "Bütçe",
+  "unspecified": "Belirtilmemiş",
+  "orMore":  "yada daha fazla",
+  "submit": "Gönder"
 }
