@@ -28,8 +28,17 @@ Array.prototype.findSingle = function (key, value) {
 }
 Array.prototype.findMulti = function (key, value, isLike = true) {
     let founds = Array();
+    let evalKey = "";
+    if(typeof key === "string"){
+        evalKey = key.split(".").map((name: any) => `['${name}']`).join("");
+    }
     this.find(function(data, index){
         let query = (Array.isArray(value) ? value.includes(((key === "") ? data : data[key])) : ((key === "") ? data : data[key]) == value);
+        if(evalKey){
+            try{
+                query = (Array.isArray(value) ? value.includes(eval(`data${evalKey}`)) : (eval(`data${evalKey}`)) == value);
+            }catch (e) {}
+        }
         if(query === isLike) founds.push(Object.assign(data, {_index: index}));
     });
     return founds;

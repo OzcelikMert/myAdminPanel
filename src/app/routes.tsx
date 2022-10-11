@@ -10,7 +10,7 @@ import {PagePropCommonDocument} from "../types/app/pageProps";
 import PageLogin from "./views/pages/login";
 import PageLock from "./views/pages/lock";
 import PageSettingsProfile from "./views/pages/settings/profile";
-import PageSettingsChangePassword from "./views/pages/settings/changePassword";
+import PageChangePassword from "./views/pages/settings/changePassword";
 import PageDashboard from "./views/pages/dashboard";
 import PageGalleryList from "./views/pages/gallery/list";
 import PageGalleryUpload from "./views/pages/gallery/upload";
@@ -22,6 +22,7 @@ import PageUserAdd from "./views/pages/settings/user/add";
 import PageUserList from "./views/pages/settings/user/list";
 import PageSettingsSEO from "./views/pages/settings/seo";
 import PageSettingsGeneral from "./views/pages/settings/general";
+import PageSubscribers from "./views/pages/settings/subscribers";
 
 export const pageRoutes = {
     login: {
@@ -143,6 +144,11 @@ export const pageRoutes = {
                 return "changePassword"
             }
         },
+        subscribers: {
+            path() {
+                return "subscribers"
+            }
+        },
     }
 }
 
@@ -212,7 +218,9 @@ class AppRoutes extends Component<PageProps, PageState> {
                         <Route path={pageRoutes.settings.profile.path()}
                                element={<PageSettingsProfile {...this.props}/>}/>
                         <Route path={pageRoutes.settings.changePassword.path()}
-                               element={<PageSettingsChangePassword {...this.props}/>}/>
+                               element={<PageChangePassword {...this.props}/>}/>
+                        <Route path={pageRoutes.settings.subscribers.path()}
+                               element={<PageSubscribers {...this.props}/>}/>
                     </Route>
 
                     <Route path="*" element={<Navigate to={pageRoutes.dashboard.path()}/>}/>

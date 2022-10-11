@@ -16,7 +16,7 @@ type PageState = {
 
 type PageProps = {} & PagePropCommonDocument;
 
-export class PageSettingsChangePassword extends Component<PageProps, PageState> {
+export class PageChangePassword extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
@@ -130,4 +130,4 @@ export class PageSettingsChangePassword extends Component<PageProps, PageState> 
     }
 }
 
-export default PageSettingsChangePassword;
+export default PageChangePassword;
