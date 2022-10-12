@@ -121,11 +121,12 @@ export class PageUserList extends Component<PageProps, PageState> {
                 name: this.props.router.t("image"),
                 width: "75px",
                 cell: row => (
-                    <div className="image pt-2 pb-2">
+                    <div className="image mt-2 mb-2">
                         <img
                             src={imageSourceUtil.getUploadedImageSrc(row.image)}
                             alt={row.name}
                         />
+                        <span className={`availability-status ${row.isOnline ? "online" : "offline"}`}></span>
                     </div>
                 )
             },

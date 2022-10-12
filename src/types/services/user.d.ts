@@ -17,6 +17,7 @@ export default interface UserDocument {
     instagram: string,
     twitter: string,
     views: number,
+    isOnline: boolean
 }
 
 export interface PopulateAuthorIdDocument {
