@@ -1,7 +1,7 @@
 import {PageTypeDocument} from "../types/constants/pageTypes";
 
 enum PageTypeId {
-    Default,
+    Default = 1,
     HomePage,
     Blogs,
     Contact
