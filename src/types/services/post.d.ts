@@ -2,7 +2,7 @@ import {PopulateTermsDocument} from "./postTerm";
 import {PopulateAuthorIdDocument} from "./user";
 import LanguageKeys from "../app/languages";
 import {ThemeGroupTypeId} from "../../constants/themeGroupTypes";
-import {PostTypeId, StatusId} from "../../constants";
+import {PageTypeId, PostTypeId, StatusId} from "../../constants";
 
 export interface PostThemeGroupTypeContentDocument {
     langId: string
@@ -42,6 +42,7 @@ export interface PostContentDocument {
 export default interface PostDocument {
     _id: string
     typeId: PostTypeId,
+    pageTypeId?: PageTypeId,
     mainId?: {
         _id: string
         contents: {
@@ -56,8 +57,7 @@ export default interface PostDocument {
     dateStart: Date,
     order: number,
     views: number,
-    isFixed: boolean,
-    isPrimary?: boolean,
+    isFixed?: boolean,
     terms: PopulateTermsDocument[]
     contents?: PostContentDocument,
     themeGroups?: (Omit<PostThemeGroupDocument, "types"> & {
@@ -79,15 +79,14 @@ export interface PostGetParamDocument {
 export type PostAddParamDocument = {
     mainId?: string
     isFixed: 1 | 0
-    isPrimary?: 1 | 0
     contents: PostContentDocument
-    termId: string[]
+    terms: string[]
     themeGroups?: (Omit<PostThemeGroupDocument, "types"|"_id"> & {
         types: (Omit<PostThemeGroupTypeDocument, "contents"|"_id"> & {
             contents: Omit<PostThemeGroupTypeContentDocument, "_id">
         })[]
     })[]
-} & Omit<PostDocument, "mainId"|"authorId"|"lastAuthorId"|"views"|"terms"|"_id"|"contents"|"isFixed"|"isPrimary">
+} & Omit<PostDocument, "_id"|"themeGroups"|"mainId"|"lastAuthorId"|"authorId"|"views"|"contents"|"terms"|"isFixed">
 
 export type PostUpdateParamDocument = {
     postId: string

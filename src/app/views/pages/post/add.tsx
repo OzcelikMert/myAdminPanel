@@ -4,7 +4,7 @@ import JoditEditor from "jodit-react";
 import moment from "moment";
 import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
 import {
-    LanguageKeysArray,
+    LanguageKeysArray, PageTypes,
     PostTermTypeId,
     PostTypeId,
     PostTypes,
@@ -36,6 +36,7 @@ type PageState = {
     langKeys: { value: string, label: string }[]
     posts: { value: string, label: string }[]
     themeGroupTypes: { value: number, label: string }[]
+    pageTypes: { value: number, label: string }[]
     formActiveKey: string
     categoryTerms: { value: string, label: string }[]
     tagTerms: { value: string, label: string }[]
@@ -44,7 +45,7 @@ type PageState = {
     mainTitle: string,
     newThemeGroups: PostThemeGroupDocument[],
     isLoading: boolean
-    formData: Omit<PostUpdateParamDocument, "termId"> & {
+    formData: Omit<PostUpdateParamDocument, "terms"> & {
         categoryTermId: string[]
         tagTermId: string[]
     },
@@ -63,6 +64,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             categoryTerms: [],
             langKeys: [],
             themeGroupTypes: [],
+            pageTypes: [],
             tagTerms: [],
             status: [],
             newThemeGroups: [],
@@ -114,6 +116,9 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             if (![PostTypeId.Page, PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))) {
                 this.getTerms();
             }
+            if ([PostTypeId.Page].includes(Number(this.state.formData.typeId))) {
+                this.getPageTypes();
+            }
             this.getStatus();
             if (this.props.getPageData.searchParams.postId) {
                 this.getPost();
@@ -164,6 +169,16 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             state.themeGroupTypes = ThemeGroupTypes.map(themeGroupType => ({
                 label: this.props.router.t(themeGroupType.langKey),
                 value: themeGroupType.id
+            }))
+            return state;
+        })
+    }
+
+    getPageTypes() {
+        this.setState((state: PageState) => {
+            state.pageTypes = PageTypes.map(pageType => ({
+                label: this.props.router.t(pageType.langKey),
+                value: pageType.id
             }))
             return state;
         })
@@ -257,11 +272,9 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         ...state.formData,
                         ...post,
                         mainId: post.mainId?._id || "",
-                        isPrimary: undefined,
                         categoryTermId: categoryTermId,
                         tagTermId: tagTermId,
                         isFixed: post.isFixed ? 1 : 0,
-                        ...(post.isPrimary ? {isPrimary: post.isPrimary ? 1 : 0} : {}),
                         dateStart: new Date(post.dateStart),
                         contents: {
                             ...state.formData.contents,
@@ -308,7 +321,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             isSubmitting: true
         }, () => {
             let params = Object.assign({
-                termId: this.state.formData.tagTermId.concat(this.state.formData.categoryTermId),
+                terms: this.state.formData.tagTermId.concat(this.state.formData.categoryTermId),
             }, {
                 ...this.state.formData,
                 contents: {
@@ -846,6 +859,18 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
+                {
+                    this.state.formData.typeId == PostTypeId.Page
+                        ? <div className="col-md-7">
+                            <ThemeFormSelect
+                                title={this.props.router.t("pageType")}
+                                name="pageTypeId"
+                                options={this.state.pageTypes}
+                                value={this.state.pageTypes?.findSingle("value", this.state.formData.pageTypeId || "")}
+                                onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
+                            />
+                        </div> : null
+                }
                 <div className="col-md-7">
                     <ThemeFormCheckBox
                         title={this.props.router.t("isFixed")}
@@ -854,17 +879,6 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
-                {
-                    this.state.formData.typeId == PostTypeId.Page
-                        ? <div className="col-md-7">
-                            <ThemeFormCheckBox
-                                title={this.props.router.t("isPrimary")}
-                                name="isPrimary"
-                                checked={Boolean(this.state.formData.isPrimary)}
-                                onChange={e => HandleForm.onChangeInput(e, this)}
-                            />
-                        </div> : null
-                }
             </div>
         );
     }

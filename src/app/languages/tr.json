@@ -172,5 +172,8 @@
   "orMore":  "yada daha fazla",
   "submit": "Gönder",
   "subscribers": "Aboneler",
-  "createdDate": "Oluşturma Tarihi"
+  "createdDate": "Oluşturma Tarihi",
+  "default": "Varsayılan",
+  "homePage": "Anasayfa",
+  "pageType": "Sayfa Tipi"
 }

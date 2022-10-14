@@ -8,6 +8,7 @@ import {UserRoles, UserRoleId} from "./userRoles";
 import ServicePages from "./servicePages";
 import {ThemeGroupTypeId, ThemeGroupTypes} from "./themeGroupTypes";
 import {LanguageKeysArray} from "./languageKeys";
+import {PageTypes, PageTypeId} from "./pageTypes";
 
 export {
     LanguageKeysArray,
@@ -19,6 +20,7 @@ export {
     PostTypes, PostTypeId,
     Status, StatusId,
     UserRoles, UserRoleId,
-    ThemeGroupTypeId, ThemeGroupTypes
+    ThemeGroupTypeId, ThemeGroupTypes,
+    PageTypes, PageTypeId
 };
 

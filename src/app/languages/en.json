@@ -172,5 +172,8 @@
   "orMore":  "or more",
   "submit": "Submit",
   "subscribers": "Subscribers",
-  "createdDate": "Created Date"
+  "createdDate": "Created Date",
+  "default": "Default",
+  "homePage": "Home Page",
+  "pageType": "Page Type"
 }

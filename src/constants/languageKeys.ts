@@ -172,5 +172,8 @@ export const LanguageKeysArray = [
     "orMore",
     "submit",
     "subscribers",
-    "createdDate"
+    "createdDate",
+    "default",
+    "homePage",
+    "pageType"
 ] as const;

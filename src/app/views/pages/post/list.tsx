@@ -1,9 +1,5 @@
 import React, {Component} from 'react'
-import {
-    PostTermTypeId,
-    PostTypeId, PostTypes, Status,
-    StatusId
-} from "../../../../constants";
+import {PageTypeId, PageTypes, PostTermTypeId, PostTypeId, PostTypes, Status, StatusId} from "../../../../constants";
 import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
@@ -186,7 +182,7 @@ export class PagePostList extends Component<PageProps, PageState> {
         this.props.router.navigate(path, {replace: true});
     }
 
-    get getTableColumns(): TableColumn<PostDocument>[] {
+    get getTableColumns(): TableColumn<PageState["showingPosts"][0]>[] {
         return [
             (
                 ![PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
@@ -211,11 +207,6 @@ export class PagePostList extends Component<PageProps, PageState> {
                     <div className="row w-100">
                         <div className="col-md-8">{row.contents?.title || this.props.router.t("[noLangAdd]")}</div>
                         <div className="col-md-4">
-                            {
-                                row.isPrimary
-                                    ? <i className="mdi mdi-home text-primary fs-5"></i>
-                                    : null
-                            }
                             {
                                 row.isFixed
                                     ? <i className="mdi mdi-pin text-success fs-5"></i>
@@ -259,6 +250,21 @@ export class PagePostList extends Component<PageProps, PageState> {
                         name: this.props.router.t("views"),
                         selector: row => row.views,
                         sortable: true
+                    } : {}
+            ),
+            (
+                [PostTypeId.Page].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                    ? {
+                        name: this.props.router.t("pageType"),
+                        selector: row => this.props.router.t(PageTypes.findSingle("id", (row.pageTypeId ? row.pageTypeId : PageTypeId.Default)).langKey),
+                        sortable: true,
+                        cell: row => (
+                            <label className={`badge badge-gradient-dark`}>
+                                {
+                                    this.props.router.t(PageTypes.findSingle("id", (row.pageTypeId ? row.pageTypeId : PageTypeId.Default)).langKey)
+                                }
+                            </label>
+                        )
                     } : {}
             ),
             {
