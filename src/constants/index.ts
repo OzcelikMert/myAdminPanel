@@ -6,7 +6,7 @@ import {PostTypes, PostTypeId} from "./postTypes";
 import {Status, StatusId} from "./status";
 import {UserRoles, UserRoleId} from "./userRoles";
 import ServicePages from "./servicePages";
-import {ThemeGroupTypeId, ThemeGroupTypes} from "./themeGroupTypes";
+import {ComponentInputTypeId, ComponentInputTypes} from "./componentInputTypes";
 import {LanguageKeysArray} from "./languageKeys";
 import {PageTypes, PageTypeId} from "./pageTypes";
 
@@ -20,7 +20,7 @@ export {
     PostTypes, PostTypeId,
     Status, StatusId,
     UserRoles, UserRoleId,
-    ThemeGroupTypeId, ThemeGroupTypes,
+    ComponentInputTypeId, ComponentInputTypes,
     PageTypes, PageTypeId
 };
 

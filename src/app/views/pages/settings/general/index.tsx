@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "../../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
-import {PermissionId, ThemeGroupTypeId, UserRoleId} from "../../../../../constants";
+import {PermissionId, UserRoleId} from "../../../../../constants";
 import settingService from "../../../../../services/setting.service";
 import languageService from "../../../../../services/language.service";
 import ServerInfoDocument from "../../../../../types/services/serverInfo";
@@ -15,7 +15,6 @@ import ThemeChooseImage from "../../../components/chooseImage";
 import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
 import {SettingContactFormDocument, SettingUpdateParamDocument} from "../../../../../types/services/setting";
 import {Tab, Tabs} from "react-bootstrap";
-import {PostThemeGroupDocument, PostThemeGroupTypeDocument} from "../../../../../types/services/post";
 
 type PageState = {
     languages: {label: string, value: string}[]

@@ -5,7 +5,8 @@ type SearchParamDocument = {
     termTypeId: PostTermTypeId,
     termId: string,
     userId: string,
-    postId: string
+    postId: string,
+    componentId: string
 }
 
 

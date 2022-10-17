@@ -175,5 +175,8 @@
   "createdDate": "Oluşturma Tarihi",
   "default": "Varsayılan",
   "homePage": "Anasayfa",
-  "pageType": "Sayfa Tipi"
+  "pageType": "Sayfa Tipi",
+  "components": "Bileşenler",
+  "newType": "Yeni Tip",
+  "component": "Bileşen"
 }

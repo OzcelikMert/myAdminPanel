@@ -32,10 +32,8 @@ enum PermissionId {
     TestimonialAdd,
     TestimonialEdit,
     TestimonialDelete,
-    FooterAdd,
-    FooterEdit,
-    FooterDelete,
-    SubscriberEdit
+    SubscriberEdit,
+    ComponentEdit
 }
 
 const Permissions: Array<PermissionDocument> = [
@@ -69,10 +67,8 @@ const Permissions: Array<PermissionDocument> = [
     {id: PermissionId.TestimonialAdd, groupId: PermissionGroupId.Testimonial, defaultRoleRank: 2, langKey: "add"},
     {id: PermissionId.TestimonialEdit, groupId: PermissionGroupId.Testimonial, defaultRoleRank: 3, langKey: "edit"},
     {id: PermissionId.TestimonialDelete, groupId: PermissionGroupId.Testimonial, defaultRoleRank: 3, langKey: "delete"},
-    {id: PermissionId.FooterAdd, groupId: PermissionGroupId.Footer, defaultRoleRank: 2, langKey: "add"},
-    {id: PermissionId.FooterEdit, groupId: PermissionGroupId.Footer, defaultRoleRank: 3, langKey: "edit"},
-    {id: PermissionId.FooterDelete, groupId: PermissionGroupId.Footer, defaultRoleRank: 3, langKey: "delete"},
-    {id: PermissionId.SubscriberEdit, groupId: PermissionGroupId.Footer, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.SubscriberEdit, groupId: PermissionGroupId.Subscriber, defaultRoleRank: 3, langKey: "edit"},
+    {id: PermissionId.ComponentEdit, groupId: PermissionGroupId.Component, defaultRoleRank: 3, langKey: "edit"},
 ]
 
 export {Permissions, PermissionId};

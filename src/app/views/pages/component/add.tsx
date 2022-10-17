@@ -1,0 +1,481 @@
+import React, {Component, FormEvent} from 'react'
+import {Tab, Tabs} from "react-bootstrap";
+import {PagePropCommonDocument} from "../../../../types/app/pageProps";
+import {LanguageKeysArray, ComponentInputTypeId, ComponentInputTypes, UserRoleId} from "../../../../constants";
+import HandleForm from "../../../../library/react/handles/form";
+import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "../../components/form";
+import SweetAlert from "react-sweetalert2";
+import V from "../../../../library/variable";
+import {pageRoutes} from "../../../routes";
+import Thread from "../../../../library/thread";
+import Spinner from "../../tools/spinner";
+import {ComponentTypeDocument, ComponentUpdateParamDocument} from "../../../../types/services/component";
+import componentService from "../../../../services/component.service";
+import ThemeChooseImage from "../../components/chooseImage";
+import imageSourceUtil from "../../../../utils/functions/imageSource.util";
+import Swal from "sweetalert2";
+import ThemeToast from "../../components/toast";
+
+type PageState = {
+    langKeys: { value: string, label: string }[]
+    types: { value: number, label: string }[]
+    formActiveKey: string
+    isSubmitting: boolean
+    mainTitle: string,
+    formData: ComponentUpdateParamDocument,
+    isSuccessMessage: boolean,
+    isLoading: boolean
+};
+
+type PageProps = {} & PagePropCommonDocument;
+
+export class PageComponentAdd extends Component<PageProps, PageState> {
+    constructor(props: PageProps) {
+        super(props);
+        this.state = {
+            formActiveKey: "general",
+            langKeys: [],
+            types: [],
+            isSubmitting: false,
+            mainTitle: "",
+            formData: {
+                _id: this.props.getPageData.searchParams.componentId,
+                order: 0,
+                types: [],
+                elementId: "",
+                langKey: "[noLangAdd]"
+            },
+            isSuccessMessage: false,
+            isLoading: true
+        }
+    }
+
+    componentDidMount() {
+        this.setPageTitle();
+        Thread.start(() => {
+            this.getLangKeys();
+            this.getTypes();
+            if (this.state.formData._id) {
+                this.getComponent();
+            }
+            this.setState({
+                isLoading: false
+            })
+        })
+    }
+
+    setPageTitle() {
+        let titles: string[] = [
+            this.props.router.t("components"),
+            this.props.router.t(this.state.formData._id ? "edit" : "add")
+        ];
+        if (this.state.formData._id) {
+            titles.push(this.state.mainTitle)
+        }
+        this.props.setBreadCrumb(titles);
+    }
+
+    getLangKeys() {
+        this.setState((state: PageState) => {
+            state.langKeys = LanguageKeysArray.map(langKey => ({label: langKey, value: langKey}))
+            return state;
+        })
+    }
+
+    getTypes() {
+        this.setState((state: PageState) => {
+            state.types = ComponentInputTypes.map(type => ({
+                label: this.props.router.t(type.langKey),
+                value: type.id
+            }))
+            return state;
+        })
+    }
+
+    getComponent() {
+        let resData = componentService.get({
+            _id: this.state.formData._id,
+            langId: this.props.getPageData.langId
+        });
+        if (resData.status) {
+            if (resData.data.length > 0) {
+                const component = resData.data[0];
+                this.setState((state: PageState) => {
+                    state.formData = Object.assign(state.formData, component);
+
+                    state.mainTitle = this.props.router.t(component.langKey);
+
+                    return state;
+                }, () => {
+                    this.setPageTitle();
+                })
+            } else {
+                this.navigateTermPage();
+            }
+        }
+    }
+
+    navigateTermPage() {
+        let path = pageRoutes.component.path() + pageRoutes.component.list.path();
+        this.props.router.navigate(path, {replace: true});
+    }
+
+    onSubmit(event: FormEvent) {
+        event.preventDefault();
+        this.setState({
+            isSubmitting: true
+        }, () => {
+            let params = this.state.formData;
+
+            ((params._id)
+                ? componentService.update(params)
+                : componentService.add(params)).then(resData => {
+                this.setState((state: PageState) => {
+                    if (resData.status) {
+                        state.isSuccessMessage = true;
+                    }
+
+                    state.isSubmitting = false;
+                    return state;
+                })
+            });
+        })
+    }
+
+    onCloseSuccessMessage() {
+        this.setState({
+            isSuccessMessage: false
+        });
+        this.navigateTermPage()
+    }
+
+    get TabThemeEvents() {
+        let self = this;
+        return {
+            onInputChange(data: any, key: string, value: any) {
+                self.setState((state: PageState) => {
+                    data[key] = value;
+                    return state;
+                }, () => {
+                    console.log(self.state)
+                })
+            },
+            onCreateType() {
+                self.setState((state: PageState) => {
+                    state.formData.types.push({
+                        _id: String.createId(),
+                        elementId: "",
+                        order: state.formData.types.length,
+                        langKey: "[noLangAdd]",
+                        typeId: ComponentInputTypeId.Text,
+                        contents: {
+                            langId: self.props.getPageData.langId,
+                            content: ""
+                        }
+                    })
+                    return state;
+                })
+            },
+            onDelete(componentTypes: ComponentTypeDocument[], index: number) {
+                Swal.fire({
+                    title: self.props.router.t("deleteAction"),
+                    html: `<b>'${self.props.router.t(componentTypes[index].langKey)}'</b> ${self.props.router.t("deleteItemQuestionWithItemName")}`,
+                    confirmButtonText: self.props.router.t("yes"),
+                    cancelButtonText: self.props.router.t("no"),
+                    icon: "question",
+                    showCancelButton: true
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        self.setState((state: PageState) => {
+                            componentTypes.splice(index, 1);
+                            return state;
+                        })
+                    }
+                })
+            },
+        }
+    }
+
+    Messages = () => {
+        return (
+            <SweetAlert
+                show={this.state.isSuccessMessage}
+                title={this.props.router.t("successful")}
+                text={`${this.props.router.t((V.isEmpty(this.props.getPageData.searchParams.userId)) ? "itemAdded" : "itemEdited")}!`}
+                icon="success"
+                timer={1000}
+                timerProgressBar={true}
+                didClose={() => this.onCloseSuccessMessage()}
+            />
+        )
+    }
+
+    TabTypes = () => {
+        const Type = (typeProps: ComponentTypeDocument, typeIndex: number) => {
+            let input = <div>{this.props.router.t("type")}</div>;
+            switch (typeProps.typeId) {
+                case ComponentInputTypeId.TextArea:
+                    input = <ThemeFormType
+                        type={"textarea"}
+                        title={this.props.router.t(typeProps.langKey)}
+                        value={typeProps.contents.content}
+                        onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "content", e.target.value)}
+                    />
+                    break;
+                case ComponentInputTypeId.Image:
+                    input = <ThemeFieldSet
+                        legend={`${this.props.router.t(typeProps.langKey)} ${typeProps.contents.comment ? `(${typeProps.contents.comment})` : ""}`}
+                    >
+                        <ThemeChooseImage
+                            {...this.props}
+                            isShow={this.state[typeProps._id]}
+                            onHide={() => this.setState((state) => {
+                                state[typeProps._id] = false;
+                                return state;
+                            })}
+                            onSelected={images => this.setState((state: PageState) => {
+                                typeProps.contents.content = images[0];
+                                return state;
+                            })}
+                            isMulti={false}
+                        />
+                        <div>
+                            <img
+                                src={imageSourceUtil.getUploadedImageSrc(typeProps.contents.content)}
+                                alt="Empty Image"
+                                className="post-image"
+                            />
+                            <button
+                                type="button"
+                                className="btn btn-gradient-warning btn-xs ms-1"
+                                onClick={() => this.setState((state) => {
+                                    state[typeProps._id] = true;
+                                    return state;
+                                })}
+                            ><i className="fa fa-pencil-square-o"></i> {this.props.router.t("select")}</button>
+                        </div>
+                    </ThemeFieldSet>
+                    break;
+                case ComponentInputTypeId.Button:
+                    input = (
+                        <div className="row">
+                            <div className="col-md-6">
+                                <ThemeFormType
+                                    type={"text"}
+                                    title={`${this.props.router.t(typeProps.langKey)} ${typeProps.contents.comment ? `(${typeProps.contents.comment})` : ""}`}
+                                    value={typeProps.contents.content}
+                                    onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "content", e.target.value)}
+                                />
+                            </div>
+                            <div className="col-md-6 mt-3 mt-lg-0">
+                                <ThemeFormType
+                                    type={"text"}
+                                    title={this.props.router.t("url")}
+                                    value={typeProps.contents.url || ""}
+                                    onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "url", e.target.value)}
+                                />
+                            </div>
+                        </div>
+                    )
+                    break;
+                default:
+                    input = <ThemeFormType
+                        type={"text"}
+                        title={`${this.props.router.t(typeProps.langKey)} ${typeProps.contents.comment ? `(${typeProps.contents.comment})` : ""}`}
+                        value={typeProps.contents.content}
+                        onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "content", e.target.value)}
+                    />
+                    break;
+            }
+
+            return (
+                <div className="col-md-7 mt-2">
+                    <div className="row">
+                        {
+                            this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                                ? <div className="col-md-12">
+                                    <button type={"button"} className="btn btn-gradient-danger btn-lg"
+                                            onClick={() => this.TabThemeEvents.onDelete(this.state.formData.types, typeIndex)}>{this.props.router.t("delete")}</button>
+                                </div> : null
+                        }
+                        {
+                            this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                                ? <div className="col-md-12 mt-3">
+                                    <ThemeFormType
+                                        title={`${this.props.router.t("elementId")}*`}
+                                        type="text"
+                                        required={true}
+                                        value={typeProps.elementId}
+                                        onChange={e => this.TabThemeEvents.onInputChange(typeProps, "elementId", e.target.value)}
+                                    />
+                                </div> : null
+                        }
+                        {
+                            this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                                ? <div className="col-md-12 mt-3">
+                                    <ThemeFormSelect
+                                        title={this.props.router.t("langKey")}
+                                        placeholder={this.props.router.t("langKey")}
+                                        options={this.state.langKeys}
+                                        value={this.state.langKeys.filter(item => item.value == typeProps.langKey)}
+                                        onChange={(item: any, e) => this.TabThemeEvents.onInputChange(typeProps, "langKey", item.value)}
+                                    />
+                                </div> : null
+                        }
+                        {
+                            this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                                ? <div className="col-md-12 mt-3">
+                                    <ThemeFormSelect
+                                        title={this.props.router.t("typeId")}
+                                        placeholder={this.props.router.t("typeId")}
+                                        options={this.state.types}
+                                        value={this.state.types.filter(item => item.value == typeProps.typeId)}
+                                        onChange={(item: any, e) => this.TabThemeEvents.onInputChange(typeProps, "typeId", item.value)}
+                                    />
+                                </div> : null
+                        }
+                        {
+                            this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                                ? <div className="col-md-12 mt-3">
+                                    <ThemeFormType
+                                        title={`${this.props.router.t("comment")}`}
+                                        type="text"
+                                        value={typeProps.contents.comment}
+                                        onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "comment", e.target.value)}
+                                    />
+                                </div> : null
+                        }
+                        {
+                            this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                                ? <div className="col-md-12 mt-3">
+                                    <ThemeFormType
+                                        title={`${this.props.router.t("order")}*`}
+                                        type="number"
+                                        required={true}
+                                        value={typeProps.order}
+                                        onChange={e => this.TabThemeEvents.onInputChange(typeProps, "order", e.target.value)}
+                                    />
+                                </div> : null
+                        }
+                        <div className="col-md-12 mt-3">
+                            {input}
+                        </div>
+                    </div>
+                    {
+                        this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                            ? <hr/> : null
+                    }
+                </div>
+            )
+        }
+
+        return (
+            <div className="row mb-3">
+                {
+                    this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                        ? <div className="col-md-7">
+                            <button type={"button"} className="btn btn-gradient-success btn-lg"
+                                    onClick={() => this.TabThemeEvents.onCreateType()}>+ {this.props.router.t("newType")}
+                            </button>
+                        </div> : null
+                }
+                <div className="col-md-7 mt-2">
+                    <div className="row">
+                        {
+                            this.state.formData.types?.orderBy("order", "asc").map((type, index) => Type(type, index))
+                        }
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    TabGeneral = () => {
+        return (
+            <div className="row">
+                <div className="col-md-7 mb-3">
+                    <ThemeFormType
+                        title={`${this.props.router.t("elementId")}*`}
+                        name="elementId"
+                        type="text"
+                        required={true}
+                        value={this.state.formData.elementId}
+                        onChange={e => HandleForm.onChangeInput(e, this)}
+                    />
+                </div>
+                <div className="col-md-7 mb-3">
+                    <ThemeFormSelect
+                        title={this.props.router.t("langKey")}
+                        name="langKey"
+                        placeholder={this.props.router.t("langKey")}
+                        options={this.state.langKeys}
+                        value={this.state.langKeys?.findSingle("value", this.state.formData.langKey)}
+                        onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
+                    />
+                </div>
+                <div className="col-md-7 mb-3">
+                    <ThemeFormType
+                        title={`${this.props.router.t("order")}*`}
+                        name="order"
+                        type="number"
+                        required={true}
+                        value={this.state.formData.order}
+                        onChange={e => HandleForm.onChangeInput(e, this)}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    render() {
+        return this.state.isLoading ? <Spinner /> : (
+            <div className="page-post">
+                <this.Messages/>
+                <div className="navigate-buttons mb-3">
+                    <button className="btn btn-gradient-dark btn-lg btn-icon-text"
+                            onClick={() => this.navigateTermPage()}>
+                        <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
+                    </button>
+                </div>
+                <div className="grid-margin stretch-card">
+                    <div className="card">
+                        <div className="card-body">
+                            <ThemeForm
+                                isActiveSaveButton={true}
+                                saveButtonText={this.props.router.t("save")}
+                                saveButtonLoadingText={this.props.router.t("loading")}
+                                isSubmitting={this.state.isSubmitting}
+                                formAttributes={{onSubmit: (event) => this.onSubmit(event)}}
+                            >
+                                <div className="card-body">
+                                    <div className="theme-tabs">
+                                        <Tabs
+                                            onSelect={(key: any) => this.setState({formActiveKey: key})}
+                                            activeKey={this.state.formActiveKey}
+                                            className="mb-5"
+                                            transition={false}>
+                                            {
+                                                this.props.getSessionData.roleId == UserRoleId.SuperAdmin
+                                                    ? <Tab eventKey="general" title={this.props.router.t("general")}>
+                                                        <this.TabGeneral/>
+                                                    </Tab> : null
+                                            }
+                                            <Tab
+                                                eventKey={this.props.getSessionData.roleId == UserRoleId.SuperAdmin ? "types" : "general"}
+                                                title={this.props.router.t(this.props.getSessionData.roleId == UserRoleId.SuperAdmin ? "content" : "general")}
+                                            >
+                                                <this.TabTypes/>
+                                            </Tab>
+                                        </Tabs>
+                                    </div>
+                                </div>
+                            </ThemeForm>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
+
+export default PageComponentAdd;

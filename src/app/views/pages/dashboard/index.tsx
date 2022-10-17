@@ -201,7 +201,7 @@ class PageDashboard extends Component<PageProps, PageState> {
                         className={`badge badge-gradient-primary cursor-pointer`}
                     >
                         {
-                            this.props.router.t(PostTypes.findSingle("id", row.typeId).langKey)
+                            this.props.router.t(PostTypes.findSingle("id", row.typeId)?.langKey || "[noLangAdd]]")
                         }
                     </label>
                 )

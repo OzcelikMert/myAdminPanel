@@ -13,7 +13,7 @@ class ThemeFieldSet extends Component<PageProps, PageState> {
             <div className="theme-form">
                 <div className="input static">
                     <span className="label">{this.props.legend} {this.props.legendElement}</span>
-                    <div className="field row d-flex">
+                    <div className="field row d-flex m-0">
                         {this.props.children}
                     </div>
                 </div>

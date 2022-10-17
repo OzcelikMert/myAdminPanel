@@ -185,7 +185,7 @@ export class PagePostList extends Component<PageProps, PageState> {
     get getTableColumns(): TableColumn<PageState["showingPosts"][0]>[] {
         return [
             (
-                ![PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                ![PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
                     ? {
                         name: this.props.router.t("image"),
                         width: "75px",
@@ -227,7 +227,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                     } : {}
             ),
             (
-                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
                     ? {
                         name: this.props.router.t("category"),
                         cell: row => row.terms.findMulti("typeId", PostTermTypeId.Category).length > 0
@@ -245,7 +245,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                     } : {}
             ),
             (
-                ![PostTypeId.Slider, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                ![PostTypeId.Slider, PostTypeId.Testimonial, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
                     ? {
                         name: this.props.router.t("views"),
                         selector: row => row.views,
@@ -308,7 +308,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                     <div className="col-md-3 mb-3">
                         <div className="row">
                             {
-                                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate, PostTypeId.Reference].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                                ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Navigate, PostTypeId.Reference].includes(Number(this.props.getPageData.searchParams.postTypeId))
                                     ? <div className="col-6">
                                         <button className="btn btn-gradient-info btn-lg w-100"
                                                 onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Category)}>
@@ -317,7 +317,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                                     </div> : null
                             }
                             {
-                                ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Footer, PostTypeId.Navigate, PostTypeId.Reference].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                                ![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Navigate, PostTypeId.Reference].includes(Number(this.props.getPageData.searchParams.postTypeId))
                                     ? <div className="col-6 text-end">
                                         <button className="btn btn-gradient-primary btn-edit-tag btn-lg w-100"
                                                 onClick={() => this.navigateTermPage("termEdit", "", PostTermTypeId.Tag)}>

@@ -12,8 +12,8 @@ enum PermissionGroupId {
     Settings,
     Service,
     Testimonial,
-    Footer,
-    Subscriber
+    Subscriber,
+    Component
 }
 
 const PermissionGroups: Array<PermissionGroupDocument> = [
@@ -28,8 +28,8 @@ const PermissionGroups: Array<PermissionGroupDocument> = [
     {id: PermissionGroupId.Settings, order: 9, langKey: "settings"},
     {id: PermissionGroupId.Service, order: 10, langKey: "services"},
     {id: PermissionGroupId.Testimonial, order: 11, langKey: "testimonials"},
-    {id: PermissionGroupId.Footer, order: 12, langKey: "footer"},
-    {id: PermissionGroupId.Subscriber, order: 13, langKey: "subscribers"}
+    {id: PermissionGroupId.Subscriber, order: 13, langKey: "subscribers"},
+    {id: PermissionGroupId.Component, order: 14, langKey: "components"}
 ]
 
 export {PermissionGroups, PermissionGroupId}

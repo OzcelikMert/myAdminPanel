@@ -178,11 +178,10 @@ export class PageUserList extends Component<PageProps, PageState> {
                 button: true,
                 width: "70px",
                 cell: row => (UserRoles.findSingle("id", row.roleId).rank < UserRoles.findSingle("id", this.props.getSessionData.roleId).rank) &&
-                permissionUtil.checkPermissionAndRedirect(
+                permissionUtil.checkPermission(
                     this.props.getSessionData.roleId,
                     this.props.getSessionData.permissions,
-                    PermissionId.UserEdit,
-                    this.props.router.navigate
+                    PermissionId.UserEdit
                 ) ? <button
                         onClick={() => this.navigateTermPage("edit", row._id)}
                         className="btn btn-gradient-warning"
@@ -194,11 +193,10 @@ export class PageUserList extends Component<PageProps, PageState> {
                 button: true,
                 width: "70px",
                 cell: row => (UserRoles.findSingle("id", row.roleId).rank < UserRoles.findSingle("id", this.props.getSessionData.roleId).rank) &&
-                permissionUtil.checkPermissionAndRedirect(
+                permissionUtil.checkPermission(
                     this.props.getSessionData.roleId,
                     this.props.getSessionData.permissions,
-                    PermissionId.UserDelete,
-                    this.props.router.navigate
+                    PermissionId.UserDelete
                 ) ? <button
                         onClick={() => this.onDelete(row._id)}
                         className="btn btn-gradient-danger"

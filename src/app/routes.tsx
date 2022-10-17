@@ -23,6 +23,8 @@ import PageUserList from "./views/pages/settings/user/list";
 import PageSettingsSEO from "./views/pages/settings/seo";
 import PageSettingsGeneral from "./views/pages/settings/general";
 import PageSubscribers from "./views/pages/settings/subscribers";
+import PageComponentAdd from "./views/pages/component/add";
+import PageComponentList from "./views/pages/component/list";
 
 export const pageRoutes = {
     login: {
@@ -52,6 +54,26 @@ export const pageRoutes = {
         upload: {
             path() {
                 return "upload"
+            }
+        },
+        list: {
+            path() {
+                return "list"
+            }
+        },
+    },
+    component: {
+        path() {
+            return `component/`
+        },
+        add: {
+            path() {
+                return "add"
+            }
+        },
+        edit: {
+            path(componentId: string | number = ":componentId") {
+                return `edit/${componentId}`
             }
         },
         list: {
@@ -201,6 +223,15 @@ class AppRoutes extends Component<PageProps, PageState> {
                             </Route>
                         )
                     }
+
+                    <Route path={pageRoutes.component.path()}>
+                        <Route path={pageRoutes.component.add.path()}
+                               element={<PageComponentAdd {...this.props}/>}/>
+                        <Route path={pageRoutes.component.edit.path()}
+                               element={<PageComponentAdd {...this.props}/>}/>
+                        <Route path={pageRoutes.component.list.path()}
+                               element={<PageComponentList {...this.props}/>}/>
+                    </Route>
 
                     <Route path={pageRoutes.settings.path()}>
                         <Route path={pageRoutes.settings.user.path()}>

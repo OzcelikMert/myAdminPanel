@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Collapse} from 'react-bootstrap';
 import {Trans} from 'react-i18next';
-import {PermissionId, PostTypeId} from "../../../constants";
+import {PermissionId, PostTypeId, UserRoleId} from "../../../constants";
 import {pageRoutes} from "../../routes";
 import {PagePropCommonDocument} from "../../../types/app/pageProps";
 import permissionUtil from "../../../utils/functions/permission.util";
@@ -29,8 +29,9 @@ interface SideBarPath {
     title: string,
     icon?: string,
     state?: string,
-    subPaths?: Array<SideBarPath>
+    subPaths?: SideBarPath[]
     permId?: PermissionId
+    roleId?: UserRoleId
 }
 
 class Sidebar extends Component<PageProps, PageState> {
@@ -166,7 +167,7 @@ class Sidebar extends Component<PageProps, PageState> {
                 },
                 {
                     path: pageRoutes.themeContent.path(),
-                    icon: `shape`,
+                    icon: `collage`,
                     title: this.props.router.t("themeContents"),
                     state: `themeContents`,
                     subPaths: [
@@ -251,17 +252,17 @@ class Sidebar extends Component<PageProps, PageState> {
                     ]
                 },
                 {
-                    path: pageRoutes.post.path(PostTypeId.Footer),
-                    icon: `note-multiple`,
-                    title: this.props.router.t("footer"),
-                    state: `footer`,
+                    path: pageRoutes.component.path(),
+                    icon: `shape`,
+                    title: this.props.router.t("components"),
+                    state: `components`,
                     subPaths: [
                         {
-                            path: pageRoutes.post.add.path(),
+                            path: pageRoutes.component.add.path(),
                             title: this.props.router.t("add"),
-                            permId: PermissionId.FooterAdd
+                            roleId: UserRoleId.SuperAdmin,
                         },
-                        {path: pageRoutes.post.list.path(), title: this.props.router.t("list")}
+                        {path: pageRoutes.component.list.path(), title: this.props.router.t("list")}
                     ]
                 },
                 {
@@ -316,11 +317,11 @@ class Sidebar extends Component<PageProps, PageState> {
         let self = this;
 
         function HasChild(_props: SideBarPath) {
-            if (_props.permId && !permissionUtil.checkPermission(
+            if ((_props.permId && !permissionUtil.checkPermission(
                 self.props.getSessionData.roleId,
                 self.props.getSessionData.permissions,
                 _props.permId
-            )) return null;
+            )) || (_props.roleId && self.props.getSessionData.roleId != _props.roleId)) return null;
             return (
                 <Link className={`nav-link ${self.isPathActive(_props.path) ? 'active' : ''}`} to={_props.path}>
                     <span
@@ -331,11 +332,11 @@ class Sidebar extends Component<PageProps, PageState> {
         }
 
         function HasChildren(_props: SideBarPath) {
-            if (_props.permId && !permissionUtil.checkPermission(
+            if ((_props.permId && !permissionUtil.checkPermission(
                 self.props.getSessionData.roleId,
                 self.props.getSessionData.permissions,
                 _props.permId
-            )) return null;
+            )) || (_props.roleId && self.props.getSessionData.roleId != _props.roleId)) return null;
             // @ts-ignore
             let state = (typeof _props.state === "undefined") ? false : self.state.isMenuOpen[_props.state];
             return (
@@ -353,11 +354,11 @@ class Sidebar extends Component<PageProps, PageState> {
                 {
                     // @ts-ignore
                     _props.subPaths.map((item, index) => {
-                        if (item.permId && !permissionUtil.checkPermission(
+                        if ((item.permId && !permissionUtil.checkPermission(
                             self.props.getSessionData.roleId,
                             self.props.getSessionData.permissions,
                             item.permId
-                        )) return null;
+                        )) || (item.roleId && self.props.getSessionData.roleId != item.roleId)) return null;
                         item.path = _props.path + item.path;
                         return (
                             <li className="nav-item" key={index}>

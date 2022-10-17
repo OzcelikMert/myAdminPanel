@@ -175,5 +175,8 @@
   "createdDate": "Created Date",
   "default": "Default",
   "homePage": "Home Page",
-  "pageType": "Page Type"
+  "pageType": "Page Type",
+  "components": "Components",
+  "newType": "New Type",
+  "component": "Component"
 }

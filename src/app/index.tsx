@@ -67,7 +67,8 @@ class AppAdmin extends Component<PageProps, PageState> {
                     termTypeId: 0,
                     postTypeId: 0,
                     termId: "",
-                    userId: ""
+                    userId: "",
+                    componentId: ""
                 },
                 langId: "",
                 mainLangId: "1",
@@ -107,7 +108,8 @@ class AppAdmin extends Component<PageProps, PageState> {
                     termTypeId: 0,
                     postTypeId: 0,
                     termId: "",
-                    userId: ""
+                    userId: "",
+                    componentId: ""
                 };
                 if (this.props.router.match) {
                     Statement.Foreach(this.props.router.match?.params, (key, value) => {
@@ -307,6 +309,8 @@ export function withRouter(Component: any) {
         const routes: RouteObject[] = [
             // User
             {path: pageRoutes.settings.path() + pageRoutes.settings.user.path() + pageRoutes.settings.user.edit.path()},
+            // Component
+            {path: pageRoutes.component.path() + pageRoutes.component.edit.path()},
             // Post
             {path: pageRoutes.themeContent.path() + pageRoutes.post.path() + pageRoutes.post.add.path()},
             {path: pageRoutes.themeContent.path() + pageRoutes.post.path() + pageRoutes.post.edit.path()},
