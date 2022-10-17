@@ -64,6 +64,22 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
         })
     }
 
+    componentDidUpdate(prevProps: PagePropCommonDocument) {
+        if (prevProps.getPageData.langId != this.props.getPageData.langId) {
+            this.setState((state: PageState) => {
+                state.isLoading = true;
+                return state;
+            }, () => {
+                Thread.start(() => {
+                    this.getComponent()
+                    this.setState({
+                        isLoading: false
+                    })
+                })
+            })
+        }
+    }
+
     setPageTitle() {
         let titles: string[] = [
             this.props.router.t("components"),
@@ -95,7 +111,8 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
     getComponent() {
         let resData = componentService.get({
             _id: this.state.formData._id,
-            langId: this.props.getPageData.langId
+            langId: this.props.getPageData.langId,
+            getContents: 1
         });
         if (resData.status) {
             if (resData.data.length > 0) {
@@ -103,7 +120,9 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
                 this.setState((state: PageState) => {
                     state.formData = Object.assign(state.formData, component);
 
-                    state.mainTitle = this.props.router.t(component.langKey);
+                    if (this.props.getPageData.langId == this.props.getPageData.mainLangId) {
+                        state.mainTitle = this.props.router.t(component.langKey);
+                    }
 
                     return state;
                 }, () => {
@@ -218,13 +237,13 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
                     input = <ThemeFormType
                         type={"textarea"}
                         title={this.props.router.t(typeProps.langKey)}
-                        value={typeProps.contents.content}
+                        value={typeProps.contents?.content}
                         onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "content", e.target.value)}
                     />
                     break;
                 case ComponentInputTypeId.Image:
                     input = <ThemeFieldSet
-                        legend={`${this.props.router.t(typeProps.langKey)} ${typeProps.contents.comment ? `(${typeProps.contents.comment})` : ""}`}
+                        legend={`${this.props.router.t(typeProps.langKey)} ${typeProps.contents?.comment ? `(${typeProps.contents.comment})` : ""}`}
                     >
                         <ThemeChooseImage
                             {...this.props}
@@ -234,14 +253,16 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
                                 return state;
                             })}
                             onSelected={images => this.setState((state: PageState) => {
-                                typeProps.contents.content = images[0];
+                                if(typeProps.contents){
+                                    typeProps.contents.content = images[0];
+                                }
                                 return state;
                             })}
                             isMulti={false}
                         />
                         <div>
                             <img
-                                src={imageSourceUtil.getUploadedImageSrc(typeProps.contents.content)}
+                                src={imageSourceUtil.getUploadedImageSrc(typeProps.contents?.content)}
                                 alt="Empty Image"
                                 className="post-image"
                             />
@@ -262,8 +283,8 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
                             <div className="col-md-6">
                                 <ThemeFormType
                                     type={"text"}
-                                    title={`${this.props.router.t(typeProps.langKey)} ${typeProps.contents.comment ? `(${typeProps.contents.comment})` : ""}`}
-                                    value={typeProps.contents.content}
+                                    title={`${this.props.router.t(typeProps.langKey)} ${typeProps.contents?.comment ? `(${typeProps.contents.comment})` : ""}`}
+                                    value={typeProps.contents?.content}
                                     onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "content", e.target.value)}
                                 />
                             </div>
@@ -271,7 +292,7 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
                                 <ThemeFormType
                                     type={"text"}
                                     title={this.props.router.t("url")}
-                                    value={typeProps.contents.url || ""}
+                                    value={typeProps.contents?.url || ""}
                                     onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "url", e.target.value)}
                                 />
                             </div>
@@ -281,8 +302,8 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
                 default:
                     input = <ThemeFormType
                         type={"text"}
-                        title={`${this.props.router.t(typeProps.langKey)} ${typeProps.contents.comment ? `(${typeProps.contents.comment})` : ""}`}
-                        value={typeProps.contents.content}
+                        title={`${this.props.router.t(typeProps.langKey)} ${typeProps.contents?.comment ? `(${typeProps.contents.comment})` : ""}`}
+                        value={typeProps.contents?.content}
                         onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "content", e.target.value)}
                     />
                     break;
@@ -340,7 +361,7 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
                                     <ThemeFormType
                                         title={`${this.props.router.t("comment")}`}
                                         type="text"
-                                        value={typeProps.contents.comment}
+                                        value={typeProps.contents?.comment}
                                         onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "comment", e.target.value)}
                                     />
                                 </div> : null

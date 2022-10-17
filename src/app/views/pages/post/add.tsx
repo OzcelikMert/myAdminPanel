@@ -25,6 +25,7 @@ import permissionUtil from "../../../../utils/functions/permission.util";
 import staticContentUtil from "../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";
 import {
+    PostContentButtonDocument,
     PostUpdateParamDocument
 } from "../../../../types/services/post";
 import LanguageKeys from "../../../../types/app/languages";
@@ -353,6 +354,34 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         })
     }
 
+    get TabGeneralButtonEvents() {
+        let self = this;
+        return {
+            onChange(key: keyof PostContentButtonDocument, value: string, index: number) {
+                self.setState((state: PageState) => {
+                    if(state.formData.contents.buttons) state.formData.contents.buttons[index][key] = value;
+                    return state;
+                })
+            },
+            onAddNew() {
+                self.setState((state: PageState) => {
+                    if(typeof state.formData.contents.buttons === "undefined") state.formData.contents.buttons = [];
+                    state.formData.contents.buttons.push({
+                        title: "",
+                        url: ""
+                    })
+                    return state;
+                })
+            },
+            onDelete(index: number) {
+                self.setState((state: PageState) => {
+                    if(state.formData.contents.buttons) state.formData.contents.buttons.remove(index);
+                    return state;
+                })
+            }
+        }
+    }
+
     get TabComponentEvents() {
         let self = this;
         return {
@@ -364,7 +393,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             },
             onAddNew() {
                 self.setState((state: PageState) => {
-                    if(state.formData.components) state.formData.components.push("")
+                    if(typeof state.formData.components === "undefined") state.formData.components = [];
+                    state.formData.components.push("")
                     return state;
                 })
             },
@@ -550,6 +580,58 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     }
 
     TabGeneral = () => {
+        const Buttons = () => {
+            const Button = (propButton: PostContentButtonDocument, index: number) => {
+                return (
+                    <div className="col-md-12 mt-4">
+                        <ThemeFieldSet
+                            legend={`${this.props.router.t("button")}#${index + 1}`}
+                            legendElement={<i className="mdi mdi-trash-can text-danger fs-3 cursor-pointer"
+                                              onClick={() => this.TabGeneralButtonEvents.onDelete(index)}></i>}
+                        >
+                            <div className="row mt-3">
+                                <div className="col-md-6">
+                                    <ThemeFormType
+                                        type={"text"}
+                                        title={this.props.router.t("title")}
+                                        value={propButton.title}
+                                        onChange={e => this.TabGeneralButtonEvents.onChange("title", e.target.value, index)}
+                                    />
+                                </div>
+                                <div className="col-md-6 mt-3 mt-lg-0">
+                                    <ThemeFormType
+                                        type={"text"}
+                                        title={this.props.router.t("url")}
+                                        value={propButton.url}
+                                        onChange={e => this.TabGeneralButtonEvents.onChange("url", e.target.value, index)}
+                                    />
+                                </div>
+                            </div>
+                        </ThemeFieldSet>
+                    </div>
+                )
+            }
+
+            return (
+                <div className="row mb-3">
+                    <div className="col-md-7">
+                        <button type={"button"} className="btn btn-gradient-success btn-lg"
+                                onClick={() => this.TabGeneralButtonEvents.onAddNew()}>+ {this.props.router.t("newButton")}
+                        </button>
+                    </div>
+                    <div className="col-md-7 mt-2">
+                        <div className="row">
+                            {
+                                this.state.formData.contents.buttons?.map((button, index) => {
+                                    return Button(button, index)
+                                })
+                            }
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div className="row">
                 {
@@ -656,6 +738,14 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                                 value={this.state.tagTerms?.filter(item => this.state.formData.tagTermId.includes(item.value))}
                                 onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item, this)}
                             />
+                        </div> : null
+                }
+                {
+                    [PostTypeId.Slider, PostTypeId.Service].includes(Number(this.state.formData.typeId))
+                        ? <div className="col-md-7 mb-3">
+                            {
+                                Buttons()
+                            }
                         </div> : null
                 }
             </div>

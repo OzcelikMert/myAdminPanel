@@ -28,7 +28,7 @@ export interface ComponentTypeDocument {
     typeId: number,
     langKey: LanguageKeys,
     order: number,
-    contents: ComponentTypeContentDocument
+    contents?: ComponentTypeContentDocument
 }
 
 export interface ComponentDocument {

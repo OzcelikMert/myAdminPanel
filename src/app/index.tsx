@@ -157,34 +157,42 @@ class AppAdmin extends Component<PageProps, PageState> {
     getContentLanguages() {
         this.setState({
             isPageLoading: true,
-        });
-        let resData = languageService.get({});
-        console.log(resData);
-        if (resData.status) {
+        }, () => {
+            let resData = languageService.get({});
+            if (resData.status) {
+                this.setState({
+                    pageLanguages: resData.data.map((lang, index) => ({
+                        label: <this.ContentLanguageItem {...lang} key={index}/>,
+                        value: lang._id
+                    }))
+                })
+            }
+
             this.setState({
-                pageLanguages: resData.data.map((lang, index) => ({
-                    label: <this.ContentLanguageItem {...lang} key={index}/>,
-                    value: lang._id
-                })),
                 isPageLoading: false
             })
-        }
+        });
+
     }
 
     getContentMainLanguage() {
         this.setState({
             isPageLoading: true,
-        });
-        let resData = settingService.get({})
-        if (resData.status) {
-            let data = resData.data[0];
-            this.setState((state: PageState) => {
-                state.pageData.mainLangId = data.defaultLangId;
-                state.pageData.langId = data.defaultLangId;
-                state.isPageLoading = false;
-                return state;
+        }, () => {
+            let resData = settingService.get({})
+            if (resData.status) {
+                let data = resData.data[0];
+                this.setState((state: PageState) => {
+                    state.pageData.mainLangId = data.defaultLangId;
+                    state.pageData.langId = data.defaultLangId;
+                    return state;
+                })
+            }
+
+            this.setState({
+                isPageLoading: false
             })
-        }
+        });
     }
 
     ContentLanguageItem = (props: LanguageDocument) => (
@@ -200,6 +208,7 @@ class AppAdmin extends Component<PageProps, PageState> {
 
     ContentLanguage = () => {
         const showingPages = [
+            pageRoutes.component.path() + pageRoutes.component.edit.path(),
             pageRoutes.post.path() + pageRoutes.post.edit.path(),
             pageRoutes.postTerm.path() + pageRoutes.postTerm.edit.path(),
             pageRoutes.settings.path() + pageRoutes.settings.seo.path()
@@ -223,8 +232,13 @@ class AppAdmin extends Component<PageProps, PageState> {
                 options={this.state.pageLanguages}
                 value={this.state.pageLanguages.findSingle("value", this.state.pageData.langId)}
                 onChange={(item: any, e) => this.setState((state: PageState) => {
-                    this.state.pageData.langId = item.value;
-                    return state;
+                    return {
+                        ...state,
+                        pageData: {
+                            ...state.pageData,
+                            langId: item.value
+                        }
+                    };
                 })}
             />
         ) : null

@@ -213,6 +213,7 @@ class PageDashboard extends Component<PageProps, PageState> {
             },
             {
                 name: this.props.router.t("status"),
+                selector: row => row.statusId,
                 sortable: true,
                 cell: row => (
                     <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>

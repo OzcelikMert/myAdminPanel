@@ -3,6 +3,12 @@ import {PopulateAuthorIdDocument} from "./user";
 import {PageTypeId, PostTypeId, StatusId} from "../../constants";
 import {ComponentDocument} from "./component";
 
+export interface PostContentButtonDocument {
+    _id?: string
+    title: string,
+    url: string
+}
+
 export interface PostContentDocument {
     langId: string
     image?: string,
@@ -12,6 +18,7 @@ export interface PostContentDocument {
     url?: string,
     seoTitle?: string,
     seoContent?: string
+    buttons?: PostContentButtonDocument[]
 }
 
 export default interface PostDocument {
