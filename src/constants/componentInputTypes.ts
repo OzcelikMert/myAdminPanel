@@ -5,7 +5,7 @@ enum ComponentInputTypeId {
     TextArea,
     Image,
     Button,
-    Icon
+    Number
 }
 
 const ComponentInputTypes: Array<ThemeGroupTypeDocument> = [
@@ -13,7 +13,7 @@ const ComponentInputTypes: Array<ThemeGroupTypeDocument> = [
     {id: ComponentInputTypeId.TextArea, langKey: "textArea"},
     {id: ComponentInputTypeId.Image, langKey: "image"},
     {id: ComponentInputTypeId.Button, langKey: "button"},
-    {id: ComponentInputTypeId.Icon, langKey: "icon"},
+    {id: ComponentInputTypeId.Number, langKey: "icon"},
 ]
 
 export {ComponentInputTypes, ComponentInputTypeId}

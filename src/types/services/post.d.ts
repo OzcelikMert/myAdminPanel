@@ -42,7 +42,7 @@ export default interface PostDocument {
     isFixed?: boolean,
     terms: (PopulateTermsDocument | undefined)[]
     contents?: PostContentDocument,
-    components?: (ComponentDocument | undefined)[]
+    components?: ComponentDocument[]
 }
 
 export interface PostGetParamDocument {

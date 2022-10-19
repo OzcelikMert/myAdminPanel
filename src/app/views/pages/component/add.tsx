@@ -299,6 +299,14 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
                         </div>
                     )
                     break;
+                case ComponentInputTypeId.Number:
+                    input = <ThemeFormType
+                        type={"number"}
+                        title={`${this.props.router.t(typeProps.langKey)} ${typeProps.contents?.comment ? `(${typeProps.contents.comment})` : ""}`}
+                        value={typeProps.contents?.content}
+                        onChange={e => this.TabThemeEvents.onInputChange(typeProps.contents, "content", e.target.value)}
+                    />
+                    break;
                 default:
                     input = <ThemeFormType
                         type={"text"}

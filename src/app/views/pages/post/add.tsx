@@ -277,7 +277,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         mainId: post.mainId?._id || "",
                         categoryTermId: categoryTermId,
                         tagTermId: tagTermId,
-                        components: post.components?.map(component => component ? component._id : ""),
+                        components: post.components?.map(component => component._id),
                         isFixed: post.isFixed ? 1 : 0,
                         dateStart: new Date(post.dateStart),
                         contents: {
