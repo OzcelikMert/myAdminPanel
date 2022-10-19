@@ -40,9 +40,9 @@ export default interface PostDocument {
     order: number,
     views: number,
     isFixed?: boolean,
-    terms: PopulateTermsDocument[]
+    terms: (PopulateTermsDocument | undefined)[]
     contents?: PostContentDocument,
-    components?: ComponentDocument[]
+    components?: (ComponentDocument | undefined)[]
 }
 
 export interface PostGetParamDocument {

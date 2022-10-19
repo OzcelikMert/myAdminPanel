@@ -68,7 +68,7 @@ export class PageComponentList extends Component<PageProps, PageState> {
                     type: "loading"
                 });
                 componentService.delete({
-                    _id: _id
+                    _id: [_id]
                 }).then(resData => {
                     loadingToast.hide();
                     if (resData.status) {

@@ -267,8 +267,8 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                     let tagTermId: string[] = [];
 
                     post.terms.forEach(term => {
-                        if (term.typeId == PostTermTypeId.Category) categoryTermId.push(term._id);
-                        else if (term.typeId == PostTermTypeId.Tag) tagTermId.push(term._id);
+                        if (term?.typeId == PostTermTypeId.Category) categoryTermId.push(term._id);
+                        else if (term?.typeId == PostTermTypeId.Tag) tagTermId.push(term._id);
                     });
 
                     state.formData = {
@@ -277,7 +277,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         mainId: post.mainId?._id || "",
                         categoryTermId: categoryTermId,
                         tagTermId: tagTermId,
-                        components: post.components?.map(component => component._id),
+                        components: post.components?.map(component => component ? component._id : ""),
                         isFixed: post.isFixed ? 1 : 0,
                         dateStart: new Date(post.dateStart),
                         contents: {

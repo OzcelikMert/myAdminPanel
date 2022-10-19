@@ -29,7 +29,7 @@ export default {
     },
     delete(params: ComponentDeleteParamDocument) {
         return Api.delete({
-            url: [ServicePages.component, params._id.toString()],
+            url: [ServicePages.component],
             data: params,
         });
     },
