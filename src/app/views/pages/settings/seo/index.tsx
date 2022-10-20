@@ -58,9 +58,8 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
     }
 
     componentDidUpdate(prevProps: Readonly<PageProps>) {
-        if (this.state.formData.seoContents.langId != this.props.getPageData.langId) {
+        if (prevProps.getPageData.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
-                state.formData.seoContents.langId = this.props.getPageData.langId;
                 state.isLoading = true;
                 return state;
             }, () => {
@@ -79,7 +78,7 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
     }
 
     getSeo() {
-        let resData = settingService.get({langId: this.state.formData.seoContents.langId});
+        let resData = settingService.get({langId: this.props.getPageData.langId});
 
         if (resData.status) {
             this.setState((state: PageState) => {
@@ -88,7 +87,8 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
                     state.formData = {
                         seoContents: {
                             ...state.formData.seoContents,
-                            ...setting.seoContents
+                            ...setting.seoContents,
+                            langId: this.props.getPageData.langId
                         }
                     };
                 }

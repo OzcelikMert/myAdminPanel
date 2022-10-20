@@ -127,10 +127,9 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         })
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.state.formData.contents.langId != this.props.getPageData.langId) {
+    componentDidUpdate(prevProps: PagePropCommonDocument) {
+        if (prevProps.getPageData.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
-                state.formData.contents.langId = this.props.getPageData.langId;
                 state.isLoading = true;
                 return state;
             }, () => {
@@ -255,7 +254,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         let resData = postService.get({
             postId: this.state.formData.postId,
             typeId: this.props.getPageData.searchParams.postTypeId,
-            langId: this.state.formData.contents.langId,
+            langId: this.props.getPageData.langId,
             getContents: 1
         });
         if (resData.status) {
@@ -283,6 +282,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         contents: {
                             ...state.formData.contents,
                             ...post.contents,
+                            langId: this.props.getPageData.langId,
                             content: post.contents?.content || ""
                         }
                     };

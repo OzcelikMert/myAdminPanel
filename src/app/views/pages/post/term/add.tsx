@@ -108,9 +108,8 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
     }
 
     componentDidUpdate(prevProps: Readonly<PageProps>) {
-        if (this.state.formData.contents.langId != this.props.getPageData.langId) {
+        if (prevProps.getPageData.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
-                state.formData.contents.langId = this.props.getPageData.langId;
                 state.isLoading = true;
                 return state;
             }, () => {
@@ -176,7 +175,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         let resData = postTermService.get({
             typeId: this.state.formData.typeId,
             postTypeId: this.state.formData.postTypeId,
-            langId: this.state.formData.contents.langId
+            langId: this.props.getPageData.langId
         });
         if (resData.status) {
             if (resData.data.length > 0) {
@@ -187,6 +186,11 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                         ...term,
                         mainId: term.mainId?._id || "",
                         isFixed: term.isFixed ? 1 : 0,
+                        contents: {
+                            ...state.formData.contents,
+                            ...term.contents,
+                            langId: this.props.getPageData.langId
+                        }
                     }
 
                     if (this.props.getPageData.langId == this.props.getPageData.mainLangId) {

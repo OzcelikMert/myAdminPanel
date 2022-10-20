@@ -118,7 +118,16 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
             if (resData.data.length > 0) {
                 const component = resData.data[0];
                 this.setState((state: PageState) => {
-                    state.formData = Object.assign(state.formData, component);
+                    state.formData = {
+                        ...state.formData,
+                        ...component,
+                        types: component.types.map(type => {
+                            if(type.contents){
+                                type.contents.langId = this.props.getPageData.langId;
+                            }
+                            return type;
+                        })
+                    };
 
                     if (this.props.getPageData.langId == this.props.getPageData.mainLangId) {
                         state.mainTitle = this.props.router.t(component.langKey);
@@ -145,7 +154,6 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
             isSubmitting: true
         }, () => {
             let params = this.state.formData;
-
             ((params._id)
                 ? componentService.update(params)
                 : componentService.add(params)).then(resData => {
