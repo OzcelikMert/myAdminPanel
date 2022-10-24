@@ -3,5 +3,5 @@ My Admin Panel
 
 Things to do:
 - Add Static Language keys for website
-- sort component order for Pages
-- add ip block and country block
+- sort component order for Page
+- add ip block and country blocks
