@@ -297,14 +297,18 @@ class Sidebar extends Component<PageProps, PageState> {
                             permId: PermissionId.SettingEdit
                         },
                         {
-                            path: pageRoutes.settings.profile.path(),
-                            icon: `account`,
-                            title: this.props.router.t("profile")
-                        },
-                        {path: pageRoutes.settings.changePassword.path(), title: this.props.router.t("changePassword")},
-                        {
                             path: pageRoutes.settings.subscribers.path(),
                             title: this.props.router.t("subscribers"),
+                            permId: PermissionId.SubscriberEdit
+                        },
+                        {
+                            path: pageRoutes.settings.contactForms.path(),
+                            title: this.props.router.t("contactForms"),
+                            permId: PermissionId.SubscriberEdit
+                        },
+                        {
+                            path: pageRoutes.settings.staticLanguages.path(),
+                            title: this.props.router.t("staticLanguages"),
                             permId: PermissionId.SubscriberEdit
                         },
                     ]

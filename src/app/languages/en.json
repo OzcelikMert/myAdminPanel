@@ -178,5 +178,7 @@
   "pageType": "Page Type",
   "components": "Components",
   "newType": "New Type",
-  "component": "Component"
+  "component": "Component",
+  "staticLanguages": "Static Languages",
+  "newStaticLanguage": "New Static Language"
 }

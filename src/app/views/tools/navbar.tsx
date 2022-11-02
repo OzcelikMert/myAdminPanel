@@ -26,10 +26,13 @@ class Navbar extends Component<PageProps, PageState> {
         (document.querySelector('.sidebar-offcanvas') as HTMLCanvasElement).classList.toggle('active');
     }
 
-    profileEvents(event: "profile" | "lock" | "signOut") {
+    profileEvents(event: "profile" | "lock" | "signOut" | "changePassword") {
         switch(event) {
             case "profile":
                 this.props.router.navigate(pageRoutes.settings.path() + pageRoutes.settings.profile.path(), {replace: true})
+                break;
+            case "changePassword":
+                this.props.router.navigate(pageRoutes.settings.path() + pageRoutes.settings.changePassword.path(), {replace: true})
                 break;
             case "lock":
                 authService.logOut().then(resData => {
@@ -230,6 +233,10 @@ class Navbar extends Component<PageProps, PageState> {
                 <Dropdown.Item onClick={evt => this.profileEvents("profile")}>
                     <i className="mdi mdi-account-circle me-2 text-primary"></i>
                     {this.props.router.t("profile")}
+                </Dropdown.Item>
+                <Dropdown.Item onClick={evt => this.profileEvents("changePassword")}>
+                    <i className="mdi mdi-key me-2 text-primary"></i>
+                    {this.props.router.t("changePassword").toCapitalizeCase()}
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => this.profileEvents("lock")}>
                     <i className="mdi mdi-lock me-2 text-primary"></i>

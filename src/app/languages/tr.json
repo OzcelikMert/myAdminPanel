@@ -178,5 +178,7 @@
   "pageType": "Sayfa Tipi",
   "components": "Bileşenler",
   "newType": "Yeni Tip",
-  "component": "Bileşen"
+  "component": "Bileşen",
+  "staticLanguages": "Sabit Diller",
+  "newStaticLanguage": "Yeni Sabit Dil"
 }

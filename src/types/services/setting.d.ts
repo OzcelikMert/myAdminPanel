@@ -1,3 +1,17 @@
+import LanguageKeys from "../app/languages";
+
+export interface SettingStaticLanguageContentDocument {
+    _id?: string
+    langId: string
+    content?: string,
+}
+
+export interface SettingStaticLanguageDocument {
+    _id?: string
+    langKey: LanguageKeys,
+    contents: SettingStaticLanguageContentDocument
+}
+
 export interface SettingSeoContentDocument {
     langId: string
     title?: string,
@@ -40,6 +54,7 @@ export default interface SettingDocument {
     seoContents?: SettingSeoContentDocument,
     contact?: SettingContactDocument
     contactForms?: SettingContactFormDocument[]
+    staticLanguages?: SettingStaticLanguageDocument[]
 }
 
 export interface SettingGetParamDocument {

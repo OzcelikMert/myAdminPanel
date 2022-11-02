@@ -211,7 +211,8 @@ class AppAdmin extends Component<PageProps, PageState> {
             pageRoutes.component.path() + pageRoutes.component.edit.path(),
             pageRoutes.post.path() + pageRoutes.post.edit.path(),
             pageRoutes.postTerm.path() + pageRoutes.postTerm.edit.path(),
-            pageRoutes.settings.path() + pageRoutes.settings.seo.path()
+            pageRoutes.settings.path() + pageRoutes.settings.seo.path(),
+            pageRoutes.settings.path() + pageRoutes.settings.staticLanguages.path()
         ];
 
         let isShow = showingPages.map(page => {

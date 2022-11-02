@@ -25,6 +25,8 @@ import PageSettingsGeneral from "./views/pages/settings/general";
 import PageSubscribers from "./views/pages/settings/subscribers";
 import PageComponentAdd from "./views/pages/component/add";
 import PageComponentList from "./views/pages/component/list";
+import PageSettingsContactForms from "./views/pages/settings/contactForms";
+import PageSettingsStaticLanguages from "./views/pages/settings/staticLanguages";
 
 export const pageRoutes = {
     login: {
@@ -171,6 +173,16 @@ export const pageRoutes = {
                 return "subscribers"
             }
         },
+        contactForms: {
+            path() {
+                return "contactForms"
+            }
+        },
+        staticLanguages: {
+            path() {
+                return "staticLanguages"
+            }
+        },
     }
 }
 
@@ -252,6 +264,10 @@ class AppRoutes extends Component<PageProps, PageState> {
                                element={<PageChangePassword {...this.props}/>}/>
                         <Route path={pageRoutes.settings.subscribers.path()}
                                element={<PageSubscribers {...this.props}/>}/>
+                        <Route path={pageRoutes.settings.contactForms.path()}
+                               element={<PageSettingsContactForms {...this.props}/>}/>
+                        <Route path={pageRoutes.settings.staticLanguages.path()}
+                               element={<PageSettingsStaticLanguages {...this.props}/>}/>
                     </Route>
 
                     <Route path="*" element={<Navigate to={pageRoutes.dashboard.path()}/>}/>

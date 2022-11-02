@@ -178,5 +178,7 @@ export const LanguageKeysArray = [
     "pageType",
     "components",
     "newType",
-    "component"
+    "component",
+    "staticLanguages",
+    "newStaticLanguage"
 ] as const;
