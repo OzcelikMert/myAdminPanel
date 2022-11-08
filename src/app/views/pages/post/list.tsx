@@ -245,7 +245,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                     } : {}
             ),
             (
-                ![PostTypeId.Slider, PostTypeId.Testimonial, PostTypeId.Navigate].includes(Number(this.props.getPageData.searchParams.postTypeId))
+                [PostTypeId.Page, PostTypeId.Blog, PostTypeId.Portfolio, PostTypeId.Service].includes(Number(this.props.getPageData.searchParams.postTypeId))
                     ? {
                         name: this.props.router.t("views"),
                         selector: row => row.views,
@@ -304,8 +304,8 @@ export class PagePostList extends Component<PageProps, PageState> {
     render() {
         return this.state.isLoading ? <Spinner/> : (
             <div className="page-post">
-                <div className="row">
-                    <div className="col-md-3 mb-3">
+                <div className="row mb-3">
+                    <div className="col-md-3">
                         <div className="row">
                             {
                                 ![PostTypeId.Slider, PostTypeId.Page, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Navigate, PostTypeId.Reference].includes(Number(this.props.getPageData.searchParams.postTypeId))
@@ -327,7 +327,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                             }
                         </div>
                     </div>
-                    <div className="col-md-9 mb-3 text-end">
+                    <div className="col-md-9 text-end">
                         {
                             this.state.listMode === "list"
                                 ? <button className="btn btn-gradient-danger btn-lg list-mode-btn"

@@ -282,8 +282,9 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                         contents: {
                             ...state.formData.contents,
                             ...post.contents,
+                            views: post.contents?.views ?? 0,
                             langId: this.props.getPageData.langId,
-                            content: post.contents?.content || ""
+                            content: post.contents?.content ?? ""
                         }
                     };
 
@@ -312,7 +313,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         this.setState({
             isSubmitting: true
         }, () => {
-            let params =  {
+            let params = {
                 ...this.state.formData,
                 terms: this.state.formData.tagTermId.concat(this.state.formData.categoryTermId),
                 components: this.state.formData.components?.filter(componentId => !Variable.isEmpty(componentId)),
@@ -359,13 +360,13 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         return {
             onChange(key: keyof PostContentButtonDocument, value: string, index: number) {
                 self.setState((state: PageState) => {
-                    if(state.formData.contents.buttons) state.formData.contents.buttons[index][key] = value;
+                    if (state.formData.contents.buttons) state.formData.contents.buttons[index][key] = value;
                     return state;
                 })
             },
             onAddNew() {
                 self.setState((state: PageState) => {
-                    if(typeof state.formData.contents.buttons === "undefined") state.formData.contents.buttons = [];
+                    if (typeof state.formData.contents.buttons === "undefined") state.formData.contents.buttons = [];
                     state.formData.contents.buttons.push({
                         title: "",
                         url: ""
@@ -375,7 +376,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             },
             onDelete(index: number) {
                 self.setState((state: PageState) => {
-                    if(state.formData.contents.buttons) state.formData.contents.buttons.remove(index);
+                    if (state.formData.contents.buttons) state.formData.contents.buttons.remove(index);
                     return state;
                 })
             }
@@ -387,20 +388,20 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         return {
             onChangeSelect(value: string, index: number) {
                 self.setState((state: PageState) => {
-                    if(state.formData.components) state.formData.components[index] = value;
+                    if (state.formData.components) state.formData.components[index] = value;
                     return state;
                 })
             },
             onAddNew() {
                 self.setState((state: PageState) => {
-                    if(typeof state.formData.components === "undefined") state.formData.components = [];
+                    if (typeof state.formData.components === "undefined") state.formData.components = [];
                     state.formData.components.push("")
                     return state;
                 })
             },
             onDelete(index: number) {
                 self.setState((state: PageState) => {
-                    if(state.formData.components) state.formData.components.remove(index);
+                    if (state.formData.components) state.formData.components.remove(index);
                     return state;
                 })
             }
@@ -427,7 +428,9 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 <div className="col-md-12 mt-4">
                     <div className="row">
                         <div className="col-3 col-lg-1 mt-2">
-                            <button type="button" className="btn btn-gradient-danger btn-lg" onClick={event => this.TabComponentEvents.onDelete(index)}><i className="mdi mdi-trash-can"></i></button>
+                            <button type="button" className="btn btn-gradient-danger btn-lg"
+                                    onClick={event => this.TabComponentEvents.onDelete(index)}><i
+                                className="mdi mdi-trash-can"></i></button>
                         </div>
                         <div className="col-9 col-lg-11">
                             <ThemeFormSelect
@@ -756,11 +759,25 @@ export class PagePostAdd extends Component<PageProps, PageState> {
         return this.state.isLoading ? <Spinner/> : (
             <div className="page-post">
                 <this.Messages/>
-                <div className="navigate-buttons mb-3">
-                    <button className="btn btn-gradient-dark btn-lg btn-icon-text"
-                            onClick={() => this.navigateTermPage()}>
-                        <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
-                    </button>
+                <div className="row mb-3">
+                    <div className="col-md-3">
+                        <div className="row">
+                            <div className="col-6">
+                                <button className="btn btn-gradient-dark btn-lg btn-icon-text w-100"
+                                        onClick={() => this.navigateTermPage()}>
+                                    <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
+                                </button>
+                            </div>
+                            {
+                                this.state.formData.postId && [PostTypeId.Page, PostTypeId.Blog, PostTypeId.Portfolio, PostTypeId.Service].includes(Number(this.state.formData.typeId))
+                                    ? <div className="col-6">
+                                        <label className="badge badge-gradient-primary w-100 p-2 fs-6 rounded-3">
+                                            <i className="mdi mdi-eye"></i> {this.state.formData.contents.views}
+                                        </label>
+                                    </div> : null
+                            }
+                        </div>
+                    </div>
                 </div>
                 <div className="grid-margin stretch-card">
                     <div className="card">

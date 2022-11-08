@@ -9,7 +9,7 @@ import {
 import {pageRoutes} from "../../../../routes";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {
-    PostTermTypeId, PostTermTypes, PostTypes,
+    PostTermTypeId, PostTermTypes, PostTypeId, PostTypes,
     StatusId
 } from "../../../../../constants";
 import V from "../../../../../library/variable";
@@ -22,6 +22,7 @@ import Thread from "../../../../../library/thread";
 import permissionUtil from "../../../../../utils/functions/permission.util";
 import staticContentUtil from "../../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
+import {PostTermUpdateParamDocument} from "../../../../../types/services/postTerm";
 
 type PageState = {
     formActiveKey: string
@@ -29,23 +30,7 @@ type PageState = {
     status: { value: number, label: string }[]
     isSubmitting: boolean
     mainTitle: string
-    formData: {
-        termId: string
-        typeId: number
-        postTypeId: number
-        mainId: string
-        statusId: number
-        order: number
-        isFixed: 1 | 0
-        contents: {
-            langId: string
-            image: string
-            title: string
-            url: string
-            seoTitle: string
-            seoContent: string
-        }
-    },
+    formData: PostTermUpdateParamDocument,
     isSuccessMessage: boolean
     isSelectionImage: boolean
     isLoading: boolean
@@ -69,7 +54,6 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                 mainId: "",
                 statusId: 0,
                 order: 0,
-                isFixed: 0,
                 contents: {
                     langId: this.props.getPageData.mainLangId,
                     image: "",
@@ -185,10 +169,10 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                         ...state.formData,
                         ...term,
                         mainId: term.mainId?._id || "",
-                        isFixed: term.isFixed ? 1 : 0,
                         contents: {
                             ...state.formData.contents,
                             ...term.contents,
+                            views: term.contents?.views ?? 0,
                             langId: this.props.getPageData.langId
                         }
                     }
@@ -233,7 +217,6 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                             mainId: "",
                             statusId: StatusId.Active,
                             order: 0,
-                            isFixed: 0,
                             contents: {
                                 langId: this.props.getPageData.mainLangId,
                                 image: "",
@@ -329,14 +312,6 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
-                <div className="col-md-7 mb-3">
-                    <ThemeFormCheckBox
-                        title={this.props.router.t("isFixed")}
-                        name="isFixed"
-                        checked={Boolean(this.state.formData.isFixed)}
-                        onChange={e => HandleForm.onChangeInput(e, this)}
-                    />
-                </div>
             </div>
         );
     }
@@ -379,7 +354,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                                 name="mainId"
                                 placeholder={this.props.router.t("chooseMainCategory")}
                                 options={this.state.postTerms}
-                                value={this.state.postTerms.findSingle("value", this.state.formData.mainId)}
+                                value={this.state.postTerms.findSingle("value", this.state.formData.mainId || "")}
                                 onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
                             />
                         </div> : null
@@ -404,11 +379,25 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                     })}
                     isMulti={false}
                 />
-                <div className="navigate-buttons mb-3">
-                    <button className="btn btn-gradient-dark btn-lg btn-icon-text"
-                            onClick={() => this.navigateTermPage()}>
-                        <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
-                    </button>
+                <div className="row mb-3">
+                    <div className="col-md-3">
+                        <div className="row">
+                            <div className="col-6">
+                                <button className="btn btn-gradient-dark btn-lg btn-icon-text w-100"
+                                        onClick={() => this.navigateTermPage()}>
+                                    <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
+                                </button>
+                            </div>
+                            {
+                                this.state.formData.termId && [PostTypeId.Blog, PostTypeId.Portfolio].includes(Number(this.state.formData.typeId))
+                                    ? <div className="col-6">
+                                        <label className="badge badge-gradient-primary w-100 p-2 fs-6 rounded-3">
+                                            <i className="mdi mdi-eye"></i> {this.state.formData.contents.views}
+                                        </label>
+                                    </div> : null
+                            }
+                        </div>
+                    </div>
                 </div>
                 <div className="grid-margin stretch-card">
                     <div className="card">

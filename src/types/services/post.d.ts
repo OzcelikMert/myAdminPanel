@@ -18,6 +18,7 @@ export interface PostContentDocument {
     url?: string,
     seoTitle?: string,
     seoContent?: string
+    views?: number
     buttons?: PostContentButtonDocument[]
 }
 

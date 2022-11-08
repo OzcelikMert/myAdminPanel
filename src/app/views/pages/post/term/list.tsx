@@ -14,7 +14,6 @@ import PostTermDocument from "../../../../../types/services/postTerm";
 import postTermService from "../../../../../services/postTerm.service";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
-import staticContentUtil from "../../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
 import classNameUtil from "../../../../../utils/functions/className.util";
 import permissionUtil from "../../../../../utils/functions/permission.util";

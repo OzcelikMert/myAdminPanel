@@ -1,6 +1,17 @@
 import {PopulateAuthorIdDocument} from "./user";
 import {PostTermTypeId, PostTypeId, StatusId} from "../../constants";
 
+export interface PostTermContentDocument {
+    langId: string
+    image?: string,
+    title: string,
+    shortContent?: string,
+    url?: string,
+    seoTitle?: string,
+    seoContent?: string
+    views?: number
+}
+
 export default interface PostTermDocument {
     _id: string
     postTypeId: PostTypeId,
@@ -18,16 +29,7 @@ export default interface PostTermDocument {
     lastAuthorId: PopulateAuthorIdDocument
     order: number,
     views: number,
-    isFixed: boolean,
-    contents?: {
-        langId: string
-        image: string,
-        title: string,
-        shortContent: string,
-        url: string,
-        seoTitle: string,
-        seoContent: string
-    }
+    contents?: PostTermContentDocument
 }
 
 export interface PopulateTermsDocument {
@@ -47,22 +49,10 @@ export interface PostTermGetParamDocument {
     statusId?: StatusId
 }
 
-export interface PostTermAddParamDocument {
-    typeId: PostTermTypeId,
-    postTypeId: PostTypeId
-    order: number
+export type PostTermAddParamDocument = {
     mainId?: string
-    statusId: StatusId
-    isFixed: 1 | 0
-    contents: {
-        langId: string
-        title: string
-        image?: string
-        url?: string
-        seoTitle?: string
-        seoContent?: string
-    }
-}
+    contents: PostTermContentDocument
+} & Omit<PostTermDocument, "_id"|"mainId"|"lastAuthorId"|"authorId"|"views"|"contents">
 
 export type PostTermUpdateParamDocument = {
     termId: string
