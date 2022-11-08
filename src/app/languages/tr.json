@@ -148,6 +148,7 @@
   "testimonials": "Takdirler",
   "carousel":"Kayan Resim",
   "about":"Hakkımızda",
+  "whyUs": "Neden Biz",
   "facts":"Ayrıntılar",
   "features":"Özelliklerimiz",
   "appointment":"İletişim",
@@ -180,5 +181,12 @@
   "newType": "Yeni Tip",
   "component": "Bileşen",
   "staticLanguages": "Sabit Diller",
-  "newStaticLanguage": "Yeni Sabit Dil"
+  "newStaticLanguage": "Yeni Sabit Dil",
+  "policies": "Politikalar",
+  "cookie-policy": "Çerez Politikası",
+  "privacy-policy":"Gizlilik Politkası",
+  "terms-of-use":"Kullanım Şartları",
+  "whatsapp": "Whatsapp",
+  "subscribe":"Abone Ol",
+  "subscribe-button": "Abone Ol Butonu"
 }

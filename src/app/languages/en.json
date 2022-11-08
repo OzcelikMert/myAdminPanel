@@ -148,6 +148,7 @@
   "testimonials": "Testimonials",
   "carousel":"Slider",
   "about":"About Us",
+  "whyUs": "Why Us",
   "facts":"Facts",
   "features":"Features",
   "appointment":"Appointment",
@@ -180,5 +181,12 @@
   "newType": "New Type",
   "component": "Component",
   "staticLanguages": "Static Languages",
-  "newStaticLanguage": "New Static Language"
+  "newStaticLanguage": "New Static Language",
+  "policies": "Policies",
+  "cookie-policy": "Cookie Policy",
+  "privacy-policy":"Privacy Policy",
+  "terms-of-use":"Terms Of Use",
+  "whatsapp": "Whatsapp",
+  "subscribe":"Subscribe",
+  "subscribe-button": "Subscribe Button"
 }

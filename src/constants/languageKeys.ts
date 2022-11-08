@@ -148,6 +148,7 @@ export const LanguageKeysArray = [
     "testimonials",
     "carousel",
     "about",
+    "whyUs",
     "facts",
     "features",
     "appointment",
@@ -180,5 +181,12 @@ export const LanguageKeysArray = [
     "newType",
     "component",
     "staticLanguages",
-    "newStaticLanguage"
+    "newStaticLanguage",
+    "policies",
+    "cookie-policy",
+    "privacy-policy",
+    "terms-of-use",
+    "whatsapp",
+    "subscribe",
+    "subscribe-button"
 ] as const;
