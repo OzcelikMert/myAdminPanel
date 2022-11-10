@@ -99,6 +99,17 @@ class PageLogin extends Component<PageProps, PageState> {
                                     <div className="row">
                                         <div className="col-md-12 mb-3">
                                             <ThemeInputType
+                                                onKeyDown={(e) => {
+                                                    if (e.keyCode === 13) {
+                                                        console.log('You must have pressed Enter ')
+                                                        if (this.state.formData.email !== "" && this.state.formData.password !== "") {
+                                                            this.onSubmit(e)
+                                                        }
+                                                        else {
+                                                            window.alert("Lütfen şifrenizi ve emailinizi boş bırakmayınız!");
+                                                        }
+                                                    }
+                                                }}
                                                 title={this.props.router.t("email")}
                                                 type="email"
                                                 name="email"
@@ -109,6 +120,17 @@ class PageLogin extends Component<PageProps, PageState> {
                                         </div>
                                         <div className="col-md-12 mb-3">
                                             <ThemeInputType
+                                                onKeyDown={(e) => {
+                                                    if (e.keyCode === 13) {
+                                                        console.log('You must have pressed Enter ')
+                                                        if (this.state.formData.email !== "" && this.state.formData.password !== "") {
+                                                            this.onSubmit(e)
+                                                        }
+                                                        else {
+                                                            window.alert("Lütfen şifrenizi ve emailinizi boş bırakmayınız!");
+                                                        }
+                                                    }
+                                                }}
                                                 title={this.props.router.t("password")}
                                                 type="password"
                                                 name="password"
