@@ -260,10 +260,7 @@ class Navbar extends Component<PageProps, PageState> {
                         src={require('../../../assets/images/admin/ozcelikLogoMini.png')} alt="logo"/></Link>
                 </div>
                 <div className="navbar-menu-wrapper d-flex align-items-stretch">
-                    <button className="navbar-toggler navbar-toggler align-self-center" type="button"
-                            onClick={() => document.body.classList.toggle('sidebar-icon-only')}>
-                        <span className="mdi mdi-menu"></span>
-                    </button>
+                   
                     <ul className="navbar-nav navbar-nav-right">
                         <li className="nav-item nav-languages">
                             <this.Languages/>
