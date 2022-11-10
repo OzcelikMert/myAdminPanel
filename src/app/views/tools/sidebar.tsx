@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Collapse} from 'react-bootstrap';
-import {Trans} from 'react-i18next';
 import {PagePropCommonDocument} from "../../../types/app/pageProps";
 import permissionUtil from "../../../utils/functions/permission.util";
 import SidebarNavs, {SideBarPath} from "../../../constants/sidebarNavs";
-import PagePaths from "../../../constants/pagePaths";
 import SidebarNav from "../../../constants/sidebarNavs";
 
 type PageState = {
@@ -47,8 +45,11 @@ class Sidebar extends Component<PageProps, PageState> {
     }
 
     onRouteChanged() {
-        (document.querySelector('#sidebar') as HTMLDivElement).classList.remove('active');
-        this.setIsMenuOpen(SidebarNav);
+        this.setState({
+            isMenuOpen: {}
+        }, () => {
+            this.setIsMenuOpen(SidebarNav);
+        })
     }
 
     setIsMenuOpen(sidebarSubPaths: SideBarPath[], stateKey?: string) {
