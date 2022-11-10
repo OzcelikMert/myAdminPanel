@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {ThemeForm, ThemeFormSelect, ThemeFormTags, ThemeFormType} from "../../../components/form";
+import {ThemeForm, ThemeFormTags, ThemeFormType} from "../../../components/form";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import HandleForm from "../../../../../library/react/handles/form";
 import {PermissionId} from "../../../../../constants";

@@ -1,24 +1,16 @@
 import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "../../../components/form";
-import HandleForm from "../../../../../library/react/handles/form";
 import {LanguageKeysArray, PermissionId, UserRoleId} from "../../../../../constants";
 import settingService from "../../../../../services/setting.service";
-import languageService from "../../../../../services/language.service";
-import ServerInfoDocument from "../../../../../types/services/serverInfo";
-import serverInfoService from "../../../../../services/serverInfo.service";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
 import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
-import ThemeChooseImage from "../../../components/chooseImage";
-import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
 import {
-    SettingContactFormDocument,
     SettingStaticLanguageDocument,
     SettingUpdateParamDocument
 } from "../../../../../types/services/setting";
-import {Tab, Tabs} from "react-bootstrap";
 
 type PageState = {
     isSubmitting: boolean

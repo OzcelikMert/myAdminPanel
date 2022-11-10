@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {PermissionId, Status, UserRoleId, UserRoles} from "../../../../../constants";
 import DataTable, {TableColumn} from "react-data-table-component";
-import {pageRoutes} from "../../../../routes";
 import Swal from "sweetalert2";
 import UserDocument from "../../../../../types/services/user";
 import ThemeUsersProfileCard from "../../../components/users/profileCard";
@@ -13,6 +12,7 @@ import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
 import classNameUtil from "../../../../../utils/functions/className.util";
 import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
+import PagePaths from "../../../../../constants/pagePaths";
 
 type PageState = {
     users: UserDocument[]
@@ -111,7 +111,7 @@ export class PageUserList extends Component<PageProps, PageState> {
     }
 
     navigateTermPage(type: "edit", itemId = "") {
-        let path = pageRoutes.settings.path() + pageRoutes.settings.user.path() + pageRoutes.settings.user.edit.path(itemId)
+        let path = PagePaths.settings().user().edit(itemId)
         this.props.router.navigate(path, {replace: true});
     }
 

@@ -33,7 +33,7 @@ enum PermissionId {
     TestimonialEdit,
     TestimonialDelete,
     SubscriberEdit,
-    ComponentEdit
+    ComponentEdit,
 }
 
 const Permissions: Array<PermissionDocument> = [

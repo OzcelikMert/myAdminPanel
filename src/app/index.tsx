@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import '../assets/app/styles/index.scss';
-import AppRoutes, {pageRoutes} from './routes';
 import {
     useLocation,
     useNavigate,
@@ -28,6 +27,8 @@ import LanguageDocument from "../types/services/language";
 import pathUtil from "../utils/path.util";
 import localStorageUtil from "../utils/localStorage.util";
 import {Helmet} from "react-helmet";
+import AppRoutes from "./routes";
+import PagePaths from "../constants/pagePaths";
 
 const language = i18n.use(initReactI18next);
 language.init({
@@ -208,11 +209,13 @@ class AppAdmin extends Component<PageProps, PageState> {
 
     ContentLanguage = () => {
         const showingPages = [
-            pageRoutes.component.path() + pageRoutes.component.edit.path(),
-            pageRoutes.post.path() + pageRoutes.post.edit.path(),
-            pageRoutes.postTerm.path() + pageRoutes.postTerm.edit.path(),
-            pageRoutes.settings.path() + pageRoutes.settings.seo.path(),
-            pageRoutes.settings.path() + pageRoutes.settings.staticLanguages.path()
+            PagePaths.component().edit(),
+            PagePaths.post().edit(),
+            PagePaths.post().term().edit(),
+            PagePaths.themeContent().post().edit(),
+            PagePaths.themeContent().post().term().edit(),
+            PagePaths.settings().seo(),
+            PagePaths.settings().staticLanguages()
         ];
 
         let isShow = showingPages.map(page => {
@@ -266,8 +269,8 @@ class AppAdmin extends Component<PageProps, PageState> {
 
     render() {
         const fullPageLayoutRoutes = [
-            pageRoutes.login.path(),
-            pageRoutes.lock.path()
+            PagePaths.login(),
+            PagePaths.lock()
         ];
         let isFullPageLayout = fullPageLayoutRoutes.includes(this.props.router.location.pathname);
 
@@ -322,24 +325,20 @@ export function withRouter(Component: any) {
         let {t, i18n} = useTranslation();
 
         const routes: RouteObject[] = [
-            // User
-            {path: pageRoutes.settings.path() + pageRoutes.settings.user.path() + pageRoutes.settings.user.edit.path()},
-            // Component
-            {path: pageRoutes.component.path() + pageRoutes.component.edit.path()},
-            // Post
-            {path: pageRoutes.themeContent.path() + pageRoutes.post.path() + pageRoutes.post.add.path()},
-            {path: pageRoutes.themeContent.path() + pageRoutes.post.path() + pageRoutes.post.edit.path()},
-            {path: pageRoutes.themeContent.path() + pageRoutes.post.path() + pageRoutes.post.list.path()},
-            {path: pageRoutes.post.path() + pageRoutes.post.add.path()},
-            {path: pageRoutes.post.path() + pageRoutes.post.edit.path()},
-            {path: pageRoutes.post.path() + pageRoutes.post.list.path()},
-            // Post Term
-            {path: pageRoutes.themeContent.path() + pageRoutes.postTerm.path() + pageRoutes.postTerm.add.path()},
-            {path: pageRoutes.themeContent.path() + pageRoutes.postTerm.path() + pageRoutes.postTerm.edit.path()},
-            {path: pageRoutes.themeContent.path() + pageRoutes.postTerm.path() + pageRoutes.postTerm.list.path()},
-            {path: pageRoutes.postTerm.path() + pageRoutes.postTerm.add.path()},
-            {path: pageRoutes.postTerm.path() + pageRoutes.postTerm.edit.path()},
-            {path: pageRoutes.postTerm.path() + pageRoutes.postTerm.list.path()},
+            {path: PagePaths.settings().user().edit()},
+            {path: PagePaths.component().edit()},
+            {path: PagePaths.post().add()},
+            {path: PagePaths.post().edit()},
+            {path: PagePaths.post().list()},
+            {path: PagePaths.post().term().add()},
+            {path: PagePaths.post().term().edit()},
+            {path: PagePaths.post().term().list()},
+            {path: PagePaths.themeContent().post().add()},
+            {path: PagePaths.themeContent().post().edit()},
+            {path: PagePaths.themeContent().post().list()},
+            {path: PagePaths.themeContent().post().term().add()},
+            {path: PagePaths.themeContent().post().term().edit()},
+            {path: PagePaths.themeContent().post().term().list()},
         ];
         let match: any = matchRoutes(routes, location);
         match = (match !== null) ? match[0] : match;

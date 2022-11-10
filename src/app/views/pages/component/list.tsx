@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import {PermissionId, UserRoleId} from "../../../../constants";
 import DataTable, {TableColumn} from "react-data-table-component";
-import {pageRoutes} from "../../../routes";
 import Swal from "sweetalert2";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";
@@ -10,6 +9,7 @@ import permissionUtil from "../../../../utils/functions/permission.util";
 import ThemeToast from "../../components/toast";
 import {ComponentDocument} from "../../../../types/services/component";
 import componentService from "../../../../services/component.service";
+import PagePaths from "../../../../constants/pagePaths";
 
 type PageState = {
     components: ComponentDocument[]
@@ -89,7 +89,7 @@ export class PageComponentList extends Component<PageProps, PageState> {
     }
 
     navigateTermPage(type: "edit", itemId = "") {
-        let path = pageRoutes.component.path() + pageRoutes.component.edit.path(itemId)
+        let path = PagePaths.component().edit(itemId)
         this.props.router.navigate(path, {replace: true});
     }
 

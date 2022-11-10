@@ -3,7 +3,6 @@ import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import ThemeChartBar from "../../components/charts/bar";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {PostTermTypeId, PostTypeId, PostTypes, Status, StatusId} from "../../../../constants";
-import {pageRoutes} from "../../../routes";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";
 import PostDocument from "../../../../types/services/post";
@@ -14,6 +13,7 @@ import {ViewNumberDocument, ViewStatisticsDocument} from "../../../../types/serv
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";
 import classNameUtil from "../../../../utils/functions/className.util";
 import permissionUtil from "../../../../utils/functions/permission.util";
+import PagePaths from "../../../../constants/pagePaths";
 
 type PageState = {
     chartData: {
@@ -167,12 +167,12 @@ class PageDashboard extends Component<PageProps, PageState> {
     }
 
     navigateTermPage(type: "termEdit" | "edit" | "listPost", postTypeId: number, itemId = "", termTypeId = 0) {
+        let pagePath = postTypeId == PostTypeId.Page ? PagePaths.post(postTypeId) : PagePaths.themeContent().post(postTypeId);
         let path = (type === "edit")
-            ? pageRoutes.post.path(postTypeId) + pageRoutes.post.edit.path(itemId)
+            ? pagePath.edit(itemId)
             : (type === "listPost")
-                ? pageRoutes.post.path(postTypeId) + pageRoutes.post.list.path()
-                : pageRoutes.postTerm.path(postTypeId, termTypeId) + pageRoutes.postTerm.edit.path(itemId);
-        path = (postTypeId != PostTypeId.Page) ? pageRoutes.themeContent.path() + path : path;
+                ? pagePath.list()
+                : pagePath.term(termTypeId).edit(itemId)
         this.props.router.navigate(path, {replace: true});
     }
 

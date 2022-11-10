@@ -7,11 +7,11 @@ import HandleForm from "../../../../../library/react/handles/form";
 import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../../components/form";
 import SweetAlert from "react-sweetalert2";
 import V, {DateMask} from "../../../../../library/variable";
-import {pageRoutes} from "../../../../routes";
 import userService from "../../../../../services/user.service";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
 import staticContentUtil from "../../../../../utils/functions/staticContent.util";
+import PagePaths from "../../../../../constants/pagePaths";
 
 type PageState = {
     formActiveKey: string
@@ -147,7 +147,7 @@ export class PageUserAdd extends Component<PageProps, PageState> {
     }
 
     navigateTermPage() {
-        let path = pageRoutes.settings.path() + pageRoutes.settings.user.path() + pageRoutes.settings.user.list.path();
+        let path = PagePaths.settings().user().list();
         this.props.router.navigate(path, {replace: true});
     }
 

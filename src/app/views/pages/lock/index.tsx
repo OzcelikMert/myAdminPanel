@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import ThemeInputType from "../../components/form/input/type";
-import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import {ThemeForm} from "../../components/form";
 import HandleForm from "../../../../library/react/handles/form";
 import V from "../../../../library/variable";
 import authService from "../../../../services/auth.service";
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";
+import PagePaths from "../../../../constants/pagePaths";
 
 type PageState = {
     isSubmitting: boolean
@@ -32,7 +32,7 @@ class PageLock extends Component<PageProps, PageState> {
 
     componentDidMount() {
         if (V.isEmpty(this.props.getSessionData.email)) {
-            this.props.router.navigate(pageRoutes.login.path(), {replace: true});
+            this.props.router.navigate(PagePaths.login(), {replace: true});
         }
     }
 
@@ -50,7 +50,7 @@ class PageLock extends Component<PageProps, PageState> {
                     this.props.setSessionData({
                         id: user._id
                     }, () => {
-                        this.props.router.navigate(pageRoutes.dashboard.path(), {replace: true});
+                        this.props.router.navigate(PagePaths.dashboard(), {replace: true});
                     });
                 } else {
                     this.setState({

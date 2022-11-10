@@ -4,9 +4,7 @@ import {
     ThemeFormType,
     ThemeFormSelect,
     ThemeForm,
-    ThemeFormCheckBox
 } from "../../../components/form"
-import {pageRoutes} from "../../../../routes";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {
     PostTermTypeId, PostTermTypes, PostTypeId, PostTypes,
@@ -23,6 +21,7 @@ import permissionUtil from "../../../../../utils/functions/permission.util";
 import staticContentUtil from "../../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
 import {PostTermUpdateParamDocument} from "../../../../../types/services/postTerm";
+import PagePaths from "../../../../../constants/pagePaths";
 
 type PageState = {
     formActiveKey: string
@@ -191,8 +190,10 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
     }
 
     navigateTermPage() {
-        let path = pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, this.props.getPageData.searchParams.termTypeId) + pageRoutes.postTerm.list.path()
-        path = (this.props.router.location.pathname.search(pageRoutes.themeContent.path()) > -1) ? pageRoutes.themeContent.path() + path : path;
+        let postTypeId = this.props.getPageData.searchParams.postTypeId;
+        let postTermTypeId = this.props.getPageData.searchParams.termTypeId;
+        let pagePath = postTypeId == PostTypeId.Page ? PagePaths.post(postTypeId).term(postTermTypeId) : PagePaths.themeContent().post(postTypeId).term(postTermTypeId);
+        let path = pagePath.list()
         this.props.router.navigate(path, {replace: true});
     }
 

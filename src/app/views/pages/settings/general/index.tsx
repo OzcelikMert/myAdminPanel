@@ -13,7 +13,7 @@ import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
 import ThemeChooseImage from "../../../components/chooseImage";
 import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
-import SettingDocument, {SettingContactFormDocument, SettingUpdateParamDocument} from "../../../../../types/services/setting";
+import {SettingUpdateParamDocument} from "../../../../../types/services/setting";
 import {Tab, Tabs} from "react-bootstrap";
 
 type PageState = {

@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {PagePropCommonDocument} from "../types/app/pageProps";
-import {pageRoutes} from "./routes";
 import {ErrorCodes} from "../library/api";
 import {LanguageId} from "../constants";
 import {Navigate} from "react-router-dom";
 import Spinner from "./views/tools/spinner";
 import authService from "../services/auth.service";
+import PagePaths from "../constants/pagePaths";
 
 type PageState = {
     isAuth: boolean
@@ -37,6 +37,7 @@ class AppProviders extends Component<PageProps, PageState> {
         this.setState({
             isPageLoading: true,
         }, () => this.checkSession());
+        console.log(this.props)
     }
 
     checkSession() {
@@ -70,16 +71,16 @@ class AppProviders extends Component<PageProps, PageState> {
         return this.state.isPageLoading ? <Spinner/>
             : (
                 !this.state.isAuth &&
-                this.props.router.location.pathname !== pageRoutes.login.path() &&
-                this.props.router.location.pathname !== pageRoutes.lock.path()
+                this.props.router.location.pathname !== PagePaths.login() &&
+                this.props.router.location.pathname !== PagePaths.lock()
             )
-                ? <Navigate to={pageRoutes.login.path()}/>
+                ? <Navigate to={PagePaths.login()}/>
                 : (
                     this.state.isAuth &&
-                    this.props.router.location.pathname === pageRoutes.login.path() &&
-                    this.props.router.location.pathname === pageRoutes.lock.path()
+                    this.props.router.location.pathname === PagePaths.login() &&
+                    this.props.router.location.pathname === PagePaths.lock()
                 )
-                    ? <Navigate to={pageRoutes.dashboard.path()}/>
+                    ? <Navigate to={PagePaths.dashboard()}/>
                     : this.props.children
     }
 }

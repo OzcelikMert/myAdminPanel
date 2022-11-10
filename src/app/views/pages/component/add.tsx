@@ -6,7 +6,6 @@ import HandleForm from "../../../../library/react/handles/form";
 import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "../../components/form";
 import SweetAlert from "react-sweetalert2";
 import V from "../../../../library/variable";
-import {pageRoutes} from "../../../routes";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";
 import {ComponentTypeDocument, ComponentUpdateParamDocument} from "../../../../types/services/component";
@@ -15,6 +14,7 @@ import ThemeChooseImage from "../../components/chooseImage";
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";
 import Swal from "sweetalert2";
 import ThemeToast from "../../components/toast";
+import PagePaths from "../../../../constants/pagePaths";
 
 type PageState = {
     langKeys: { value: string, label: string }[]
@@ -144,7 +144,7 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
     }
 
     navigateTermPage() {
-        let path = pageRoutes.component.path() + pageRoutes.component.list.path();
+        let path = PagePaths.component().list();
         this.props.router.navigate(path, {replace: true});
     }
 

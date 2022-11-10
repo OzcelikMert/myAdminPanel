@@ -3,13 +3,13 @@ import {Dropdown} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import {Trans} from 'react-i18next';
 import {PagePropCommonDocument} from "../../../types/app/pageProps";
-import {pageRoutes} from "../../routes";
 import authService from "../../../services/auth.service";
 import {LanguageDocument} from "../../../types/constants";
 import {Languages} from "../../../constants";
 import localStorageUtil from "../../../utils/localStorage.util";
 import pathUtil from "../../../utils/path.util";
 import imageSourceUtil from "../../../utils/functions/imageSource.util";
+import PagePaths from "../../../constants/pagePaths";
 
 type PageState = {};
 
@@ -29,10 +29,10 @@ class Navbar extends Component<PageProps, PageState> {
     profileEvents(event: "profile" | "lock" | "signOut" | "changePassword") {
         switch(event) {
             case "profile":
-                this.props.router.navigate(pageRoutes.settings.path() + pageRoutes.settings.profile.path(), {replace: true})
+                this.props.router.navigate(PagePaths.settings().profile(), {replace: true})
                 break;
             case "changePassword":
-                this.props.router.navigate(pageRoutes.settings.path() + pageRoutes.settings.changePassword.path(), {replace: true})
+                this.props.router.navigate(PagePaths.settings().changePassword(), {replace: true})
                 break;
             case "lock":
                 authService.logOut().then(resData => {
@@ -40,7 +40,7 @@ class Navbar extends Component<PageProps, PageState> {
                         this.props.setSessionData({
                             id: ""
                         }, () => {
-                            this.props.router.navigate(pageRoutes.lock.path(), {replace: true})
+                            this.props.router.navigate(PagePaths.lock(), {replace: true})
                         })
                     }
                 })
@@ -51,7 +51,7 @@ class Navbar extends Component<PageProps, PageState> {
                         this.props.setSessionData({
                             id: ""
                         }, () => {
-                            this.props.router.navigate(pageRoutes.login.path(), {replace: true})
+                            this.props.router.navigate(PagePaths.login(), {replace: true})
                         })
                     }
                 })

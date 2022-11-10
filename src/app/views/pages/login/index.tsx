@@ -1,13 +1,12 @@
 import React, {Component} from 'react'
 import ThemeInputType from "../../components/form/input/type";
-import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import {LanguageId, StatusId} from "../../../../constants";
 import {ThemeForm, ThemeFormCheckBox} from "../../components/form";
 import HandleForm from "../../../../library/react/handles/form";
 import authService from "../../../../services/auth.service";
-import {ErrorCodes} from "../../../../library/api";
 import UserDocument from "../../../../types/services/user";
+import PagePaths from "../../../../constants/pagePaths";
 
 type PageState = {
     isSubmitting: boolean
@@ -47,7 +46,6 @@ class PageLogin extends Component<PageProps, PageState> {
     }
 
     onSubmit(event: React.FormEvent<HTMLFormElement>) {
-        console.log(this.state)
         event.preventDefault();
         this.setState({
             isWrong: false,
@@ -67,7 +65,7 @@ class PageLogin extends Component<PageProps, PageState> {
                             name: user.name,
                             permissions: user.permissions,
                         });
-                        this.props.router.navigate(pageRoutes.dashboard.path(), {replace: true});
+                        this.props.router.navigate(PagePaths.dashboard(), {replace: true});
                     }else {
                         this.setState({
                             user: user
@@ -83,11 +81,9 @@ class PageLogin extends Component<PageProps, PageState> {
                 })
             });
         })
-        console.log(this.state)
     }
 
     render() {
-        console.log(this)
         return (
             <div className="page-login">
                 <div className="d-flex align-items-stretch auth auth-img-bg h-100">

@@ -1,6 +1,6 @@
 import {PermissionId, PostTypeId, UserRoleId} from "../../constants";
 import {NavigateFunction} from "react-router-dom";
-import {pageRoutes} from "../../app/routes";
+import PagePaths from "../../constants/pagePaths";
 
 export default {
     checkPermission(userRoleId: number, userPermissions: number[], permissionId: number | number[]) {
@@ -20,7 +20,7 @@ export default {
             userPermissions,
             permissionId
         )) {
-            navigate(pageRoutes.dashboard.path(), {replace: true})
+            navigate(PagePaths.dashboard(), {replace: true})
             return false;
         }
         return true;

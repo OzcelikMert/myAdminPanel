@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {PageTypeId, PageTypes, PostTermTypeId, PostTypeId, PostTypes, Status, StatusId} from "../../../../constants";
-import {pageRoutes} from "../../../routes";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../components/form";
@@ -14,6 +13,7 @@ import imageSourceUtil from "../../../../utils/functions/imageSource.util";
 import classNameUtil from "../../../../utils/functions/className.util";
 import permissionUtil from "../../../../utils/functions/permission.util";
 import ThemeToast from "../../components/toast";
+import PagePaths from "../../../../constants/pagePaths";
 
 type PageState = {
     posts: PostDocument[],
@@ -173,12 +173,13 @@ export class PagePostList extends Component<PageProps, PageState> {
     }
 
     navigateTermPage(type: "termEdit" | "edit", itemId = "", termTypeId = 0) {
+        let postTypeId = this.props.getPageData.searchParams.postTypeId;
+        let pagePath = postTypeId == PostTypeId.Page ? PagePaths.post(postTypeId) : PagePaths.themeContent().post(postTypeId);
         let path = (type === "edit")
-            ? pageRoutes.post.path(this.props.getPageData.searchParams.postTypeId) + pageRoutes.post.edit.path(itemId)
-            : (itemId)
-                ? pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, termTypeId) + pageRoutes.postTerm.edit.path(itemId)
-                : pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, termTypeId) + pageRoutes.postTerm.list.path();
-        path = (this.props.router.location.pathname.search(pageRoutes.themeContent.path()) > -1) ? pageRoutes.themeContent.path() + path : path;
+            ? pagePath.edit(itemId)
+            : (type === "termEdit" && itemId)
+                ? pagePath.term(termTypeId).edit(itemId)
+                : pagePath.term(termTypeId).list()
         this.props.router.navigate(path, {replace: true});
     }
 

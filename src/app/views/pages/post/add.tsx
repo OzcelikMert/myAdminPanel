@@ -3,18 +3,11 @@ import {Tab, Tabs} from "react-bootstrap";
 import JoditEditor from "jodit-react";
 import moment from "moment";
 import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
-import {
-    LanguageKeysArray, PageTypes,
-    PostTermTypeId,
-    PostTypeId,
-    PostTypes,
-    StatusId,
-    UserRoleId
-} from "../../../../constants";
+import {LanguageKeysArray, PageTypes, PostTermTypeId, PostTypeId, PostTypes, StatusId,} from "../../../../constants";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import SweetAlert from "react-sweetalert2";
 import V from "../../../../library/variable";
-import {pageRoutes} from "../../../routes";
+import Variable from "../../../../library/variable";
 import HandleForm from "../../../../library/react/handles/form";
 import ThemeChooseImage from "../../components/chooseImage";
 import postTermService from "../../../../services/postTerm.service";
@@ -24,14 +17,9 @@ import Spinner from "../../tools/spinner";
 import permissionUtil from "../../../../utils/functions/permission.util";
 import staticContentUtil from "../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../utils/functions/imageSource.util";
-import {
-    PostContentButtonDocument,
-    PostUpdateParamDocument
-} from "../../../../types/services/post";
-import LanguageKeys from "../../../../types/app/languages";
+import {PostContentButtonDocument, PostUpdateParamDocument} from "../../../../types/services/post";
 import componentService from "../../../../services/component.service";
-import {ComponentDocument} from "../../../../types/services/component";
-import Variable from "../../../../library/variable";
+import PagePaths from "../../../../constants/pagePaths";
 
 type PageState = {
     langKeys: { value: string, label: string }[]
@@ -303,8 +291,10 @@ export class PagePostAdd extends Component<PageProps, PageState> {
     }
 
     navigateTermPage() {
-        let path = pageRoutes.post.path(this.props.getPageData.searchParams.postTypeId) + pageRoutes.post.list.path()
-        path = (this.props.router.location.pathname.search(pageRoutes.themeContent.path()) > -1) ? pageRoutes.themeContent.path() + path : path;
+        let postTypeId = this.props.getPageData.searchParams.postTypeId;
+        let pagePath = postTypeId == PostTypeId.Page ? PagePaths.post(postTypeId) : PagePaths.themeContent().post(postTypeId);
+        let path = pagePath.list();
+
         this.props.router.navigate(path, {replace: true});
     }
 

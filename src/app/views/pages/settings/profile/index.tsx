@@ -14,7 +14,6 @@ import userService from "../../../../../services/user.service";
 import profileService from "../../../../../services/profile.service";
 import Thread from "../../../../../library/thread";
 import classNameUtil from "../../../../../utils/functions/className.util";
-import staticContentUtil from "../../../../../utils/functions/staticContent.util";
 import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
 import ThemeToast from "../../../components/toast";
 import {PermissionDocument, PermissionGroupDocument} from "../../../../../types/constants";

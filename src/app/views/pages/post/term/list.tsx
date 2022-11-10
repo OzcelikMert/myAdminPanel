@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
 import {
-    PostTermTypes,
+    PostTermTypes, PostTypeId,
     PostTypes, Status,
     StatusId
 } from "../../../../../constants";
-import {pageRoutes} from "../../../../routes";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import DataTable, {TableColumn} from "react-data-table-component";
 import {ThemeFormCheckBox} from "../../../components/form";
@@ -18,6 +17,7 @@ import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
 import classNameUtil from "../../../../../utils/functions/className.util";
 import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
+import PagePaths from "../../../../../constants/pagePaths";
 
 type PageState = {
     postTerms: PostTermDocument[],
@@ -175,12 +175,14 @@ export class PagePostTermList extends Component<PageProps, PageState> {
     }
 
     navigateTermPage(type: "add" | "back" | "edit", postTermId = "") {
+        let postTypeId = this.props.getPageData.searchParams.postTypeId;
+        let postTermTypeId = this.props.getPageData.searchParams.termTypeId;
+        let pagePath = postTypeId == PostTypeId.Page ? PagePaths.post(postTypeId).term(postTermTypeId) : PagePaths.themeContent().post(postTypeId).term(postTermTypeId);
         let path = (type === "add")
-            ? pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, this.props.getPageData.searchParams.termTypeId) + pageRoutes.postTerm.add.path()
+            ? pagePath.add()
             : (type === "edit")
-                ? pageRoutes.postTerm.path(this.props.getPageData.searchParams.postTypeId, this.props.getPageData.searchParams.termTypeId) + pageRoutes.postTerm.edit.path(postTermId)
-                : pageRoutes.post.path(this.props.getPageData.searchParams.postTypeId) + pageRoutes.post.list.path();
-        path = (this.props.router.location.pathname.search(pageRoutes.themeContent.path()) > -1) ? pageRoutes.themeContent.path() + path : path;
+                ? pagePath.edit(postTermId)
+                : pagePath.list();
         this.props.router.navigate(path, {replace: true});
     }
 
