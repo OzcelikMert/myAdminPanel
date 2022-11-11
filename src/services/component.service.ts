@@ -11,7 +11,7 @@ import {
 export default {
     get(params: ComponentGetParamDocument): ServiceResultDocument<ComponentDocument[]> {
         return Api.getSync({
-            url: [ServicePages.component, params._id?.toString()],
+            url: [ServicePages.component, params.componentId?.toString()],
             data: params,
         });
     },
@@ -23,7 +23,7 @@ export default {
     },
     update(params: ComponentUpdateParamDocument) {
         return Api.put({
-            url: [ServicePages.component, params._id.toString()],
+            url: [ServicePages.component, params.componentId.toString()],
             data: params,
         });
     },

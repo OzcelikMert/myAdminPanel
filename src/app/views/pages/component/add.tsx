@@ -39,7 +39,7 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
             isSubmitting: false,
             mainTitle: "",
             formData: {
-                _id: this.props.getPageData.searchParams.componentId,
+                componentId: this.props.getPageData.searchParams.componentId,
                 order: 0,
                 types: [],
                 elementId: "",
@@ -55,7 +55,7 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
         Thread.start(() => {
             this.getLangKeys();
             this.getTypes();
-            if (this.state.formData._id) {
+            if (this.state.formData.componentId) {
                 this.getComponent();
             }
             this.setState({
@@ -83,9 +83,9 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
     setPageTitle() {
         let titles: string[] = [
             this.props.router.t("components"),
-            this.props.router.t(this.state.formData._id ? "edit" : "add")
+            this.props.router.t(this.state.formData.componentId ? "edit" : "add")
         ];
-        if (this.state.formData._id) {
+        if (this.state.formData.componentId) {
             titles.push(this.state.mainTitle)
         }
         this.props.setBreadCrumb(titles);
@@ -110,7 +110,7 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
 
     getComponent() {
         let resData = componentService.get({
-            _id: this.state.formData._id,
+            componentId: this.state.formData.componentId,
             langId: this.props.getPageData.langId,
             getContents: 1
         });
@@ -154,7 +154,7 @@ export class PageComponentAdd extends Component<PageProps, PageState> {
             isSubmitting: true
         }, () => {
             let params = this.state.formData;
-            ((params._id)
+            ((params.componentId)
                 ? componentService.update(params)
                 : componentService.add(params)).then(resData => {
                 this.setState((state: PageState) => {
