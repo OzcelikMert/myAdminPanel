@@ -6,5 +6,13 @@ export default {
         set: (langId: number) => {
             window.localStorage.setItem("adminLanguage", langId.toString());
         }
+    },
+    adminIsDarkTheme: {
+        get get(): boolean {
+            return Boolean((window.localStorage.getItem("adminIsDarkTheme") ?? false));
+        },
+        set: (isDarkTheme: boolean) => {
+            window.localStorage.setItem("adminIsDarkTheme", isDarkTheme.toString());
+        }
     }
 }

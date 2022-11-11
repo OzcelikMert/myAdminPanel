@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {PagePropCommonDocument} from "../types/app/pageProps";
 import {ErrorCodes} from "../library/api";
-import {LanguageId} from "../constants";
+import {LanguageId, UserRoleId} from "../constants";
 import {Navigate} from "react-router-dom";
 import Spinner from "./views/tools/spinner";
 import authService from "../services/auth.service";
 import PagePaths from "../constants/pagePaths";
+import permissionUtil from "../utils/functions/permission.util";
+import ThemeToast from "./views/components/toast";
 
 type PageState = {
     isAuth: boolean
@@ -27,7 +29,7 @@ class AppProviders extends Component<PageProps, PageState> {
         this.onRouteChanged();
     }
 
-    componentDidUpdate(prevProps:Readonly<PageProps>, prevState:Readonly<PageState>) {
+    componentDidUpdate(prevProps: Readonly<PageProps>, prevState: Readonly<PageState>) {
         if (this.props.router.location.pathname !== prevProps.router.location.pathname) {
             this.onRouteChanged();
         }
@@ -36,8 +38,35 @@ class AppProviders extends Component<PageProps, PageState> {
     onRouteChanged() {
         this.setState({
             isPageLoading: true,
-        }, () => this.checkSession());
-        console.log(this.props)
+        }, () => {
+            console.log(this.props)
+            if (this.checkPermission()) {
+                this.checkSession();
+                this.setState({
+                    isPageLoading: false
+                })
+            }
+        });
+    }
+
+    checkPermission() {
+        if (
+            !permissionUtil.checkPermissionPath(
+                this.props.router.location.pathname,
+                this.props.getSessionData.roleId,
+                this.props.getSessionData.permissions
+            )
+        ) {
+            new ThemeToast({
+                type: "error",
+                title: this.props.router.t("error"),
+                content: this.props.router.t("noPerm"),
+                position: "top-center"
+            })
+            this.props.router.navigate(PagePaths.dashboard(), {replace: true})
+            return false;
+        }
+        return true;
     }
 
     checkSession() {
@@ -49,7 +78,7 @@ class AppProviders extends Component<PageProps, PageState> {
             if (isRefresh) {
                 if (resData.data.length > 0) {
                     let user = resData.data[0];
-                    this.props.setSessionData( {
+                    this.props.setSessionData({
                         id: user._id,
                         langId: LanguageId.English,
                         roleId: user.roleId,
@@ -62,7 +91,6 @@ class AppProviders extends Component<PageProps, PageState> {
             }
         }
         this.setState({
-            isPageLoading: false,
             isAuth: isAuth
         })
     }

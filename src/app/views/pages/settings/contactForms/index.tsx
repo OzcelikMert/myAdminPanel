@@ -36,12 +36,6 @@ class PageSettingsContactForms extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
-        if(!permissionUtil.checkPermissionAndRedirect(
-            this.props.getSessionData.roleId,
-            this.props.getSessionData.permissions,
-            PermissionId.SettingEdit,
-            this.props.router.navigate
-        )) return;
         this.setPageTitle();
         Thread.start(() => {
             this.getSettings();

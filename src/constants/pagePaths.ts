@@ -1,3 +1,6 @@
+import {PostTypeId} from "./postTypes";
+import {PostTermTypeId} from "./postTermTypes";
+
 function setPath(...paths: (number | string | undefined)[]) {
     let returnPath = "";
     for (let path of paths) {
@@ -59,7 +62,7 @@ const PagePaths = {
             }
         }
     },
-    post(typeId: string | number = ":postTypeId", firstPath: string | undefined = undefined) {
+    post(typeId: string | PostTypeId = ":postTypeId", firstPath: string | undefined = undefined) {
         let path = setPath(firstPath, "post", typeId);
 
         return {
@@ -75,7 +78,7 @@ const PagePaths = {
             list() {
                 return setPath(path, "list");
             },
-            term(typeId: string | number = ":termTypeId") {
+            term(typeId: string | PostTermTypeId = ":termTypeId") {
                 path = setPath(path, "term", typeId);
 
                 return {

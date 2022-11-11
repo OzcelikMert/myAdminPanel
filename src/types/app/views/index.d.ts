@@ -6,6 +6,7 @@ type AppAdminGetState = {
         searchParams: SearchParamDocument,
         langId: string,
         mainLangId: string,
+        isDarkTheme: boolean
     },
     sessionData: {
         id: string,
@@ -22,6 +23,7 @@ type AppAdminSetState = {
     pageData: {
         langId?: string,
         mainLangId?: string,
+        isDarkTheme?: boolean
     },
     sessionData: {
         id?: string,

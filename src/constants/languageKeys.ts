@@ -188,5 +188,6 @@ export const LanguageKeysArray = [
     "terms-of-use",
     "whatsapp",
     "subscribe",
-    "subscribe-button"
+    "subscribe-button",
+    "noPerm"
 ] as const;

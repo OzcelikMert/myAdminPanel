@@ -69,14 +69,6 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
-        if (!permissionUtil.checkPermissionAndRedirect(
-            this.props.getSessionData.roleId,
-            this.props.getSessionData.permissions,
-            this.props.getPageData.searchParams.postId
-                ? permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Edit")
-                : permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Add"),
-            this.props.router.navigate
-        )) return;
         this.setPageTitle();
         Thread.start(() => {
             this.getTerms();

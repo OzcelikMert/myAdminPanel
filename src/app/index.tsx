@@ -73,6 +73,7 @@ class AppAdmin extends Component<PageProps, PageState> {
                 },
                 langId: "",
                 mainLangId: "1",
+                isDarkTheme: localStorageUtil.adminIsDarkTheme.get
             },
             sessionData: {
                 id: "",

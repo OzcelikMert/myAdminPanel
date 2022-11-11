@@ -188,5 +188,6 @@
   "terms-of-use":"Terms Of Use",
   "whatsapp": "Whatsapp",
   "subscribe":"Subscribe",
-  "subscribe-button": "Subscribe Button"
+  "subscribe-button": "Subscribe Button",
+  "noPerm": "No Permission"
 }

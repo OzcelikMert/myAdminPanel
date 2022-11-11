@@ -188,5 +188,6 @@
   "terms-of-use":"Kullanım Şartları",
   "whatsapp": "Whatsapp",
   "subscribe":"Abone Ol",
-  "subscribe-button": "Abone Ol Butonu"
+  "subscribe-button": "Abone Ol Butonu",
+  "noPerm": "Yetkin Yetersiz"
 }

@@ -42,12 +42,6 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
     }
 
     componentDidMount() {
-        if (!permissionUtil.checkPermissionAndRedirect(
-            this.props.getSessionData.roleId,
-            this.props.getSessionData.permissions,
-            PermissionId.SeoEdit,
-            this.props.router.navigate
-        )) return;
         this.setPageTitle()
         Thread.start(() => {
             this.getSeo();
