@@ -1,20 +1,17 @@
 import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeFieldSet, ThemeForm, ThemeFormType} from "../../../components/form";
-import {PermissionId, UserRoleId} from "../../../../../constants";
+import {UserRoleId} from "../../../../../constants";
 import settingService from "../../../../../services/setting.service";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
-import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
-import {SettingContactFormDocument, SettingUpdateParamDocument} from "../../../../../types/services/setting";
+import {SettingContactFormDocument, SettingContactFormUpdateParamDocument} from "../../../../../types/services/setting";
 
 type PageState = {
     isSubmitting: boolean
     isLoading: boolean
-    formData: {
-        contactForms: SettingUpdateParamDocument["contactForms"]
-    },
+    formData: SettingContactFormUpdateParamDocument
     newContactForms: SettingContactFormDocument[]
     formActiveKey: string
 };
@@ -55,7 +52,7 @@ class PageSettingsContactForms extends Component<PageProps, PageState> {
             this.setState((state: PageState) => {
                 resData.data.forEach(setting => {
                     state.formData = {
-                        contactForms: setting.contactForms
+                        contactForms: setting.contactForms ?? []
                     }
                 })
                 return state;
@@ -68,9 +65,7 @@ class PageSettingsContactForms extends Component<PageProps, PageState> {
         this.setState({
             isSubmitting: true
         }, () => {
-            settingService.update({
-                contactForms: this.state.formData.contactForms
-            }).then(resData => {
+            settingService.updateContactForm(this.state.formData).then(resData => {
                 if(resData.status){
                     new ThemeToast({
                         type: "success",

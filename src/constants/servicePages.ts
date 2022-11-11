@@ -1,6 +1,5 @@
 const ServicePages = {
     auth: "auth",
-    profile: "profile",
     user: "user",
     gallery: "gallery",
     postTerm: "postTerm",

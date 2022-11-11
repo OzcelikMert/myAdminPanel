@@ -61,6 +61,18 @@ export interface SettingGetParamDocument {
     langId?: string
 }
 
-export type SettingUpdateParamDocument =  {
+export type SettingGeneralUpdateParamDocument =  {
     defaultLangId?: string
-} & Omit<SettingDocument, "_id"|"defaultLangId">
+} & Omit<SettingDocument, "_id"|"defaultLangId"|"seoContents"|"contactForms"|"staticLanguages">
+
+export type SettingSeoUpdateParamDocument =  {
+    seoContents: SettingSeoContentDocument
+}
+
+export type SettingContactFormUpdateParamDocument =  {
+    contactForms: SettingContactFormDocument[]
+}
+
+export type SettingStaticLanguageUpdateParamDocument =  {
+    staticLanguages: SettingStaticLanguageDocument[]
+}

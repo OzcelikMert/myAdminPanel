@@ -2,24 +2,16 @@ import React, {Component} from 'react'
 import {ThemeForm, ThemeFormTags, ThemeFormType} from "../../../components/form";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import HandleForm from "../../../../../library/react/handles/form";
-import {PermissionId} from "../../../../../constants";
 import settingService from "../../../../../services/setting.service";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
-import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
+import {SettingSeoUpdateParamDocument} from "../../../../../types/services/setting";
 
 type PageState = {
     isSubmitting: boolean
     isLoading: boolean
-    formData: {
-        seoContents: {
-            langId: string
-            title: string
-            content: string
-            tags: string[]
-        }
-    }
+    formData: SettingSeoUpdateParamDocument
 };
 
 type PageProps = {} & PagePropCommonDocument;
@@ -98,7 +90,7 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
         this.setState({
             isSubmitting: true
         }, () => {
-            settingService.update(this.state.formData).then(resData => {
+            settingService.updateSeo(this.state.formData).then(resData => {
                 if (resData.status) {
                     new ThemeToast({
                         type: "success",
@@ -155,7 +147,7 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
                                             title={this.props.router.t("websiteTags")}
                                             placeHolder={this.props.router.t("writeAndPressEnter")}
                                             name="seoContents.tags"
-                                            value={this.state.formData.seoContents.tags}
+                                            value={this.state.formData.seoContents.tags ?? []}
                                             onChange={(value, name) => HandleForm.onChangeSelect(name, value, this)}
                                         />
                                     </div>

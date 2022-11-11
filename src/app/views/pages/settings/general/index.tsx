@@ -13,7 +13,7 @@ import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
 import ThemeChooseImage from "../../../components/chooseImage";
 import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
-import {SettingUpdateParamDocument} from "../../../../../types/services/setting";
+import {SettingGeneralUpdateParamDocument} from "../../../../../types/services/setting";
 import {Tab, Tabs} from "react-bootstrap";
 
 type PageState = {
@@ -21,7 +21,7 @@ type PageState = {
     isSubmitting: boolean
     isLoading: boolean
     serverInfo: ServerInfoDocument
-    formData: Omit<SettingUpdateParamDocument, "contactForms"|"staticLanguages"|"seoContents">,
+    formData: Omit<SettingGeneralUpdateParamDocument, "contactForms"|"staticLanguages"|"seoContents">,
     formActiveKey: string
 };
 
@@ -114,16 +114,10 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
         this.setState({
             isSubmitting: true
         }, () => {
-            settingService.update({
-                logo: this.state.formData.logo,
-                logoTwo: this.state.formData.logoTwo,
-                icon: this.state.formData.icon,
+            settingService.updateGeneral({
+                ...this.state.formData,
                 head: this.state.formData.head?.decode(),
                 script: this.state.formData.script?.decode(),
-                defaultLangId: this.state.formData.defaultLangId,
-                contact: {
-                    ...this.state.formData.contact
-                }
             }).then(resData => {
                 if(resData.status){
                     this.props.setPageData({

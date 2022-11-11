@@ -8,17 +8,14 @@ import Spinner from "../../../tools/spinner";
 import permissionUtil from "../../../../../utils/functions/permission.util";
 import ThemeToast from "../../../components/toast";
 import {
-    SettingStaticLanguageDocument,
-    SettingUpdateParamDocument
+    SettingStaticLanguageDocument, SettingStaticLanguageUpdateParamDocument
 } from "../../../../../types/services/setting";
 
 type PageState = {
     isSubmitting: boolean
     isLoading: boolean
     langKeys: { value: string, label: string }[]
-    formData: {
-        staticLanguages: SettingUpdateParamDocument["staticLanguages"]
-    },
+    formData: SettingStaticLanguageUpdateParamDocument,
     newStaticLanguages: SettingStaticLanguageDocument[]
 };
 
@@ -88,7 +85,7 @@ class PageSettingsStaticLanguages extends Component<PageProps, PageState> {
                                 ...staticLanguage.contents,
                                 langId: this.props.getPageData.langId
                             }
-                        }))
+                        })) ?? []
                     }
                 })
                 return state;
@@ -101,7 +98,7 @@ class PageSettingsStaticLanguages extends Component<PageProps, PageState> {
         this.setState({
             isSubmitting: true
         }, () => {
-            settingService.update({
+            settingService.updateStaticLanguage({
                 staticLanguages: this.state.formData.staticLanguages
             }).then(resData => {
                 if(resData.status){

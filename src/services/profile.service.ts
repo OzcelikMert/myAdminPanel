@@ -5,13 +5,13 @@ import {ProfileChangePasswordParamDocument, ProfileUpdateParamDocument} from "..
 export default {
     update(params: ProfileUpdateParamDocument) {
         return Api.put({
-            url: [ServicePages.profile],
+            url: [ServicePages.user, "profile"],
             data: params,
         });
     },
     changePassword(params: ProfileChangePasswordParamDocument) {
         return Api.put({
-            url: [ServicePages.profile, "changePassword"],
+            url: [ServicePages.user, "changePassword"],
             data: params,
         });
     },

@@ -5,6 +5,7 @@ import {PagePropCommonDocument} from "../../../types/app/pageProps";
 import permissionUtil from "../../../utils/functions/permission.util";
 import SidebarNavs, {SideBarPath} from "../../../constants/sidebarNavs";
 import SidebarNav from "../../../constants/sidebarNavs";
+import {UserRoles} from "../../../constants";
 
 type PageState = {
     isMenuOpen: any
@@ -78,16 +79,8 @@ class Sidebar extends Component<PageProps, PageState> {
     Item = (props: SideBarPath) => {
         let self = this;
 
-        function checkPerm(_props: SideBarPath) {
-            return (_props.permId && !permissionUtil.checkPermission(
-                self.props.getSessionData.roleId,
-                self.props.getSessionData.permissions,
-                _props.permId
-            )) || (_props.roleId && self.props.getSessionData.roleId != _props.roleId);
-        }
-
         function HasChild(_props: SideBarPath) {
-            if (checkPerm(_props)) return null;
+            if (!permissionUtil.checkPermissionPath(_props.path, self.props.getSessionData.roleId, self.props.getSessionData.permissions)) return null;
             return (
                 <Link className={`nav-link ${self.isPathActive(_props.path) ? 'active' : ''}`} to={_props.path ?? ""}>
                     <span
@@ -98,7 +91,7 @@ class Sidebar extends Component<PageProps, PageState> {
         }
 
         function HasChildren(_props: SideBarPath) {
-            if (checkPerm(_props)) return null;
+            if (!permissionUtil.checkPermissionPath(_props.path, self.props.getSessionData.roleId, self.props.getSessionData.permissions)) return null;
             let state = (_props.state) ? self.state.isMenuOpen[_props.state] : false;
             return (
                 <span>

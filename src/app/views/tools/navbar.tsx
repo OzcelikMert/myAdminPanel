@@ -19,11 +19,6 @@ class Navbar extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {}
-        this.props.setPageData({
-            isDarkTheme: !this.props.getPageData.isDarkTheme
-        }, () => {
-            localStorageUtil.adminIsDarkTheme.set(this.props.getPageData.isDarkTheme);
-        })
     }
 
     toggleOffCanvas() {

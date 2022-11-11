@@ -198,12 +198,12 @@ const SidebarNav: SideBarPath[] = [
             {
                 path: PagePaths.settings().contactForms(),
                 title: "contactForms",
-                permId: PermissionId.SubscriberEdit
+                roleId: UserRoleId.Admin,
             },
             {
                 path: PagePaths.settings().staticLanguages(),
                 title: "staticLanguages",
-                permId: PermissionId.SubscriberEdit
+                permId: PermissionId.StaticLanguage
             },
         ]
     },
