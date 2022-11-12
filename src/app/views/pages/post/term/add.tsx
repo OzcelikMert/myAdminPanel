@@ -184,7 +184,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
     navigateTermPage() {
         let postTypeId = this.props.getPageData.searchParams.postTypeId;
         let postTermTypeId = this.props.getPageData.searchParams.termTypeId;
-        let pagePath = postTypeId == PostTypeId.Page ? PagePaths.post(postTypeId).term(postTermTypeId) : PagePaths.themeContent().post(postTypeId).term(postTermTypeId);
+        let pagePath = [PostTypeId.Page, PostTypeId.Navigate].includes(Number(postTypeId)) ? PagePaths.post(postTypeId).term(postTermTypeId) : PagePaths.themeContent().post(postTypeId).term(postTermTypeId);
         let path = pagePath.list()
         this.props.router.navigate(path, {replace: true});
     }

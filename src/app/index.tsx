@@ -14,7 +14,7 @@ import {initReactI18next} from "react-i18next";
 
 import English from "./languages/en.json"
 import Turkish from "./languages/tr.json"
-import {LanguageId, Languages} from "../constants";
+import {LanguageId, Languages, Status} from "../constants";
 import Navbar from "./views/tools/navbar";
 import Sidebar from "./views/tools/sidebar";
 import Footer from "./views/tools/footer";
@@ -29,6 +29,7 @@ import localStorageUtil from "../utils/localStorage.util";
 import {Helmet} from "react-helmet";
 import AppRoutes from "./routes";
 import PagePaths from "../constants/pagePaths";
+import classNameUtil from "../utils/functions/className.util";
 
 const language = i18n.use(initReactI18next);
 language.init({
@@ -115,8 +116,8 @@ class AppAdmin extends Component<PageProps, PageState> {
                 };
                 if (this.props.router.match) {
                     Statement.Foreach(this.props.router.match?.params, (key, value) => {
-                         state.pageData.searchParams[key] = value;
-                     })
+                        state.pageData.searchParams[key] = value;
+                    })
                 }
                 return state;
             }, () => this.setState({isPageLoading: false}))
@@ -249,24 +250,39 @@ class AppAdmin extends Component<PageProps, PageState> {
         ) : null
     }
 
-    BreadCrumb = () => (
-        <div className="page-header">
-            <div className="row w-100 m-0">
-                <div className="col-md-8 p-0">
-                    <h3 className="page-title">
-                        <Link to="/dashboard">
-                        <span className="page-title-icon bg-gradient-primary text-white me-2">
-                            <i className="mdi mdi-home"></i>
-                        </span></Link>
-                        {this.state.breadCrumbTitle}
-                    </h3>
-                </div>
-                <div className="col-md-4 p-0 content-language">
-                    <this.ContentLanguage/>
+    BreadCrumb = () => {
+        let breadCrumbTitles = this.state.breadCrumbTitle.split(" - ");
+        return (
+            <div className="page-header">
+                <div className="row w-100 m-0">
+                    <div className="col-md-8 p-0">
+                        <h3 className="page-title">
+                            <Link to="/dashboard">
+                                <span className="page-title-icon bg-gradient-primary text-white me-2">
+                                    <i className="mdi mdi-home"></i>
+                                </span>
+                            </Link>
+                            {
+                                breadCrumbTitles.map((breadCrumbTitle, index) => (
+                                    <span>
+                                        <label className="badge badge-gradient-dark ms-2">{breadCrumbTitle}</label>
+                                        {
+                                            breadCrumbTitles.length != (index + 1)
+                                                ? <label className="badge badge-gradient-primary ms-2"><i className="mdi mdi-arrow-right"></i></label>
+                                                : null
+                                        }
+                                    </span>
+                                ))
+                            }
+                        </h3>
+                    </div>
+                    <div className="col-md-4 p-0 content-language">
+                        <this.ContentLanguage/>
+                    </div>
                 </div>
             </div>
-        </div>
-    );
+        )
+    };
 
     render() {
         const fullPageLayoutRoutes = [

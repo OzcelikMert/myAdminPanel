@@ -174,7 +174,7 @@ export class PagePostList extends Component<PageProps, PageState> {
 
     navigateTermPage(type: "termEdit" | "edit", itemId = "", termTypeId = 0) {
         let postTypeId = this.props.getPageData.searchParams.postTypeId;
-        let pagePath = postTypeId == PostTypeId.Page ? PagePaths.post(postTypeId) : PagePaths.themeContent().post(postTypeId);
+        let pagePath = [PostTypeId.Page, PostTypeId.Navigate].includes(Number(postTypeId)) ? PagePaths.post(postTypeId) : PagePaths.themeContent().post(postTypeId);
         let path = (type === "edit")
             ? pagePath.edit(itemId)
             : (type === "termEdit" && itemId)
