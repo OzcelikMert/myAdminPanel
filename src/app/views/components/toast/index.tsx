@@ -23,7 +23,7 @@ class ThemeToast {
             bar: {
                 color: this.getColor
             },
-            position: props.position ?? "bottom-center",
+            position: props.position ?? "top-center",
             hideAfter: props.timeOut,
             heading: props.title,
         }
