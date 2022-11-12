@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "../../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
-import {PermissionId, UserRoleId} from "../../../../../constants";
+import {Languages, PermissionId, UserRoleId} from "../../../../../constants";
 import settingService from "../../../../../services/setting.service";
 import languageService from "../../../../../services/language.service";
 import ServerInfoDocument from "../../../../../types/services/serverInfo";
@@ -15,13 +15,15 @@ import ThemeChooseImage from "../../../components/chooseImage";
 import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
 import {SettingGeneralUpdateParamDocument} from "../../../../../types/services/setting";
 import {Tab, Tabs} from "react-bootstrap";
+import localStorageUtil from "../../../../../utils/localStorage.util";
 
 type PageState = {
     languages: {label: string, value: string}[]
+    panelLanguages: {label: string, value: string}[]
     isSubmitting: boolean
     isLoading: boolean
     serverInfo: ServerInfoDocument
-    formData: Omit<SettingGeneralUpdateParamDocument, "contactForms"|"staticLanguages"|"seoContents">,
+    formData: Omit<SettingGeneralUpdateParamDocument, "contactForms"|"staticLanguages"|"seoContents"> & {panelLangId: string},
     formActiveKey: string
 };
 
@@ -32,6 +34,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
         super(props);
         this.state = {
             languages: [],
+            panelLanguages: [],
             isSubmitting: false,
             isLoading: true,
             formActiveKey: `general`,
@@ -41,7 +44,8 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                 memory: "0"
             },
             formData: {
-                contact: {}
+                contact: {},
+                panelLangId: localStorageUtil.adminLanguage.get.toString()
             }
         }
     }
@@ -50,6 +54,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
         this.setPageTitle();
         Thread.start(() => {
             this.getServerDetails();
+            this.getPanelLanguages();
             this.getLanguages();
             this.getSettings();
             this.setState({
@@ -83,6 +88,15 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                 return state;
             })
         }
+    }
+
+    getPanelLanguages() {
+        this.setState({
+            panelLanguages: Languages.map(language => ({
+                label: language.title,
+                value: language.id.toString()
+            }))
+        })
     }
 
     getLanguages() {
@@ -130,10 +144,17 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                         })
                     });
                 }
-
                 this.setState((state: PageState) => {
                     state.isSubmitting = false;
                     return state;
+                }, () => {
+                    if(this.state.formData.panelLangId != localStorageUtil.adminLanguage.get.toString()){
+                        let language = Languages.findSingle("id", Number(this.state.formData.panelLangId));
+                        if(language) {
+                            localStorageUtil.adminLanguage.set(Number(this.state.formData.panelLangId));
+                            window.location.reload();
+                        }
+                    }
                 })
             })
         })
@@ -263,6 +284,17 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
         return (
             <div className="row">
                 <div className="col-md-7 mb-3">
+                    <ThemeFormSelect
+                        title={this.props.router.t("websiteMainLanguage").toCapitalizeCase()}
+                        name="defaultLangId"
+                        isMulti={false}
+                        isSearchable={false}
+                        options={this.state.languages}
+                        value={this.state.languages.findSingle("value", this.state.formData.defaultLangId || "")}
+                        onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
+                    />
+                </div>
+                <div className="col-md-7 mb-3">
                     <ThemeFieldSet legend={this.props.router.t("logo")}>
                         <ThemeChooseImage
                             {...this.props}
@@ -360,12 +392,12 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                 </div>
                 <div className="col-md-7 mb-3">
                     <ThemeFormSelect
-                        title={this.props.router.t("websiteMainLanguage").toCapitalizeCase()}
-                        name="defaultLangId"
+                        title={this.props.router.t("adminPanelLanguage").toCapitalizeCase()}
+                        name="panelLangId"
                         isMulti={false}
                         isSearchable={false}
-                        options={this.state.languages}
-                        value={this.state.languages.findSingle("value", this.state.formData.defaultLangId || "")}
+                        options={this.state.panelLanguages}
+                        value={this.state.panelLanguages.findSingle("value", this.state.formData.panelLangId)}
                         onChange={(item: any, e) => HandleForm.onChangeSelect(e.name, item.value, this)}
                     />
                 </div>

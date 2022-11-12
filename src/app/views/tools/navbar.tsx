@@ -58,14 +58,6 @@ class Navbar extends Component<PageProps, PageState> {
         }
     }
 
-    onChangeLanguage(langId: number) {
-        let language = Languages.findSingle("id", langId);
-        if(language) {
-            localStorageUtil.adminLanguage.set(langId);
-            window.location.reload();
-        }
-    }
-
     Notifications = () => (
         <Dropdown align={"end"}>
             <Dropdown.Toggle className="nav-link count-indicator">
@@ -128,49 +120,6 @@ class Navbar extends Component<PageProps, PageState> {
                 <div className="dropdown-divider"></div>
                 <h6 className="p-3 mb-0 text-center cursor-pointer"><Trans>See all
                     notifications</Trans></h6>
-            </Dropdown.Menu>
-        </Dropdown>
-    )
-
-    LanguageItem = (props: LanguageDocument) => {
-        return (
-            <Dropdown.Item onClick={evt => this.onChangeLanguage(props.id)}>
-                <div className="language-flag">
-                    <img src={pathUtil.uploads.flags + props.image} alt={props.title}/>
-                </div>
-                <div className="ms-2 d-flex align-items-start flex-column justify-content-center">
-                    <span>{props.title}</span>
-                </div>
-            </Dropdown.Item>
-        )
-    }
-
-    LanguageSelectedItem = (props: LanguageDocument) => {
-        return (
-            <div className="selected-language">
-                <img src={pathUtil.uploads.flags + props.image} alt={props.title}/>
-            </div>
-        )
-    }
-
-    Languages = () => (
-        <Dropdown align={"end"}>
-            <Dropdown.Toggle className="nav-link">
-                {
-                    <this.LanguageSelectedItem {...Languages.findSingle("id", localStorageUtil.adminLanguage.get)} />
-                }
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu className="navbar-dropdown">
-                <div className="dropdown-divider"></div>
-                {
-                    Languages.map(language => (
-                        <>
-                            <this.LanguageItem {...language} />
-                            <div className="dropdown-divider"></div>
-                        </>
-                    ))
-                }
             </Dropdown.Menu>
         </Dropdown>
     )
@@ -261,9 +210,6 @@ class Navbar extends Component<PageProps, PageState> {
                 <div className="navbar-menu-wrapper d-flex align-items-stretch">
                    
                     <ul className="navbar-nav navbar-nav-right">
-                        <li className="nav-item nav-languages">
-                            <this.Languages/>
-                        </li>
                         <li className="nav-item nav-profile">
                             <this.Profile/>
                         </li>

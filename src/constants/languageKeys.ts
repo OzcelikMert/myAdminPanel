@@ -189,5 +189,6 @@ export const LanguageKeysArray = [
     "whatsapp",
     "subscribe",
     "subscribe-button",
-    "noPerm"
+    "noPerm",
+    "adminPanelLanguage"
 ] as const;

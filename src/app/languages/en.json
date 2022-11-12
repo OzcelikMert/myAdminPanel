@@ -189,5 +189,6 @@
   "whatsapp": "Whatsapp",
   "subscribe":"Subscribe",
   "subscribe-button": "Subscribe Button",
-  "noPerm": "No Permission"
+  "noPerm": "No Permission",
+  "adminPanelLanguage": "Admin Panel Language"
 }

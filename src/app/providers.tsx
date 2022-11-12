@@ -39,13 +39,13 @@ class AppProviders extends Component<PageProps, PageState> {
         this.setState({
             isPageLoading: true,
         }, () => {
-            console.log(this.props)
-            if (this.checkPermission()) {
-                this.checkSession();
-                this.setState({
-                    isPageLoading: false
-                })
-            }
+            this.checkSession(() => {
+                if (this.checkPermission()) {
+                    this.setState({
+                        isPageLoading: false
+                    })
+                }
+            });
         });
     }
 
@@ -69,7 +69,7 @@ class AppProviders extends Component<PageProps, PageState> {
         return true;
     }
 
-    checkSession() {
+    checkSession(callback: Function) {
         let isRefresh = this.props.getSessionData.id.length < 1;
         let isAuth = false;
         let resData = authService.getSession({isRefresh: isRefresh});
@@ -86,8 +86,12 @@ class AppProviders extends Component<PageProps, PageState> {
                         image: user.image,
                         name: user.name,
                         permissions: user.permissions
-                    });
+                    }, () => callback());
+                }else {
+                    callback();
                 }
+            }else {
+                callback();
             }
         }
         this.setState({
