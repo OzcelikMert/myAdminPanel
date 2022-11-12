@@ -1,6 +1,4 @@
 import {PermissionId, PostTypeId, UserRoleId, UserRoles} from "../../constants";
-import {NavigateFunction} from "react-router-dom";
-import PagePaths from "../../constants/pagePaths";
 import PermissionPaths from "../../constants/permissionPaths";
 
 export default {

@@ -177,11 +177,11 @@ export class PagePostTermList extends Component<PageProps, PageState> {
     navigateTermPage(type: "add" | "back" | "edit", postTermId = "") {
         let postTypeId = this.props.getPageData.searchParams.postTypeId;
         let postTermTypeId = this.props.getPageData.searchParams.termTypeId;
-        let pagePath = postTypeId == PostTypeId.Page ? PagePaths.post(postTypeId).term(postTermTypeId) : PagePaths.themeContent().post(postTypeId).term(postTermTypeId);
+        let pagePath = postTypeId == PostTypeId.Page ? PagePaths.post(postTypeId) : PagePaths.themeContent().post(postTypeId);
         let path = (type === "add")
-            ? pagePath.add()
+            ? pagePath.term(postTermTypeId).add()
             : (type === "edit")
-                ? pagePath.edit(postTermId)
+                ? pagePath.term(postTermTypeId).edit(postTermId)
                 : pagePath.list();
         this.props.router.navigate(path, {replace: true});
     }

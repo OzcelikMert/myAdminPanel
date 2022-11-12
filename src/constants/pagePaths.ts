@@ -78,7 +78,7 @@ const PagePaths = {
             list() {
                 return setPath(path, "list");
             },
-            term(typeId: string | PostTermTypeId = ":termTypeId") {
+            term(typeId: string | PostTermTypeId | undefined = ":termTypeId") {
                 path = setPath(path, "term", typeId);
 
                 return {
