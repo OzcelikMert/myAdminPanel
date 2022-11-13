@@ -73,7 +73,6 @@ class Sidebar extends Component<PageProps, PageState> {
     }
 
     isPathActive(path: string) {
-        console.log(path)
         return this.props.router.location.pathname.search(path) > -1;
     }
 

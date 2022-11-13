@@ -41,16 +41,22 @@ class AppProviders extends Component<PageProps, PageState> {
         }, () => {
             this.checkSession(() => {
                 if (this.checkPermission()) {
-                    this.setState({
-                        isPageLoading: false
-                    })
+
                 }
+                this.setState({
+                    isPageLoading: false
+                })
             });
         });
     }
 
     checkPermission() {
+        const ignoredPaths = [
+            PagePaths.login(),
+            PagePaths.lock()
+        ];
         if (
+            !ignoredPaths.includes(this.props.router.location.pathname) &&
             !permissionUtil.checkPermissionPath(
                 this.props.router.location.pathname,
                 this.props.getSessionData.roleId,
@@ -72,11 +78,13 @@ class AppProviders extends Component<PageProps, PageState> {
     checkSession(callback: Function) {
         let isRefresh = this.props.getSessionData.id.length < 1;
         let isAuth = false;
+        let isPromiseCallBack = false;
         let resData = authService.getSession({isRefresh: isRefresh});
         if (resData.status && resData.errorCode == ErrorCodes.success) {
             isAuth = true;
             if (isRefresh) {
                 if (resData.data.length > 0) {
+                    isPromiseCallBack = true;
                     let user = resData.data[0];
                     this.props.setSessionData({
                         id: user._id,
@@ -87,12 +95,12 @@ class AppProviders extends Component<PageProps, PageState> {
                         name: user.name,
                         permissions: user.permissions
                     }, () => callback());
-                }else {
-                    callback();
                 }
-            }else {
-                callback();
             }
+        }
+
+        if(!isPromiseCallBack){
+            callback();
         }
         this.setState({
             isAuth: isAuth
