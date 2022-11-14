@@ -17,9 +17,9 @@ import ThemeChooseImage from "../../../components/chooseImage";
 import postTermService from "../../../../../services/postTerm.service";
 import Spinner from "../../../tools/spinner";
 import Thread from "../../../../../library/thread";
-import permissionUtil from "../../../../../utils/functions/permission.util";
-import staticContentUtil from "../../../../../utils/functions/staticContent.util";
-import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
+import permissionUtil from "../../../../../utils/permission.util";
+import staticContentUtil from "../../../../../utils/staticContent.util";
+import imageSourceUtil from "../../../../../utils/imageSource.util";
 import {PostTermUpdateParamDocument} from "../../../../../types/services/postTerm";
 import PagePaths from "../../../../../constants/pagePaths";
 

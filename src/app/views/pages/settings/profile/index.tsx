@@ -13,8 +13,8 @@ import ThemeChooseImage from "../../../components/chooseImage";
 import userService from "../../../../../services/user.service";
 import profileService from "../../../../../services/profile.service";
 import Thread from "../../../../../library/thread";
-import classNameUtil from "../../../../../utils/functions/className.util";
-import imageSourceUtil from "../../../../../utils/functions/imageSource.util";
+import classNameUtil from "../../../../../utils/className.util";
+import imageSourceUtil from "../../../../../utils/imageSource.util";
 import ThemeToast from "../../../components/toast";
 import {PermissionDocument, PermissionGroupDocument} from "../../../../../types/constants";
 

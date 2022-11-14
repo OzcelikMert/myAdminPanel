@@ -10,9 +10,9 @@ import postService from "../../../../services/post.service";
 import WorldMap from "react-svg-worldmap";
 import viewService from "../../../../services/view.service";
 import {ViewNumberDocument, ViewStatisticsDocument} from "../../../../types/services/view";
-import imageSourceUtil from "../../../../utils/functions/imageSource.util";
-import classNameUtil from "../../../../utils/functions/className.util";
-import permissionUtil from "../../../../utils/functions/permission.util";
+import imageSourceUtil from "../../../../utils/imageSource.util";
+import classNameUtil from "../../../../utils/className.util";
+import permissionUtil from "../../../../utils/permission.util";
 import PagePaths from "../../../../constants/pagePaths";
 
 type PageState = {

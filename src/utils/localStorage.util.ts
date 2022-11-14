@@ -9,7 +9,7 @@ export default {
     },
     adminIsDarkTheme: {
         get get(): boolean {
-            return Boolean((window.localStorage.getItem("adminIsDarkTheme") ?? false));
+            return Boolean(JSON.parse(window.localStorage.getItem("adminIsDarkTheme") ?? "false"));
         },
         set: (isDarkTheme: boolean) => {
             window.localStorage.setItem("adminIsDarkTheme", isDarkTheme.toString());

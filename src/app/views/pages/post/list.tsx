@@ -9,9 +9,9 @@ import postService from "../../../../services/post.service";
 import PostDocument from "../../../../types/services/post";
 import Spinner from "../../tools/spinner";
 import Thread from "../../../../library/thread";
-import imageSourceUtil from "../../../../utils/functions/imageSource.util";
-import classNameUtil from "../../../../utils/functions/className.util";
-import permissionUtil from "../../../../utils/functions/permission.util";
+import imageSourceUtil from "../../../../utils/imageSource.util";
+import classNameUtil from "../../../../utils/className.util";
+import permissionUtil from "../../../../utils/permission.util";
 import ThemeToast from "../../components/toast";
 import PagePaths from "../../../../constants/pagePaths";
 

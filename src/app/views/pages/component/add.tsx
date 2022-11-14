@@ -11,7 +11,7 @@ import Spinner from "../../tools/spinner";
 import {ComponentTypeDocument, ComponentUpdateParamDocument} from "../../../../types/services/component";
 import componentService from "../../../../services/component.service";
 import ThemeChooseImage from "../../components/chooseImage";
-import imageSourceUtil from "../../../../utils/functions/imageSource.util";
+import imageSourceUtil from "../../../../utils/imageSource.util";
 import Swal from "sweetalert2";
 import ThemeToast from "../../components/toast";
 import PagePaths from "../../../../constants/pagePaths";

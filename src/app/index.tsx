@@ -29,7 +29,6 @@ import localStorageUtil from "../utils/localStorage.util";
 import {Helmet} from "react-helmet";
 import AppRoutes from "./routes";
 import PagePaths from "../constants/pagePaths";
-import classNameUtil from "../utils/functions/className.util";
 
 const language = i18n.use(initReactI18next);
 language.init({
@@ -74,7 +73,6 @@ class AppAdmin extends Component<PageProps, PageState> {
                 },
                 langId: "",
                 mainLangId: "1",
-                isDarkTheme: localStorageUtil.adminIsDarkTheme.get
             },
             sessionData: {
                 id: "",

@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {Dropdown} from "react-bootstrap";
 import {LanguageId, Status, StatusId} from "../../../../constants";
-import staticContentUtil from "../../../../utils/functions/staticContent.util";
-import classNameUtil from "../../../../utils/functions/className.util";
+import staticContentUtil from "../../../../utils/staticContent.util";
+import classNameUtil from "../../../../utils/className.util";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import permissionUtil from "../../../../utils/functions/permission.util";
+import permissionUtil from "../../../../utils/permission.util";
 
 type PageState = {};
 

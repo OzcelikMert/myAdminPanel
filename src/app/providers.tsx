@@ -6,7 +6,7 @@ import {Navigate} from "react-router-dom";
 import Spinner from "./views/tools/spinner";
 import authService from "../services/auth.service";
 import PagePaths from "../constants/pagePaths";
-import permissionUtil from "../utils/functions/permission.util";
+import permissionUtil from "../utils/permission.util";
 import ThemeToast from "./views/components/toast";
 
 type PageState = {

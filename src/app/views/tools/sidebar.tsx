@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Collapse} from 'react-bootstrap';
 import {PagePropCommonDocument} from "../../../types/app/pageProps";
-import permissionUtil from "../../../utils/functions/permission.util";
+import permissionUtil from "../../../utils/permission.util";
 import SidebarNavs, {SideBarPath} from "../../../constants/sidebarNavs";
 import SidebarNav from "../../../constants/sidebarNavs";
 import {UserRoles} from "../../../constants";

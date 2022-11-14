@@ -5,8 +5,7 @@ type AppAdminGetState = {
     pageData: {
         searchParams: SearchParamDocument,
         langId: string,
-        mainLangId: string,
-        isDarkTheme: boolean
+        mainLangId: string
     },
     sessionData: {
         id: string,

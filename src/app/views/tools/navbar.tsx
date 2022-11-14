@@ -8,18 +8,23 @@ import {LanguageDocument} from "../../../types/constants";
 import {Languages} from "../../../constants";
 import localStorageUtil from "../../../utils/localStorage.util";
 import pathUtil from "../../../utils/path.util";
-import imageSourceUtil from "../../../utils/functions/imageSource.util";
+import imageSourceUtil from "../../../utils/imageSource.util";
 import PagePaths from "../../../constants/pagePaths";
 import DarkModeToggle from "react-dark-mode-toggle";
+import themeUtil from "../../../utils/theme.util";
 
-type PageState = {};
+type PageState = {
+    isDarkTheme: boolean
+};
 
 type PageProps = {} & PagePropCommonDocument;
 
 class Navbar extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
-        this.state = {}
+        this.state = {
+            isDarkTheme: localStorageUtil.adminIsDarkTheme.get
+        }
     }
 
     toggleOffCanvas() {
@@ -200,17 +205,11 @@ class Navbar extends Component<PageProps, PageState> {
     )
 
     onChangeTheme(){      
-        this.props.setPageData({
-            isDarkTheme: !this.props.getPageData.isDarkTheme
+        this.setState({
+            isDarkTheme: !this.state.isDarkTheme
         }, () => {
-            localStorageUtil.adminIsDarkTheme.set(this.props.getPageData.isDarkTheme);
-            const root = document.documentElement;
-            root?.style.setProperty("--theme-navbar-bg-color", this.props.getPageData.isDarkTheme ? "#1c1c1c" : "#fff")
-            root?.style.setProperty("--theme-bg-color", this.props.getPageData.isDarkTheme ? "#1c1c1c" : "#fff")
-            root?.style.setProperty("--theme-content-wrapper-bg-color", this.props.getPageData.isDarkTheme ? "#333333" : "#f2edf3")
-            root?.style.setProperty("--theme-h3-text-color", this.props.getPageData.isDarkTheme ? "#fff" : "#000")
-            root?.style.setProperty("--theme-menu-title-color", this.props.getPageData.isDarkTheme ? "#b0bec5" : "inherit")
-            root?.style.setProperty("--theme-menu-title-active-color", this.props.getPageData.isDarkTheme ? "#fff" : "#000")
+            localStorageUtil.adminIsDarkTheme.set(this.state.isDarkTheme);
+            themeUtil.setThemeColor(this.state.isDarkTheme);
         })
     }
 
@@ -226,7 +225,7 @@ class Navbar extends Component<PageProps, PageState> {
                 <div className="navbar-menu-wrapper d-flex align-items-stretch">
                    
                     <ul className="navbar-nav navbar-nav-right">
-                    <DarkModeToggle onChange={() => this.onChangeTheme()} checked={this.props.getPageData.isDarkTheme} size={55}/>
+                    <DarkModeToggle onChange={() => this.onChangeTheme()} checked={this.state.isDarkTheme} size={55}/>
                         <li className="nav-item nav-profile">
                             <this.Profile/>
                         </li>

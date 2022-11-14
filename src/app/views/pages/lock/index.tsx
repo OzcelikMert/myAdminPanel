@@ -5,7 +5,7 @@ import {ThemeForm} from "../../components/form";
 import HandleForm from "../../../../library/react/handles/form";
 import V from "../../../../library/variable";
 import authService from "../../../../services/auth.service";
-import imageSourceUtil from "../../../../utils/functions/imageSource.util";
+import imageSourceUtil from "../../../../utils/imageSource.util";
 import PagePaths from "../../../../constants/pagePaths";
 
 type PageState = {

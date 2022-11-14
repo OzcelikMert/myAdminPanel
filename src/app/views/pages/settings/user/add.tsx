@@ -10,7 +10,7 @@ import V, {DateMask} from "../../../../../library/variable";
 import userService from "../../../../../services/user.service";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
-import staticContentUtil from "../../../../../utils/functions/staticContent.util";
+import staticContentUtil from "../../../../../utils/staticContent.util";
 import PagePaths from "../../../../../constants/pagePaths";
 
 type PageState = {

@@ -1,5 +1,5 @@
-import {PermissionId, PostTypeId, UserRoleId, UserRoles} from "../../constants";
-import PermissionPaths from "../../constants/permissionPaths";
+import {PermissionId, PostTypeId, UserRoleId, UserRoles} from "../constants";
+import PermissionPaths from "../constants/permissionPaths";
 
 export default {
     checkPermissionPath(path: string, userRoleId: UserRoleId, userPermissions: number[]) {

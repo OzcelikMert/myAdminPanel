@@ -9,9 +9,9 @@ import Spinner from "../../tools/spinner";
 import Thread from "../../../../library/thread";
 import pathUtil from "../../../../utils/path.util";
 import DataTable, {TableColumn} from "react-data-table-component";
-import imageSourceUtil from "../../../../utils/functions/imageSource.util";
+import imageSourceUtil from "../../../../utils/imageSource.util";
 import ThemeToast from "../../components/toast";
-import permissionUtil from "../../../../utils/functions/permission.util";
+import permissionUtil from "../../../../utils/permission.util";
 import {PermissionId} from "../../../../constants";
 
 type PageState = {

@@ -7,9 +7,9 @@ import {
 } from "../../../../constants";
 import UserDocument from "../../../../types/services/user";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import classNameUtil from "../../../../utils/functions/className.util";
-import staticContentUtil from "../../../../utils/functions/staticContent.util";
-import imageSourceUtil from "../../../../utils/functions/imageSource.util";
+import classNameUtil from "../../../../utils/className.util";
+import staticContentUtil from "../../../../utils/staticContent.util";
+import imageSourceUtil from "../../../../utils/imageSource.util";
 import {ThemeFieldSet} from "../form";
 import {PermissionDocument, PermissionGroupDocument} from "../../../../types/constants";
 

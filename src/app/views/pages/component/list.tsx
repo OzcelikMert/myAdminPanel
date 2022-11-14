@@ -5,7 +5,7 @@ import DataTable, {TableColumn} from "react-data-table-component";
 import Swal from "sweetalert2";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";
-import permissionUtil from "../../../../utils/functions/permission.util";
+import permissionUtil from "../../../../utils/permission.util";
 import ThemeToast from "../../components/toast";
 import {ComponentDocument} from "../../../../types/services/component";
 import componentService from "../../../../services/component.service";

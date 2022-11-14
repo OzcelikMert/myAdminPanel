@@ -1,6 +1,6 @@
-import V from "../../library/variable";
-import {emptyImage} from "../../app/views/components/chooseImage";
-import pathUtil from "../path.util";
+import V from "../library/variable";
+import {emptyImage} from "../app/views/components/chooseImage";
+import pathUtil from "./path.util";
 
 export default {
     getUploadedImageSrc(imageName?: string): any {

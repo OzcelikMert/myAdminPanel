@@ -127,3 +127,12 @@ body {
   height: 100vh;
   overflow-y: auto;
 }
+
+:root{
+  --theme-bg-color: #fff;
+  --theme-content-wrapper-bg-color: #f2edf3;
+  --theme-h3-text-color: #000;
+  --theme-menu-title-color: inherit;
+  --theme-menu-title-active-color: #000;
+  --theme-navbar-bg-color: #fff;
+};
