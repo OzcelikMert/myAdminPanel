@@ -133,13 +133,12 @@ body {
 }
 
 :root{
-  --theme-bg-color: #fff;
-  --theme-content-wrapper-bg-color: #f2edf3;
-  --theme-h3-text-color: #000;
-  --theme-menu-title-color: inherit;
-  --theme-menu-title-active-color: #000;
-  --theme-navbar-bg-color: #fff;
-
+  --theme-bg-color: var(--theme-bg-light);
+  --theme-content-wrapper-bg: var(--theme-content-wrapper-bg-light);
+  --theme-h3-text-color: var(--theme-h3-text-color-light);
+  --theme-menu-title-color: var(--theme-menu-title-color-light);
+  --theme-menu-title-active-color: var(--theme-menu-title-active-color-light);
+  --theme-navbar-bg: var(--theme-navbar-bg-light);
   --theme-sidebar-bg: var(--theme-sidebar-bg-light);
   --theme-sidebar-menu-hover-bg: var(--theme-sidebar-menu-hover-bg-light);
 };

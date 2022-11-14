@@ -55,7 +55,7 @@ body {
 }
 
 .content-wrapper {
-  background: var(--theme-content-wrapper-bg-color);
+  background: var(--theme-content-wrapper-bg);
   padding: 2.75rem 2.25rem;
   width: 100%;
   @include flex-grow(1);

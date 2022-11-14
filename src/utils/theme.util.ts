@@ -21,19 +21,15 @@ export default class ThemeUtil {
         this.root.style.setProperty(variable, this.var(variable))
     }
 
-    private sidebar() {
-        this.setColor("sidebar-bg");
-        this.setColor("sidebar-menu-hover-bg");
-    }
-
 
     setThemeColor() {
-        this.sidebar();
-        this.root.style.setProperty("--theme-navbar-bg-color", this.isDarkTheme ? "#1c1c1c" : "#fff")
-        this.root.style.setProperty("--theme-bg-color", this.isDarkTheme ? "#1c1c1c" : "#fff")
-        this.root.style.setProperty("--theme-content-wrapper-bg-color", this.isDarkTheme ? "#333333" : "#f2edf3")
-        this.root.style.setProperty("--theme-h3-text-color", this.isDarkTheme ? "#fff" : "#000")
-        this.root.style.setProperty("--theme-menu-title-color", this.isDarkTheme ? "#b0bec5" : "inherit")
-        this.root.style.setProperty("--theme-menu-title-active-color", this.isDarkTheme ? "#fff" : "#000")
+        this.setColor("sidebar-bg");
+        this.setColor("sidebar-menu-hover-bg");
+        this.setColor("navbar-bg");
+        this.setColor("bg");
+        this.setColor("content-wrapper-bg");
+        this.setColor("h3-text-color");
+        this.setColor("menu-title-color");
+        this.setColor("menu-title-active-color");
     }
 }
