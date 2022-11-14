@@ -135,7 +135,7 @@
       }
 
       &:hover {
-        background: $sidebar-dark-menu-hover-bg;
+        background: var(--theme-sidebar-menu-hover-bg);
       }
 
       &.sidebar-actions {
