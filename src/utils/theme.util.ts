@@ -1,5 +1,3 @@
-import localStorageUtil from "./localStorage.util";
-
 export default class ThemeUtil {
     isDarkTheme: boolean;
     root: HTMLElement;
@@ -21,7 +19,6 @@ export default class ThemeUtil {
         this.root.style.setProperty(variable, this.var(variable))
     }
 
-
     setThemeColor() {
         this.setColor("sidebar-bg");
         this.setColor("sidebar-menu-hover-bg");
@@ -31,5 +28,6 @@ export default class ThemeUtil {
         this.setColor("h3-text-color");
         this.setColor("menu-title-color");
         this.setColor("menu-title-active-color");
+        this.setColor("worldmap-stroke-bg");
     }
 }

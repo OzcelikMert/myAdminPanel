@@ -37,6 +37,7 @@ type PageState = {
         number: ViewNumberDocument,
         statistics: ViewStatisticsDocument
     }
+    worldMapSize: "lg" | "xl" | "xxl"
     isLoading: boolean
 };
 
@@ -64,6 +65,7 @@ class PageDashboard extends Component<PageProps, PageState> {
                     country: []
                 }
             },
+            worldMapSize: "lg",
             isLoading: true
         }
     }
@@ -164,6 +166,12 @@ class PageDashboard extends Component<PageProps, PageState> {
 
             return state;
         })
+    }
+
+    setWorldMapSize(size: PageState["worldMapSize"]) {
+        this.setState({
+            worldMapSize: size
+        });
     }
 
     navigateTermPage(type: "termEdit" | "edit" | "listPost", postTypeId: number, itemId = "", termTypeId = 0) {
@@ -338,15 +346,31 @@ class PageDashboard extends Component<PageProps, PageState> {
                     <div className="card">
                         <div className="card-body overflow-auto">
                             <h4 className="card-title">{this.props.router.t("weeklyVisitorsStatistics")}</h4>
-                            <WorldMap
-                                color="#b66dff"
-                                value-suffix="people"
-                                size="lg"
-                                data={this.state.visitorData.statistics.country.map(view => ({
-                                    country: view._id.toLowerCase(),
-                                    value: view.total
-                                }))}
-                            />
+                            <div className="row d-none d-lg-block">
+                                <div className="col-md-12 text-end">
+                                    <button className="btn btn-gradient-success btn-sm" onClick={() => this.setWorldMapSize(this.state.worldMapSize == "xl" ? "xxl" : "xl")}>
+                                        <i className="fa fa-search-plus"></i>
+                                    </button>
+                                    <button className="btn btn-gradient-danger btn-sm" onClick={() => this.setWorldMapSize(this.state.worldMapSize == "xxl" ? "xl" : "lg")}>
+                                        <i className="fa fa-search-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="row overflow-auto">
+                                <WorldMap
+                                    color="#b66dff"
+                                    borderColor="var(--theme-worldmap-stroke-bg)"
+                                    frameColor="red"
+                                    strokeOpacity={0.3}
+                                    backgroundColor="var(--theme-bg)"
+                                    value-suffix="people"
+                                    size={this.state.worldMapSize}
+                                    data={this.state.visitorData.statistics.country.map(view => ({
+                                        country: view._id.toLowerCase(),
+                                        value: view.total
+                                    }))}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
