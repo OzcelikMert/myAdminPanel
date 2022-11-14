@@ -1,6 +1,6 @@
 .navbar {
   font-weight: $font-weight-light;
-  background: $navbar-bg;
+  background: var(--theme-navbar-bg-color);
   transition:background $action-transition-duration $action-transition-timing-function;
   -webkit-transition:background $action-transition-duration $action-transition-timing-function;
   -moz-transition:background $action-transition-duration $action-transition-timing-function;
@@ -14,7 +14,7 @@
     -webkit-transition: width $action-transition-duration $action-transition-timing-function, background $action-transition-duration $action-transition-timing-function;
     -moz-transition: width $action-transition-duration $action-transition-timing-function, background $action-transition-duration $action-transition-timing-function;
     -ms-transition: width $action-transition-duration $action-transition-timing-function, background $action-transition-duration $action-transition-timing-function;
-    background: $navbar-bg;
+    background: var(--theme-navbar-bg-color);
     width: $sidebar-width-lg;
     height: $navbar-height;
     :host-context(.sidebar-dark) & {

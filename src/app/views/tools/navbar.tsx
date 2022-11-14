@@ -10,6 +10,7 @@ import localStorageUtil from "../../../utils/localStorage.util";
 import pathUtil from "../../../utils/path.util";
 import imageSourceUtil from "../../../utils/functions/imageSource.util";
 import PagePaths from "../../../constants/pagePaths";
+import DarkModeToggle from "react-dark-mode-toggle";
 
 type PageState = {};
 
@@ -198,6 +199,21 @@ class Navbar extends Component<PageProps, PageState> {
         </Dropdown>
     )
 
+    onChangeTheme(){      
+        this.props.setPageData({
+            isDarkTheme: !this.props.getPageData.isDarkTheme
+        }, () => {
+            localStorageUtil.adminIsDarkTheme.set(this.props.getPageData.isDarkTheme);
+            const root = document.documentElement;
+            root?.style.setProperty("--theme-navbar-bg-color", this.props.getPageData.isDarkTheme ? "#1c1c1c" : "#fff")
+            root?.style.setProperty("--theme-bg-color", this.props.getPageData.isDarkTheme ? "#1c1c1c" : "#fff")
+            root?.style.setProperty("--theme-content-wrapper-bg-color", this.props.getPageData.isDarkTheme ? "#333333" : "#f2edf3")
+            root?.style.setProperty("--theme-h3-text-color", this.props.getPageData.isDarkTheme ? "#fff" : "#000")
+            root?.style.setProperty("--theme-menu-title-color", this.props.getPageData.isDarkTheme ? "#b0bec5" : "inherit")
+            root?.style.setProperty("--theme-menu-title-active-color", this.props.getPageData.isDarkTheme ? "#fff" : "#000")
+        })
+    }
+
     render() {
         return (
             <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -210,6 +226,7 @@ class Navbar extends Component<PageProps, PageState> {
                 <div className="navbar-menu-wrapper d-flex align-items-stretch">
                    
                     <ul className="navbar-nav navbar-nav-right">
+                    <DarkModeToggle onChange={() => this.onChangeTheme()} checked={this.props.getPageData.isDarkTheme} size={55}/>
                         <li className="nav-item nav-profile">
                             <this.Profile/>
                         </li>

@@ -1,6 +1,7 @@
 /* Cards */
 
 .card {
+  background: var(--theme-bg-color);
   border: 0;
   .card-body {
     padding: $card-padding-y $card-padding-x;

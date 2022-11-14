@@ -72,3 +72,16 @@ $theme-gradient-colors: (
 
         danger-light: linear-gradient(to right, #ffbf9630, #fe709617)
 );
+root{
+  $theme-bg-color: #fff;
+  $theme-content-wrapper-bg-color:#f2edf3;
+  $theme-h3-text-color: #000;
+  $theme-menu-title-color: inherit;
+  $theme-menu-title-active-color: #000;
+  $theme-navbar-bg-color: #fff;
+};
+*{
+  transition-property: background;
+  transition-duration: 0.3s;
+  transition-delay: 0.05s;
+}

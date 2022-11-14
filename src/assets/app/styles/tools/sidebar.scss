@@ -1,6 +1,6 @@
 .sidebar {
   min-height: calc(100vh - #{$navbar-height});
-  background: $sidebar-light-bg;
+  background: var(--theme-bg-color);
   padding: 0;
   width: $sidebar-width-lg;
   z-index: 11;
@@ -100,7 +100,7 @@
         }
 
         .menu-title {
-          color: inherit;
+          color: var(--theme-menu-title-color);
           display: inline-block;
           font-size: $sidebar-menu-font-size;
           line-height: 1;
@@ -123,7 +123,7 @@
         .nav-link {
           &.active {
             .menu-title {
-              color: $sidebar-light-menu-active-color;
+              color: var(--theme-menu-title-active-color);
               font-weight: 900;
             }
 

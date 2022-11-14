@@ -55,7 +55,7 @@ body {
 }
 
 .content-wrapper {
-  background: $content-bg;
+  background: var(--theme-content-wrapper-bg-color);
   padding: 2.75rem 2.25rem;
   width: 100%;
   @include flex-grow(1);
@@ -90,7 +90,7 @@ code {
   }
 }
 .page-title {
-  color: $black;
+  color: var(--theme-h3-text-color);
   font-size: 1.125rem;
   margin-bottom: 0;
   .page-title-icon {
