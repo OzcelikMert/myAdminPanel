@@ -31,6 +31,15 @@ class Navbar extends Component<PageProps, PageState> {
         (document.querySelector('.sidebar-offcanvas') as HTMLCanvasElement).classList.toggle('active');
     }
 
+    onChangeTheme(){
+        this.setState({
+            isDarkTheme: !this.state.isDarkTheme
+        }, () => {
+            localStorageUtil.adminIsDarkTheme.set(this.state.isDarkTheme);
+            (new themeUtil(this.state.isDarkTheme)).setThemeColor();
+        })
+    }
+
     profileEvents(event: "profile" | "lock" | "signOut" | "changePassword") {
         switch(event) {
             case "profile":
@@ -203,15 +212,6 @@ class Navbar extends Component<PageProps, PageState> {
             </Dropdown.Menu>
         </Dropdown>
     )
-
-    onChangeTheme(){      
-        this.setState({
-            isDarkTheme: !this.state.isDarkTheme
-        }, () => {
-            localStorageUtil.adminIsDarkTheme.set(this.state.isDarkTheme);
-            themeUtil.setThemeColor(this.state.isDarkTheme);
-        })
-    }
 
     render() {
         return (

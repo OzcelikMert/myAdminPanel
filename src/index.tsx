@@ -15,7 +15,7 @@ import localStorageUtil from "./utils/localStorage.util";
 class App extends Component<{}, {}> {
     constructor(props: any) {
         super(props);
-        themeUtil.setThemeColor(localStorageUtil.adminIsDarkTheme.get);
+        (new themeUtil(localStorageUtil.adminIsDarkTheme.get)).setThemeColor();
     }
 
     render() {

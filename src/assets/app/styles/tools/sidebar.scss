@@ -1,6 +1,6 @@
 .sidebar {
   min-height: calc(100vh - #{$navbar-height});
-  background: var(--theme-bg-color);
+  background: var(--theme-sidebar-bg);
   padding: 0;
   width: $sidebar-width-lg;
   z-index: 11;
@@ -135,7 +135,7 @@
       }
 
       &:hover {
-        background: $sidebar-light-menu-hover-bg;
+        background: $sidebar-dark-menu-hover-bg;
       }
 
       &.sidebar-actions {

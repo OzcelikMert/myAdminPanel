@@ -119,6 +119,10 @@
 @import "tools/layout";
 @import "tools/spinner";
 
+/* === Theme Colors === */
+@import "theme/light";
+@import "theme/dark";
+
 html {
   overflow: hidden;
 }
@@ -135,4 +139,6 @@ body {
   --theme-menu-title-color: inherit;
   --theme-menu-title-active-color: #000;
   --theme-navbar-bg-color: #fff;
+
+  --theme-sidebar-bg: var(--sidebar-bg-light);
 };
