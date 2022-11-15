@@ -13,7 +13,7 @@
     }
   }
   .card-title {
-    color: $card-title-color;
+    color: var(--theme-card-statistic-title-color);
     margin-bottom: .75rem;
     text-transform: capitalize;
     font-weight: $font-weight-medium;

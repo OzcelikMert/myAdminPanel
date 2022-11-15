@@ -29,5 +29,13 @@ export default class ThemeUtil {
         this.setColor("menu-title-color");
         this.setColor("menu-title-active-color");
         this.setColor("worldmap-stroke-bg");
+        this.setColor("footer-bg");
+        this.setColor("profile-text-color");
+        this.setColor("p-text-color");
+        this.setColor("card-statistic-title-color");
+        this.setColor("table-bg");
+        this.setColor("table-gradient-color");
+        this.setColor("table-hover-bg");
+        this.setColor("table-text-color");
     }
 }

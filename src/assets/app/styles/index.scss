@@ -142,4 +142,31 @@ body {
   --theme-sidebar-bg: var(--theme-sidebar-bg-light);
   --theme-sidebar-menu-hover-bg: var(--theme-sidebar-menu-hover-bg-light);
   --theme-worldmap-stroke-bg: var(--theme-worldmap-stroke-bg-light);
+  --theme-p-text-color: var(--theme-p-text-color-light);
+  --theme-profile-text-color: var(--theme-profile-text-color-light);
+  --theme-footer-bg: var(--theme-footer-bg-light);
+  --bs-black-rgb: var(--theme-profile-text-color);
+  --bs-dark-rgb: var(--theme-p-text-color);
+  --theme-card-statistic-title-color: var(--theme-card-statistic-title-color-light);
+  --theme-table-bg: var(--theme-table-bg-light);
+  --theme-table-gradient-color: var(--theme-table-gradient-color-light);
+  --theme-table-hover-bg: var(--theme-table-hover-bg-light);
+  --theme-table-text-color: var(--theme-table-text-color-light);
+  
+  .rdt_TableHead{
+    color: var(--theme-table-text-color);
+  }
+  .rdt_TableHeadRow{
+    background-color: var(--theme-table-bg);
+  }
+  .rdt_TableRow{
+    color: var(--theme-table-text-color);
+    background-color: var(--theme-table-bg);
+    &:hover {
+      background: var(--theme-table-hover-bg);
+    }
+  }
+  .rdt_Pagination{
+    background-color: var(--theme-table-bg);
+  }
 };
