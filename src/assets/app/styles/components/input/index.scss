@@ -27,19 +27,19 @@
     white-space: nowrap;
     transform: translate(0, 0);
     transform-origin: 0 0;
-    background: white;
+    background: var(--theme-bg);
     transition: transform 120ms ease-in;
     font-weight: normal;
     line-height: 1.2;
-    color: #0000007a;
+    color: var(--theme-input-label-color);
   }
   .field {
     box-sizing: border-box;
     display: block;
     width: 100%;
-    border: 1px solid #00000059;
+    border: 1px solid var(--theme-content-wrapper-bg);
     padding: calc(.5rem * 1.5) .5rem;
-    color: black;
+    color: var(--theme-input-color);
     background: transparent;
     border-radius: 4px;
     &.failed {

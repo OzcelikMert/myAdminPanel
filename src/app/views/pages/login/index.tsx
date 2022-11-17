@@ -89,7 +89,7 @@ class PageLogin extends Component<PageProps, PageState> {
                 <div className="d-flex align-items-stretch auth auth-img-bg h-100">
                     <div className="row flex-grow">
                         <div
-                            className="col-lg-6 d-flex align-items-center justify-content-center bg-white login-half-form">
+                            className="col-lg-6 d-flex align-items-center justify-content-center login-half-form">
                             <div className="auth-form-transparent text-left p-3">
                                 <h4 className="text-center">{this.props.router.t("loginPanel")}</h4>
                                 <ThemeForm

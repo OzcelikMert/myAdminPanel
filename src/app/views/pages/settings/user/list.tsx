@@ -13,9 +13,12 @@ import classNameUtil from "../../../../../utils/className.util";
 import permissionUtil from "../../../../../utils/permission.util";
 import ThemeToast from "../../../components/toast";
 import PagePaths from "../../../../../constants/pagePaths";
+import ThemeDataTable from "../../../components/table/dataTable";
 
 type PageState = {
+    searchKey: string
     users: UserDocument[]
+    showingUsers: PageState["users"]
     isViewUserInfo: boolean
     selectedUserId: string
     isLoading: boolean
@@ -27,6 +30,8 @@ export class PageUserList extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
+            searchKey: "",
+            showingUsers: [],
             users: [],
             isViewUserInfo: false,
             selectedUserId: "",
@@ -64,7 +69,7 @@ export class PageUserList extends Component<PageProps, PageState> {
             })
             state.users = users.filter(user => user.roleId != UserRoleId.SuperAdmin);
             return state;
-        });
+        }, () => this.onSearch(this.state.searchKey));
     }
 
     onDelete(userId: string) {
@@ -107,6 +112,13 @@ export class PageUserList extends Component<PageProps, PageState> {
         this.setState({
             isViewUserInfo: true,
             selectedUserId: userId
+        })
+    }
+
+    onSearch(searchKey: string) {
+        this.setState({
+            searchKey: searchKey,
+            showingUsers: this.state.users.filter(user => user.name.toLowerCase().search(searchKey) > -1)
         })
     }
 
@@ -224,29 +236,13 @@ export class PageUserList extends Component<PageProps, PageState> {
                     <div className="card">
                         <div className="card-body">
                             <div className="table-user">
-                                <div className="table-responsive">
-                                    <DataTable
-                                        columns={this.getTableColumns}
-                                        data={this.state.users}
-                                        defaultSortFieldId="userRole"
-                                        noHeader
-                                        fixedHeader
-                                        defaultSortAsc={false}
-                                        pagination
-                                        highlightOnHover
-                                        noDataComponent={
-                                            <h5>
-                                                {this.props.router.t("noRecords")} <i
-                                                className="mdi mdi-emoticon-sad-outline"></i>
-                                            </h5>
-                                        }
-                                        paginationComponentOptions={{
-                                            noRowsPerPage: true,
-                                            rangeSeparatorText: "/",
-                                            rowsPerPageText: "",
-                                        }}
-                                    />
-                                </div>
+                                <ThemeDataTable
+                                    columns={this.getTableColumns}
+                                    data={this.state.showingUsers}
+                                    t={this.props.router.t}
+                                    onSearch={searchKey => this.onSearch(searchKey)}
+                                    isSearchable={true}
+                                />
                             </div>
                         </div>
                     </div>

@@ -14,14 +14,15 @@ import classNameUtil from "../../../../utils/className.util";
 import permissionUtil from "../../../../utils/permission.util";
 import ThemeToast from "../../components/toast";
 import PagePaths from "../../../../constants/pagePaths";
+import ThemeDataTable from "../../components/table/dataTable";
 
 type PageState = {
+    searchKey: string
     posts: PostDocument[],
     showingPosts: PageState["posts"]
-    selectedPosts: string[]
+    selectedPosts: PageState["posts"]
     listMode: "list" | "deleted"
     isShowToggleMenu: boolean
-    checkedRowsClear: boolean
     isLoading: boolean
 };
 
@@ -31,7 +32,7 @@ export class PagePostList extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
-            checkedRowsClear: false,
+            searchKey: "",
             selectedPosts: [],
             listMode: "list",
             isShowToggleMenu: false,
@@ -79,6 +80,7 @@ export class PagePostList extends Component<PageProps, PageState> {
 
     onChangeStatus = (event: any, statusId: number) => {
         event.preventDefault();
+        let selectedPostId = this.state.selectedPosts.map(post => post._id);
         if (statusId === StatusId.Deleted && this.state.listMode === "deleted") {
             Swal.fire({
                 title: this.props.router.t("deleteAction"),
@@ -95,13 +97,13 @@ export class PagePostList extends Component<PageProps, PageState> {
                     });
 
                     postService.delete({
-                        postId: this.state.selectedPosts,
+                        postId: selectedPostId,
                         typeId: this.props.getPageData.searchParams.postTypeId
                     }).then(resData => {
                         loadingToast.hide();
                         if (resData.status) {
                             this.setState((state: PageState) => {
-                                state.posts = state.posts.filter(item => !state.selectedPosts.includes(item._id));
+                                state.posts = state.posts.filter(item => !selectedPostId.includes(item._id));
                                 return state;
                             }, () => {
                                 new ThemeToast({
@@ -121,7 +123,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                 type: "loading"
             });
             postService.updateStatus({
-                postId: this.state.selectedPosts,
+                postId: selectedPostId,
                 typeId: this.props.getPageData.searchParams.postTypeId,
                 statusId: statusId
             }).then(resData => {
@@ -129,7 +131,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                 if (resData.status) {
                     this.setState((state: PageState) => {
                         state.posts.map((item, index) => {
-                            if (state.selectedPosts.includes(item._id)) {
+                            if (selectedPostId.includes(item._id)) {
                                 item.statusId = statusId;
                             }
                         })
@@ -147,12 +149,18 @@ export class PagePostList extends Component<PageProps, PageState> {
         }
     }
 
-    onSelect(allSelected: boolean, selectedCount: number, selectedRows: PageState["showingPosts"]) {
+    onSelect(selectedRows: PageState["showingPosts"]) {
         this.setState((state: PageState) => {
-            state.selectedPosts = [];
-            selectedRows.forEach(item => state.selectedPosts.push(item._id))
-            state.isShowToggleMenu = selectedCount > 0;
+            state.selectedPosts = selectedRows;
+            state.isShowToggleMenu = selectedRows.length > 0;
             return state;
+        })
+    }
+
+    onSearch(searchKey: string) {
+        this.setState({
+            searchKey: searchKey,
+            showingPosts: this.state.posts.filter(post => (post.contents?.title ?? "").toLowerCase().search(searchKey) > -1)
         })
     }
 
@@ -167,9 +175,8 @@ export class PagePostList extends Component<PageProps, PageState> {
             } else {
                 state.showingPosts = state.posts.findMulti("statusId", StatusId.Deleted);
             }
-            state.checkedRowsClear = !this.state.checkedRowsClear;
             return state;
-        })
+        }, () => this.onSearch(this.state.searchKey))
     }
 
     navigateTermPage(type: "termEdit" | "edit", itemId = "", termTypeId = 0) {
@@ -379,38 +386,17 @@ export class PagePostList extends Component<PageProps, PageState> {
                                         /> : null
                                     }
                                 </div>
-                                <div className="table-responsive">
-                                    <DataTable
-                                        columns={this.getTableColumns}
-                                        data={this.state.showingPosts.orderBy("order", "asc")}
-                                        conditionalRowStyles={[
-                                            {
-                                                when: row => row.statusId != StatusId.Active || new Date().diffDays(new Date(row.dateStart)) > 0,
-                                                classNames: ["bg-gradient-danger-light"]
-                                            }
-                                        ]}
-                                        noHeader
-                                        fixedHeader
-                                        defaultSortAsc={false}
-                                        pagination
-                                        highlightOnHover
-                                        selectableRows
-                                        onSelectedRowsChange={selected => this.onSelect(selected.allSelected, selected.selectedCount, selected.selectedRows)}
-                                        selectableRowsComponent={ThemeFormCheckBox}
-                                        clearSelectedRows={this.state.checkedRowsClear}
-                                        noDataComponent={
-                                            <h5>
-                                                {this.props.router.t("noRecords")} <i
-                                                className="mdi mdi-emoticon-sad-outline"></i>
-                                            </h5>
-                                        }
-                                        paginationComponentOptions={{
-                                            noRowsPerPage: true,
-                                            rangeSeparatorText: "/",
-                                            rowsPerPageText: "",
-                                        }}
-                                    />
-                                </div>
+                                <ThemeDataTable
+                                    columns={this.getTableColumns}
+                                    data={this.state.showingPosts}
+                                    onSelect={rows => this.onSelect(rows)}
+                                    onSearch={searchKey => this.onSearch(searchKey)}
+                                    selectedRows={this.state.selectedPosts}
+                                    t={this.props.router.t}
+                                    isSelectable={true}
+                                    isAllSelectable={true}
+                                    isSearchable={true}
+                                />
                             </div>
                         </div>
                     </div>

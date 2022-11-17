@@ -10,9 +10,12 @@ import ThemeToast from "../../components/toast";
 import {ComponentDocument} from "../../../../types/services/component";
 import componentService from "../../../../services/component.service";
 import PagePaths from "../../../../constants/pagePaths";
+import ThemeDataTable from "../../components/table/dataTable";
 
 type PageState = {
+    searchKey: string
     components: ComponentDocument[]
+    showingComponents: PageState["components"]
     isLoading: boolean
 };
 
@@ -22,6 +25,8 @@ export class PageComponentList extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
+            searchKey: "",
+            showingComponents: [],
             components: [],
             isLoading: true
         }
@@ -49,7 +54,7 @@ export class PageComponentList extends Component<PageProps, PageState> {
         this.setState((state: PageState) => {
             state.components = components;
             return state;
-        });
+        }, () => this.onSearch(this.state.searchKey));
     }
 
     onDelete(_id: string) {
@@ -85,6 +90,13 @@ export class PageComponentList extends Component<PageProps, PageState> {
                     }
                 })
             }
+        })
+    }
+
+    onSearch(searchKey: string) {
+        this.setState({
+            searchKey: searchKey,
+            showingComponents: this.state.components.filter(component => this.props.router.t(component.langKey).toLowerCase().search(searchKey) > -1)
         })
     }
 
@@ -146,28 +158,13 @@ export class PageComponentList extends Component<PageProps, PageState> {
                     <div className="card">
                         <div className="card-body">
                             <div className="table-post">
-                                <div className="table-responsive">
-                                    <DataTable
-                                        columns={this.getTableColumns}
-                                        data={this.state.components.orderBy("order", "asc")}
-                                        noHeader
-                                        fixedHeader
-                                        defaultSortAsc={false}
-                                        pagination
-                                        highlightOnHover
-                                        noDataComponent={
-                                            <h5>
-                                                {this.props.router.t("noRecords")} <i
-                                                className="mdi mdi-emoticon-sad-outline"></i>
-                                            </h5>
-                                        }
-                                        paginationComponentOptions={{
-                                            noRowsPerPage: true,
-                                            rangeSeparatorText: "/",
-                                            rowsPerPageText: "",
-                                        }}
-                                    />
-                                </div>
+                                <ThemeDataTable
+                                    columns={this.getTableColumns}
+                                    data={this.state.showingComponents}
+                                    t={this.props.router.t}
+                                    onSearch={searchKey => this.onSearch(searchKey)}
+                                    isSearchable={true}
+                                />
                             </div>
                         </div>
                     </div>

@@ -5,8 +5,7 @@ import {
     StatusId
 } from "../../../../../constants";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
-import DataTable, {TableColumn} from "react-data-table-component";
-import {ThemeFormCheckBox} from "../../../components/form";
+import {TableColumn} from "react-data-table-component";
 import {ThemeTableToggleMenu} from "../../../components/table";
 import Swal from "sweetalert2";
 import PostTermDocument from "../../../../../types/services/postTerm";
@@ -18,14 +17,15 @@ import classNameUtil from "../../../../../utils/className.util";
 import permissionUtil from "../../../../../utils/permission.util";
 import ThemeToast from "../../../components/toast";
 import PagePaths from "../../../../../constants/pagePaths";
+import ThemeDataTable from "../../../components/table/dataTable";
 
 type PageState = {
+    searchKey: string
     postTerms: PostTermDocument[],
     showingPostTerms: PageState["postTerms"]
-    selectedPostTerms: string[]
+    selectedPostTerms: PageState["postTerms"]
     listMode: "list" | "deleted"
     isShowToggleMenu: boolean
-    checkedRowsClear: boolean
     isLoading: boolean
 };
 
@@ -35,7 +35,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
-            checkedRowsClear: false,
+            searchKey: "",
             selectedPostTerms: [],
             listMode: "list",
             isShowToggleMenu: false,
@@ -77,6 +77,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
 
     onChangeStatus(event: any, statusId: number) {
         event.preventDefault();
+        let selectedPostTermId = this.state.selectedPostTerms.map(postTerm => postTerm._id);
 
         if (statusId === StatusId.Deleted && this.state.listMode === "deleted") {
             Swal.fire({
@@ -94,14 +95,14 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                     });
 
                     postTermService.delete({
-                        termId: this.state.selectedPostTerms,
+                        termId: selectedPostTermId,
                         typeId: this.props.getPageData.searchParams.termTypeId,
                         postTypeId: this.props.getPageData.searchParams.postTypeId
                     }).then(resData => {
                         loadingToast.hide();
                         if (resData.status) {
                             this.setState((state: PageState) => {
-                                state.postTerms = state.postTerms.filter(item => !state.selectedPostTerms.includes(item._id))
+                                state.postTerms = state.postTerms.filter(item => !selectedPostTermId.includes(item._id))
                                 return state;
                             }, () => {
                                 new ThemeToast({
@@ -122,7 +123,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
             });
 
             postTermService.updateStatus({
-                termId: this.state.selectedPostTerms,
+                termId: selectedPostTermId,
                 typeId: this.props.getPageData.searchParams.termTypeId,
                 postTypeId: this.props.getPageData.searchParams.postTypeId,
                 statusId: statusId
@@ -131,7 +132,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                 if (resData.status) {
                     this.setState((state: PageState) => {
                         state.postTerms.map((item, index) => {
-                            if (state.selectedPostTerms.includes(item._id)) {
+                            if (selectedPostTermId.includes(item._id)) {
                                 item.statusId = statusId;
                             }
                         })
@@ -149,12 +150,18 @@ export class PagePostTermList extends Component<PageProps, PageState> {
         }
     }
 
-    onSelect(allSelected: boolean, selectedCount: number, selectedRows: PageState["showingPostTerms"]) {
+    onSelect(selectedRows: PageState["showingPostTerms"]) {
         this.setState((state: PageState) => {
-            state.selectedPostTerms = [];
-            selectedRows.forEach(item => state.selectedPostTerms.push(item._id))
-            state.isShowToggleMenu = selectedCount > 0;
+            state.selectedPostTerms = selectedRows;
+            state.isShowToggleMenu = selectedRows.length > 0;
             return state;
+        })
+    }
+
+    onSearch(searchKey: string) {
+        this.setState({
+            searchKey: searchKey,
+            showingPostTerms: this.state.postTerms.filter(postTerm => (postTerm.contents?.title ?? "").toLowerCase().search(searchKey) > -1)
         })
     }
 
@@ -169,9 +176,8 @@ export class PagePostTermList extends Component<PageProps, PageState> {
             } else {
                 state.showingPostTerms = state.postTerms.findMulti("statusId", StatusId.Deleted);
             }
-            state.checkedRowsClear = !this.state.checkedRowsClear;
             return state;
-        })
+        }, () => this.onSearch(this.state.searchKey))
     }
 
     navigateTermPage(type: "add" | "back" | "edit", postTermId = "") {
@@ -322,38 +328,17 @@ export class PagePostTermList extends Component<PageProps, PageState> {
                                         /> : null
                                     }
                                 </div>
-                                <div className="table-responsive">
-                                    <DataTable
-                                        columns={this.getTableColumns}
-                                        data={this.state.showingPostTerms}
-                                        conditionalRowStyles={[
-                                            {
-                                                when: row => row.statusId != StatusId.Active,
-                                                classNames: ["bg-gradient-danger-light"]
-                                            }
-                                        ]}
-                                        noHeader
-                                        fixedHeader
-                                        defaultSortAsc={false}
-                                        pagination
-                                        highlightOnHover
-                                        selectableRows
-                                        onSelectedRowsChange={selected => this.onSelect(selected.allSelected, selected.selectedCount, selected.selectedRows)}
-                                        selectableRowsComponent={ThemeFormCheckBox}
-                                        clearSelectedRows={this.state.checkedRowsClear}
-                                        noDataComponent={
-                                            <h5>
-                                                {this.props.router.t("noRecords")} <i
-                                                className="mdi mdi-emoticon-sad-outline"></i>
-                                            </h5>
-                                        }
-                                        paginationComponentOptions={{
-                                            noRowsPerPage: true,
-                                            rangeSeparatorText: "/",
-                                            rowsPerPageText: "",
-                                        }}
-                                    />
-                                </div>
+                                <ThemeDataTable
+                                    columns={this.getTableColumns}
+                                    data={this.state.showingPostTerms}
+                                    onSelect={rows => this.onSelect(rows)}
+                                    onSearch={searchKey => this.onSearch(searchKey)}
+                                    selectedRows={this.state.selectedPostTerms}
+                                    t={this.props.router.t}
+                                    isSelectable={true}
+                                    isAllSelectable={true}
+                                    isSearchable={true}
+                                />
                             </div>
                         </div>
                     </div>

@@ -37,5 +37,7 @@ export default class ThemeUtil {
         this.setColor("table-gradient-color");
         this.setColor("table-hover-bg");
         this.setColor("table-text-color");
+        this.setColor("input-label-color");
+        this.setColor("input-color");
     }
 }

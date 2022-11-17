@@ -39,10 +39,10 @@
 @import "mixins/responsive";
 @import "mixins/utilities";
 @import "mixins/tabs";
-@import "mixins/inputs";
 @import "mixins/typography";
 
 /* === Core Styles === */
+@import "pages/login";
 @import "pages/home";
 @import "pages/gallery";
 @import "pages/post";
@@ -101,6 +101,7 @@
 @import "components/plugin-overrides/sweetAlert2";
 @import "components/plugin-overrides/react-bootstrap-modal";
 @import "components/plugin-overrides/cogoToast";
+@import "./components/plugin-overrides/react-select";
 /*@import "./components/plugin-overrides/contex-menu";
 @import "./components/plugin-overrides/no-ui-slider";
 @import "./components/plugin-overrides/slick-carousel";
@@ -152,7 +153,9 @@ body {
   --theme-table-gradient-color: var(--theme-table-gradient-color-light);
   --theme-table-hover-bg: var(--theme-table-hover-bg-light);
   --theme-table-text-color: var(--theme-table-text-color-light);
-  
+  --theme-input-label-color: var(--theme-input-label-color-light);
+  --theme-input-color: var(--theme-input-color-light);
+
   .rdt_TableHead{
     color: var(--theme-table-text-color);
   }

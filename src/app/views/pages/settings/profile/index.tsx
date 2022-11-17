@@ -17,6 +17,7 @@ import classNameUtil from "../../../../../utils/className.util";
 import imageSourceUtil from "../../../../../utils/imageSource.util";
 import ThemeToast from "../../../components/toast";
 import {PermissionDocument, PermissionGroupDocument} from "../../../../../types/constants";
+import {ProfileUpdateParamDocument} from "../../../../../types/services/profile";
 
 type PageState = {
     isLoading: boolean,
@@ -29,15 +30,7 @@ type PageState = {
         statusId: number
         permissions: number[]
     }
-    formData: {
-        image: string
-        name: string
-        comment: string
-        phone: string
-        facebook: string
-        instagram: string
-        twitter: string
-    }
+    formData: ProfileUpdateParamDocument
 };
 
 type PageProps = {} & PagePropCommonDocument;

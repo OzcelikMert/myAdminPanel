@@ -42,7 +42,6 @@ class ThemeChooseImageGallery extends Component<PageProps, PageState> {
                 <Modal.Header
                     className="border-bottom-0"
                     closeButton>
-
                 </Modal.Header>
                 <Modal.Body className="m-0 p-0" >
                     <div className="card">

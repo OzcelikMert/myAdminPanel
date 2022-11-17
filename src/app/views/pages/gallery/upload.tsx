@@ -4,6 +4,7 @@ import UploadingFilesDocument from "../../../../types/app/views/pages/gallery/up
 import ApiRequestConfig from "../../../../services/api/config";
 import Thread from "../../../../library/thread";
 import galleryService from "../../../../services/gallery.service";
+import ThemeToast from "../../components/toast";
 
 type PageState = {
     isDragging: boolean,
@@ -39,54 +40,73 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
         ])
     }
 
-    uploadFiles() {
+    async uploadFiles() {
         if (!this.state.isUploading && this.state.uploadingFiles.length > 0) {
             this.setState({
                 isUploading: true
-            });
-
-            new Promise<string[]>(async (resolve) => {
-                let uploadedImages: string[] = [];
-                for (const uploadingFile of this.state.uploadingFiles) {
-                    if (
-                        uploadingFile.progressValue === 100 ||
-                        uploadingFile.file.size > 1024000
-                    ) continue;
-
-                    this.setState((state: PageState) => {
-                        let findIndex = state.uploadingFiles.indexOfKey("id", uploadingFile.id);
-                        if (findIndex > -1) {
-                            state.uploadingFiles[findIndex].isUploading = true;
+            }, async () => {
+                let uploadedFiles = await new Promise<string[]>(async (resolve) => {
+                    let uploadedImages: string[] = [];
+                    for (const uploadingFile of this.state.uploadingFiles) {
+                        if (
+                            uploadingFile.progressValue === 100
+                        ) continue;
+                        else if(uploadingFile.file.size > 1024000) {
+                            new ThemeToast({
+                                type: "error",
+                                title: this.props.router.t("error"),
+                                content: `${uploadingFile.file.name} ${this.props.router.t("bigImageSize")}`,
+                                position: "top-right",
+                                timeOut: 5
+                            })
+                            continue;
                         }
-                        return state;
-                    })
 
-                    const formData = new FormData();
-                    formData.append("file", uploadingFile.file, uploadingFile.file.name);
+                        this.setState((state: PageState) => {
+                            let findIndex = state.uploadingFiles.indexOfKey("id", uploadingFile.id);
+                            if (findIndex > -1) {
+                                state.uploadingFiles[findIndex].isUploading = true;
+                            }
+                            return state;
+                        }, async () => {
+                            const formData = new FormData();
+                            formData.append("file", uploadingFile.file, uploadingFile.file.name);
 
-                    let resData = await galleryService.add(formData);
-                    if(
-                        resData.status &&
-                        Array.isArray(resData.data) &&
-                        resData.data.length > 0
-                    ) uploadedImages.push(resData.data[0])
-                    await Thread.sleep(750);
-                    this.setState((state: PageState) => {
-                        let findIndex = state.uploadingFiles.indexOfKey("id", uploadingFile.id);
-                        if (findIndex > -1) {
-                            state.uploadingFiles[findIndex].progressValue = 100;
-                            state.uploadingFiles[findIndex].isUploading = false;
-                        }
-                        return state;
-                    })
-                }
-                resolve(uploadedImages);
-            }).then(result => {
+                            let resData = await galleryService.add(formData);
+                            if(
+                                resData.status &&
+                                Array.isArray(resData.data) &&
+                                resData.data.length > 0
+                            ) {
+                                uploadedImages.push(resData.data[0]);
+                                new ThemeToast({
+                                    type: "success",
+                                    title: this.props.router.t("successful"),
+                                    content: `${uploadingFile.file.name} ${this.props.router.t("imageUploadedWithName")}`,
+                                    position: "top-right",
+                                    timeOut: 5
+                                })
+                            }
+                            await Thread.sleep(750);
+                            this.setState((state: PageState) => {
+                                let findIndex = state.uploadingFiles.indexOfKey("id", uploadingFile.id);
+                                if (findIndex > -1) {
+                                    state.uploadingFiles[findIndex].progressValue = 100;
+                                    state.uploadingFiles[findIndex].isUploading = false;
+                                }
+                                return state;
+                            })
+                        })
+                    }
+                    resolve(uploadedImages);
+                })
+
                 this.setState({
                     isUploading: false
+                }, () => {
+                    ApiRequestConfig.onUploadProgress = undefined;
+                    if(this.props.uploadedImages) this.props.uploadedImages(uploadedFiles)
                 });
-                ApiRequestConfig.onUploadProgress = undefined;
-                if(this.props.uploadedImages) this.props.uploadedImages(result)
             });
         }
     }
@@ -97,7 +117,6 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
             if (files != null && files.length > 0) {
                 for (let i = 0; i < files.length; i++) {
                     let file = files[i];
-                    console.log(file)
                     state.uploadingFiles.push({
                         id: String.createId(),
                         file: file,
@@ -128,7 +147,6 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
             this.setState((state: PageState) => {
                 for (let i = 0; i < files.length; i++) {
                     let file = files[i];
-                    console.log(file)
                     state.uploadingFiles.push({
                         id: String.createId(),
                         file: file,

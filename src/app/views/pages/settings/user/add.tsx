@@ -12,6 +12,7 @@ import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
 import staticContentUtil from "../../../../../utils/staticContent.util";
 import PagePaths from "../../../../../constants/pagePaths";
+import {UserUpdateParamDocument} from "../../../../../types/services/user";
 
 type PageState = {
     formActiveKey: string
@@ -19,18 +20,7 @@ type PageState = {
     status: { value: number, label: string }[]
     mainTitle: string,
     isSubmitting: boolean
-    formData: {
-        userId: string
-        image: string
-        name: string
-        email: string
-        password: string
-        roleId: number
-        statusId: number
-        banDateEnd: string
-        banComment: string
-        permissions: number[]
-    },
+    formData: UserUpdateParamDocument,
     isSuccessMessage: boolean,
     isLoading: boolean
 };
@@ -48,7 +38,6 @@ export class PageUserAdd extends Component<PageProps, PageState> {
             isSubmitting: false,
             formData: {
                 userId: this.props.getPageData.searchParams.userId,
-                image: "",
                 name: "",
                 email: "",
                 password: "",

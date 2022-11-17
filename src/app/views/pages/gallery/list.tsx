@@ -12,10 +12,10 @@ import DataTable, {TableColumn} from "react-data-table-component";
 import imageSourceUtil from "../../../../utils/imageSource.util";
 import ThemeToast from "../../components/toast";
 import permissionUtil from "../../../../utils/permission.util";
-import {PermissionId} from "../../../../constants";
+import {PermissionId, Permissions} from "../../../../constants";
+import ThemeDataTable from "../../components/table/dataTable";
 
 type PageState = {
-    isSelectedAll: boolean
     images: string[]
     showingImages: string[]
     selectedImages: PageState["images"]
@@ -23,7 +23,6 @@ type PageState = {
     isOpenViewer: boolean
     isLoading: boolean
     searchKey: string
-    checkedRowsClear: boolean
 };
 
 type PageProps = {
@@ -35,11 +34,11 @@ type PageProps = {
 
 export class PageGalleryList extends Component<PageProps, PageState> {
     toast: null | ThemeToast = null;
-
+    listPage: number = 0;
+    listPagePerCount: number = 10;
     constructor(props: PageProps) {
         super(props);
         this.state = {
-            isSelectedAll: false,
             images: [],
             showingImages: [],
             selectedImages: [],
@@ -47,7 +46,6 @@ export class PageGalleryList extends Component<PageProps, PageState> {
             isOpenViewer: false,
             isLoading: true,
             searchKey: "",
-            checkedRowsClear: false,
         }
     }
 
@@ -74,7 +72,7 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                 this.setState({
                     images: images
                 }, () => {
-                    this.onSearch()
+                    this.onSearch(this.state.searchKey)
                 })
             }
         }
@@ -90,7 +88,7 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                 state.images = state.images.filter((image, index) => state.images.indexOfKey("", image) === index);
                 return state;
             }, () => {
-                this.onSearch();
+                this.onSearch(this.state.searchKey);
             })
         }
     }
@@ -102,7 +100,7 @@ export class PageGalleryList extends Component<PageProps, PageState> {
         ])
     }
 
-    onSelect(image: string[]) {
+    onSelect(images: string[]) {
         if(!this.props.isModal && !permissionUtil.checkPermission(
             this.props.getSessionData.roleId,
             this.props.getSessionData.permissions,
@@ -110,7 +108,7 @@ export class PageGalleryList extends Component<PageProps, PageState> {
         )) return;
 
         this.setState({
-            selectedImages: image,
+            selectedImages: images
         }, () => {
             if (this.state.selectedImages.length > 0) {
                 if (!this.toast || !this.toast.isShow) {
@@ -166,10 +164,9 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                         this.setState((state: PageState) => {
                             state.images = state.images.filter(image => !state.selectedImages.includes(image));
                             state.selectedImages = [];
-                            state.checkedRowsClear = !state.checkedRowsClear;
                             return state;
                         }, () => {
-                            this.onSearch();
+                            this.onSearch(this.state.searchKey);
                             new ThemeToast({
                                 content: this.props.router.t("itemDeleted"),
                                 type: "success",
@@ -195,9 +192,10 @@ export class PageGalleryList extends Component<PageProps, PageState> {
         })
     }
 
-    onSearch() {
+    onSearch(searchKey: string) {
         this.setState({
-            showingImages: this.state.images.filter(image => image.search(this.state.searchKey) > -1)
+            searchKey: searchKey,
+            showingImages: this.state.images.filter(image => image.toLowerCase().search(searchKey) > -1)
         })
     }
 
@@ -210,7 +208,7 @@ export class PageGalleryList extends Component<PageProps, PageState> {
                     <div className="image pt-2 pb-2">
                         <LazyLoadImage
                             className="gallery-img"
-                            effect="blur"
+                            effect="opacity"
                             alt={row}
                             src={imageSourceUtil.getUploadedImageSrc(row)} // use normal <img> attributes as props
                         />
@@ -257,48 +255,20 @@ export class PageGalleryList extends Component<PageProps, PageState> {
         return this.state.isLoading ? <Spinner/> : (
             <div className="page-gallery">
                 <this.ImageViewer/>
-                <div className="row">
-                    <div className="col-md-9 mb-3"></div>
-                    <div className="col-md-3 mb-3">
-                        <input
-                            name="imageName"
-                            className="form-control w-100"
-                            placeholder={`${this.props.router.t("search")}...`}
-                            type="search"
-                            onChange={(event) => this.setState({searchKey: event.target.value}, () => this.onSearch())}
-                        />
-                    </div>
-                </div>
                 <div className="grid-margin stretch-card">
                     <div className="card">
                         <div className="card-body">
-                            <div className="table-responsive">
-                                <DataTable
-                                    columns={this.getTableColumns}
-                                    data={this.state.showingImages}
-                                    noHeader
-                                    fixedHeader
-                                    defaultSortAsc={false}
-                                    pagination
-                                    highlightOnHover
-                                    selectableRows
-                                    selectableRowsSingle={this.props.isModal && !this.props.isMulti}
-                                    onSelectedRowsChange={selected => this.onSelect(selected.selectedRows)}
-                                    selectableRowsComponent={ThemeFormCheckBox}
-                                    clearSelectedRows={this.state.checkedRowsClear}
-                                    noDataComponent={
-                                        <h5>
-                                            {this.props.router.t("noRecords")}<i
-                                            className="mdi mdi-emoticon-sad-outline"></i>
-                                        </h5>
-                                    }
-                                    paginationComponentOptions={{
-                                        noRowsPerPage: true,
-                                        rangeSeparatorText: "/",
-                                        rowsPerPageText: "",
-                                    }}
-                                />
-                            </div>
+                            <ThemeDataTable
+                                columns={this.getTableColumns}
+                                data={this.state.showingImages}
+                                onSelect={rows => this.onSelect(rows)}
+                                onSearch={searchKey => this.onSearch(searchKey)}
+                                selectedRows={this.state.selectedImages}
+                                t={this.props.router.t}
+                                isSelectable={true}
+                                isAllSelectable={!(this.props.isModal && !this.props.isMulti)}
+                                isSearchable={true}
+                            />
                         </div>
                     </div>
                 </div>

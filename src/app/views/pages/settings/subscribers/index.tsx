@@ -11,12 +11,14 @@ import {SubscriberDocument} from "../../../../../types/services/subscriber";
 import subscriberService from "../../../../../services/subscriber.service";
 import {ThemeTableToggleMenu} from "../../../components/table";
 import {ThemeFormCheckBox} from "../../../components/form";
+import ThemeDataTable from "../../../components/table/dataTable";
 
 type PageState = {
+    searchKey: string
     subscribers: SubscriberDocument[]
-    selectedSubscribers: string[]
+    showingSubscribers: PageState["subscribers"]
+    selectedSubscribers: PageState["subscribers"]
     isShowToggleMenu: boolean
-    checkedRowsClear: boolean
     isLoading: boolean
 };
 
@@ -26,10 +28,11 @@ export class PageSubscribers extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
+            searchKey: "",
+            showingSubscribers: [],
             subscribers: [],
             selectedSubscribers: [],
             isShowToggleMenu: false,
-            checkedRowsClear: false,
             isLoading: true
         }
     }
@@ -55,11 +58,12 @@ export class PageSubscribers extends Component<PageProps, PageState> {
         let subscribers = subscriberService.get({}).data;
         this.setState({
             subscribers: subscribers
-        });
+        }, () => this.onSearch(this.state.searchKey));
     }
 
     onDelete(event: any) {
         event.preventDefault();
+        let selectedSubscribeId = this.state.selectedSubscribers.map(post => post._id);
 
         Swal.fire({
             title: this.props.router.t("deleteAction"),
@@ -76,13 +80,12 @@ export class PageSubscribers extends Component<PageProps, PageState> {
                 });
 
                 subscriberService.delete({
-                    _id: this.state.selectedSubscribers
+                    _id: selectedSubscribeId
                 }).then(resData => {
                     loadingToast.hide();
                     if (resData.status) {
                         this.setState((state: PageState) => {
-                            state.subscribers = state.subscribers.filter(item => !state.selectedSubscribers.includes(item._id));
-                            state.checkedRowsClear = !this.state.checkedRowsClear;
+                            state.subscribers = state.subscribers.filter(item => !selectedSubscribeId.includes(item._id));
                             return state;
                         }, () => {
                             new ThemeToast({
@@ -90,6 +93,7 @@ export class PageSubscribers extends Component<PageProps, PageState> {
                                 title: this.props.router.t("successful"),
                                 content: this.props.router.t("itemDeleted")
                             })
+                            this.onSearch(this.state.searchKey)
                         })
                     }
                 })
@@ -97,12 +101,18 @@ export class PageSubscribers extends Component<PageProps, PageState> {
         })
     }
 
-    onSelect(allSelected: boolean, selectedCount: number, selectedRows: PageState["subscribers"]) {
+    onSelect(selectedRows: PageState["subscribers"]) {
         this.setState((state: PageState) => {
-            state.selectedSubscribers = [];
-            selectedRows.forEach(item => state.selectedSubscribers.push(item._id))
-            state.isShowToggleMenu = selectedCount > 0;
+            state.selectedSubscribers = selectedRows;
+            state.isShowToggleMenu = selectedRows.length > 0;
             return state;
+        })
+    }
+
+    onSearch(searchKey: string) {
+        this.setState({
+            searchKey: searchKey,
+            showingSubscribers: this.state.subscribers.filter(subscriber => subscriber.email.toLowerCase().search(searchKey) > -1)
         })
     }
 
@@ -148,32 +158,17 @@ export class PageSubscribers extends Component<PageProps, PageState> {
                                         /> : null
                                     }
                                 </div>
-                                <div className="table-responsive">
-                                    <DataTable
-                                        columns={this.getTableColumns}
-                                        data={this.state.subscribers}
-                                        noHeader
-                                        fixedHeader
-                                        defaultSortAsc={false}
-                                        pagination
-                                        highlightOnHover
-                                        selectableRows
-                                        onSelectedRowsChange={selected => this.onSelect(selected.allSelected, selected.selectedCount, selected.selectedRows)}
-                                        selectableRowsComponent={ThemeFormCheckBox}
-                                        clearSelectedRows={this.state.checkedRowsClear}
-                                        noDataComponent={
-                                            <h5>
-                                                {this.props.router.t("noRecords")} <i
-                                                className="mdi mdi-emoticon-sad-outline"></i>
-                                            </h5>
-                                        }
-                                        paginationComponentOptions={{
-                                            noRowsPerPage: true,
-                                            rangeSeparatorText: "/",
-                                            rowsPerPageText: "",
-                                        }}
-                                    />
-                                </div>
+                                <ThemeDataTable
+                                    columns={this.getTableColumns}
+                                    data={this.state.showingSubscribers}
+                                    selectedRows={this.state.selectedSubscribers}
+                                    t={this.props.router.t}
+                                    onSelect={rows => this.onSelect(rows)}
+                                    onSearch={searchKey => this.onSearch(searchKey)}
+                                    isSelectable={true}
+                                    isAllSelectable={true}
+                                    isSearchable={true}
+                                />
                             </div>
                         </div>
                     </div>

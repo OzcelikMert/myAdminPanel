@@ -14,6 +14,7 @@ import imageSourceUtil from "../../../../utils/imageSource.util";
 import classNameUtil from "../../../../utils/className.util";
 import permissionUtil from "../../../../utils/permission.util";
 import PagePaths from "../../../../constants/pagePaths";
+import ThemeDataTable from "../../components/table/dataTable";
 
 type PageState = {
     chartData: {
@@ -386,34 +387,11 @@ class PageDashboard extends Component<PageProps, PageState> {
                         <div className="card-body">
                             <h4 className="card-title">{this.props.router.t("lastPosts")}</h4>
                             <div className="table-post">
-                                <div className="table-responsive">
-                                    <DataTable
-                                        columns={this.getTableColumns}
-                                        data={this.state.lastPosts}
-                                        conditionalRowStyles={[
-                                            {
-                                                when: row => row.statusId != StatusId.Active || new Date().diffDays(new Date(row.dateStart)) > 0,
-                                                classNames: ["bg-gradient-danger-light"]
-                                            }
-                                        ]}
-                                        noHeader
-                                        fixedHeader
-                                        defaultSortAsc={false}
-                                        pagination={false}
-                                        highlightOnHover
-                                        noDataComponent={
-                                            <h5>
-                                                {this.props.router.t("noRecords")} <i
-                                                className="mdi mdi-emoticon-sad-outline"></i>
-                                            </h5>
-                                        }
-                                        paginationComponentOptions={{
-                                            noRowsPerPage: true,
-                                            rangeSeparatorText: "/",
-                                            rowsPerPageText: "",
-                                        }}
-                                    />
-                                </div>
+                                <ThemeDataTable
+                                    columns={this.getTableColumns}
+                                    data={this.state.lastPosts}
+                                    t={this.props.router.t}
+                                />
                             </div>
                         </div>
                     </div>

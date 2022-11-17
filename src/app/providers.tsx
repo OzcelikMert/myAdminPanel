@@ -80,6 +80,7 @@ class AppProviders extends Component<PageProps, PageState> {
         let isAuth = false;
         let isPromiseCallBack = false;
         let resData = authService.getSession({isRefresh: isRefresh});
+        console.log(resData);
         if (resData.status && resData.errorCode == ErrorCodes.success) {
             isAuth = true;
             if (isRefresh) {
