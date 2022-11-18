@@ -6,12 +6,12 @@
       &:not(.active) {
         &:hover,
         &:focus {
-          color: black;
+          color: var(--theme-menu-title-active-color);
         }
       }
       &.active {
-        background: theme-gradient-color("dark");
-        color: #bbb5b5;
+        background: var(--theme-content-wrapper-bg);
+        color: var(--theme-menu-title-active-color);
       }
     }
   }

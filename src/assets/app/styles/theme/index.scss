@@ -1,7 +1,7 @@
 @import "light";
 @import "dark";
 
-:root{
+:root {
   --theme-bg-color: var(--theme-bg-light);
   --theme-content-wrapper-bg: var(--theme-content-wrapper-bg-light);
   --theme-h3-text-color: var(--theme-h3-text-color-light);
@@ -19,8 +19,11 @@
   --theme-card-statistic-title-color: var(--theme-card-statistic-title-color-light);
   --theme-table-bg: var(--theme-table-bg-light);
   --theme-table-gradient-color: var(--theme-table-gradient-color-light);
+  --theme-table-row-border-color: var(--theme-table-row-border-color-light);
   --theme-table-hover-bg: var(--theme-table-hover-bg-light);
   --theme-table-text-color: var(--theme-table-text-color-light);
+  --theme-table-pagination-btn-color: var(--theme-table-pagination-btn-color);
+  --theme-table-pagination-btn-disable-color:  var(--theme-table-pagination-btn-disable-color);
   --theme-input-label-color: var(--theme-input-label-color-light);
   --theme-input-color: var(--theme-input-color-light);
   --theme-gradient-primary-color: var(--theme-gradient-primary-color-light);
@@ -33,7 +36,7 @@
   --theme-gradient-dark-color: var(--theme-gradient-dark-color-light);
   --theme-input-field-border-color: var(--theme-input-field-border-color-light);
   --theme-link-color: var(--theme-link-color-light);
-  --bs-link-color : var(--theme-link-color);
+  --bs-link-color: var(--theme-link-color);
   --theme-card-profile-title-color: var(--theme-card-profile-title-color-light);
   --theme-footer-text-color: var(--theme-footer-text-color-light);
   --theme-gallery-bg: var(--theme-galery-bg-light);
@@ -43,22 +46,4 @@
   --theme-nav-tabs-link-active-bg: var(--theme-nav-tabs-link-active-bg-light);
   --theme-profile-card-bg: var(--theme-profile-card-bg-light);
   --theme-profile-card-text-color: var(--theme-profile-card-text-color-light);
-
-  .rdt_TableHead{
-    color: var(--theme-table-text-color);
-  }
-  .rdt_TableHeadRow{
-    background-color: var(--theme-table-bg);
-  }
-  .rdt_TableRow{
-    color: var(--theme-table-text-color);
-    background-color: var(--theme-table-bg);
-    &:hover {
-      background: var(--theme-table-hover-bg);
-      color: var(--theme-table-text-color);
-    }
-  }
-  .rdt_Pagination{
-    background-color: var(--theme-table-bg);
-  }
-};
+}

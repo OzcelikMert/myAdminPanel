@@ -35,6 +35,7 @@ export default class ThemeUtil {
         this.setColor("card-statistic-title-color");
         this.setColor("table-bg");
         this.setColor("table-gradient-color");
+        this.setColor("table-row-border-color");
         this.setColor("table-hover-bg");
         this.setColor("table-text-color");
         this.setColor("input-label-color");
@@ -57,5 +58,7 @@ export default class ThemeUtil {
         this.setColor("nav-tabs-link-active-bg");
         this.setColor("profile-card-bg");
         this.setColor("profile-card-text-color");
+        this.setColor("table-pagination-btn-color");
+        this.setColor("table-pagination-btn-disable-color");
     }
 }

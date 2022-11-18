@@ -131,7 +131,7 @@ export class PageUserList extends Component<PageProps, PageState> {
         return [
             {
                 name: this.props.router.t("image"),
-                width: "75px",
+                width: "100px",
                 cell: row => (
                     <div className="image mt-2 mb-2">
                         <img
