@@ -1,12 +1,17 @@
 .content-language {
   .label {
-    background: #f2edf3;
+    color: var(--theme-content-language-label-color);
+    background: var(--theme-content-language-bg);
   }
 
   .field {
     div[class$="-control"] {
-      background: #f2edf3;
+      color: var(--theme-content-language-label-color) !important; 
+      background: var(--theme-content-language-bg);
     }
+  }
+  .title{
+    color: red;
   }
 }
 

@@ -40,8 +40,12 @@ class ThemeChooseImageGallery extends Component<PageProps, PageState> {
                 }}
             >
                 <Modal.Header
-                    className="border-bottom-0"
-                    closeButton>
+                    className="border-bottom-0">
+                    <div className="w-100 text-end">
+                    <button className="btn btn-gradient-dark" onClick={() => {
+                        this.props.onClose();
+                    }}><i className="fa fa-close"></i></button>
+                    </div>
                 </Modal.Header>
                 <Modal.Body className="m-0 p-0" >
                     <div className="card">

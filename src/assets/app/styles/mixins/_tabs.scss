@@ -10,7 +10,8 @@
         }
       }
       &.active {
-        color: black;
+        background: theme-gradient-color("dark");
+        color: #bbb5b5;
       }
     }
   }

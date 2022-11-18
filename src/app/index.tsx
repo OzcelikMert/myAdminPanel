@@ -201,7 +201,7 @@ class AppAdmin extends Component<PageProps, PageState> {
             <div className="col-6 text-end">
                 <img width="35" src={pathUtil.uploads.flags + props.image} alt={props.shortKey}/>
             </div>
-            <div className="col-6 text-start">
+            <div className="col-6 text-start content-language-title">
                 <h6>{props.title}</h6>
             </div>
         </div>

@@ -1,5 +1,5 @@
 import React, {Component, FormEvent} from 'react'
-import {Tab, Tabs} from "react-bootstrap";
+import {OverlayTrigger, Tab, Tabs, Tooltip} from "react-bootstrap";
 import JoditEditor from "jodit-react";
 import moment from "moment";
 import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
@@ -753,9 +753,18 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             {
                                 this.state.formData.postId && [PostTypeId.Page, PostTypeId.Blog, PostTypeId.Portfolio, PostTypeId.Service].includes(Number(this.state.formData.typeId))
                                     ? <div className="col-6">
-                                        <label className="badge badge-gradient-primary w-100 p-2 fs-6 rounded-3">
+                                        <OverlayTrigger
+                                          delay={{ hide: 450, show: 300 }}
+                                          overlay={(props) => (
+                                            <Tooltip {...props}>
+                                              {`${this.props.router.t("impressions")}`}
+                                            </Tooltip>
+                                          )}
+                                          placement="top"
+                                        ><label className="badge badge-gradient-primary w-100 p-2 fs-6 rounded-3">
                                             <i className="mdi mdi-eye"></i> {this.state.formData.contents.views}
                                         </label>
+                                        </OverlayTrigger>
                                     </div> : null
                             }
                         </div>

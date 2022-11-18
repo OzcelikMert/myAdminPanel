@@ -1,11 +1,11 @@
-import React, {Component, FormEvent} from 'react'
-import {Tab, Tabs} from "react-bootstrap";
+import React, { Component, FormEvent } from 'react'
+import { OverlayTrigger, Tab, Tabs, Tooltip } from "react-bootstrap";
 import {
     ThemeFormType,
     ThemeFormSelect,
     ThemeForm,
 } from "../../../components/form"
-import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
+import { PagePropCommonDocument } from "../../../../../types/app/pageProps";
 import {
     PostTermTypeId, PostTermTypes, PostTypeId, PostTypes,
     StatusId
@@ -20,9 +20,8 @@ import Thread from "../../../../../library/thread";
 import permissionUtil from "../../../../../utils/permission.util";
 import staticContentUtil from "../../../../../utils/staticContent.util";
 import imageSourceUtil from "../../../../../utils/imageSource.util";
-import {PostTermUpdateParamDocument} from "../../../../../types/services/postTerm";
+import { PostTermUpdateParamDocument } from "../../../../../types/services/postTerm";
 import PagePaths from "../../../../../constants/pagePaths";
-
 type PageState = {
     formActiveKey: string
     postTerms: { value: string, label: string }[]
@@ -131,7 +130,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         });
         if (resData.status) {
             this.setState((state: PageState) => {
-                state.postTerms = [{value: "", label: this.props.router.t("notSelected")}];
+                state.postTerms = [{ value: "", label: this.props.router.t("notSelected") }];
                 resData.data.orderBy("order", "asc").forEach(item => {
                     if (!V.isEmpty(this.props.getPageData.searchParams.termId)) {
                         if (this.props.getPageData.searchParams.termId == item._id) return;
@@ -186,7 +185,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         let postTermTypeId = this.props.getPageData.searchParams.termTypeId;
         let pagePath = [PostTypeId.Page, PostTypeId.Navigate].includes(Number(postTypeId)) ? PagePaths.post(postTypeId).term(postTermTypeId) : PagePaths.themeContent().post(postTypeId).term(postTermTypeId);
         let path = pagePath.list()
-        this.props.router.navigate(path, {replace: true});
+        this.props.router.navigate(path, { replace: true });
     }
 
     onSubmit(event: FormEvent) {
@@ -199,33 +198,33 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
             ((params.termId)
                 ? postTermService.update(params)
                 : postTermService.add(params)).then(resData => {
-                if (resData.status) {
-                    this.getTerms();
-                }
-
-                this.setState((state: PageState) => {
                     if (resData.status) {
-                        state.formData = {
-                            ...state.formData,
-                            mainId: "",
-                            statusId: StatusId.Active,
-                            order: 0,
-                            contents: {
-                                langId: this.props.getPageData.mainLangId,
-                                image: "",
-                                title: "",
-                                url: "",
-                                seoTitle: "",
-                                seoContent: "",
-                            }
-                        }
-                        state.isSuccessMessage = true;
+                        this.getTerms();
                     }
 
-                    state.isSubmitting = false;
-                    return state;
+                    this.setState((state: PageState) => {
+                        if (resData.status) {
+                            state.formData = {
+                                ...state.formData,
+                                mainId: "",
+                                statusId: StatusId.Active,
+                                order: 0,
+                                contents: {
+                                    langId: this.props.getPageData.mainLangId,
+                                    image: "",
+                                    title: "",
+                                    url: "",
+                                    seoTitle: "",
+                                    seoContent: "",
+                                }
+                            }
+                            state.isSuccessMessage = true;
+                        }
+
+                        state.isSubmitting = false;
+                        return state;
+                    });
                 });
-            });
         })
     }
 
@@ -322,7 +321,7 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                         type="button"
                         className="btn btn-gradient-warning btn-xs ms-1"
                         onClick={() => {
-                            this.setState({isSelectionImage: true})
+                            this.setState({ isSelectionImage: true })
                         }}
                     ><i className="fa fa-pencil-square-o"></i></button>
                 </div>
@@ -358,13 +357,13 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
     }
 
     render() {
-        return this.state.isLoading ? <Spinner/> : (
+        return this.state.isLoading ? <Spinner /> : (
             <div className="page-post-term">
-                <this.Messages/>
+                <this.Messages />
                 <ThemeChooseImage
                     {...this.props}
                     isShow={this.state.isSelectionImage}
-                    onHide={() => this.setState({isSelectionImage: false})}
+                    onHide={() => this.setState({ isSelectionImage: false })}
                     result={this.state.formData.contents.image}
                     onSelected={images => this.setState((state: PageState) => {
                         state.formData.contents.image = images[0];
@@ -377,16 +376,25 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                         <div className="row">
                             <div className="col-6">
                                 <button className="btn btn-gradient-dark btn-lg btn-icon-text w-100"
-                                        onClick={() => this.navigateTermPage()}>
+                                    onClick={() => this.navigateTermPage()}>
                                     <i className="mdi mdi-arrow-left"></i> {this.props.router.t("returnBack")}
                                 </button>
                             </div>
                             {
                                 this.state.formData.termId && [PostTypeId.Blog, PostTypeId.Portfolio].includes(Number(this.state.formData.typeId))
                                     ? <div className="col-6">
-                                        <label className="badge badge-gradient-primary w-100 p-2 fs-6 rounded-3">
+                                        <OverlayTrigger
+                                          delay={{ hide: 450, show: 300 }}
+                                          overlay={(props) => (
+                                            <Tooltip {...props}>
+                                                {`${this.props.router.t("impressions")}`}
+                                            </Tooltip>
+                                          )}
+                                          placement="top"
+                                        ><label className="badge badge-gradient-primary w-100 p-2 fs-6 rounded-3">
                                             <i className="mdi mdi-eye"></i> {this.state.formData.contents.views}
                                         </label>
+                                        </OverlayTrigger>
                                     </div> : null
                             }
                         </div>
@@ -400,22 +408,22 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                                 saveButtonText={this.props.router.t("save")}
                                 saveButtonLoadingText={this.props.router.t("loading")}
                                 isSubmitting={this.state.isSubmitting}
-                                formAttributes={{onSubmit: (event) => this.onSubmit(event)}}
+                                formAttributes={{ onSubmit: (event) => this.onSubmit(event) }}
                             >
                                 <div className="theme-tabs">
                                     <Tabs
-                                        onSelect={(key: any) => this.setState({formActiveKey: key})}
+                                        onSelect={(key: any) => this.setState({ formActiveKey: key })}
                                         activeKey={this.state.formActiveKey}
                                         className="mb-5"
                                         transition={false}>
                                         <Tab eventKey="general" title={this.props.router.t("general")}>
-                                            <this.TabGeneral/>
+                                            <this.TabGeneral />
                                         </Tab>
                                         <Tab eventKey="options" title={this.props.router.t("options")}>
-                                            <this.TabOptions/>
+                                            <this.TabOptions />
                                         </Tab>
                                         <Tab eventKey="seo" title={this.props.router.t("seo")}>
-                                            <this.TabSEO/>
+                                            <this.TabSEO />
                                         </Tab>
                                     </Tabs>
                                 </div>
