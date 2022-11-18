@@ -191,5 +191,6 @@
   "subscribe":"Subscribe",
   "subscribe-button": "Subscribe Button",
   "noPerm": "No Permission",
-  "adminPanelLanguage": "Admin Panel Language"
+  "adminPanelLanguage": "Admin Panel Language",
+  "impressions": "Impressions"
 }

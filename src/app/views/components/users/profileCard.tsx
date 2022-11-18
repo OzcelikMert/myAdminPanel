@@ -177,7 +177,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                                     <this.SocialMedia/>
                                 </div>
                             </div>
-                            <div className="col-sm-8 position-relative">
+                            <div className="col-sm-8 position-relative card-profile-title">
                                 <div className="p-2">
                                     <this.General/>
                                     <this.Permissions/>

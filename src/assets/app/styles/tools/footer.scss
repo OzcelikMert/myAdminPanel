@@ -1,7 +1,6 @@
 .footer {
   background: var(--theme-footer-bg);
-  color: $footer-color;
-  border-top: 1px solid darken($footer-bg, 5%);
+  color: var(--theme-footer-text-color) !important;
   padding: 30px 1rem;
   transition: all $action-transition-duration $action-transition-timing-function;
   -moz-transition: all $action-transition-duration $action-transition-timing-function;

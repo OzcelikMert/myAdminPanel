@@ -191,5 +191,6 @@ export const LanguageKeysArray = [
     "subscribe",
     "subscribe-button",
     "noPerm",
-    "adminPanelLanguage"
+    "adminPanelLanguage",
+    "impressions"
 ] as const;

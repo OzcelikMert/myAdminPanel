@@ -25,6 +25,7 @@ export default class ThemeUtil {
         this.setColor("navbar-bg");
         this.setColor("bg");
         this.setColor("content-wrapper-bg");
+        this.setColor("input-field-border-color");
         this.setColor("h3-text-color");
         this.setColor("menu-title-color");
         this.setColor("menu-title-active-color");
@@ -39,5 +40,12 @@ export default class ThemeUtil {
         this.setColor("table-text-color");
         this.setColor("input-label-color");
         this.setColor("input-color");
+        this.setColor("link-color");
+        this.setColor("card-profile-title-color");
+        this.setColor("footer-text-color");
+        this.setColor("gallery-bg");
+        this.setColor("card-text-color");
+        this.setColor("content-language-bg");
+        this.setColor("content-language-label-color");
     }
 }
