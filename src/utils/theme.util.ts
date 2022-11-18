@@ -47,5 +47,13 @@ export default class ThemeUtil {
         this.setColor("gradient-danger-color");
         this.setColor("gradient-light-color");
         this.setColor("gradient-dark-color");
+        this.setColor("link-color");
+        this.setColor("card-profile-title-color");
+        this.setColor("footer-text-color");
+        this.setColor("gallery-bg");
+        this.setColor("card-text-color");
+        this.setColor("content-language-bg");
+        this.setColor("content-language-label-color");
+        this.setColor("nav-tabs-link-active-bg");
     }
 }
