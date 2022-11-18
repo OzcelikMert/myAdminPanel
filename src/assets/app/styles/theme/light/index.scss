@@ -18,4 +18,12 @@
   --theme-table-text-color-light: #000;
   --theme-input-label-color-light: #0000007a;
   --theme-input-color-light: black;
+  --theme-gradient-primary-color-light: linear-gradient(to right, #da8cff, #9a55ff);
+  --theme-gradient-secondary-color-light: linear-gradient(to right, #e7ebf0, #868e96);
+  --theme-gradient-success-color-light: linear-gradient(to right, #84d9d2, #07cdae);
+  --theme-gradient-info-color-light: linear-gradient(to right, #90caf9, #047edf 99%);
+  --theme-gradient-warning-color-light: linear-gradient(to right, #f6e384, #ffd500);
+  --theme-gradient-danger-color-light: linear-gradient(to right, #ffbf96, #fe7096);
+  --theme-gradient-light-color-light: linear-gradient(to bottom, #f4f4f4, #e4e4e9);
+  --theme-gradient-dark-color-light: linear-gradient(89deg, #5e7188, #3e4b5b);
 };

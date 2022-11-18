@@ -1,0 +1,52 @@
+@import "light";
+@import "dark";
+
+:root{
+  --theme-bg-color: var(--theme-bg-light);
+  --theme-content-wrapper-bg: var(--theme-content-wrapper-bg-light);
+  --theme-h3-text-color: var(--theme-h3-text-color-light);
+  --theme-menu-title-color: var(--theme-menu-title-color-light);
+  --theme-menu-title-active-color: var(--theme-menu-title-active-color-light);
+  --theme-navbar-bg: var(--theme-navbar-bg-light);
+  --theme-sidebar-bg: var(--theme-sidebar-bg-light);
+  --theme-sidebar-menu-hover-bg: var(--theme-sidebar-menu-hover-bg-light);
+  --theme-worldmap-stroke-bg: var(--theme-worldmap-stroke-bg-light);
+  --theme-p-text-color: var(--theme-p-text-color-light);
+  --theme-profile-text-color: var(--theme-profile-text-color-light);
+  --theme-footer-bg: var(--theme-footer-bg-light);
+  --bs-black-rgb: var(--theme-profile-text-color);
+  --bs-dark-rgb: var(--theme-p-text-color);
+  --theme-card-statistic-title-color: var(--theme-card-statistic-title-color-light);
+  --theme-table-bg: var(--theme-table-bg-light);
+  --theme-table-gradient-color: var(--theme-table-gradient-color-light);
+  --theme-table-hover-bg: var(--theme-table-hover-bg-light);
+  --theme-table-text-color: var(--theme-table-text-color-light);
+  --theme-input-label-color: var(--theme-input-label-color-light);
+  --theme-input-color: var(--theme-input-color-light);
+  --theme-gradient-primary-color: var(--theme-gradient-primary-color-light);
+  --theme-gradient-secondary-color: var(--theme-gradient-secondary-color-light);
+  --theme-gradient-success-color: var(--theme-gradient-success-color-light);
+  --theme-gradient-info-color: var(--theme-gradient-info-color-light);
+  --theme-gradient-warning-color: var(--theme-gradient-warning-color-light);
+  --theme-gradient-danger-color: var(--theme-gradient-danger-color-light);
+  --theme-gradient-light-color: var(--theme-gradient-light-color-light);
+  --theme-gradient-dark-color: var(--theme-gradient-dark-color-light);
+
+  .rdt_TableHead{
+    color: var(--theme-table-text-color);
+  }
+  .rdt_TableHeadRow{
+    background-color: var(--theme-table-bg);
+  }
+  .rdt_TableRow{
+    color: var(--theme-table-text-color);
+    background-color: var(--theme-table-bg);
+    &:hover {
+      background: var(--theme-table-hover-bg);
+      color: var(--theme-table-text-color);
+    }
+  }
+  .rdt_Pagination{
+    background-color: var(--theme-table-bg);
+  }
+};

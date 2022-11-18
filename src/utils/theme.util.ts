@@ -39,5 +39,13 @@ export default class ThemeUtil {
         this.setColor("table-text-color");
         this.setColor("input-label-color");
         this.setColor("input-color");
+        this.setColor("gradient-primary-color");
+        this.setColor("gradient-secondary-color");
+        this.setColor("gradient-success-color");
+        this.setColor("gradient-info-color");
+        this.setColor("gradient-warning-color");
+        this.setColor("gradient-danger-color");
+        this.setColor("gradient-light-color");
+        this.setColor("gradient-dark-color");
     }
 }

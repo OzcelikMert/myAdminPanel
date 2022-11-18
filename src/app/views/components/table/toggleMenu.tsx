@@ -18,10 +18,10 @@ class ThemeTableToggleMenu extends Component<PageProps, PageState> {
     render() {
         return (
             <Dropdown align={"end"}>
-                <Dropdown.Toggle className="table-toggle-menu">
+                <Dropdown.Toggle className="table-toggle-menu btn-gradient-primary">
                     <i className="mdi mdi-menu"></i>
                 </Dropdown.Toggle>
-                <Dropdown.Menu className="bg-gradient-light table-dropdown-menu">
+                <Dropdown.Menu className="table-dropdown-menu">
                     {
                         Status.findMulti("id", this.props.status).map((item, index) => {
                                 if (item.id === StatusId.Deleted) {
@@ -41,7 +41,7 @@ class ThemeTableToggleMenu extends Component<PageProps, PageState> {
                                 return (
                                     <Dropdown.Item onClick={(event) => this.props.onChange(event, item.id)} key={index}>
                                         <button
-                                            className={`btn btn-gradient-${classNameUtil.getStatusClassName(item.id)} w-100`}>{this.props.router.t(item.langKey)}</button>
+                                            className={`btn btn-gradient-${classNameUtil.getStatusClassName(item.id)} w-100 mb-1`}>{this.props.router.t(item.langKey)}</button>
                                     </Dropdown.Item>
                                 )
                             }

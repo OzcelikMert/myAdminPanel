@@ -145,7 +145,7 @@ class PageDashboard extends Component<PageProps, PageState> {
         let ctx = (document.createElement("canvas") as HTMLCanvasElement).getContext("2d") as CanvasFillStrokeStyles;
 
         let gradientBar = ctx.createLinearGradient(0, 0, 0, 181)
-        gradientBar.addColorStop(0, 'rgba(218, 140, 255, 1)')
+        gradientBar.addColorStop(0, '#6e3a87')
         gradientBar.addColorStop(1, 'rgba(154, 85, 255, 1)')
 
         this.setState((state: PageState) => {
