@@ -9,9 +9,10 @@
     flex-wrap: wrap;
 
     .tag {
+      color: var(--theme-input-color);
       margin: 3px;
       display: inline-flex;
-      background-color: #cecece;
+      background-color: var(--theme-content-wrapper-bg);
       border-radius: 3px;
       padding-left: 3px;
 
@@ -40,6 +41,8 @@
       flex-grow: 1;
       text-overflow: ellipsis;
       opacity: 1;
+      background: transparent;
+      color: var(--theme-input-color);
     }
   }
 }

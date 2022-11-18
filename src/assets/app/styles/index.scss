@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+/* === Theme Colors === */
+@import "theme";
 
 /* === Plugin styles === */
 @import '~react-bootstrap-typeahead/css/Typeahead';
@@ -67,6 +69,7 @@
 @import "components/chooseImage/index";
 @import "components/contentLangauge";
 @import "components/widgets";
+@import "components/table/toggleMenu";
 /*@import "./components/forms";
 @import "components/breadcrumbs";
 @import "./components/icons";
@@ -119,10 +122,6 @@
 @import "tools/footer";
 @import "tools/layout";
 @import "tools/spinner";
-
-/* === Theme Colors === */
-@import "theme/light";
-@import "theme/dark";
 
 html {
   overflow: hidden;

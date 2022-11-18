@@ -25,7 +25,6 @@ export default class ThemeUtil {
         this.setColor("navbar-bg");
         this.setColor("bg");
         this.setColor("content-wrapper-bg");
-        this.setColor("input-field-border-color");
         this.setColor("h3-text-color");
         this.setColor("menu-title-color");
         this.setColor("menu-title-active-color");
@@ -40,6 +39,14 @@ export default class ThemeUtil {
         this.setColor("table-text-color");
         this.setColor("input-label-color");
         this.setColor("input-color");
+        this.setColor("gradient-primary-color");
+        this.setColor("gradient-secondary-color");
+        this.setColor("gradient-success-color");
+        this.setColor("gradient-info-color");
+        this.setColor("gradient-warning-color");
+        this.setColor("gradient-danger-color");
+        this.setColor("gradient-light-color");
+        this.setColor("gradient-dark-color");
         this.setColor("link-color");
         this.setColor("card-profile-title-color");
         this.setColor("footer-text-color");

@@ -63,7 +63,7 @@ class ThemeFormTags extends Component<PageProps, PageState> {
     }
 
     Tag = (props: { title: string }) => (
-        <span className="tag bg-gradient-light">
+        <span className="tag">
             {props.title}
             <button type="button" className="btn btn-gradient-danger delete" onClick={() => this.onRemove(props.title)}>
                 <i className="mdi mdi-close"></i>
