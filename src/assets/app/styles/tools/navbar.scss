@@ -183,6 +183,7 @@
             }
           }
           .dropdown-menu {
+            background: var(--theme-profile-card-bg);
             @extend .dropdownAnimation;
             margin-top: 0;
             border: none;
@@ -197,6 +198,7 @@
               }
 
               .dropdown-item {
+                color: var(--theme-profile-card-text-color);
                 @extend .d-flex;
                 @extend .align-items-center;
                 margin-bottom: 0;
@@ -274,6 +276,7 @@
               }
             }
             .nav-profile-text {
+              color: var(--theme-profile-text-color);
               margin-left: 1.25rem;
               .rtl & {
                 margin-left: 0;

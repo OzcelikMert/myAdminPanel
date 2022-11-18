@@ -48,5 +48,7 @@ export default class ThemeUtil {
         this.setColor("content-language-bg");
         this.setColor("content-language-label-color");
         this.setColor("nav-tabs-link-active-bg");
+        this.setColor("profile-card-bg");
+        this.setColor("profile-card-text-color");
     }
 }

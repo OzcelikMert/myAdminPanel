@@ -184,7 +184,7 @@ class Navbar extends Component<PageProps, PageState> {
                     <span className="availability-status online"></span>
                 </div>
                 <div className="nav-profile-text">
-                    <p className="mb-1 text-black">
+                    <p className="mb-1">
                         {
                             this.props.getSessionData.name
                         }
