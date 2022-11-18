@@ -367,7 +367,7 @@ export class PagePostList extends Component<PageProps, PageState> {
                                                 permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Delete")
                                             )
                                         ) ? <ThemeTableToggleMenu
-                                            {...this.props}
+                                            t={this.props.router.t}
                                             status={
                                                 [
                                                     StatusId.Active,

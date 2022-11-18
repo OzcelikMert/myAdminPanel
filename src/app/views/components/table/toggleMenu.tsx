@@ -12,7 +12,8 @@ type PageProps = {
     status: StatusId[],
     langId: LanguageId,
     onChange: (event: React.MouseEvent<HTMLElement, MouseEvent>, statusId: number) => void
-} & PagePropCommonDocument;
+    t: PagePropCommonDocument["router"]["t"]
+};
 
 class ThemeTableToggleMenu extends Component<PageProps, PageState> {
     render() {
@@ -24,24 +25,10 @@ class ThemeTableToggleMenu extends Component<PageProps, PageState> {
                 <Dropdown.Menu className="table-dropdown-menu">
                     {
                         Status.findMulti("id", this.props.status).map((item, index) => {
-                                if (item.id === StatusId.Deleted) {
-                                    if(!permissionUtil.checkPermission(
-                                        this.props.getSessionData.roleId,
-                                        this.props.getSessionData.permissions,
-                                        permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Delete")
-                                    )) return null;
-                                }else {
-                                    if(!permissionUtil.checkPermission(
-                                        this.props.getSessionData.roleId,
-                                        this.props.getSessionData.permissions,
-                                        permissionUtil.getPermissionIdForPostType(this.props.getPageData.searchParams.postTypeId, "Edit")
-                                    )) return null;
-                                }
-
                                 return (
                                     <Dropdown.Item onClick={(event) => this.props.onChange(event, item.id)} key={index}>
                                         <button
-                                            className={`btn btn-gradient-${classNameUtil.getStatusClassName(item.id)} w-100 mb-1`}>{this.props.router.t(item.langKey)}</button>
+                                            className={`btn btn-gradient-${classNameUtil.getStatusClassName(item.id)} w-100 mb-1`}>{this.props.t(item.langKey)}</button>
                                     </Dropdown.Item>
                                 )
                             }

@@ -22,6 +22,7 @@ import staticContentUtil from "../../../../../utils/staticContent.util";
 import imageSourceUtil from "../../../../../utils/imageSource.util";
 import { PostTermUpdateParamDocument } from "../../../../../types/services/postTerm";
 import PagePaths from "../../../../../constants/pagePaths";
+import ThemeToolTip from "../../../components/tooltip";
 type PageState = {
     formActiveKey: string
     postTerms: { value: string, label: string }[]
@@ -383,18 +384,12 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
                             {
                                 this.state.formData.termId && [PostTypeId.Blog, PostTypeId.Portfolio].includes(Number(this.state.formData.typeId))
                                     ? <div className="col-6">
-                                        <OverlayTrigger
-                                          delay={{ hide: 450, show: 300 }}
-                                          overlay={(props) => (
-                                            <Tooltip {...props}>
-                                                {`${this.props.router.t("impressions")}`}
-                                            </Tooltip>
-                                          )}
-                                          placement="top"
-                                        ><label className="badge badge-gradient-primary w-100 p-2 fs-6 rounded-3">
-                                            <i className="mdi mdi-eye"></i> {this.state.formData.contents.views}
-                                        </label>
-                                        </OverlayTrigger>
+                                        <ThemeToolTip message={this.props.router.t("views")}>
+                                            <label className="badge badge-gradient-primary w-100 p-2 fs-6 rounded-3">
+                                                <i className="mdi mdi-eye"></i> {this.state.formData.contents.views}
+                                            </label>
+                                        </ThemeToolTip>
+
                                     </div> : null
                             }
                         </div>

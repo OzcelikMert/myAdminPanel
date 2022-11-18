@@ -147,7 +147,7 @@ export class PageSubscribers extends Component<PageProps, PageState> {
                                                 PermissionId.SubscriberEdit
                                             )
                                         ) ? <ThemeTableToggleMenu
-                                            {...this.props}
+                                            t={this.props.router.t}
                                             status={
                                                 [
                                                     StatusId.Deleted
