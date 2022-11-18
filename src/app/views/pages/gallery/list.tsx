@@ -234,21 +234,30 @@ export class PageGalleryList extends Component<PageProps, PageState> {
         ];
     }
 
-    ImageViewer = () => this.state.isOpenViewer
-        ? (
-            <ModalGateway>
-                <Modal onClose={() => this.onCloseViewer()} closeOnBackdropClick={false}>
-                    <Carousel
-                        currentIndex={this.state.selectedImageIndex}
-                        views={this.state.showingImages.map(image => ({
-                            alt: image,
-                            source: pathUtil.uploads.images + image,
-                            caption: image
-                        }))}
-                    />
-                </Modal>
-            </ModalGateway>
-        ) : null
+    ImageViewer = () => {
+        let images: PageState["images"] = this.state.showingImages;
+        let index = this.state.selectedImageIndex;
+
+        if(this.props.isModal){
+            images = [this.state.showingImages[this.state.selectedImageIndex]];
+            index = 0;
+        }
+
+        return this.state.isOpenViewer ? (
+                <ModalGateway>
+                    <Modal onClose={() => this.onCloseViewer()} closeOnBackdropClick={false}>
+                        <Carousel
+                            currentIndex={index}
+                            views={images.map(image => ({
+                                alt: image,
+                                source: pathUtil.uploads.images + image,
+                                caption: image
+                            }))}
+                        />
+                    </Modal>
+                </ModalGateway>
+            ) : null
+    }
 
 
     render() {
