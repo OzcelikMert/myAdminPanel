@@ -20,6 +20,7 @@ import imageSourceUtil from "../../../../utils/imageSource.util";
 import {PostContentButtonDocument, PostUpdateParamDocument} from "../../../../types/services/post";
 import componentService from "../../../../services/component.service";
 import PagePaths from "../../../../constants/pagePaths";
+import ThemeToolTip from "../../components/tooltip";
 
 type PageState = {
     langKeys: { value: string, label: string }[]
@@ -753,18 +754,11 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             {
                                 this.state.formData.postId && [PostTypeId.Page, PostTypeId.Blog, PostTypeId.Portfolio, PostTypeId.Service].includes(Number(this.state.formData.typeId))
                                     ? <div className="col-6">
-                                        <OverlayTrigger
-                                          delay={{ hide: 450, show: 300 }}
-                                          overlay={(props) => (
-                                            <Tooltip {...props}>
-                                              {`${this.props.router.t("impressions")}`}
-                                            </Tooltip>
-                                          )}
-                                          placement="top"
-                                        ><label className="badge badge-gradient-primary w-100 p-2 fs-6 rounded-3">
-                                            <i className="mdi mdi-eye"></i> {this.state.formData.contents.views}
-                                        </label>
-                                        </OverlayTrigger>
+                                        <ThemeToolTip message={this.props.router.t("views")}>
+                                            <label className="badge badge-gradient-primary w-100 p-2 fs-6 rounded-3">
+                                                <i className="mdi mdi-eye"></i> {this.state.formData.contents.views}
+                                            </label>
+                                        </ThemeToolTip>
                                     </div> : null
                             }
                         </div>

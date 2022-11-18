@@ -1,7 +1,7 @@
 .custom-select {
   .custom-select__control,
   .custom-select__menu {
-    background: transparent;
+    background: var(--theme-bg);
   }
 
   .custom-select__menu {
