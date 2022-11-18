@@ -47,5 +47,6 @@ export default class ThemeUtil {
         this.setColor("card-text-color");
         this.setColor("content-language-bg");
         this.setColor("content-language-label-color");
+        this.setColor("nav-tabs-link-active-bg");
     }
 }
