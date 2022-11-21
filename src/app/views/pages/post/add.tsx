@@ -302,7 +302,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                 components: this.state.formData.components?.filter(componentId => !Variable.isEmpty(componentId)),
                 contents: {
                     ...this.state.formData.contents,
-                    content: this.state.formData.contents.content?.decode()
+                    content: this.state.formData.contents.content
                 }
             };
 
@@ -546,7 +546,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             <div className="row">
                 <div className="col-md-7 mb-3">
                     <JoditEditor
-                        value={this.state.formData.contents.content?.decode() || ""}
+                        value={this.state.formData.contents.content || ""}
                         config={{
                             uploader: {insertImageAsBase64URI: true},
                             showXPathInStatusbar: false,

@@ -77,8 +77,8 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                         logo: setting.logo,
                         logoTwo: setting.logoTwo,
                         icon: setting.icon,
-                        head: setting.head?.decode(),
-                        script: setting.script?.decode(),
+                        head: setting.head,
+                        script: setting.script,
                         defaultLangId: setting.defaultLangId,
                         contact: {
                             ...setting.contact
@@ -130,8 +130,8 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
         }, () => {
             settingService.updateGeneral({
                 ...this.state.formData,
-                head: this.state.formData.head?.decode(),
-                script: this.state.formData.script?.decode(),
+                head: this.state.formData.head,
+                script: this.state.formData.script,
             }).then(resData => {
                 if(resData.status){
                     this.props.setPageData({
@@ -168,7 +168,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                         title={this.props.router.t("head")}
                         name="head"
                         type="textarea"
-                        value={this.state.formData.head?.decode()}
+                        value={this.state.formData.head}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
@@ -177,7 +177,7 @@ export class PageSettingsGeneral extends Component<PageProps, PageState> {
                         title={this.props.router.t("script")}
                         name="script"
                         type="textarea"
-                        value={this.state.formData.script?.decode()}
+                        value={this.state.formData.script}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
                 </div>
