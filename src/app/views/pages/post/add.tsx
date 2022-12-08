@@ -91,7 +91,7 @@ export class PagePostAdd extends Component<PageProps, PageState> {
             if ([PostTypeId.Navigate].includes(Number(this.state.formData.typeId))) {
                 this.getPosts();
             }
-            if (![PostTypeId.Page, PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))) {
+            if (![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))) {
                 this.getTerms();
             }
             if ([PostTypeId.Page].includes(Number(this.state.formData.typeId))) {
@@ -200,7 +200,6 @@ export class PagePostAdd extends Component<PageProps, PageState> {
                             value: term._id,
                             label: term.contents?.title || this.props.router.t("[noLangAdd]")
                         });
-
                     }
                 });
                 return state;
