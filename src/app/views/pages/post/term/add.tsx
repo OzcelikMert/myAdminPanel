@@ -37,7 +37,7 @@ type PageState = {
 
 type PageProps = {} & PagePropCommonDocument;
 
-export class PagePostTermAdd extends Component<PageProps, PageState> {
+export default class PagePostTermAdd extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
@@ -430,5 +430,3 @@ export class PagePostTermAdd extends Component<PageProps, PageState> {
         )
     }
 }
-
-export default PagePostTermAdd;

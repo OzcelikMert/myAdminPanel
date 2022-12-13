@@ -21,7 +21,7 @@ type PageState = {
 
 type PageProps = {} & PagePropCommonDocument;
 
-export class PageComponentList extends Component<PageProps, PageState> {
+export default class PageComponentList extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
@@ -173,5 +173,3 @@ export class PageComponentList extends Component<PageProps, PageState> {
         )
     }
 }
-
-export default PageComponentList;

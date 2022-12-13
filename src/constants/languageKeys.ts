@@ -1,4 +1,5 @@
 export const LanguageKeysArray = [
+    "contentLanguage",
     "imageUploadedWithName",
     "loginPanel",
     "email",

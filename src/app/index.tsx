@@ -29,6 +29,8 @@ import localStorageUtil from "utils/localStorage.util";
 import {Helmet} from "react-helmet";
 import AppRoutes from "./routes";
 import PagePaths from "constants/pagePaths";
+import ThemeBreadCrumb from "components/breadCrumb";
+import ThemeContentLanguage from "components/contentLanguage";
 
 const language = i18n.use(initReactI18next);
 language.init({
@@ -44,7 +46,7 @@ language.init({
 });
 
 type PageState = {
-    pageLanguages: { label: string | JSX.Element, value: any }[],
+    contentLanguages: LanguageDocument[],
     breadCrumbTitle: string,
     isPageLoading: boolean,
 } & AppAdminGetState;
@@ -60,7 +62,7 @@ class AppAdmin extends Component<PageProps, PageState> {
         super(props);
         this.state = {
             breadCrumbTitle: "",
-            pageLanguages: [],
+            contentLanguages: [],
             isPageLoading: true,
             pageData: {
                 searchParams: {
@@ -162,10 +164,7 @@ class AppAdmin extends Component<PageProps, PageState> {
             let resData = languageService.get({});
             if (resData.status) {
                 this.setState({
-                    pageLanguages: resData.data.map((lang, index) => ({
-                        label: <this.ContentLanguageItem {...lang} key={index}/>,
-                        value: lang._id
-                    }))
+                    contentLanguages: resData.data
                 })
             }
 
@@ -196,92 +195,6 @@ class AppAdmin extends Component<PageProps, PageState> {
         });
     }
 
-    ContentLanguageItem = (props: LanguageDocument) => (
-        <div className="row p-0">
-            <div className="col-6 text-end">
-                <img width="35" src={pathUtil.uploads.flags + props.image} alt={props.shortKey}/>
-            </div>
-            <div className="col-6 text-start content-language-title">
-                <h6>{props.title}</h6>
-            </div>
-        </div>
-    )
-
-    ContentLanguage = () => {
-        const showingPages = [
-            PagePaths.component().edit(),
-            PagePaths.post().edit(),
-            PagePaths.post().term().edit(),
-            PagePaths.themeContent().post().edit(),
-            PagePaths.themeContent().post().term().edit(),
-            PagePaths.settings().seo(),
-            PagePaths.settings().staticLanguages()
-        ];
-
-        let isShow = showingPages.map(page => {
-            if (
-                this.props.router.match &&
-                this.props.router.match.route
-            ) {
-                return this.props.router.match.route.path.indexOf(page) > -1
-            }
-            return this.props.router.location.pathname.indexOf(page) > -1
-        }).includes(true);
-
-        return isShow ? (
-            <ThemeFormSelect
-                title="Content Language"
-                name="contentLanguageId"
-                isSearchable={false}
-                options={this.state.pageLanguages}
-                value={this.state.pageLanguages.findSingle("value", this.state.pageData.langId)}
-                onChange={(item: any, e) => this.setState((state: PageState) => {
-                    return {
-                        ...state,
-                        pageData: {
-                            ...state.pageData,
-                            langId: item.value
-                        }
-                    };
-                })}
-            />
-        ) : null
-    }
-
-    BreadCrumb = () => {
-        let breadCrumbTitles = this.state.breadCrumbTitle.split(" - ");
-        return (
-            <div className="page-header">
-                <div className="row w-100 m-0">
-                    <div className="col-md-8 p-0">
-                        <h3 className="page-title">
-                            <Link to="/dashboard">
-                                <span className="page-title-icon bg-gradient-primary text-white me-2">
-                                    <i className="mdi mdi-home"></i>
-                                </span>
-                            </Link>
-                            {
-                                breadCrumbTitles.map((breadCrumbTitle, index) => (
-                                    <span>
-                                        <label className="badge badge-gradient-dark ms-2">{breadCrumbTitle}</label>
-                                        {
-                                            breadCrumbTitles.length != (index + 1)
-                                                ? <label className="badge badge-gradient-primary ms-2"><i className="mdi mdi-arrow-right"></i></label>
-                                                : null
-                                        }
-                                    </span>
-                                ))
-                            }
-                        </h3>
-                    </div>
-                    <div className="col-md-4 p-0 content-language">
-                        <this.ContentLanguage/>
-                    </div>
-                </div>
-            </div>
-        )
-    };
-
     render() {
         const fullPageLayoutRoutes = [
             PagePaths.login(),
@@ -294,7 +207,6 @@ class AppAdmin extends Component<PageProps, PageState> {
             return null;
         }
 
-
         const commonProps: PagePropCommonDocument = {
             router: this.props.router,
             setBreadCrumb: titles => this.setBreadCrumb(titles),
@@ -304,6 +216,7 @@ class AppAdmin extends Component<PageProps, PageState> {
             setPageData: (data, callBack) => this.setPageData(data, callBack)
         };
 
+
         return (
             <AppProviders {...commonProps}>
                 <Helmet>
@@ -312,13 +225,38 @@ class AppAdmin extends Component<PageProps, PageState> {
                     <link rel="canonical" href={window.location.href.replace("http:", "https:")}/>
                 </Helmet>
                 <div className="container-scroller">
-                    {!isFullPageLayout ? <Navbar {...commonProps}/> : ''}
+                    {!isFullPageLayout ? <Navbar {...commonProps}/> : null}
                     <div
                         className={`container-fluid page-body-wrapper ${isFullPageLayout ? "full-page-wrapper" : ""}`}>
-                        {!isFullPageLayout ? <Sidebar {...commonProps}/> : ''}
+                        {!isFullPageLayout ? <Sidebar {...commonProps}/> : null}
                         <div className="main-panel">
                             <div className="content-wrapper">
-                                {!isFullPageLayout ? <this.BreadCrumb/> : ''}
+                                <div className="page-header">
+                                    {
+                                        !isFullPageLayout ?
+                                            <div className="row w-100 m-0">
+                                                <div className="col-md-8 p-0">
+                                                    <ThemeBreadCrumb breadCrumbs={this.state.breadCrumbTitle.split(" - ")} />
+                                                </div>
+                                                <div className="col-md-4 p-0 content-language">
+                                                    <ThemeContentLanguage
+                                                        router={this.props.router}
+                                                        options={this.state.contentLanguages}
+                                                        value={this.state.contentLanguages.findSingle("_id", this.state.pageData.langId)}
+                                                        onChange={(item, e) => this.setState((state: PageState) => {
+                                                            return {
+                                                                ...state,
+                                                                pageData: {
+                                                                    ...state.pageData,
+                                                                    langId: item.value
+                                                                }
+                                                            };
+                                                        })}
+                                                    />
+                                                </div>
+                                            </div> : null
+                                    }
+                                </div>
                                 <AppRoutes {...commonProps} isPageLoading={this.state.isPageLoading}/>
                             </div>
                             {!isFullPageLayout ? <Footer/> : ''}

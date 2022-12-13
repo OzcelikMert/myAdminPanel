@@ -31,7 +31,7 @@ type PageProps = {
     uploadedImages?: string[]
 } & PagePropCommonDocument;
 
-export class PageGalleryList extends Component<PageProps, PageState> {
+export default class PageGalleryList extends Component<PageProps, PageState> {
     toast: null | ThemeToast = null;
     listPage: number = 0;
     listPagePerCount: number = 10;
@@ -284,5 +284,3 @@ export class PageGalleryList extends Component<PageProps, PageState> {
         )
     }
 }
-
-export default PageGalleryList;
