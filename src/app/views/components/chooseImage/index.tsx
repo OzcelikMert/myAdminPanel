@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {Modal} from "react-bootstrap";
 import ThemeChooseImageUrl from "./url";
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
+import {PagePropCommonDocument} from "types/app/pageProps";
 import ThemeChooseImageGallery from "./gallery";
 
-const emptyImage = require("../../../../assets/images/admin/empty.png");
+const emptyImage = require("images/admin/empty.png");
 
 type PageState = {
     isShowModalUrl: boolean

@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {Modal} from "react-bootstrap";
 import {ThemeFormType} from "../form";
-import HandleForm from "../../../../library/react/handles/form";
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
+import HandleForm from "library/react/handles/form";
+import {PagePropCommonDocument} from "types/app/pageProps";
 
 type PageState = {
     isShowInvalidUrl: boolean,
