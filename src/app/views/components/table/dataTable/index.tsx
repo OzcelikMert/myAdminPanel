@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import DataTable, {TableColumn, TableProps} from "react-data-table-component";
+import DataTable, {TableProps} from "react-data-table-component";
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeFormCheckBox, ThemeFormType} from "../../form";
 

@@ -1,6 +1,4 @@
-import React, {Component, RefObject} from 'react'
-
-type PageState = {} & any;
+import React from 'react'
 
 type PageProps = {
     title?: string,

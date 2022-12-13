@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 
 type PageState = {} & any;
 
-type onChange = (value: any) => void;
-
 type PageProps = {
     title?: string,
 } &  React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;

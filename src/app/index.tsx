@@ -3,7 +3,7 @@ import '../assets/app/styles/index.scss';
 import {
     useLocation,
     useNavigate,
-    useParams, useSearchParams, matchRoutes, RouteObject, BrowserRouter, Link
+    useParams, useSearchParams, matchRoutes, RouteObject, Link
 } from "react-router-dom";
 import {PagePropCommonDocument} from "../types/app/pageProps";
 import {useTranslation} from "react-i18next";
@@ -14,7 +14,7 @@ import {initReactI18next} from "react-i18next";
 
 import English from "./languages/en.json"
 import Turkish from "./languages/tr.json"
-import {LanguageId, Languages, Status} from "../constants";
+import {LanguageId, Languages} from "../constants";
 import Navbar from "./views/tools/navbar";
 import Sidebar from "./views/tools/sidebar";
 import Footer from "./views/tools/footer";

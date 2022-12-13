@@ -1,6 +1,5 @@
-import React, {Component, createRef, RefObject} from "react";
-import V from "../../../../library/variable";
-import {Modal, Tab, Tabs} from "react-bootstrap";
+import React, {Component} from "react";
+import {Modal} from "react-bootstrap";
 import ThemeChooseImageUrl from "./url";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import ThemeChooseImageGallery from "./gallery";

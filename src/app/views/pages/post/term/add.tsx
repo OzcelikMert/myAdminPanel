@@ -1,5 +1,5 @@
 import React, { Component, FormEvent } from 'react'
-import { OverlayTrigger, Tab, Tabs, Tooltip } from "react-bootstrap";
+import { Tab, Tabs } from "react-bootstrap";
 import {
     ThemeFormType,
     ThemeFormSelect,
@@ -17,7 +17,6 @@ import ThemeChooseImage from "../../../components/chooseImage";
 import postTermService from "../../../../../services/postTerm.service";
 import Spinner from "../../../tools/spinner";
 import Thread from "../../../../../library/thread";
-import permissionUtil from "../../../../../utils/permission.util";
 import staticContentUtil from "../../../../../utils/staticContent.util";
 import imageSourceUtil from "../../../../../utils/imageSource.util";
 import { PostTermUpdateParamDocument } from "../../../../../types/services/postTerm";

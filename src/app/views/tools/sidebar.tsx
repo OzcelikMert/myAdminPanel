@@ -5,7 +5,6 @@ import {PagePropCommonDocument} from "../../../types/app/pageProps";
 import permissionUtil from "../../../utils/permission.util";
 import SidebarNavs, {SideBarPath} from "../../../constants/sidebarNavs";
 import SidebarNav from "../../../constants/sidebarNavs";
-import {UserRoles} from "../../../constants";
 
 type PageState = {
     isMenuOpen: any

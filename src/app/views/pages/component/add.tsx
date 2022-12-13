@@ -13,7 +13,6 @@ import componentService from "../../../../services/component.service";
 import ThemeChooseImage from "../../components/chooseImage";
 import imageSourceUtil from "../../../../utils/imageSource.util";
 import Swal from "sweetalert2";
-import ThemeToast from "../../components/toast";
 import PagePaths from "../../../../constants/pagePaths";
 
 type PageState = {

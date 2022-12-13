@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {PagePropCommonDocument} from "../types/app/pageProps";
 import {ErrorCodes} from "../library/api";
-import {LanguageId, UserRoleId} from "../constants";
+import {LanguageId} from "../constants";
 import {Navigate} from "react-router-dom";
 import Spinner from "./views/tools/spinner";
 import authService from "../services/auth.service";

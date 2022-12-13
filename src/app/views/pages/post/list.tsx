@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {PageTypeId, PageTypes, PostTermTypeId, PostTypeId, PostTypes, Status, StatusId} from "../../../../constants";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import DataTable, {TableColumn} from "react-data-table-component";
-import {ThemeFormCheckBox} from "../../components/form";
+import {TableColumn} from "react-data-table-component";
 import {ThemeTableToggleMenu} from "../../components/table";
 import Swal from "sweetalert2";
 import postService from "../../../../services/post.service";

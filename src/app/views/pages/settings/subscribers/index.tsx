@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {PermissionId, StatusId} from "../../../../../constants";
-import DataTable, {TableColumn} from "react-data-table-component";
+import  {TableColumn} from "react-data-table-component";
 import Swal from "sweetalert2";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
@@ -10,7 +10,6 @@ import ThemeToast from "../../../components/toast";
 import {SubscriberDocument} from "../../../../../types/services/subscriber";
 import subscriberService from "../../../../../services/subscriber.service";
 import {ThemeTableToggleMenu} from "../../../components/table";
-import {ThemeFormCheckBox} from "../../../components/form";
 import ThemeDataTable from "../../../components/table/dataTable";
 
 type PageState = {

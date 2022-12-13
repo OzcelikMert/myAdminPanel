@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import ThemeChartBar from "../../components/charts/bar";
-import DataTable, {TableColumn} from "react-data-table-component";
-import {PostTermTypeId, PostTypeId, PostTypes, Status, StatusId} from "../../../../constants";
+import {TableColumn} from "react-data-table-component";
+import {PostTypeId, PostTypes, Status} from "../../../../constants";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";
 import PostDocument from "../../../../types/services/post";

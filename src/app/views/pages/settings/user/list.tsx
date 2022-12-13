@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {PermissionId, Status, UserRoleId, UserRoles} from "../../../../../constants";
-import DataTable, {TableColumn} from "react-data-table-component";
+import {TableColumn} from "react-data-table-component";
 import Swal from "sweetalert2";
 import UserDocument from "../../../../../types/services/user";
 import ThemeUsersProfileCard from "../../../components/users/profileCard";

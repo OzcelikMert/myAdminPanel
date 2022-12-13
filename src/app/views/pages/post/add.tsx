@@ -1,9 +1,9 @@
 import React, {Component, FormEvent} from 'react'
-import {OverlayTrigger, Tab, Tabs, Tooltip} from "react-bootstrap";
+import {Tab, Tabs} from "react-bootstrap";
 import JoditEditor from "jodit-react";
 import moment from "moment";
 import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
-import {LanguageKeysArray, PageTypes, PostTermTypeId, PostTypeId, PostTypes, StatusId,} from "../../../../constants";
+import {LanguageKeysArray, PageTypes, PostTermTypeId, PostTypeId, PostTypes, StatusId} from "../../../../constants";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import SweetAlert from "react-sweetalert2";
 import V from "../../../../library/variable";
@@ -14,7 +14,6 @@ import postTermService from "../../../../services/postTerm.service";
 import postService from "../../../../services/post.service";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";
-import permissionUtil from "../../../../utils/permission.util";
 import staticContentUtil from "../../../../utils/staticContent.util";
 import imageSourceUtil from "../../../../utils/imageSource.util";
 import {PostContentButtonDocument, PostUpdateParamDocument} from "../../../../types/services/post";

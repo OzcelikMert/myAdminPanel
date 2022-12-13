@@ -20,7 +20,7 @@ class App extends Component<{}, {}> {
 
     render() {
         return (
-            <BrowserRouter basename="admin">
+            <BrowserRouter>
                 <AppAdmin/>
             </BrowserRouter>
         );

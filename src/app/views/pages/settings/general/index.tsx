@@ -2,14 +2,13 @@ import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
 import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "../../../components/form";
 import HandleForm from "../../../../../library/react/handles/form";
-import {Languages, PermissionId, UserRoleId} from "../../../../../constants";
+import {Languages, UserRoleId} from "../../../../../constants";
 import settingService from "../../../../../services/setting.service";
 import languageService from "../../../../../services/language.service";
 import ServerInfoDocument from "../../../../../types/services/serverInfo";
 import serverInfoService from "../../../../../services/serverInfo.service";
 import Thread from "../../../../../library/thread";
 import Spinner from "../../../tools/spinner";
-import permissionUtil from "../../../../../utils/permission.util";
 import ThemeToast from "../../../components/toast";
 import ThemeChooseImage from "../../../components/chooseImage";
 import imageSourceUtil from "../../../../../utils/imageSource.util";

@@ -8,8 +8,6 @@ type PageProps = {
     title?: string
 } & StateManagerProps;
 
-
-
 class ThemeFormSelect extends Component<PageProps, PageState> {
     render () {
         return (

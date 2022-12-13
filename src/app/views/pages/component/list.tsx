@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import {PermissionId, UserRoleId} from "../../../../constants";
-import DataTable, {TableColumn} from "react-data-table-component";
+import {TableColumn} from "react-data-table-component";
 import Swal from "sweetalert2";
 import Thread from "../../../../library/thread";
 import Spinner from "../../tools/spinner";

@@ -8,7 +8,6 @@ import {
 import UserDocument from "../../../../types/services/user";
 import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import classNameUtil from "../../../../utils/className.util";
-import staticContentUtil from "../../../../utils/staticContent.util";
 import imageSourceUtil from "../../../../utils/imageSource.util";
 import {ThemeFieldSet} from "../form";
 import {PermissionDocument, PermissionGroupDocument} from "../../../../types/constants";

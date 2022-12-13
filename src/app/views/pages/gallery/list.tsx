@@ -3,16 +3,15 @@ import {PagePropCommonDocument} from "../../../../types/app/pageProps";
 import Carousel, {Modal, ModalGateway} from "react-images";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import Swal from "sweetalert2";
-import {ThemeFormCheckBox} from "../../components/form";
 import galleryService from "../../../../services/gallery.service";
 import Spinner from "../../tools/spinner";
 import Thread from "../../../../library/thread";
 import pathUtil from "../../../../utils/path.util";
-import DataTable, {TableColumn} from "react-data-table-component";
+import {TableColumn} from "react-data-table-component";
 import imageSourceUtil from "../../../../utils/imageSource.util";
 import ThemeToast from "../../components/toast";
 import permissionUtil from "../../../../utils/permission.util";
-import {PermissionId, Permissions} from "../../../../constants";
+import {PermissionId} from "../../../../constants";
 import ThemeDataTable from "../../components/table/dataTable";
 
 type PageState = {
