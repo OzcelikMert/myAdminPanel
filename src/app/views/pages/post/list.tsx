@@ -159,7 +159,7 @@ export class PagePostList extends Component<PageProps, PageState> {
     onSearch(searchKey: string) {
         this.setState({
             searchKey: searchKey,
-            showingPosts: this.state.posts.filter(post => (post.contents?.title ?? "").toLowerCase().search(searchKey) > -1)
+            showingPosts: this.state.showingPosts.filter(post => (post.contents?.title ?? "").toLowerCase().search(searchKey) > -1)
         })
     }
 

@@ -4,14 +4,14 @@
   "description": "Admin Panel",
   "private": true,
   "main": "dist/main.bundle.js",
-  "proxy": "http://localhost:5001",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject"
   },
   "dependencies": {
+    "@craco/craco": "^7.0.0",
     "bootstrap": "^5.1.3",
     "chart.js": "^3.7.1",
     "cogo-toast": "^4.2.3",
@@ -21,7 +21,8 @@
     "jodit-react": "^1.2.10",
     "jquery": "^3.6.0",
     "moment": "^2.29.1",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
+    "react-app-alias": "^2.2.2",
     "react-bootstrap": "^2.1.2",
     "react-bootstrap-typeahead": "^6.0.0-alpha.9",
     "react-chartjs-2": "^4.0.1",
@@ -30,19 +31,19 @@
     "react-data-table-component": "^7.5.2",
     "react-data-table-component-extensions": "^1.6.0",
     "react-datepicker": "^4.6.0",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-i18next": "^11.16.9",
     "react-images": "^1.2.0-beta.7",
     "react-lazy-load-image-component": "^1.5.4",
-    "react-router": "^6.2.1",
-    "react-router-dom": "^6.2.1",
+    "react-router": "^6.4.5",
+    "react-router-dom": "^6.4.5",
     "react-scripts": "^5.0.1",
     "react-select": "^5.2.2",
     "react-svg-worldmap": "2.0.0-alpha.1",
     "react-sweetalert2": "^0.5.2",
     "sass": "^1.49.9",
-    "typescript": "^4.5.5"
+    "typescript": "^4.9.4"
   },
   "devDependencies": {
     "@mdi/font": "^6.5.95",

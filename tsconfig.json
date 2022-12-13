@@ -21,41 +21,12 @@
     "noEmit": true,
     "sourceMap": false,
     "jsx": "react",
-    "outDir": "./dist",
-    "paths": {
-      "pages/*": ["src/app/views/pages/*"],
-      "components/*": ["src/app/views/components/*"],
-      "types/*": ["src/types/*"],
-      "styles/*": ["src/assets/styles/*"],
-      "images/*": ["assets/images/*"],
-      "services/*": ["src/services/*"],
-      "constants/*": ["src/constants/*"],
-      "library/*": ["src/library/*"],
-      "utils/*": ["src/utils/*"],
-    }
+    "outDir": "./dist"
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
+    "src"
   ],
-  "filesGlob": [
-    "typings/index.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "types": [
-    "react",
-    "node",
-    "electron"
-  ],
-  "exclude": [
-    "build",
-    "config",
-    "dist",
-    "node_modules",
-    "public",
-    "scripts"
-  ],
+  "extends": "./tsconfig.paths.json",
   "compileOnSave": false,
   "awesomeTypescriptLoaderOptions": {
     "silent": true

@@ -161,7 +161,7 @@ export class PagePostTermList extends Component<PageProps, PageState> {
     onSearch(searchKey: string) {
         this.setState({
             searchKey: searchKey,
-            showingPostTerms: this.state.postTerms.filter(postTerm => (postTerm.contents?.title ?? "").toLowerCase().search(searchKey) > -1)
+            showingPostTerms: this.state.showingPostTerms.filter(postTerm => (postTerm.contents?.title ?? "").toLowerCase().search(searchKey) > -1)
         })
     }
 

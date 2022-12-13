@@ -16,7 +16,7 @@ type PageState = {
 
 type PageProps = {} & PagePropCommonDocument;
 
-class Navbar extends Component<PageProps, PageState> {
+export default class Navbar extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
@@ -235,5 +235,3 @@ class Navbar extends Component<PageProps, PageState> {
         );
     }
 }
-
-export default Navbar;
