@@ -1,4 +1,4 @@
-import {PermissionPathDocument} from "../../types/constants/permissionPaths";
+import {PermissionPathDocument} from "types/constants/permissionPaths";
 import galleryPermissionPath from "./gallery.permissionPath";
 import componentPermissionPath from "./component.permissionPath";
 import settingPermissionPath from "./setting.permissionPath";

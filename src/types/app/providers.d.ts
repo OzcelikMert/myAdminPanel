@@ -1,4 +1,4 @@
-import {PostTermTypeId, PostTypeId} from "../../constants";
+import {PostTermTypeId, PostTypeId} from "constants/index";
 
 type SearchParamDocument = {
     postTypeId: PostTypeId,

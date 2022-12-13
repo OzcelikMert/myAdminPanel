@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import ThemeInputType from "../../components/form/input/type";
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import {ThemeForm} from "../../components/form";
-import HandleForm from "../../../../library/react/handles/form";
-import V from "../../../../library/variable";
-import authService from "../../../../services/auth.service";
-import imageSourceUtil from "../../../../utils/imageSource.util";
-import PagePaths from "../../../../constants/pagePaths";
+import ThemeInputType from "components/form/input/type";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {ThemeForm} from "components/form";
+import HandleForm from "library/react/handles/form";
+import V from "library/variable";
+import authService from "services/auth.service";
+import imageSourceUtil from "utils/imageSource.util";
+import PagePaths from "constants/pagePaths";
 
 type PageState = {
     isSubmitting: boolean

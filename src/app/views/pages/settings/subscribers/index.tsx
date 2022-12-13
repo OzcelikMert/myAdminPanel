@@ -1,16 +1,16 @@
 import React, {Component} from 'react'
-import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
-import {PermissionId, StatusId} from "../../../../../constants";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {PermissionId, StatusId} from "constants/index";
 import  {TableColumn} from "react-data-table-component";
 import Swal from "sweetalert2";
-import Thread from "../../../../../library/thread";
-import Spinner from "../../../tools/spinner";
-import permissionUtil from "../../../../../utils/permission.util";
-import ThemeToast from "../../../components/toast";
-import {SubscriberDocument} from "../../../../../types/services/subscriber";
-import subscriberService from "../../../../../services/subscriber.service";
-import {ThemeTableToggleMenu} from "../../../components/table";
-import ThemeDataTable from "../../../components/table/dataTable";
+import Thread from "library/thread";
+import Spinner from "components/tools/spinner";
+import permissionUtil from "utils/permission.util";
+import ThemeToast from "components/toast";
+import {SubscriberDocument} from "types/services/subscriber";
+import subscriberService from "services/subscriber.service";
+import {ThemeTableToggleMenu} from "components/table";
+import ThemeDataTable from "components/table/dataTable";
 
 type PageState = {
     searchKey: string
@@ -23,7 +23,7 @@ type PageState = {
 
 type PageProps = {} & PagePropCommonDocument;
 
-export class PageSubscribers extends Component<PageProps, PageState> {
+export default class PageSubscribers extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
@@ -176,5 +176,3 @@ export class PageSubscribers extends Component<PageProps, PageState> {
         )
     }
 }
-
-export default PageSubscribers;

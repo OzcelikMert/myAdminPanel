@@ -1,12 +1,12 @@
 import Api from "./api";
-import {ServicePages} from "../constants";
-import ServiceResultDocument from "../types/services/api/result";
+import {ServicePages} from "constants/index";
+import ServiceResultDocument from "types/services/api/result";
 import PostDocument, {
     PostDeleteParamDocument,
     PostGetParamDocument,
     PostAddParamDocument,
     PostUpdateParamDocument, PostUpdateStatusParamDocument
-} from "../types/services/post";
+} from "types/services/post";
 
 export default {
     get(params: PostGetParamDocument): ServiceResultDocument<PostDocument[]> {

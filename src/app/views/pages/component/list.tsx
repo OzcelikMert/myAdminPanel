@@ -1,16 +1,16 @@
 import React, {Component} from 'react'
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import {PermissionId, UserRoleId} from "../../../../constants";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {PermissionId, UserRoleId} from "constants/index";
 import {TableColumn} from "react-data-table-component";
 import Swal from "sweetalert2";
-import Thread from "../../../../library/thread";
-import Spinner from "../../tools/spinner";
-import permissionUtil from "../../../../utils/permission.util";
-import ThemeToast from "../../components/toast";
-import {ComponentDocument} from "../../../../types/services/component";
-import componentService from "../../../../services/component.service";
-import PagePaths from "../../../../constants/pagePaths";
-import ThemeDataTable from "../../components/table/dataTable";
+import Thread from "library/thread";
+import Spinner from "components/tools/spinner";
+import permissionUtil from "utils/permission.util";
+import ThemeToast from "components/toast";
+import {ComponentDocument} from "types/services/component";
+import componentService from "services/component.service";
+import PagePaths from "constants/pagePaths";
+import ThemeDataTable from "components/table/dataTable";
 
 type PageState = {
     searchKey: string

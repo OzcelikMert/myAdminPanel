@@ -1,4 +1,4 @@
-import {LanguageKeysArray} from "../../../constants";
+import {LanguageKeysArray} from "constants/index";
 
 type LanguageKeys = typeof LanguageKeysArray[number];
 

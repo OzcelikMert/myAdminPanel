@@ -1,18 +1,18 @@
 import React, {Component} from 'react'
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
+import {PagePropCommonDocument} from "types/app/pageProps";
 import Carousel, {Modal, ModalGateway} from "react-images";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
 import Swal from "sweetalert2";
-import galleryService from "../../../../services/gallery.service";
-import Spinner from "../../tools/spinner";
-import Thread from "../../../../library/thread";
-import pathUtil from "../../../../utils/path.util";
+import galleryService from "services/gallery.service";
+import Spinner from "components/tools/spinner";
+import Thread from "library/thread";
+import pathUtil from "utils/path.util";
 import {TableColumn} from "react-data-table-component";
-import imageSourceUtil from "../../../../utils/imageSource.util";
-import ThemeToast from "../../components/toast";
-import permissionUtil from "../../../../utils/permission.util";
-import {PermissionId} from "../../../../constants";
-import ThemeDataTable from "../../components/table/dataTable";
+import imageSourceUtil from "utils/imageSource.util";
+import ThemeToast from "components/toast";
+import permissionUtil from "utils/permission.util";
+import {PermissionId} from "constants/index";
+import ThemeDataTable from "components/table/dataTable";
 
 type PageState = {
     images: string[]

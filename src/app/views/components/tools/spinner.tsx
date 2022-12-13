@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export class Spinner extends Component {
+export default class Spinner extends Component {
   render() {
     return (
       <div>
@@ -11,5 +11,3 @@ export class Spinner extends Component {
     )
   }
 }
-
-export default Spinner

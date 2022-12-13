@@ -1,18 +1,18 @@
 import React, {Component, FormEvent} from 'react'
 import {Tab, Tabs} from "react-bootstrap";
 import moment from "moment";
-import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
-import {PermissionGroups, Permissions, StatusId, UserRoleId, UserRoles} from "../../../../../constants";
-import HandleForm from "../../../../../library/react/handles/form";
-import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../../components/form";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {PermissionGroups, Permissions, StatusId, UserRoleId, UserRoles} from "constants/index";
+import HandleForm from "library/react/handles/form";
+import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "components/form";
 import SweetAlert from "react-sweetalert2";
-import V, {DateMask} from "../../../../../library/variable";
-import userService from "../../../../../services/user.service";
-import Thread from "../../../../../library/thread";
-import Spinner from "../../../tools/spinner";
-import staticContentUtil from "../../../../../utils/staticContent.util";
-import PagePaths from "../../../../../constants/pagePaths";
-import {UserUpdateParamDocument} from "../../../../../types/services/user";
+import V, {DateMask} from "library/variable";
+import userService from "services/user.service";
+import Thread from "library/thread";
+import Spinner from "components/tools/spinner";
+import staticContentUtil from "utils/staticContent.util";
+import PagePaths from "constants/pagePaths";
+import {UserUpdateParamDocument} from "types/services/user";
 
 type PageState = {
     formActiveKey: string

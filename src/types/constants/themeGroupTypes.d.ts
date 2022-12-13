@@ -1,8 +1,8 @@
 import LanguageKeys from "../app/languages";
-import {ThemeGroupTypeId} from "../../constants";
+import {ComponentInputTypeId} from "constants/componentInputTypes";
 
 interface ThemeGroupTypeDocument {
-    id: ThemeGroupTypeId,
+    id: ComponentInputTypeId,
     langKey: LanguageKeys
 }
 

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Collapse} from 'react-bootstrap';
-import {PagePropCommonDocument} from "../../../types/app/pageProps";
-import permissionUtil from "../../../utils/permission.util";
-import SidebarNavs, {SideBarPath} from "../../../constants/sidebarNavs";
-import SidebarNav from "../../../constants/sidebarNavs";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import permissionUtil from "utils/permission.util";
+import SidebarNavs, {SideBarPath} from "constants/sidebarNavs";
+import SidebarNav from "constants/sidebarNavs";
 
 type PageState = {
     isMenuOpen: any

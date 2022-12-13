@@ -1,4 +1,4 @@
-import {PageTypeDocument} from "../types/constants/pageTypes";
+import {PageTypeDocument} from "types/constants/pageTypes";
 
 enum PageTypeId {
     Default = 1,

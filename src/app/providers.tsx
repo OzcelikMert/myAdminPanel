@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import {PagePropCommonDocument} from "../types/app/pageProps";
-import {ErrorCodes} from "../library/api";
-import {LanguageId} from "../constants";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {LanguageId} from "constants/index";
 import {Navigate} from "react-router-dom";
-import Spinner from "./views/tools/spinner";
-import authService from "../services/auth.service";
-import PagePaths from "../constants/pagePaths";
-import permissionUtil from "../utils/permission.util";
-import ThemeToast from "./views/components/toast";
+import Spinner from "components/tools/spinner";
+import authService from "services/auth.service";
+import PagePaths from "constants/pagePaths";
+import permissionUtil from "utils/permission.util";
+import ThemeToast from "components/toast";
+import {ErrorCodes} from "library/api";
 
 type PageState = {
     isAuth: boolean
@@ -16,7 +16,7 @@ type PageState = {
 
 type PageProps = {} & PagePropCommonDocument;
 
-class AppProviders extends Component<PageProps, PageState> {
+export default class AppProviders extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
@@ -125,5 +125,3 @@ class AppProviders extends Component<PageProps, PageState> {
                     : this.props.children
     }
 }
-
-export default AppProviders;

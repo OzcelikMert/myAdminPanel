@@ -1,23 +1,23 @@
 import React, {Component, FormEvent} from 'react'
-import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
-import {ThemeFieldSet, ThemeForm, ThemeFormType} from "../../../components/form";
-import HandleForm from "../../../../../library/react/handles/form";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {ThemeFieldSet, ThemeForm, ThemeFormType} from "components/form";
+import HandleForm from "library/react/handles/form";
 import {
     PermissionGroups,
     PermissionId,
     Permissions, Status,
     UserRoleId, UserRoles
-} from "../../../../../constants";
-import Spinner from "../../../tools/spinner";
-import ThemeChooseImage from "../../../components/chooseImage";
-import userService from "../../../../../services/user.service";
-import profileService from "../../../../../services/profile.service";
-import Thread from "../../../../../library/thread";
-import classNameUtil from "../../../../../utils/className.util";
-import imageSourceUtil from "../../../../../utils/imageSource.util";
-import ThemeToast from "../../../components/toast";
-import {PermissionDocument, PermissionGroupDocument} from "../../../../../types/constants";
-import {ProfileUpdateParamDocument} from "../../../../../types/services/profile";
+} from "constants/index";
+import Spinner from "components/tools/spinner";
+import ThemeChooseImage from "components/chooseImage";
+import userService from "services/user.service";
+import profileService from "services/profile.service";
+import Thread from "library/thread";
+import classNameUtil from "utils/className.util";
+import imageSourceUtil from "utils/imageSource.util";
+import ThemeToast from "components/toast";
+import {PermissionDocument, PermissionGroupDocument} from "types/constants";
+import {ProfileUpdateParamDocument} from "types/services/profile";
 
 type PageState = {
     isLoading: boolean,

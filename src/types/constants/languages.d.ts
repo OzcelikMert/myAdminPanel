@@ -1,4 +1,4 @@
-import {LanguageId} from "../../constants";
+import {LanguageId} from "constants/index";
 
 interface LanguageDocument {
     id: LanguageId,

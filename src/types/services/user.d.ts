@@ -1,4 +1,4 @@
-import {StatusId, UserRoleId} from "../../constants";
+import {StatusId, UserRoleId} from "constants/index";
 
 export default interface UserDocument {
     _id: string

@@ -1,6 +1,6 @@
 import Api from "./api";
-import {ServicePages} from "../constants";
-import {ProfileChangePasswordParamDocument, ProfileUpdateParamDocument} from "../types/services/profile";
+import {ServicePages} from "constants/index";
+import {ProfileChangePasswordParamDocument, ProfileUpdateParamDocument} from "types/services/profile";
 
 export default {
     update(params: ProfileUpdateParamDocument) {

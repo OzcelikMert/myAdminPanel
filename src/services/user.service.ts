@@ -1,12 +1,12 @@
 import Api from "./api";
-import {ServicePages} from "../constants";
-import ServiceResultDocument from "../types/services/api/result";
+import {ServicePages} from "constants/index";
+import ServiceResultDocument from "types/services/api/result";
 import UserDocument, {
     UserDeleteParamDocument,
     UserAddParamDocument,
     UserUpdateParamDocument,
     UsersGetParamDocument
-} from "../types/services/user";
+} from "types/services/user";
 
 export default {
     get(params: UsersGetParamDocument): ServiceResultDocument<UserDocument[]> {

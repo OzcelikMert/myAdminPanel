@@ -1,12 +1,12 @@
 import Api from "./api";
-import {ServicePages} from "../constants";
-import ServiceResultDocument from "../types/services/api/result";
+import {ServicePages} from "constants/index";
+import ServiceResultDocument from "types/services/api/result";
 import {
     ComponentAddParamDocument, ComponentDeleteParamDocument,
     ComponentDocument,
     ComponentGetParamDocument,
     ComponentUpdateParamDocument
-} from "../types/services/component";
+} from "types/services/component";
 
 export default {
     get(params: ComponentGetParamDocument): ServiceResultDocument<ComponentDocument[]> {

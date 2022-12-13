@@ -1,8 +1,8 @@
 import Api from "./api";
-import {ServicePages} from "../constants";
-import ServiceResultDocument from "../types/services/api/result";
-import UserDocument from "../types/services/user";
-import {AuthLoginParamDocument, AuthGetSessionParamDocument} from "../types/services/auth";
+import {ServicePages} from "constants/index";
+import ServiceResultDocument from "types/services/api/result";
+import UserDocument from "types/services/user";
+import {AuthLoginParamDocument, AuthGetSessionParamDocument} from "types/services/auth";
 
 export default {
     getSession(params: AuthGetSessionParamDocument): ServiceResultDocument<UserDocument[]> {

@@ -2,7 +2,7 @@
 
 /* === Plugin styles === */
 @import '~react-bootstrap-typeahead/css/Typeahead';
-@import '~react-datepicker/dist/react-datepicker';
+@import '~react-datepicker/dist/react-datepicker.css';
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
@@ -68,7 +68,7 @@
 @import "components/contentLangauge";
 @import "components/widgets";
 @import "components/table/toggleMenu";
-@import "components/table/dataTable";
+@import "components/table/dataTable/index";
 /*@import "./components/forms";
 @import "components/breadcrumbs";
 @import "./components/icons";
@@ -103,7 +103,7 @@
 @import "components/plugin-overrides/sweetAlert2";
 @import "components/plugin-overrides/react-bootstrap-modal";
 @import "components/plugin-overrides/cogoToast";
-@import "./components/plugin-overrides/react-select";
+@import "components/plugin-overrides/react-select";
 /*@import "./components/plugin-overrides/contex-menu";
 @import "./components/plugin-overrides/no-ui-slider";
 @import "./components/plugin-overrides/slick-carousel";
@@ -123,7 +123,7 @@
 @import "tools/spinner";
 
 /* === Theme Colors === */
-@import "theme";
+@import "theme/index";
 
 html {
   overflow: hidden;

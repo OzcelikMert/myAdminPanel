@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {Dropdown} from "react-bootstrap";
-import {LanguageId, Status, StatusId} from "../../../../constants";
-import classNameUtil from "../../../../utils/className.util";
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
+import {LanguageId, Status, StatusId} from "constants/index";
+import classNameUtil from "utils/className.util";
+import {PagePropCommonDocument} from "types/app/pageProps";
 
 type PageState = {};
 

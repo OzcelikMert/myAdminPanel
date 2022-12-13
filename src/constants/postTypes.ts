@@ -1,4 +1,4 @@
-import {PostTypeDocument} from "../types/constants";
+import {PostTypeDocument} from "types/constants";
 
 enum PostTypeId {
     Blog = 1,

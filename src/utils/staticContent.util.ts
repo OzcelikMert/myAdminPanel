@@ -3,10 +3,8 @@ import {
     StatusId,
     UserRoleId,
     UserRoles
-} from "../constants";
-import localStorageUtil from "./localStorage.util";
-import {PagePropCommonDocument} from "../types/app/pageProps";
-import LanguageKeys from "../types/app/languages";
+} from "constants/index";
+import {PagePropCommonDocument} from "types/app/pageProps";
 
 export default {
     getStatusForSelect(statusId: StatusId[], t: PagePropCommonDocument["router"]["t"]) {

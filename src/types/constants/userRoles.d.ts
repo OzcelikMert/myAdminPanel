@@ -1,4 +1,4 @@
-import {UserRoleId} from "../../constants";
+import {UserRoleId} from "constants/index";
 import LanguageKeys from "../app/languages";
 
 interface UserRoleDocument {

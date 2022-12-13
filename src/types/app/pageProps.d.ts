@@ -3,7 +3,7 @@ import LanguageKeys from "./languages";
 import {AppAdminGetState, AppAdminSetState} from "./views";
 import {i18n, TFunction} from "i18next";
 
-interface PagePropCommonDocument {
+export interface PagePropCommonDocument {
     router: PagePropRouterDocument,
     setBreadCrumb: (titles: string[]) => void
     setSessionData: (data: AppAdminSetState["sessionData"], callBack?: () => void) => void
@@ -25,8 +25,4 @@ interface PagePropRouterDocument {
     match?: PathMatch<any> & {route?: {path: string}},
     t: (key: LanguageKeys) => string
     i18n: i18n
-}
-
-export {
-    PagePropCommonDocument
 }

@@ -1,5 +1,5 @@
 import {PopulateAuthorIdDocument} from "./user";
-import {PostTermTypeId, PostTypeId, StatusId} from "../../constants";
+import {PostTermTypeId, PostTypeId, StatusId} from "constants/index";
 
 export interface PostTermContentDocument {
     langId: string

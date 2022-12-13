@@ -1,19 +1,19 @@
 import React, {Component, FormEvent} from 'react'
 import {Tab, Tabs} from "react-bootstrap";
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import {LanguageKeysArray, ComponentInputTypeId, ComponentInputTypes, UserRoleId} from "../../../../constants";
-import HandleForm from "../../../../library/react/handles/form";
-import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "../../components/form";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {LanguageKeysArray, ComponentInputTypeId, ComponentInputTypes, UserRoleId} from "constants/index";
+import HandleForm from "library/react/handles/form";
+import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "components/form";
 import SweetAlert from "react-sweetalert2";
-import V from "../../../../library/variable";
-import Thread from "../../../../library/thread";
-import Spinner from "../../tools/spinner";
-import {ComponentTypeDocument, ComponentUpdateParamDocument} from "../../../../types/services/component";
-import componentService from "../../../../services/component.service";
-import ThemeChooseImage from "../../components/chooseImage";
-import imageSourceUtil from "../../../../utils/imageSource.util";
+import V from "library/variable";
+import Thread from "library/thread";
+import Spinner from "components/tools/spinner";
+import {ComponentTypeDocument, ComponentUpdateParamDocument} from "types/services/component";
+import componentService from "services/component.service";
+import ThemeChooseImage from "components/chooseImage";
+import imageSourceUtil from "utils/imageSource.util";
 import Swal from "sweetalert2";
-import PagePaths from "../../../../constants/pagePaths";
+import PagePaths from "constants/pagePaths";
 
 type PageState = {
     langKeys: { value: string, label: string }[]

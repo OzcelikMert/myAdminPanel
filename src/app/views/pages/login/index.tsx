@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import ThemeInputType from "../../components/form/input/type";
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import {LanguageId, StatusId} from "../../../../constants";
-import {ThemeForm, ThemeFormCheckBox} from "../../components/form";
-import HandleForm from "../../../../library/react/handles/form";
-import authService from "../../../../services/auth.service";
-import UserDocument from "../../../../types/services/user";
-import PagePaths from "../../../../constants/pagePaths";
+import ThemeInputType from "components/form/input/type";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {LanguageId, StatusId} from "constants/index";
+import {ThemeForm, ThemeFormCheckBox} from "components/form";
+import HandleForm from "library/react/handles/form";
+import authService from "services/auth.service";
+import UserDocument from "types/services/user";
+import PagePaths from "constants/pagePaths";
 
 type PageState = {
     isSubmitting: boolean
@@ -200,7 +200,7 @@ class PageLogin extends Component<PageProps, PageState> {
                         <div className="col-lg-6 login-half-bg d-flex flex-row">
                             <div className="brand-logo">
                                 {
-                                    <img src={require('../../../../assets/images/admin/ozcelikLogo.png')} alt="logo" />
+                                    <img src={require('images/admin/ozcelikLogo.png')} alt="logo" />
                                 }
                             </div>
                         </div>

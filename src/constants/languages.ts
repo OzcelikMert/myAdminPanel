@@ -1,4 +1,4 @@
-import {LanguageDocument} from "../types/constants";
+import {LanguageDocument} from "types/constants";
 
 enum LanguageId {
     Turkish = 1,

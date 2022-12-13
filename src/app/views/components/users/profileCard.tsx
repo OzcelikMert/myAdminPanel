@@ -4,13 +4,13 @@ import {
     LanguageId, PermissionGroups,
     Permissions, Status,
     StatusId, UserRoles,
-} from "../../../../constants";
-import UserDocument from "../../../../types/services/user";
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import classNameUtil from "../../../../utils/className.util";
-import imageSourceUtil from "../../../../utils/imageSource.util";
+} from "constants/index";
+import UserDocument from "types/services/user";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import classNameUtil from "utils/className.util";
+import imageSourceUtil from "utils/imageSource.util";
 import {ThemeFieldSet} from "../form";
-import {PermissionDocument, PermissionGroupDocument} from "../../../../types/constants";
+import {PermissionDocument, PermissionGroupDocument} from "types/constants";
 
 type PageState = {};
 

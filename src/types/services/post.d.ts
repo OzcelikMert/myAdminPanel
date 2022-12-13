@@ -1,6 +1,6 @@
 import {PopulateTermsDocument} from "./postTerm";
 import {PopulateAuthorIdDocument} from "./user";
-import {PageTypeId, PostTypeId, StatusId} from "../../constants";
+import {PageTypeId, PostTypeId, StatusId} from "constants/index";
 import {ComponentDocument} from "./component";
 
 export interface PostContentButtonDocument {

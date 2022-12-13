@@ -21,7 +21,18 @@
     "noEmit": true,
     "sourceMap": false,
     "jsx": "react",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "paths": {
+      "pages/*": ["src/app/views/pages/*"],
+      "components/*": ["src/app/views/components/*"],
+      "types/*": ["src/types/*"],
+      "styles/*": ["src/assets/styles/*"],
+      "images/*": ["assets/images/*"],
+      "services/*": ["src/services/*"],
+      "constants/*": ["src/constants/*"],
+      "library/*": ["src/library/*"],
+      "utils/*": ["src/utils/*"],
+    }
   },
   "include": [
     "src/**/*.ts",

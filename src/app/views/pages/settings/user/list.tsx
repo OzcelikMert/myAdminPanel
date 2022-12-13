@@ -1,19 +1,19 @@
 import React, {Component} from 'react'
-import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
-import {PermissionId, Status, UserRoleId, UserRoles} from "../../../../../constants";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {PermissionId, Status, UserRoleId, UserRoles} from "constants/index";
 import {TableColumn} from "react-data-table-component";
 import Swal from "sweetalert2";
-import UserDocument from "../../../../../types/services/user";
-import ThemeUsersProfileCard from "../../../components/users/profileCard";
-import userService from "../../../../../services/user.service";
-import Thread from "../../../../../library/thread";
-import Spinner from "../../../tools/spinner";
-import imageSourceUtil from "../../../../../utils/imageSource.util";
-import classNameUtil from "../../../../../utils/className.util";
-import permissionUtil from "../../../../../utils/permission.util";
-import ThemeToast from "../../../components/toast";
-import PagePaths from "../../../../../constants/pagePaths";
-import ThemeDataTable from "../../../components/table/dataTable";
+import UserDocument from "types/services/user";
+import ThemeUsersProfileCard from "components/users/profileCard";
+import userService from "services/user.service";
+import Thread from "library/thread";
+import Spinner from "components/tools/spinner";
+import imageSourceUtil from "utils/imageSource.util";
+import classNameUtil from "utils/className.util";
+import permissionUtil from "utils/permission.util";
+import ThemeToast from "components/toast";
+import PagePaths from "constants/pagePaths";
+import ThemeDataTable from "components/table/dataTable";
 
 type PageState = {
     searchKey: string

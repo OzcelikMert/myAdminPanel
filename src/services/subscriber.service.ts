@@ -1,12 +1,12 @@
 import Api from "./api";
-import {ServicePages} from "../constants";
-import ServiceResultDocument from "../types/services/api/result";
+import {ServicePages} from "constants/index";
+import ServiceResultDocument from "types/services/api/result";
 import {
     SubscriberAddDocument,
     SubscriberDeleteParamDocument,
     SubscriberDocument,
     SubscriberGetParamDocument
-} from "../types/services/subscriber";
+} from "types/services/subscriber";
 
 export default {
     get(params: SubscriberGetParamDocument): ServiceResultDocument<SubscriberDocument[]> {

@@ -1,4 +1,4 @@
-import {PermissionId, UserRoleId} from "../../constants";
+import {PermissionId, UserRoleId} from "constants/index";
 
 interface PermissionPathDocument {
     path: string,

@@ -1,4 +1,4 @@
-import {PostTypeId} from "../../constants";
+import {PostTypeId} from "constants/index";
 import LanguageKeys from "../app/languages";
 
 interface PostTypeDocument {

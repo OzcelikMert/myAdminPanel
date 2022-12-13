@@ -1,4 +1,4 @@
-import {ThemeGroupTypeDocument} from "../types/constants";
+import {ThemeGroupTypeDocument} from "types/constants";
 
 enum ComponentInputTypeId {
     Text = 1,

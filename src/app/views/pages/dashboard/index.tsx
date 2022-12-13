@@ -1,20 +1,20 @@
 import React, {Component} from 'react';
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
-import ThemeChartBar from "../../components/charts/bar";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import ThemeChartBar from "components/charts/bar";
 import {TableColumn} from "react-data-table-component";
-import {PostTypeId, PostTypes, Status} from "../../../../constants";
-import Thread from "../../../../library/thread";
-import Spinner from "../../tools/spinner";
-import PostDocument from "../../../../types/services/post";
-import postService from "../../../../services/post.service";
+import {PostTypeId, PostTypes, Status} from "constants/index";
+import Thread from "library/thread";
+import Spinner from "components/tools/spinner";
+import PostDocument from "types/services/post";
+import postService from "services/post.service";
 import WorldMap from "react-svg-worldmap";
-import viewService from "../../../../services/view.service";
-import {ViewNumberDocument, ViewStatisticsDocument} from "../../../../types/services/view";
-import imageSourceUtil from "../../../../utils/imageSource.util";
-import classNameUtil from "../../../../utils/className.util";
-import permissionUtil from "../../../../utils/permission.util";
-import PagePaths from "../../../../constants/pagePaths";
-import ThemeDataTable from "../../components/table/dataTable";
+import viewService from "services/view.service";
+import {ViewNumberDocument, ViewStatisticsDocument} from "types/services/view";
+import imageSourceUtil from "utils/imageSource.util";
+import classNameUtil from "utils/className.util";
+import permissionUtil from "utils/permission.util";
+import PagePaths from "constants/pagePaths";
+import ThemeDataTable from "components/table/dataTable";
 
 type PageState = {
     chartData: {

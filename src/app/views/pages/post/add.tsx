@@ -2,24 +2,24 @@ import React, {Component, FormEvent} from 'react'
 import {Tab, Tabs} from "react-bootstrap";
 import JoditEditor from "jodit-react";
 import moment from "moment";
-import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "../../components/form"
-import {LanguageKeysArray, PageTypes, PostTermTypeId, PostTypeId, PostTypes, StatusId} from "../../../../constants";
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
+import {ThemeFieldSet, ThemeForm, ThemeFormCheckBox, ThemeFormSelect, ThemeFormType} from "components/form"
+import {LanguageKeysArray, PageTypes, PostTermTypeId, PostTypeId, PostTypes, StatusId} from "constants/index";
+import {PagePropCommonDocument} from "types/app/pageProps";
 import SweetAlert from "react-sweetalert2";
-import V from "../../../../library/variable";
-import Variable from "../../../../library/variable";
-import HandleForm from "../../../../library/react/handles/form";
-import ThemeChooseImage from "../../components/chooseImage";
-import postTermService from "../../../../services/postTerm.service";
-import postService from "../../../../services/post.service";
-import Thread from "../../../../library/thread";
-import Spinner from "../../tools/spinner";
-import staticContentUtil from "../../../../utils/staticContent.util";
-import imageSourceUtil from "../../../../utils/imageSource.util";
-import {PostContentButtonDocument, PostUpdateParamDocument} from "../../../../types/services/post";
-import componentService from "../../../../services/component.service";
-import PagePaths from "../../../../constants/pagePaths";
-import ThemeToolTip from "../../components/tooltip";
+import V from "library/variable";
+import Variable from "library/variable";
+import HandleForm from "library/react/handles/form";
+import ThemeChooseImage from "components/chooseImage";
+import postTermService from "services/postTerm.service";
+import postService from "services/post.service";
+import Thread from "library/thread";
+import Spinner from "components/tools/spinner";
+import staticContentUtil from "utils/staticContent.util";
+import imageSourceUtil from "utils/imageSource.util";
+import {PostContentButtonDocument, PostUpdateParamDocument} from "types/services/post";
+import componentService from "services/component.service";
+import PagePaths from "constants/pagePaths";
+import ThemeToolTip from "components/tooltip";
 
 type PageState = {
     langKeys: { value: string, label: string }[]

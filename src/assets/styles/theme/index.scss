@@ -1,5 +1,5 @@
-@import "light";
-@import "dark";
+@import "light/index";
+@import "dark/index";
 
 :root {
   --theme-bg-color: var(--theme-bg-light);

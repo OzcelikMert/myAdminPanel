@@ -1,4 +1,4 @@
-import {PostTermTypeDocument} from "../types/constants";
+import {PostTermTypeDocument} from "types/constants";
 
 enum PostTermTypeId {
     Category = 1,

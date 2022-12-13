@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import '../assets/app/styles/index.scss';
+import 'styles/index.scss';
 import {
     useLocation,
     useNavigate,
     useParams, useSearchParams, matchRoutes, RouteObject, Link
 } from "react-router-dom";
-import {PagePropCommonDocument} from "../types/app/pageProps";
+import {PagePropCommonDocument} from "types/app/pageProps";
 import {useTranslation} from "react-i18next";
 import AppProviders from "./providers";
 
@@ -14,21 +14,21 @@ import {initReactI18next} from "react-i18next";
 
 import English from "./languages/en.json"
 import Turkish from "./languages/tr.json"
-import {LanguageId, Languages} from "../constants";
-import Navbar from "./views/tools/navbar";
-import Sidebar from "./views/tools/sidebar";
-import Footer from "./views/tools/footer";
-import {ThemeFormSelect} from "./views/components/form";
-import Statement from "../library/statement";
-import {AppAdminGetState, AppAdminSetState} from "../types/app/views";
-import languageService from "../services/language.service";
-import settingService from "../services/setting.service";
-import LanguageDocument from "../types/services/language";
-import pathUtil from "../utils/path.util";
-import localStorageUtil from "../utils/localStorage.util";
+import {LanguageId, Languages} from "constants/index";
+import Navbar from "components/tools/navbar";
+import Sidebar from "components/tools/sidebar";
+import Footer from "components/tools/footer";
+import {ThemeFormSelect} from "components/form";
+import Statement from "library/statement";
+import {AppAdminGetState, AppAdminSetState} from "types/app/views";
+import languageService from "services/language.service";
+import settingService from "services/setting.service";
+import LanguageDocument from "types/services/language";
+import pathUtil from "utils/path.util";
+import localStorageUtil from "utils/localStorage.util";
 import {Helmet} from "react-helmet";
 import AppRoutes from "./routes";
-import PagePaths from "../constants/pagePaths";
+import PagePaths from "constants/pagePaths";
 
 const language = i18n.use(initReactI18next);
 language.init({

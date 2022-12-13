@@ -1,4 +1,4 @@
-import {StatusId, UserRoleId} from "../constants";
+import {StatusId, UserRoleId} from "constants/index";
 
 export default {
     getStatusClassName(statusId: number): string {

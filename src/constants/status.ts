@@ -1,4 +1,4 @@
-import {StatusDocument} from "../types/constants";
+import {StatusDocument} from "types/constants";
 
 enum StatusId {
     Active = 1,

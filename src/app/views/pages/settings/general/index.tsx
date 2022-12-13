@@ -1,20 +1,20 @@
 import React, {Component} from 'react'
-import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
-import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "../../../components/form";
-import HandleForm from "../../../../../library/react/handles/form";
-import {Languages, UserRoleId} from "../../../../../constants";
-import settingService from "../../../../../services/setting.service";
-import languageService from "../../../../../services/language.service";
-import ServerInfoDocument from "../../../../../types/services/serverInfo";
-import serverInfoService from "../../../../../services/serverInfo.service";
-import Thread from "../../../../../library/thread";
-import Spinner from "../../../tools/spinner";
-import ThemeToast from "../../../components/toast";
-import ThemeChooseImage from "../../../components/chooseImage";
-import imageSourceUtil from "../../../../../utils/imageSource.util";
-import {SettingGeneralUpdateParamDocument} from "../../../../../types/services/setting";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {ThemeFieldSet, ThemeForm, ThemeFormSelect, ThemeFormType} from "components/form";
+import HandleForm from "library/react/handles/form";
+import {Languages, UserRoleId} from "constants/index";
+import settingService from "services/setting.service";
+import languageService from "services/language.service";
+import ServerInfoDocument from "types/services/serverInfo";
+import serverInfoService from "services/serverInfo.service";
+import Thread from "library/thread";
+import Spinner from "components/tools/spinner";
+import ThemeToast from "components/toast";
+import ThemeChooseImage from "components/chooseImage";
+import imageSourceUtil from "utils/imageSource.util";
+import {SettingGeneralUpdateParamDocument} from "types/services/setting";
 import {Tab, Tabs} from "react-bootstrap";
-import localStorageUtil from "../../../../../utils/localStorage.util";
+import localStorageUtil from "utils/localStorage.util";
 
 type PageState = {
     languages: {label: string, value: string}[]

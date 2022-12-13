@@ -1,7 +1,7 @@
 import Api from "./api";
-import {ServicePages} from "../constants";
-import ServiceResultDocument from "../types/services/api/result";
-import ServerInfoDocument from "../types/services/serverInfo";
+import {ServicePages} from "constants/index";
+import ServiceResultDocument from "types/services/api/result";
+import ServerInfoDocument from "types/services/serverInfo";
 
 export default {
     get(): ServiceResultDocument<ServerInfoDocument> {

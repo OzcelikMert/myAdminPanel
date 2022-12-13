@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import {Dropdown} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import {Trans} from 'react-i18next';
-import {PagePropCommonDocument} from "../../../types/app/pageProps";
-import authService from "../../../services/auth.service";
-import localStorageUtil from "../../../utils/localStorage.util";
-import imageSourceUtil from "../../../utils/imageSource.util";
-import PagePaths from "../../../constants/pagePaths";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import authService from "services/auth.service";
+import localStorageUtil from "utils/localStorage.util";
+import imageSourceUtil from "utils/imageSource.util";
+import PagePaths from "constants/pagePaths";
 import DarkModeToggle from "react-dark-mode-toggle";
-import themeUtil from "../../../utils/theme.util";
+import themeUtil from "utils/theme.util";
 
 type PageState = {
     isDarkTheme: boolean
@@ -215,9 +215,9 @@ class Navbar extends Component<PageProps, PageState> {
             <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
                 <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                     <Link className="navbar-brand brand-logo" to="/"><img
-                        src={require('../../../assets/images/admin/ozcelikLogo.png')} alt="logo"/></Link>
+                        src={require('images/admin/ozcelikLogo.png')} alt="logo"/></Link>
                     <Link className="navbar-brand brand-logo-mini" to="/"><img
-                        src={require('../../../assets/images/admin/ozcelikLogoMini.png')} alt="logo"/></Link>
+                        src={require('images/admin/ozcelikLogoMini.png')} alt="logo"/></Link>
                 </div>
                 <div className="navbar-menu-wrapper d-flex align-items-stretch">
                    

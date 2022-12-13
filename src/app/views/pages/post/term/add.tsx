@@ -4,24 +4,25 @@ import {
     ThemeFormType,
     ThemeFormSelect,
     ThemeForm,
-} from "../../../components/form"
-import { PagePropCommonDocument } from "../../../../../types/app/pageProps";
+} from "components/form"
+import { PagePropCommonDocument } from "types/app/pageProps";
 import {
     PostTermTypeId, PostTermTypes, PostTypeId, PostTypes,
     StatusId
-} from "../../../../../constants";
-import V from "../../../../../library/variable";
+} from "constants/index";
+import V from "library/variable";
 import SweetAlert from "react-sweetalert2";
-import HandleForm from "../../../../../library/react/handles/form";
-import ThemeChooseImage from "../../../components/chooseImage";
-import postTermService from "../../../../../services/postTerm.service";
-import Spinner from "../../../tools/spinner";
-import Thread from "../../../../../library/thread";
-import staticContentUtil from "../../../../../utils/staticContent.util";
-import imageSourceUtil from "../../../../../utils/imageSource.util";
-import { PostTermUpdateParamDocument } from "../../../../../types/services/postTerm";
-import PagePaths from "../../../../../constants/pagePaths";
-import ThemeToolTip from "../../../components/tooltip";
+import HandleForm from "library/react/handles/form";
+import ThemeChooseImage from "components/chooseImage";
+import postTermService from "services/postTerm.service";
+import Spinner from "components/tools/spinner";
+import Thread from "library/thread";
+import staticContentUtil from "utils/staticContent.util";
+import imageSourceUtil from "utils/imageSource.util";
+import { PostTermUpdateParamDocument } from "types/services/postTerm";
+import PagePaths from "constants/pagePaths";
+import ThemeToolTip from "components/tooltip";
+
 type PageState = {
     formActiveKey: string
     postTerms: { value: string, label: string }[]

@@ -1,4 +1,4 @@
-import {StatusId} from "../../constants";
+import {StatusId} from "constants/index";
 
 export default interface LanguageDocument {
     _id: string

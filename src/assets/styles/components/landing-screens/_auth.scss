@@ -3,7 +3,7 @@
 .auth {
 	height: 100%;
 	.login-half-bg {
-		background: url("../../../../images/admin/auth/login.png");
+		background: url("../../../images/admin/auth/login.png");
 		background-size: cover;
 		background-color: #00000063;
 		background-blend-mode: color;
@@ -15,7 +15,7 @@
 		background-size: cover;
 	}
 	&.lock-full-bg {
-		background: url("../../../../images/admin/auth/lock.webp");
+		background: url("../../../images/admin/auth/lock.webp");
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-position: bottom;

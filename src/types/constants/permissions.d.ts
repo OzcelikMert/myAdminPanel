@@ -1,5 +1,5 @@
 import LanguageKeys from "../app/languages";
-import {PermissionGroupId, PermissionId} from "../../constants";
+import {PermissionGroupId, PermissionId} from "constants/index";
 
 interface PermissionDocument {
     id: PermissionId,

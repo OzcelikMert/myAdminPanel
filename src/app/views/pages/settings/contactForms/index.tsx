@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
-import {ThemeFieldSet, ThemeForm, ThemeFormType} from "../../../components/form";
-import {UserRoleId} from "../../../../../constants";
-import settingService from "../../../../../services/setting.service";
-import Thread from "../../../../../library/thread";
-import Spinner from "../../../tools/spinner";
-import ThemeToast from "../../../components/toast";
-import {SettingContactFormDocument, SettingContactFormUpdateParamDocument} from "../../../../../types/services/setting";
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {ThemeFieldSet, ThemeForm, ThemeFormType} from "components/form";
+import {UserRoleId} from "constants/index";
+import settingService from "services/setting.service";
+import Thread from "library/thread";
+import Spinner from "components/tools/spinner";
+import ThemeToast from "components/toast";
+import {SettingContactFormDocument, SettingContactFormUpdateParamDocument} from "types/services/setting";
 
 type PageState = {
     isSubmitting: boolean

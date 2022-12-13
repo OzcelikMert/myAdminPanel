@@ -1,4 +1,4 @@
-import {PageTypeId} from "../../constants";
+import {PageTypeId} from "constants/index";
 import LanguageKeys from "../app/languages";
 
 interface PageTypeDocument {

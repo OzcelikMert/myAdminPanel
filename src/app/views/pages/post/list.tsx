@@ -1,19 +1,19 @@
 import React, {Component} from 'react'
-import {PageTypeId, PageTypes, PostTermTypeId, PostTypeId, PostTypes, Status, StatusId} from "../../../../constants";
-import {PagePropCommonDocument} from "../../../../types/app/pageProps";
+import {PageTypeId, PageTypes, PostTermTypeId, PostTypeId, PostTypes, Status, StatusId} from "constants/index";
+import {PagePropCommonDocument} from "types/app/pageProps";
 import {TableColumn} from "react-data-table-component";
-import {ThemeTableToggleMenu} from "../../components/table";
+import {ThemeTableToggleMenu} from "components/table";
 import Swal from "sweetalert2";
-import postService from "../../../../services/post.service";
-import PostDocument from "../../../../types/services/post";
-import Spinner from "../../tools/spinner";
-import Thread from "../../../../library/thread";
-import imageSourceUtil from "../../../../utils/imageSource.util";
-import classNameUtil from "../../../../utils/className.util";
-import permissionUtil from "../../../../utils/permission.util";
-import ThemeToast from "../../components/toast";
-import PagePaths from "../../../../constants/pagePaths";
-import ThemeDataTable from "../../components/table/dataTable";
+import postService from "services/post.service";
+import PostDocument from "types/services/post";
+import Spinner from "components/tools/spinner";
+import Thread from "library/thread";
+import imageSourceUtil from "utils/imageSource.util";
+import classNameUtil from "utils/className.util";
+import permissionUtil from "utils/permission.util";
+import ThemeToast from "components/toast";
+import PagePaths from "constants/pagePaths";
+import ThemeDataTable from "components/table/dataTable";
 
 type PageState = {
     searchKey: string

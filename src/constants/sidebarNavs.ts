@@ -2,7 +2,7 @@ import {PermissionId} from "./permissions";
 import {PostTypeId} from "./postTypes";
 import {UserRoleId} from "./userRoles";
 import PagePaths from "./pagePaths";
-import LanguageKeys from "../types/app/languages";
+import LanguageKeys from "types/app/languages";
 
 export interface SideBarPath {
     path: string,

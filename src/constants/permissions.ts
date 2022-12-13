@@ -1,4 +1,4 @@
-import {PermissionDocument} from "../types/constants";
+import {PermissionDocument} from "types/constants";
 import {PermissionGroupId} from "./permissionGroups";
 
 enum PermissionId {

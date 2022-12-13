@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import DataTable, {TableProps} from "react-data-table-component";
-import {PagePropCommonDocument} from "../../../../../types/app/pageProps";
+import {PagePropCommonDocument} from "types/app/pageProps";
 import {ThemeFormCheckBox, ThemeFormType} from "../../form";
 
 type PageState = {

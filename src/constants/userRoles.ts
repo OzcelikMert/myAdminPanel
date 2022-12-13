@@ -1,4 +1,4 @@
-import {UserRoleDocument} from "../types/constants";
+import {UserRoleDocument} from "types/constants";
 
 enum UserRoleId {
     User = 1,
