@@ -58,8 +58,8 @@ export default class PagePostTermList extends Component<PageProps, PageState> {
 
     setPageTitle() {
         this.props.setBreadCrumb([
-            this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId).langKey),
-            this.props.router.t(PostTermTypes.findSingle("id", this.props.getPageData.searchParams.termTypeId).langKey)
+            this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId)?.langKey ?? "[noLangAdd]"),
+            this.props.router.t(PostTermTypes.findSingle("id", this.props.getPageData.searchParams.termTypeId)?.langKey ?? "[noLangAdd]")
         ])
     }
 
@@ -228,7 +228,7 @@ export default class PagePostTermList extends Component<PageProps, PageState> {
                     <label
                         className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
-                            this.props.router.t(Status.findSingle("id", row.statusId).langKey)
+                            this.props.router.t(Status.findSingle("id", row.statusId)?.langKey ?? "[noLangAdd]")
                         }
                     </label>
                 )

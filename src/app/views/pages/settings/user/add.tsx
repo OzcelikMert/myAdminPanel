@@ -95,7 +95,7 @@ export default class PageUserAdd extends Component<PageProps, PageState> {
         this.setState((state: PageState) => {
             let findUserRole = UserRoles.findSingle("id", this.props.getSessionData.roleId);
             state.userRoles = staticContentUtil.getUserRolesForSelect(
-                UserRoles.map(userRole => findUserRole.rank > userRole.rank ? userRole.id : 0).filter(roleId => roleId !== 0),
+                UserRoles.map(userRole => findUserRole && (findUserRole.rank > userRole.rank) ? userRole.id : 0).filter(roleId => roleId !== 0),
                 this.props.router.t
             );
             state.formData.roleId = UserRoleId.User;
@@ -187,7 +187,7 @@ export default class PageUserAdd extends Component<PageProps, PageState> {
 
     onChangeUserRole(roleId: number) {
         let role = UserRoles.findSingle("id", roleId);
-        let permsForRole = Permissions.filter(perm => perm.defaultRoleRank <= role.rank);
+        let permsForRole = Permissions.filter(perm => role && (perm.defaultRoleRank <= role.rank));
         this.setState((state: PageState) => {
             state.formData.permissions = [];
             permsForRole.forEach(perm => {
@@ -236,6 +236,9 @@ export default class PageUserAdd extends Component<PageProps, PageState> {
                                 key={index}
                                 legend={this.props.router.t(group.langKey)}
                             >
+                                {
+                                    (() => {console.log(Permissions.findMulti("groupId", group.id)); return null})()
+                                }
                                 {
                                     Permissions.findMulti("groupId", group.id).map((perm, index) => (
                                         <div className="col-md-4" key={index}>

@@ -175,7 +175,7 @@ export default class PageSettingsProfile extends Component<PageProps, PageState>
                                 <label
                                     className={`badge badge-gradient-${classNameUtil.getUserRolesClassName(this.state.data.roleId)} ms-1`}>
                                     {
-                                        this.props.router.t(UserRoles.findSingle("id", this.state.data.roleId).langKey)
+                                        this.props.router.t(UserRoles.findSingle("id", this.state.data.roleId)?.langKey ?? "[noLangAdd]")
                                     }
                                 </label>
                             </span>
@@ -185,7 +185,7 @@ export default class PageSettingsProfile extends Component<PageProps, PageState>
                                 <label
                                     className={`badge badge-gradient-${classNameUtil.getStatusClassName(this.state.data.statusId)} ms-1`}>
                                     {
-                                        this.props.router.t(Status.findSingle("id", this.state.data.statusId).langKey)
+                                        this.props.router.t(Status.findSingle("id", this.state.data.statusId)?.langKey ?? "[noLangAdd]")
                                     }
                                 </label>
                             </span>

@@ -10,7 +10,7 @@ type PageState = {};
 type PageProps = {
     router: PagePropCommonDocument["router"]
     options: LanguageDocument[]
-    value: LanguageDocument
+    value?: LanguageDocument
     onChange: (item: {label: string, value: any}, e: any) => void
 };
 
@@ -54,7 +54,7 @@ export default class ThemeContentLanguage extends Component<PageProps, PageState
                 name="contentLanguageId"
                 isSearchable={false}
                 options={this.props.options.map(option => ({label: <this.Item {...option} />, value: option._id}))}
-                value={{label: <this.Item {...this.props.value} />, value: this.props.value._id}}
+                value={ this.props.value ? {label: <this.Item {...this.props.value} />, value: this.props.value._id} : undefined }
                 onChange={(item: any, e) => this.props.onChange(item, e)}
             />
         ) : <div></div>

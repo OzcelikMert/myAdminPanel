@@ -60,7 +60,7 @@ export default class PagePostList extends Component<PageProps, PageState> {
     setPageTitle() {
         console.log(this.props)
         this.props.setBreadCrumb([
-            this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId).langKey),
+            this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId)?.langKey ?? "[noLangAdd]"),
             this.props.router.t("list")
         ])
     }
@@ -263,12 +263,12 @@ export default class PagePostList extends Component<PageProps, PageState> {
                 [PostTypeId.Page].includes(Number(this.props.getPageData.searchParams.postTypeId))
                     ? {
                         name: this.props.router.t("pageType"),
-                        selector: row => this.props.router.t(PageTypes.findSingle("id", (row.pageTypeId ? row.pageTypeId : PageTypeId.Default)).langKey),
+                        selector: row => this.props.router.t(PageTypes.findSingle("id", (row.pageTypeId ? row.pageTypeId : PageTypeId.Default))?.langKey ?? "[noLangAdd]"),
                         sortable: true,
                         cell: row => (
                             <label className={`badge badge-gradient-dark`}>
                                 {
-                                    this.props.router.t(PageTypes.findSingle("id", (row.pageTypeId ? row.pageTypeId : PageTypeId.Default)).langKey)
+                                    this.props.router.t(PageTypes.findSingle("id", (row.pageTypeId ? row.pageTypeId : PageTypeId.Default))?.langKey ?? "[noLangAdd]")
                                 }
                             </label>
                         )
@@ -280,7 +280,7 @@ export default class PagePostList extends Component<PageProps, PageState> {
                 cell: row => (
                     <label className={`badge badge-gradient-${classNameUtil.getStatusClassName(row.statusId)}`}>
                         {
-                            this.props.router.t(Status.findSingle("id", row.statusId).langKey)
+                            this.props.router.t(Status.findSingle("id", row.statusId)?.langKey ?? "[noLangAdd]")
                         }
                     </label>
                 )

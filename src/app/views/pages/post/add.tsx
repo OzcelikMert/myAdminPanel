@@ -125,7 +125,7 @@ export default class PagePostAdd extends Component<PageProps, PageState> {
 
     setPageTitle() {
         let titles: string[] = [
-            this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId).langKey),
+            this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId)?.langKey ?? "[noLangAdd]"),
             this.props.router.t(this.state.formData.postId ? "edit" : "add")
         ];
         if (this.state.formData.postId) {

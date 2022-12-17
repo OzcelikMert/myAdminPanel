@@ -62,7 +62,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                         <label
                             className={`badge badge-gradient-${classNameUtil.getUserRolesClassName(this.props.userInfo.roleId)} ms-1`}>
                             {
-                                this.props.router.t(UserRoles.findSingle("id", this.props.userInfo.roleId).langKey)
+                                this.props.router.t(UserRoles.findSingle("id", this.props.userInfo.roleId)?.langKey ?? "[noLangAdd]")
                             }
                         </label>
                     </span>
@@ -72,7 +72,7 @@ class ThemeUsersProfileCard extends Component<PageProps, PageState> {
                         <label
                             className={`badge badge-gradient-${classNameUtil.getStatusClassName(this.props.userInfo.statusId)} ms-1`}>
                             {
-                                this.props.router.t(Status.findSingle("id", this.props.userInfo.statusId).langKey)
+                                this.props.router.t(Status.findSingle("id", this.props.userInfo.statusId)?.langKey ?? "[noLangAdd]")
                             }
                         </label>
                     </span>

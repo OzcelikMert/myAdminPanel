@@ -59,38 +59,40 @@ export default class PageComponentList extends Component<PageProps, PageState> {
 
     onDelete(_id: string) {
         let component = this.state.components.findSingle("_id", _id);
-        Swal.fire({
-            title: this.props.router.t("deleteAction"),
-            html: `<b>'${this.props.router.t(component.langKey)}'</b> ${this.props.router.t("deleteItemQuestionWithItemName")}`,
-            confirmButtonText: this.props.router.t("yes"),
-            cancelButtonText: this.props.router.t("no"),
-            icon: "question",
-            showCancelButton: true
-        }).then(result => {
-            if (result.isConfirmed) {
-                const loadingToast = new ThemeToast({
-                    content: this.props.router.t("deleting"),
-                    type: "loading"
-                });
-                componentService.delete({
-                    componentId: [_id]
-                }).then(resData => {
-                    loadingToast.hide();
-                    if (resData.status) {
-                        this.setState((state: PageState) => {
-                            state.components = state.components.filter(item => _id !== item._id);
-                            return state;
-                        }, () => {
-                            new ThemeToast({
-                                type: "success",
-                                title: this.props.router.t("successful"),
-                                content: this.props.router.t("itemDeleted")
+        if(component){
+            Swal.fire({
+                title: this.props.router.t("deleteAction"),
+                html: `<b>'${this.props.router.t(component.langKey)}'</b> ${this.props.router.t("deleteItemQuestionWithItemName")}`,
+                confirmButtonText: this.props.router.t("yes"),
+                cancelButtonText: this.props.router.t("no"),
+                icon: "question",
+                showCancelButton: true
+            }).then(result => {
+                if (result.isConfirmed) {
+                    const loadingToast = new ThemeToast({
+                        content: this.props.router.t("deleting"),
+                        type: "loading"
+                    });
+                    componentService.delete({
+                        componentId: [_id]
+                    }).then(resData => {
+                        loadingToast.hide();
+                        if (resData.status) {
+                            this.setState((state: PageState) => {
+                                state.components = state.components.filter(item => _id !== item._id);
+                                return state;
+                            }, () => {
+                                new ThemeToast({
+                                    type: "success",
+                                    title: this.props.router.t("successful"),
+                                    content: this.props.router.t("itemDeleted")
+                                })
                             })
-                        })
-                    }
-                })
-            }
-        })
+                        }
+                    })
+                }
+            })
+        }
     }
 
     onSearch(searchKey: string) {

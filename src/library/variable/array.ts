@@ -61,7 +61,6 @@ Array.prototype.findMulti = function (key, value, isLike = true) {
             let _data = data;
             if(typeof key === "string"){
                 if(key.length > 0){
-                    let _data = data;
                     for(const name of key.split(".")) {
                         if(typeof _data !== "undefined"){
                             _data = _data[name];
