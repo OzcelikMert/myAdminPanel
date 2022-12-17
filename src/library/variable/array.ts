@@ -9,13 +9,17 @@ declare global {
     }
 }
 
+function convertQueryData(data: any): string {
+    return JSON.stringify({d: data});
+}
+
 Array.prototype.indexOfKey = function (key, value) {
     let findIndex = -1;
     if(typeof value !== "undefined"){
         findIndex = this.map(data => {
             let _data: any = data;
             if(typeof key === "string"){
-                if(key !== ""){
+                if(key.length > 0){
                     for(const name of key.split(".")) {
                         if(typeof _data !== "undefined"){
                             _data = _data[name];
@@ -23,19 +27,19 @@ Array.prototype.indexOfKey = function (key, value) {
                     }
                 }
             }
-            return _data;
-        }).indexOf(value)
+            return convertQueryData(_data);
+        }).indexOf(convertQueryData(value))
     }
     return findIndex;
 }
 Array.prototype.findSingle = function (key, value) {
     return this.find(function (data) {
         let query: boolean = false;
+
         if(typeof value !== "undefined"){
             let _data = data;
             if(typeof key === "string"){
-                if(key !== ""){
-                    let _data = data;
+                if(key.length > 0){
                     for(const name of key.split(".")) {
                         if(typeof _data !== "undefined"){
                             _data = _data[name];
@@ -43,8 +47,9 @@ Array.prototype.findSingle = function (key, value) {
                     }
                 }
             }
-            query = _data == value;
+            query = convertQueryData(_data) == convertQueryData(value);
         }
+
         return query;
     });
 }
@@ -55,7 +60,7 @@ Array.prototype.findMulti = function (key, value, isLike = true) {
         if(typeof value !== "undefined"){
             let _data = data;
             if(typeof key === "string"){
-                if(key !== ""){
+                if(key.length > 0){
                     let _data = data;
                     for(const name of key.split(".")) {
                         if(typeof _data !== "undefined"){
@@ -65,9 +70,9 @@ Array.prototype.findMulti = function (key, value, isLike = true) {
                 }
             }
             if(Array.isArray(value)){
-                query = value.includes(_data);
+                query = value.map(v => convertQueryData(v)).includes(convertQueryData(_data));
             }else {
-                query = _data == value;
+                query = convertQueryData(_data) == convertQueryData(value);
             }
         }
         if (query === isLike) founds.push(Object.assign(data));
