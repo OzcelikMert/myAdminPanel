@@ -6,8 +6,8 @@ enum LanguageId {
 }
 
 const Languages: Array<LanguageDocument> = [
-    { id: LanguageId.Turkish, code: "tr", title: "Türkçe", order: 1, image: "tr.webp" },
-    { id: LanguageId.English, code: "en", title: "English", order: 2, image: "gb.webp" },
+    { id: LanguageId.English, code: "en", title: "English", order: 1, image: "gb.webp" },
+    { id: LanguageId.Turkish, code: "tr", title: "Türkçe", order: 2, image: "tr.webp" },
 ]
 
 export {Languages, LanguageId}

@@ -16,7 +16,10 @@ export default {
                 if(permissionPath.userRoleId){
                     let permPathUserRole = UserRoles.findSingle("id", permissionPath.userRoleId);
                     let userRole = UserRoles.findSingle("id", userRoleId);
-                    if(userRole.rank < permPathUserRole.rank){
+                    if(
+                        (typeof permPathUserRole === "undefined" || typeof userRole === "undefined") ||
+                        (userRole.rank < permPathUserRole.rank)
+                    ){
                         return false;
                     }
                 }
