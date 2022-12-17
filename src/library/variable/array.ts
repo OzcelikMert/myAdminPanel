@@ -11,44 +11,40 @@ declare global {
 
 Array.prototype.indexOfKey = function (key, value) {
     let findIndex = -1;
-
     if(typeof value !== "undefined"){
         findIndex = this.map(data => {
-            let returnData: any = undefined;
-
+            let _data: any = data;
             if(typeof key === "string"){
-                if(key === ""){
-                    returnData = data;
-                }else {
+                if(key !== ""){
                     for(const name of key.split(".")) {
-                        returnData = returnData[name];
+                        if(typeof _data !== "undefined"){
+                            _data = _data[name];
+                        }
                     }
                 }
             }
-
-            return returnData;
+            return _data;
         }).indexOf(value)
     }
-
     return findIndex;
 }
 Array.prototype.findSingle = function (key, value) {
     return this.find(function (data) {
         let query: boolean = false;
-
         if(typeof value !== "undefined"){
             let _data = data;
             if(typeof key === "string"){
                 if(key !== ""){
                     let _data = data;
                     for(const name of key.split(".")) {
-                        _data = _data[name];
+                        if(typeof _data !== "undefined"){
+                            _data = _data[name];
+                        }
                     }
                 }
             }
             query = _data == value;
         }
-
         return query;
     });
 }
@@ -56,25 +52,24 @@ Array.prototype.findMulti = function (key, value, isLike = true) {
     let founds = Array();
     this.find(function (data) {
         let query: boolean = false;
-
         if(typeof value !== "undefined"){
             let _data = data;
             if(typeof key === "string"){
                 if(key !== ""){
                     let _data = data;
                     for(const name of key.split(".")) {
-                        _data = _data[name];
+                        if(typeof _data !== "undefined"){
+                            _data = _data[name];
+                        }
                     }
                 }
             }
-
             if(Array.isArray(value)){
                 query = value.includes(_data);
             }else {
                 query = _data == value;
             }
         }
-
         if (query === isLike) founds.push(Object.assign(data));
     });
     return founds;
