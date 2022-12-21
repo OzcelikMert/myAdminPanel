@@ -58,7 +58,6 @@ export default class PagePostList extends Component<PageProps, PageState> {
     }
 
     setPageTitle() {
-        console.log(this.props)
         this.props.setBreadCrumb([
             this.props.router.t(PostTypes.findSingle("id", this.props.getPageData.searchParams.postTypeId)?.langKey ?? "[noLangAdd]"),
             this.props.router.t("list")

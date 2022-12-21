@@ -237,9 +237,6 @@ export default class PageUserAdd extends Component<PageProps, PageState> {
                                 legend={this.props.router.t(group.langKey)}
                             >
                                 {
-                                    (() => {console.log(Permissions.findMulti("groupId", group.id)); return null})()
-                                }
-                                {
                                     Permissions.findMulti("groupId", group.id).map((perm, index) => (
                                         <div className="col-md-4" key={index}>
                                             <ThemeFormCheckBox

@@ -182,9 +182,7 @@ export default class PageComponentAdd extends Component<PageProps, PageState> {
                 self.setState((state: PageState) => {
                     data[key] = value;
                     return state;
-                }, () => {
-                    console.log(self.state)
-                })
+                }, () => {})
             },
             onCreateType() {
                 self.setState((state: PageState) => {

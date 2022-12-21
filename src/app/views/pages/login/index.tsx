@@ -54,7 +54,6 @@ class PageLogin extends Component<PageProps, PageState> {
             authService.login(this.state.formData).then(resData => {
                 if (resData.data.length > 0) {
                     let user = resData.data[0];
-                    console.log(resData.status)
                     if(resData.status){
                         this.props.setSessionData({
                             id: user._id,
@@ -101,7 +100,6 @@ class PageLogin extends Component<PageProps, PageState> {
                                             <ThemeInputType
                                                 onKeyDown={(e) => {
                                                     if (e.keyCode === 13) {
-                                                        console.log('You must have pressed Enter ')
                                                         if (this.state.formData.email !== "" && this.state.formData.password !== "") {
                                                             this.onSubmit(e)
                                                         }
@@ -122,7 +120,6 @@ class PageLogin extends Component<PageProps, PageState> {
                                             <ThemeInputType
                                                 onKeyDown={(e) => {
                                                     if (e.keyCode === 13) {
-                                                        console.log('You must have pressed Enter ')
                                                         if (this.state.formData.email !== "" && this.state.formData.password !== "") {
                                                             this.onSubmit(e)
                                                         }
