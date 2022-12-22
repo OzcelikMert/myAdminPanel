@@ -40,38 +40,38 @@ export default class ProviderPermission extends Component<PageProps, PageState> 
     onRouteChanged() {
         this.setState({
             isPageLoading: true,
-        }, () => {
-            this.checkPermission().then(() => {
-                this.setState({
-                    isPageLoading: false
-                })
-            });
+        }, async () => {
+            await this.checkPermission();
+            this.setState({
+                isPageLoading: false
+            })
         });
     }
 
-    checkPermission() {
-        return new Promise( resolve => {
-            let permissionIsValid = true;
-            const ignoredPaths = [
-                PagePaths.login(),
-                PagePaths.lock()
-            ];
-            if (
-                !ignoredPaths.includes(this.props.router.location.pathname) &&
-                !permissionUtil.checkPermissionPath(
-                    this.props.router.location.pathname,
-                    this.props.getSessionData.roleId,
-                    this.props.getSessionData.permissions
-                )
-            ) {
-                permissionIsValid = false;
-                new ThemeToast({
-                    type: "error",
-                    title: this.props.router.t("error"),
-                    content: this.props.router.t("noPerm"),
-                    position: "top-center"
-                });
-            }
+    async checkPermission() {
+        let permissionIsValid = true;
+        const ignoredPaths = [
+            PagePaths.login(),
+            PagePaths.lock()
+        ];
+        if (
+            !ignoredPaths.includes(this.props.router.location.pathname) &&
+            !permissionUtil.checkPermissionPath(
+                this.props.router.location.pathname,
+                this.props.getSessionData.roleId,
+                this.props.getSessionData.permissions
+            )
+        ) {
+            permissionIsValid = false;
+            new ThemeToast({
+                type: "error",
+                title: this.props.router.t("error"),
+                content: this.props.router.t("noPerm"),
+                position: "top-center"
+            });
+        }
+
+        await new Promise( resolve => {
             this.setState({
                 permissionIsValid: permissionIsValid,
             }, () => {

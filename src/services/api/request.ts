@@ -35,7 +35,7 @@ class ApiRequest {
         try {
             let resData = await axios.request({
                 url: this.getApiUrl(),
-                data: this.params.data,
+                ...(this.params.method === "GET" ? {params: this.params.data} : {data: this.params.data}),
                 method: this.params.method,
                 withCredentials: true,
                 timeout: Timeouts.verySlow,
@@ -58,9 +58,9 @@ class ApiRequest {
         }
     }
 
-    init() : Promise<ServiceResultDocument<any>> {
-        return new Promise( async resolve => {
-            await this.request(resolve);
+    async init() : Promise<ServiceResultDocument<any>> {
+        return new Promise( resolve => {
+            this.request(resolve);
         })
     }
 }

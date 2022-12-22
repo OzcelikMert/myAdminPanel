@@ -1,25 +1,17 @@
-import React, { Component, FormEvent } from 'react'
-import { Tab, Tabs } from "react-bootstrap";
-import {
-    ThemeFormType,
-    ThemeFormSelect,
-    ThemeForm,
-} from "components/form"
-import { PagePropCommonDocument } from "types/app/pageProps";
-import {
-    PostTermTypeId, PostTermTypes, PostTypeId, PostTypes,
-    StatusId
-} from "constants/index";
+import React, {Component, FormEvent} from 'react'
+import {Tab, Tabs} from "react-bootstrap";
+import {ThemeForm, ThemeFormSelect, ThemeFormType,} from "components/form"
+import {PagePropCommonDocument} from "types/app/pageProps";
+import {PostTermTypeId, PostTermTypes, PostTypeId, PostTypes, StatusId} from "constants/index";
 import V from "library/variable";
 import SweetAlert from "react-sweetalert2";
 import HandleForm from "library/react/handles/form";
 import ThemeChooseImage from "components/chooseImage";
 import postTermService from "services/postTerm.service";
 import Spinner from "components/tools/spinner";
-import Thread from "library/thread";
 import staticContentUtil from "utils/staticContent.util";
 import imageSourceUtil from "utils/imageSource.util";
-import { PostTermUpdateParamDocument } from "types/services/postTerm";
+import {PostTermUpdateParamDocument} from "types/services/postTerm";
 import PagePaths from "constants/pagePaths";
 import ThemeToolTip from "components/tooltip";
 
@@ -54,7 +46,7 @@ export default class PagePostTermAdd extends Component<PageProps, PageState> {
                 statusId: 0,
                 order: 0,
                 contents: {
-                    langId: this.props.getPageData.mainLangId,
+                    langId: this.props.getPageData.langId,
                     image: "",
                     title: "",
                     url: "",
@@ -191,16 +183,17 @@ export default class PagePostTermAdd extends Component<PageProps, PageState> {
             isSubmitting: true
         }, () => {
             let params = this.state.formData;
-
+            console.log(params);
             ((params.termId)
                 ? postTermService.update(params)
-                : postTermService.add(params)).then(resData => {
-                    if (resData.status) {
-                        this.getTerms();
+                : postTermService.add(params)).then(async resData => {
+                    if (this.state.formData.typeId == PostTermTypeId.Category && resData.status) {
+                        await this.getTerms();
                     }
 
                     this.setState((state: PageState) => {
                         if (resData.status) {
+                            console.log(this.props)
                             state.formData = {
                                 ...state.formData,
                                 mainId: "",

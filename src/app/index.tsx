@@ -23,6 +23,7 @@ import ThemeBreadCrumb from "components/breadCrumb";
 import ThemeContentLanguage from "components/contentLanguage";
 import ProviderAuth from "./providers/providerAuth";
 import ProviderPermission from "./providers/providerPermission";
+import Spinner from "components/tools/spinner";
 
 
 type PageState = {
@@ -69,9 +70,16 @@ class AppAdmin extends Component<PageProps, PageState> {
     }
 
     async componentDidMount() {
-        await this.onRouteChanged();
-        await this.getContentLanguages();
-        await this.getContentMainLanguage();
+        this.setState({
+            isPageLoading: true
+        }, async () => {
+            await this.getContentLanguages();
+            await this.getContentMainLanguage();
+            await this.onRouteChanged();
+            this.setState({
+                isPageLoading: false
+            })
+        })
     }
 
     async componentDidUpdate(prevProps: Readonly<PageProps>, prevState: Readonly<PageState>) {
@@ -138,41 +146,24 @@ class AppAdmin extends Component<PageProps, PageState> {
     }
 
     async getContentLanguages() {
-        this.setState({
-            isPageLoading: true,
-        }, async () => {
-            let resData = await languageService.get({});
-            if (resData.status) {
-                this.setState({
-                    contentLanguages: resData.data
-                })
-            }
-
+        let resData = await languageService.get({});
+        if (resData.status) {
             this.setState({
-                isPageLoading: false
+                contentLanguages: resData.data
             })
-        });
-
+        }
     }
 
     async getContentMainLanguage() {
-        this.setState({
-            isPageLoading: true,
-        }, async () => {
-            let resData = await settingService.get({})
-            if (resData.status) {
-                let data = resData.data[0];
-                this.setState((state: PageState) => {
-                    state.pageData.mainLangId = data.defaultLangId;
-                    state.pageData.langId = data.defaultLangId;
-                    return state;
-                })
-            }
-
-            this.setState({
-                isPageLoading: false
+        let resData = await settingService.get({})
+        if (resData.status) {
+            let data = resData.data[0];
+            this.setState((state: PageState) => {
+                state.pageData.mainLangId = data.defaultLangId;
+                state.pageData.langId = data.defaultLangId;
+                return state;
             })
-        });
+        }
     }
 
     render() {
@@ -197,7 +188,7 @@ class AppAdmin extends Component<PageProps, PageState> {
         };
 
 
-        return (
+        return this.state.isPageLoading ? <Spinner isFullPage={true} /> : (
             <>
                 <Helmet>
                     <title>Admin Panel | {this.state.breadCrumbTitle}</title>
