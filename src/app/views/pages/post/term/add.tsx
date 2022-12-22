@@ -183,7 +183,6 @@ export default class PagePostTermAdd extends Component<PageProps, PageState> {
             isSubmitting: true
         }, () => {
             let params = this.state.formData;
-            console.log(params);
             ((params.termId)
                 ? postTermService.update(params)
                 : postTermService.add(params)).then(async resData => {
@@ -193,7 +192,6 @@ export default class PagePostTermAdd extends Component<PageProps, PageState> {
 
                     this.setState((state: PageState) => {
                         if (resData.status) {
-                            console.log(this.props)
                             state.formData = {
                                 ...state.formData,
                                 mainId: "",

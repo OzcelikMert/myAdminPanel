@@ -281,7 +281,6 @@ export default class PagePostAdd extends Component<PageProps, PageState> {
         let postTypeId = this.props.getPageData.searchParams.postTypeId;
         let pagePath = [PostTypeId.Page, PostTypeId.Navigate].includes(Number(postTypeId))  ? PagePaths.post(postTypeId) : PagePaths.themeContent().post(postTypeId);
         let path = pagePath.list();
-
         this.props.router.navigate(path, {replace: true});
     }
 
@@ -309,7 +308,7 @@ export default class PagePostAdd extends Component<PageProps, PageState> {
                     }
 
                     state.isSubmitting = false;
-                    console.log(state);
+
                     return state;
                 })
             });
