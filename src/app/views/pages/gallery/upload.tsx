@@ -1,7 +1,6 @@
 import React, {Component, createRef, RefObject} from 'react'
 import {PagePropCommonDocument} from "types/app/pageProps";
 import UploadingFilesDocument from "types/app/views/pages/gallery/upload";
-import ApiRequestConfig from "services/api/config";
 import Thread from "library/thread";
 import galleryService from "services/gallery.service";
 import ThemeToast from "components/toast";
@@ -104,7 +103,6 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
                 this.setState({
                     isUploading: false
                 }, () => {
-                    ApiRequestConfig.onUploadProgress = undefined;
                     if(this.props.uploadedImages) this.props.uploadedImages(uploadedFiles)
                 });
             });

@@ -9,8 +9,8 @@ import UserDocument, {
 } from "types/services/user";
 
 export default {
-    get(params: UsersGetParamDocument): ServiceResultDocument<UserDocument[]> {
-        return Api.getSync({
+    get(params: UsersGetParamDocument): Promise<ServiceResultDocument<UserDocument[]>> {
+        return Api.get({
             url: [ServicePages.user, params.userId?.toString()],
             data: params,
         });

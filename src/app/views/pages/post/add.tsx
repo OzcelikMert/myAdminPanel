@@ -83,41 +83,37 @@ export default class PagePostAdd extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getLangKeys();
-            if ([PostTypeId.Navigate].includes(Number(this.state.formData.typeId))) {
-                this.getPosts();
-            }
-            if (![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))) {
-                this.getTerms();
-            }
-            if ([PostTypeId.Page].includes(Number(this.state.formData.typeId))) {
-                this.getComponents();
-                this.getPageTypes();
-            }
-            this.getStatus();
-            if (this.props.getPageData.searchParams.postId) {
-                this.getPost();
-            }
-            this.setState({
-                isLoading: false
-            })
+        this.getLangKeys();
+        if ([PostTypeId.Navigate].includes(Number(this.state.formData.typeId))) {
+            await this.getPosts();
+        }
+        if (![PostTypeId.Slider, PostTypeId.Service, PostTypeId.Testimonial, PostTypeId.Navigate].includes(Number(this.state.formData.typeId))) {
+            await this.getTerms();
+        }
+        if ([PostTypeId.Page].includes(Number(this.state.formData.typeId))) {
+            await this.getComponents();
+            this.getPageTypes();
+        }
+        this.getStatus();
+        if (this.props.getPageData.searchParams.postId) {
+            await this.getPost();
+        }
+        this.setState({
+            isLoading: false
         })
     }
 
-    componentDidUpdate(prevProps: PagePropCommonDocument) {
+    async componentDidUpdate(prevProps: PagePropCommonDocument) {
         if (prevProps.getPageData.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
                 state.isLoading = true;
                 return state;
-            }, () => {
-                Thread.start(() => {
-                    this.getPost()
-                    this.setState({
-                        isLoading: false
-                    })
+            }, async () => {
+                await this.getPost()
+                this.setState({
+                    isLoading: false
                 })
             })
         }
@@ -141,8 +137,8 @@ export default class PagePostAdd extends Component<PageProps, PageState> {
         })
     }
 
-    getComponents() {
-        let resData = componentService.get({langId: this.props.getPageData.mainLangId});
+    async getComponents() {
+        let resData = await componentService.get({langId: this.props.getPageData.mainLangId});
         if (resData.status) {
             this.setState((state: PageState) => {
                 state.components = resData.data.orderBy("order", "asc").map(component => {
@@ -178,8 +174,8 @@ export default class PagePostAdd extends Component<PageProps, PageState> {
         })
     }
 
-    getTerms() {
-        let resData = postTermService.get({
+    async getTerms() {
+        let resData = await postTermService.get({
             postTypeId: this.props.getPageData.searchParams.postTypeId,
             langId: this.props.getPageData.mainLangId,
             statusId: StatusId.Active
@@ -206,8 +202,8 @@ export default class PagePostAdd extends Component<PageProps, PageState> {
         }
     }
 
-    getPosts() {
-        let resData = postService.get({
+    async getPosts() {
+        let resData = await postService.get({
             langId: this.props.getPageData.mainLangId,
             statusId: StatusId.Active,
             typeId: PostTypeId.Navigate
@@ -229,8 +225,8 @@ export default class PagePostAdd extends Component<PageProps, PageState> {
         }
     }
 
-    getPost() {
-        let resData = postService.get({
+    async getPost() {
+        let resData = await postService.get({
             postId: this.state.formData.postId,
             typeId: this.props.getPageData.searchParams.postTypeId,
             langId: this.props.getPageData.langId,
@@ -313,6 +309,7 @@ export default class PagePostAdd extends Component<PageProps, PageState> {
                     }
 
                     state.isSubmitting = false;
+                    console.log(state);
                     return state;
                 })
             });

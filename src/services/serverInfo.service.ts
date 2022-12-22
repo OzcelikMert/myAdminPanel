@@ -4,8 +4,8 @@ import ServiceResultDocument from "types/services/api/result";
 import ServerInfoDocument from "types/services/serverInfo";
 
 export default {
-    get(): ServiceResultDocument<ServerInfoDocument> {
-        return Api.getSync({
+    get(): Promise<ServiceResultDocument<ServerInfoDocument>> {
+        return Api.get({
             url: [ServicePages.serverInfo]
         });
     },

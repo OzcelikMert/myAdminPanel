@@ -52,17 +52,15 @@ export default class PageUserAdd extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getRoles();
-            this.getStatus();
-            if (this.state.formData.userId) {
-                this.getUser();
-            }
-            this.setState({
-                isLoading: false
-            })
+        this.getRoles();
+        this.getStatus();
+        if (this.state.formData.userId) {
+            await this.getUser();
+        }
+        this.setState({
+            isLoading: false
         })
     }
 
@@ -103,8 +101,8 @@ export default class PageUserAdd extends Component<PageProps, PageState> {
         })
     }
 
-    getUser() {
-        let resData = userService.get({
+    async getUser() {
+        let resData = await userService.get({
             userId: this.props.getPageData.searchParams.userId
         });
         if (resData.status) {

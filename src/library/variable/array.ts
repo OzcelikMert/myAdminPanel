@@ -10,7 +10,11 @@ declare global {
 }
 
 function convertQueryData(data: any): string {
-    return JSON.stringify({d: data});
+    return JSON.stringify({
+        d: typeof data === "number" ?
+            data.toString()
+            : data
+    });
 }
 
 Array.prototype.indexOfKey = function (key, value) {

@@ -68,31 +68,27 @@ export default class PagePostTermAdd extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getTerms();
-            this.getStatus();
-            if (this.props.getPageData.searchParams.termId) {
-                this.getTerm();
-            }
-            this.setState({
-                isLoading: false
-            })
+        await this.getTerms();
+        this.getStatus();
+        if (this.props.getPageData.searchParams.termId) {
+            await this.getTerm();
+        }
+        this.setState({
+            isLoading: false
         })
     }
 
-    componentDidUpdate(prevProps: Readonly<PageProps>) {
+    async componentDidUpdate(prevProps: Readonly<PageProps>) {
         if (prevProps.getPageData.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
                 state.isLoading = true;
                 return state;
-            }, () => {
-                Thread.start(() => {
-                    this.getTerm();
-                    this.setState({
-                        isLoading: false
-                    })
+            }, async () => {
+                await this.getTerm();
+                this.setState({
+                    isLoading: false
                 })
             })
         }
@@ -122,8 +118,8 @@ export default class PagePostTermAdd extends Component<PageProps, PageState> {
         })
     }
 
-    getTerms() {
-        let resData = postTermService.get({
+    async getTerms() {
+        let resData = await postTermService.get({
             typeId: this.state.formData.typeId,
             postTypeId: this.state.formData.postTypeId,
             langId: this.props.getPageData.mainLangId,
@@ -146,8 +142,8 @@ export default class PagePostTermAdd extends Component<PageProps, PageState> {
         }
     }
 
-    getTerm() {
-        let resData = postTermService.get({
+    async getTerm() {
+        let resData = await postTermService.get({
             typeId: this.state.formData.typeId,
             postTypeId: this.state.formData.postTypeId,
             langId: this.props.getPageData.langId

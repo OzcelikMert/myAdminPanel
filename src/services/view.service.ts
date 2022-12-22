@@ -13,15 +13,9 @@ export default {
             url: [ServicePages.view, "number"]
         });
     },
-    getStatistics(): ServiceResultDocument<ViewStatisticsDocument> {
-        return Api.getSync({
+    getStatistics(): Promise<ServiceResultDocument<ViewStatisticsDocument>> {
+        return Api.get({
             url: [ServicePages.view, "statistics"]
-        });
-    },
-    add(params: ViewAddParamDocument) {
-        return Api.getSync({
-            url: [ServicePages.view],
-            data: params,
         });
     }
 }

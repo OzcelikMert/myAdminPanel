@@ -14,9 +14,11 @@ type PageState = {
     isPageLoading: boolean
 };
 
-type PageProps = {} & PagePropCommonDocument;
+type PageProps = {
+    isFullPage: boolean
+} & PagePropCommonDocument;
 
-export default class AppProviders extends Component<PageProps, PageState> {
+export default class ProviderAuth extends Component<PageProps, PageState> {
     constructor(props: PageProps) {
         super(props);
         this.state = {
@@ -39,10 +41,7 @@ export default class AppProviders extends Component<PageProps, PageState> {
         this.setState({
             isPageLoading: true,
         }, () => {
-            this.checkSession(() => {
-                if (this.checkPermission()) {
-
-                }
+            this.checkSession().then(() => {
                 this.setState({
                     isPageLoading: false
                 })
@@ -50,41 +49,14 @@ export default class AppProviders extends Component<PageProps, PageState> {
         });
     }
 
-    checkPermission() {
-        const ignoredPaths = [
-            PagePaths.login(),
-            PagePaths.lock()
-        ];
-        if (
-            !ignoredPaths.includes(this.props.router.location.pathname) &&
-            !permissionUtil.checkPermissionPath(
-                this.props.router.location.pathname,
-                this.props.getSessionData.roleId,
-                this.props.getSessionData.permissions
-            )
-        ) {
-            new ThemeToast({
-                type: "error",
-                title: this.props.router.t("error"),
-                content: this.props.router.t("noPerm"),
-                position: "top-center"
-            })
-            this.props.router.navigate(PagePaths.dashboard(), {replace: true})
-            return false;
-        }
-        return true;
-    }
-
-    checkSession(callback: Function) {
-        let isRefresh = this.props.getSessionData.id.length < 1;
-        let isAuth = false;
-        let isPromiseCallBack = false;
-        let resData = authService.getSession({isRefresh: isRefresh});
-        if (resData.status && resData.errorCode == ErrorCodes.success) {
-            isAuth = true;
-            if (isRefresh) {
+    async checkSession() {
+        return new Promise(async resolve => {
+            let isAuth = false;
+            let resData = await authService.getSession({});
+            console.log(resData)
+            if (resData.status && resData.errorCode == ErrorCodes.success) {
                 if (resData.data.length > 0) {
-                    isPromiseCallBack = true;
+                    isAuth = true;
                     let user = resData.data[0];
                     this.props.setSessionData({
                         id: user._id,
@@ -94,21 +66,20 @@ export default class AppProviders extends Component<PageProps, PageState> {
                         image: user.image,
                         name: user.name,
                         permissions: user.permissions
-                    }, () => callback());
+                    });
                 }
             }
-        }
 
-        if(!isPromiseCallBack){
-            callback();
-        }
-        this.setState({
-            isAuth: isAuth
+            this.setState({
+                isAuth: isAuth
+            }, () => {
+                resolve(1);
+            })
         })
     }
 
     render() {
-        return this.state.isPageLoading ? <Spinner/>
+        return this.state.isPageLoading ? <Spinner isFullPage={this.props.isFullPage}/>
             : (
                 !this.state.isAuth &&
                 this.props.router.location.pathname !== PagePaths.login() &&

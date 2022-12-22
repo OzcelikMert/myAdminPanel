@@ -39,13 +39,11 @@ export default class PageUserList extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getUsers();
-            this.setState({
-                isLoading: false
-            })
+        await this.getUsers();
+        this.setState({
+            isLoading: false
         })
     }
 
@@ -57,8 +55,8 @@ export default class PageUserList extends Component<PageProps, PageState> {
         ])
     }
 
-    getUsers() {
-        let users = userService.get({}).data;
+    async getUsers() {
+        let users = (await userService.get({})).data;
         this.setState((state: PageState) => {
             state.users = state.users.sort(user => {
                 let sort = 0;

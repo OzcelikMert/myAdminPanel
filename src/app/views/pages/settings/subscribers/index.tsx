@@ -36,13 +36,11 @@ export default class PageSubscribers extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getSubscribers();
-            this.setState({
-                isLoading: false
-            })
+        await this.getSubscribers();
+        this.setState({
+            isLoading: false
         })
     }
 
@@ -53,8 +51,8 @@ export default class PageSubscribers extends Component<PageProps, PageState> {
         ])
     }
 
-    getSubscribers() {
-        let subscribers = subscriberService.get({}).data;
+    async getSubscribers() {
+        let subscribers = (await subscriberService.get({})).data;
         this.setState({
             subscribers: subscribers
         }, () => this.onSearch(this.state.searchKey));

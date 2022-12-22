@@ -32,13 +32,11 @@ class PageSettingsContactForms extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+   async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getSettings();
-            this.setState({
-                isLoading: false
-            })
+        await this.getSettings();
+        this.setState({
+            isLoading: false
         })
     }
 
@@ -46,8 +44,8 @@ class PageSettingsContactForms extends Component<PageProps, PageState> {
         this.props.setBreadCrumb([this.props.router.t("settings"), this.props.router.t("contactForms")])
     }
 
-    getSettings() {
-        let resData = settingService.get({})
+    async getSettings() {
+        let resData = await settingService.get({})
         if (resData.status) {
             this.setState((state: PageState) => {
                 resData.data.forEach(setting => {

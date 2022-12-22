@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import {PagePropCommonDocument} from "types/app/pageProps";
 import {useTranslation} from "react-i18next";
-import AppProviders from "./providers";
 import {LanguageId} from "constants/index";
 import Navbar from "components/tools/navbar";
 import Sidebar from "components/tools/sidebar";
@@ -22,6 +21,8 @@ import AppRoutes from "./routes";
 import PagePaths from "constants/pagePaths";
 import ThemeBreadCrumb from "components/breadCrumb";
 import ThemeContentLanguage from "components/contentLanguage";
+import ProviderAuth from "./providers/providerAuth";
+import ProviderPermission from "./providers/providerPermission";
 
 
 type PageState = {
@@ -67,22 +68,22 @@ class AppAdmin extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
-        this.getContentLanguages();
-        this.getContentMainLanguage();
-        this.onRouteChanged();
+    async componentDidMount() {
+        await this.onRouteChanged();
+        await this.getContentLanguages();
+        await this.getContentMainLanguage();
     }
 
-    componentDidUpdate(prevProps: Readonly<PageProps>, prevState: Readonly<PageState>) {
+    async componentDidUpdate(prevProps: Readonly<PageProps>, prevState: Readonly<PageState>) {
         if (this.props.router.location.pathname !== prevProps.router.location.pathname) {
-            this.onRouteChanged();
+            await this.onRouteChanged();
         }
     }
 
-    onRouteChanged() {
+    async onRouteChanged() {
         this.setState({
             isPageLoading: true,
-        }, () => {
+        }, async () => {
             this.setState((state: PageState) => {
                 state.pageData.langId = state.pageData.mainLangId;
                 state.pageData.searchParams = {
@@ -136,11 +137,11 @@ class AppAdmin extends Component<PageProps, PageState> {
         })
     }
 
-    getContentLanguages() {
+    async getContentLanguages() {
         this.setState({
             isPageLoading: true,
-        }, () => {
-            let resData = languageService.get({});
+        }, async () => {
+            let resData = await languageService.get({});
             if (resData.status) {
                 this.setState({
                     contentLanguages: resData.data
@@ -154,11 +155,11 @@ class AppAdmin extends Component<PageProps, PageState> {
 
     }
 
-    getContentMainLanguage() {
+    async getContentMainLanguage() {
         this.setState({
             isPageLoading: true,
-        }, () => {
-            let resData = settingService.get({})
+        }, async () => {
+            let resData = await settingService.get({})
             if (resData.status) {
                 let data = resData.data[0];
                 this.setState((state: PageState) => {
@@ -197,54 +198,57 @@ class AppAdmin extends Component<PageProps, PageState> {
 
 
         return (
-            <AppProviders {...commonProps}>
+            <>
                 <Helmet>
                     <title>Admin Panel | {this.state.breadCrumbTitle}</title>
                     <meta name="description" content=""/>
                     <link rel="canonical" href={window.location.href.replace("http:", "https:")}/>
                 </Helmet>
                 <div className="container-scroller">
-                    {!isFullPageLayout ? <Navbar {...commonProps}/> : null}
+                    {!isFullPageLayout && this.state.sessionData.id.length > 0 ? <Navbar {...commonProps}/> : null}
                     <div
                         className={`container-fluid page-body-wrapper ${isFullPageLayout ? "full-page-wrapper" : ""}`}>
-                        {!isFullPageLayout ? <Sidebar {...commonProps}/> : null}
-                        <div className="main-panel">
-                            <div className="content-wrapper">
-                                {
-                                    !isFullPageLayout ?
-                                        <div className="page-header">
-                                            <div className="row w-100 m-0">
-                                                <div className="col-md-8 p-0">
-                                                    <ThemeBreadCrumb
-                                                        breadCrumbs={this.state.breadCrumbTitle.split(" - ")}/>
-                                                </div>
-                                                <div className="col-md-4 p-0 content-language">
-                                                    <ThemeContentLanguage
-                                                        router={this.props.router}
-                                                        options={this.state.contentLanguages}
-                                                        value={this.state.contentLanguages.findSingle("_id", this.state.pageData.langId)}
-                                                        onChange={(item, e) => this.setState((state: PageState) => {
-                                                            return {
-                                                                ...state,
-                                                                pageData: {
-                                                                    ...state.pageData,
-                                                                    langId: item.value
-                                                                }
-                                                            };
-                                                        })}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div> : null
-                                }
-                                <AppRoutes {...commonProps} isPageLoading={this.state.isPageLoading}/>
-                            </div>
-                            {!isFullPageLayout ? <Footer/> : ''}
-                        </div>
+                        {!isFullPageLayout && this.state.sessionData.id.length > 0 ? <Sidebar {...commonProps}/> : null}
+                        <ProviderAuth {...commonProps} isFullPage={isFullPageLayout}>
+                            <ProviderPermission {...commonProps} isFullPage={isFullPageLayout}>
+                                <div className="main-panel">
+                                    <div className="content-wrapper">
+                                        {
+                                            !isFullPageLayout ?
+                                                <div className="page-header">
+                                                    <div className="row w-100 m-0">
+                                                        <div className="col-md-8 p-0">
+                                                            <ThemeBreadCrumb
+                                                                breadCrumbs={this.state.breadCrumbTitle.split(" - ")}/>
+                                                        </div>
+                                                        <div className="col-md-4 p-0 content-language">
+                                                            <ThemeContentLanguage
+                                                                router={this.props.router}
+                                                                options={this.state.contentLanguages}
+                                                                value={this.state.contentLanguages.findSingle("_id", this.state.pageData.langId)}
+                                                                onChange={(item, e) => this.setState((state: PageState) => {
+                                                                    return {
+                                                                        ...state,
+                                                                        pageData: {
+                                                                            ...state.pageData,
+                                                                            langId: item.value
+                                                                        }
+                                                                    };
+                                                                })}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div> : null
+                                        }
+                                        <AppRoutes {...commonProps} isPageLoading={this.state.isPageLoading} isFullPage={isFullPageLayout}/>
+                                    </div>
+                                    {!isFullPageLayout ? <Footer/> : ''}
+                                </div>
+                            </ProviderPermission>
+                        </ProviderAuth>
                     </div>
                 </div>
-
-            </AppProviders>
+            </>
         );
     }
 }

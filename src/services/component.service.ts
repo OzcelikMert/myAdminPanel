@@ -9,8 +9,8 @@ import {
 } from "types/services/component";
 
 export default {
-    get(params: ComponentGetParamDocument): ServiceResultDocument<ComponentDocument[]> {
-        return Api.getSync({
+    get(params: ComponentGetParamDocument): Promise<ServiceResultDocument<ComponentDocument[]>> {
+        return Api.get({
             url: [ServicePages.component, params.componentId?.toString()],
             data: params,
         });

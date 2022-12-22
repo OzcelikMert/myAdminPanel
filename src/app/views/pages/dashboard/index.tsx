@@ -71,18 +71,16 @@ class PageDashboard extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getViewNumber();
-            this.getViewStatistics();
-            this.getLastPosts();
-            this.setState({
-                isLoading: false
-            }, () => {
-                this.chartInit();
-                this.timerReportOne();
-            })
+        await this.getViewNumber();
+        await this.getViewStatistics();
+        await this.getLastPosts();
+        this.setState({
+            isLoading: false
+        }, () => {
+            this.chartInit();
+            this.timerReportOne();
         })
     }
 
@@ -100,26 +98,26 @@ class PageDashboard extends Component<PageProps, PageState> {
         if (this.timer) {
             clearInterval(this.timer)
         }
-        this.timer = setInterval(() => {
-            this.getViewNumber();
+        this.timer = setInterval(async () => {
+            await this.getViewNumber();
         }, 10000)
     }
 
-    getViewNumber() {
-        viewService.getNumber().then(resData => {
-            if (resData.status) {
-                if (JSON.stringify(this.state.visitorData.number) != JSON.stringify(resData.data)) {
-                    this.setState((state: PageState) => {
-                        state.visitorData.number = resData.data;
-                        return state;
-                    })
-                }
+    async getViewNumber() {
+        let resData = await viewService.getNumber();
+
+        if (resData.status) {
+            if (JSON.stringify(this.state.visitorData.number) != JSON.stringify(resData.data)) {
+                this.setState((state: PageState) => {
+                    state.visitorData.number = resData.data;
+                    return state;
+                })
             }
-        });
+        }
     }
 
-    getViewStatistics() {
-        let resData = viewService.getStatistics();
+    async getViewStatistics() {
+        let resData = await viewService.getStatistics();
 
         if (resData.status) {
             this.setState((state: PageState) => {
@@ -129,8 +127,8 @@ class PageDashboard extends Component<PageProps, PageState> {
         }
     }
 
-    getLastPosts() {
-        let resData = postService.get({
+    async getLastPosts() {
+        let resData = await postService.get({
             langId: this.props.getPageData.mainLangId,
             maxCount: 10
         });

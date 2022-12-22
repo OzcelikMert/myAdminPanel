@@ -3,19 +3,11 @@ import ServiceResultDocument from "types/services/api/result";
 import ApiRequest from "./request";
 
 const Api = {
-    getSync(params: ApiRequestParamDocument): ServiceResultDocument<any> {
-        return new ApiRequest({
-            ...params,
-            method: "GET",
-            async: false
-        }).initSync();
-    },
     get(params: ApiRequestParamDocument): Promise<ServiceResultDocument<any>> {
         return new Promise(resolve => {
             new ApiRequest({
                 ...params,
-                method: "GET",
-                async: true,
+                method: "GET"
             }).init().then(resData => {
                 resolve(resData)
             })
@@ -25,8 +17,7 @@ const Api = {
         return new Promise(resolve => {
             new ApiRequest({
                 ...params,
-                method: "POST",
-                async: true,
+                method: "POST"
             }).init().then(resData => {
                 resolve(resData)
             })
@@ -36,8 +27,7 @@ const Api = {
         return new Promise(resolve => {
             new ApiRequest({
                 ...params,
-                method: "PUT",
-                async: true,
+                method: "PUT"
             }).init().then(resData => {
                 resolve(resData)
             })
@@ -47,8 +37,7 @@ const Api = {
         return new Promise(resolve => {
             new ApiRequest({
                 ...params,
-                method: "DELETE",
-                async: true,
+                method: "DELETE"
             }).init().then(resData => {
                 resolve(resData)
             })

@@ -9,9 +9,9 @@ import PostDocument, {
 } from "types/services/post";
 
 export default {
-    get(params: PostGetParamDocument): ServiceResultDocument<PostDocument[]> {
+    get(params: PostGetParamDocument): Promise<ServiceResultDocument<PostDocument[]>> {
         let url = Array.isArray(params.typeId) ? [] : [params.typeId?.toString(), params.postId?.toString()]
-        return Api.getSync({
+        return Api.get({
             url: [ServicePages.post, ...url],
             data: params
         });

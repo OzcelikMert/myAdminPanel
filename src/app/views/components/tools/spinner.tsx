@@ -1,13 +1,24 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
-export default class Spinner extends Component {
-  render() {
-    return (
-      <div>
-        <div className="spinner-wrapper">
-          <div className="donut"></div>
-        </div>
-      </div>
-    )
-  }
+type PageState = {};
+
+type PageProps = {
+    isFullPage?: boolean
+};
+
+export default class Spinner extends Component<PageProps, PageState> {
+    constructor(props: PageProps) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className="spinner-main">
+                <div className="spinner-bg"></div>
+                <div className={`spinner-wrapper ${this.props.isFullPage ? "spinner-full-page" : ""}`}>
+                    <div className="donut"></div>
+                </div>
+            </div>
+        )
+    }
 }

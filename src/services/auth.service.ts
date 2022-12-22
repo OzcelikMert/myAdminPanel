@@ -5,8 +5,8 @@ import UserDocument from "types/services/user";
 import {AuthLoginParamDocument, AuthGetSessionParamDocument} from "types/services/auth";
 
 export default {
-    getSession(params: AuthGetSessionParamDocument): ServiceResultDocument<UserDocument[]> {
-        return Api.getSync({
+    getSession(params: AuthGetSessionParamDocument): Promise<ServiceResultDocument<UserDocument[]>> {
+        return Api.get({
             url: [ServicePages.auth],
             data: params,
         });

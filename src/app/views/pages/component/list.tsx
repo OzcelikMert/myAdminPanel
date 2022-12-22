@@ -32,13 +32,11 @@ export default class PageComponentList extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getComponents();
-            this.setState({
-                isLoading: false
-            })
+        await this.getComponents();
+        this.setState({
+            isLoading: false
         })
     }
 
@@ -49,8 +47,8 @@ export default class PageComponentList extends Component<PageProps, PageState> {
         ])
     }
 
-    getComponents() {
-        let components = componentService.get({langId: this.props.getPageData.langId}).data;
+    async getComponents() {
+        let components = (await componentService.get({langId: this.props.getPageData.langId})).data;
         this.setState((state: PageState) => {
             state.components = components;
             return state;

@@ -41,13 +41,11 @@ export default class PagePostList extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getPosts();
-            this.setState({
-                isLoading: false
-            })
+        await this.getPosts();
+        this.setState({
+            isLoading: false
         })
     }
 
@@ -64,11 +62,11 @@ export default class PagePostList extends Component<PageProps, PageState> {
         ])
     }
 
-    getPosts() {
-        let posts = postService.get({
+    async getPosts() {
+        let posts = (await postService.get({
             typeId: this.props.getPageData.searchParams.postTypeId,
             langId: this.props.getPageData.langId
-        }).data;
+        })).data;
         this.setState((state: PageState) => {
             state.posts = posts;
             state.showingPosts = posts.filter(value => value.statusId !== StatusId.Deleted);

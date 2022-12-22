@@ -61,13 +61,11 @@ export default class PageSettingsProfile extends Component<PageProps, PageState>
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getUser();
-            this.setState({
-                isLoading: false
-            })
+        await this.getUser();
+        this.setState({
+            isLoading: false
         })
     }
 
@@ -75,8 +73,8 @@ export default class PageSettingsProfile extends Component<PageProps, PageState>
         this.props.setBreadCrumb([this.props.router.t("settings"), this.props.router.t("profile")])
     }
 
-    getUser() {
-        let resData = userService.get({
+    async getUser() {
+        let resData = await userService.get({
             userId: this.props.getSessionData.id
         });
         if (resData.status) {

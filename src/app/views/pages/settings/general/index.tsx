@@ -17,12 +17,12 @@ import {Tab, Tabs} from "react-bootstrap";
 import localStorageUtil from "utils/localStorage.util";
 
 type PageState = {
-    languages: {label: string, value: string}[]
-    panelLanguages: {label: string, value: string}[]
+    languages: { label: string, value: string }[]
+    panelLanguages: { label: string, value: string }[]
     isSubmitting: boolean
     isLoading: boolean
     serverInfo: ServerInfoDocument
-    formData: Omit<SettingGeneralUpdateParamDocument, "contactForms"|"staticLanguages"|"seoContents"> & {panelLangId: string},
+    formData: Omit<SettingGeneralUpdateParamDocument, "contactForms" | "staticLanguages" | "seoContents"> & { panelLangId: string },
     formActiveKey: string
 };
 
@@ -49,16 +49,14 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getServerDetails();
-            this.getPanelLanguages();
-            this.getLanguages();
-            this.getSettings();
-            this.setState({
-                isLoading: false
-            })
+        await this.getServerDetails();
+        this.getPanelLanguages();
+        await this.getLanguages();
+        await this.getSettings();
+        this.setState({
+            isLoading: false
         })
     }
 
@@ -66,8 +64,8 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
         this.props.setBreadCrumb([this.props.router.t("settings"), this.props.router.t("general")])
     }
 
-    getSettings() {
-        let resData = settingService.get({})
+    async getSettings() {
+        let resData = await settingService.get({})
         if (resData.status) {
             this.setState((state: PageState) => {
                 resData.data.forEach(setting => {
@@ -98,8 +96,8 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
         })
     }
 
-    getLanguages() {
-        let resData = languageService.get({})
+    async getLanguages() {
+        let resData = await languageService.get({})
         if (resData.status) {
             this.setState({
                 languages: resData.data.map(lang => ({
@@ -110,9 +108,9 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
         }
     }
 
-    getServerDetails() {
-        let resData = serverInfoService.get();
-        if(resData.status){
+    async getServerDetails() {
+        let resData = await serverInfoService.get();
+        if (resData.status) {
             this.setState({
                 serverInfo: resData.data
             })
@@ -132,7 +130,7 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
                 head: this.state.formData.head,
                 script: this.state.formData.script,
             }).then(resData => {
-                if(resData.status){
+                if (resData.status) {
                     this.props.setPageData({
                         mainLangId: this.state.formData.defaultLangId
                     }, () => {
@@ -147,9 +145,9 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
                     state.isSubmitting = false;
                     return state;
                 }, () => {
-                    if(this.state.formData.panelLangId != localStorageUtil.adminLanguage.get.toString()){
+                    if (this.state.formData.panelLangId != localStorageUtil.adminLanguage.get.toString()) {
                         let language = Languages.findSingle("id", Number(this.state.formData.panelLangId));
-                        if(language) {
+                        if (language) {
                             localStorageUtil.adminLanguage.set(Number(this.state.formData.panelLangId));
                             window.location.reload();
                         }
@@ -265,7 +263,8 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
                         value={this.state.formData.contact?.address}
                         onChange={e => HandleForm.onChangeInput(e, this)}
                     />
-                </div>,
+                </div>
+                ,
                 <div className="col-md-7 mb-3">
                     <ThemeFormType
                         title={this.props.router.t("addressMap")}
@@ -411,7 +410,8 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
                     <div className="row">
                         <div className="card-col col-xl-4 col-lg-4 col-md-4 col-6">
                             <div className="card-body">
-                                <div className="d-flex align-items-center justify-content-center flex-column flex-sm-row">
+                                <div
+                                    className="d-flex align-items-center justify-content-center flex-column flex-sm-row">
                                     <i className="mdi mdi-harddisk text-primary ms-0 me-sm-4 icon-lg"></i>
                                     <div className="wrapper text-center text-sm-end">
                                         <p className="card-text mb-0 text-dark">{this.props.router.t("storage")}</p>
@@ -424,7 +424,8 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
                         </div>
                         <div className="card-col col-xl-4 col-lg-4 col-md-4 col-6">
                             <div className="card-body">
-                                <div className="d-flex align-items-center justify-content-center flex-column flex-sm-row">
+                                <div
+                                    className="d-flex align-items-center justify-content-center flex-column flex-sm-row">
                                     <i className="mdi mdi-memory text-primary ms-0 me-sm-4 icon-lg"></i>
                                     <div className="wrapper text-center text-sm-end">
                                         <p className="card-text mb-0 text-dark">{this.props.router.t("memory")}</p>
@@ -437,7 +438,8 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
                         </div>
                         <div className="card-col col-xl-4 col-lg-4 col-md-4 col-6">
                             <div className="card-body">
-                                <div className="d-flex align-items-center justify-content-center flex-column flex-sm-row">
+                                <div
+                                    className="d-flex align-items-center justify-content-center flex-column flex-sm-row">
                                     <i className="fa fa-microchip text-primary ms-0 me-sm-4 icon-lg"></i>
                                     <div className="wrapper text-center text-sm-end">
                                         <p className="card-text mb-0 text-dark">{this.props.router.t("processor")}</p>
@@ -455,9 +457,9 @@ export default class PageSettingsGeneral extends Component<PageProps, PageState>
     }
 
     render() {
-        return this.state.isLoading ? <Spinner /> : (
+        return this.state.isLoading ? <Spinner/> : (
             <div className="page-settings page-dashboard page-post">
-                <this.ServerInfo />
+                <this.ServerInfo/>
                 <div className="grid-margin stretch-card">
                     <div className="card">
                         <div className="card-body">

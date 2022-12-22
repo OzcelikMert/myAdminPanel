@@ -33,27 +33,23 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle()
-        Thread.start(() => {
-            this.getSeo();
-            this.setState({
-                isLoading: false
-            })
+        await this.getSeo();
+        this.setState({
+            isLoading: false
         })
     }
 
-    componentDidUpdate(prevProps: Readonly<PageProps>) {
+    async componentDidUpdate(prevProps: Readonly<PageProps>) {
         if (prevProps.getPageData.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
                 state.isLoading = true;
                 return state;
-            }, () => {
-                Thread.start(() => {
-                    this.getSeo()
-                    this.setState({
-                        isLoading: false
-                    })
+            }, async () => {
+                await this.getSeo()
+                this.setState({
+                    isLoading: false
                 })
             })
         }
@@ -63,8 +59,8 @@ class PageSettingsSEO extends Component<PageProps, PageState> {
         this.props.setBreadCrumb([this.props.router.t("settings"), this.props.router.t("seo")])
     }
 
-    getSeo() {
-        let resData = settingService.get({langId: this.props.getPageData.langId});
+    async getSeo() {
+        let resData = await settingService.get({langId: this.props.getPageData.langId});
 
         if (resData.status) {
             this.setState((state: PageState) => {

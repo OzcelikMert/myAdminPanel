@@ -1,8 +1,8 @@
-import $ from "jquery";
 import {ErrorCodes, Timeouts} from "library/api";
 import {ApiRequestParamDocument} from "types/services/api";
-import ApiRequestConfig from "./config";
 import ServiceResultDocument from "types/services/api/result";
+import axios from "axios";
+import pathUtil from "utils/path.util";
 
 class ApiRequest {
     constructor(params: ApiRequestParamDocument) {
@@ -22,7 +22,7 @@ class ApiRequest {
     private result: ServiceResultDocument<any>;
 
     private getApiUrl(): string {
-        let apiUrl = ApiRequestConfig.mainUrl;
+        let apiUrl = pathUtil.api;
         this.params.url.forEach(url => {
             if(url) {
                 apiUrl += url + "/";
@@ -31,58 +31,37 @@ class ApiRequest {
         return apiUrl.removeLastChar();
     }
 
-    private request(resolve?: (value: any) => void) {
-        let self = this;
-        let isRequestFailed = false;
-        $.ajax({
-            url: this.getApiUrl(),
-            data: this.params.data,
-            method: this.params.method,
-            async: this.params.async,
-            contentType: this.params.contentType,
-            processData: this.params.processData,
-            timeout: Timeouts.verySlow,
-            xhrFields: {
+    private async request(resolve: (value: any) => void) {
+        try {
+            let resData = await axios.request({
+                url: this.getApiUrl(),
+                data: this.params.data,
+                method: this.params.method,
                 withCredentials: true,
-            },
-            xhr(): XMLHttpRequest {
-                let xhr = new XMLHttpRequest();
-
-                xhr.upload.onprogress = function(e) {
-                    if (e.lengthComputable) {
-                        let percentComplete = e.loaded / e.total;
-                        percentComplete = Number.parseInt((percentComplete * 100).toString());
-                        if (typeof ApiRequestConfig.onUploadProgress !== "undefined") {
-                            ApiRequestConfig.onUploadProgress(this, e, percentComplete);
-                        }
+                timeout: Timeouts.verySlow,
+                onUploadProgress: (e) => {
+                    var percentComplete = Math.round((e.loaded * 100) / (e.total ?? 1))
+                    if (typeof this.params.onUploadProgress !== "undefined") {
+                        this.params.onUploadProgress(e, percentComplete);
                     }
-                };
-
-                return xhr;
-            },
-            beforeSend: function () {},
-            complete: function () {
-                if(resolve) resolve(self.result)
-            },
-            success: (resData) => {
-                this.result = resData;
-            },
-            error: (xhr, ets) => {
-                this.result = xhr.responseJSON;
-                isRequestFailed = true;
+                },
+            });
+            this.result = resData.data;
+        }catch (e: any) {
+            this.result.status = false;
+            this.result.customData = e;
+            if(e.response && e.response.data){
+                this.result = e.response.data;
             }
-        });
+        }finally {
+            resolve(this.result);
+        }
     }
 
     init() : Promise<ServiceResultDocument<any>> {
-        return new Promise( resolve => {
-            this.request(resolve);
+        return new Promise( async resolve => {
+            await this.request(resolve);
         })
-    }
-
-    initSync(): ServiceResultDocument<any> {
-       this.request();
-       return this.result;
     }
 }
 

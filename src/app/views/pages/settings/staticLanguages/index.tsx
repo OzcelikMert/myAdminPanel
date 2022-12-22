@@ -34,28 +34,24 @@ class PageSettingsStaticLanguages extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getLangKeys();
-            this.getSettings();
-            this.setState({
-                isLoading: false
-            })
+        this.getLangKeys();
+        await this.getSettings();
+        this.setState({
+            isLoading: false
         })
     }
 
-    componentDidUpdate(prevProps: PagePropCommonDocument) {
+    async componentDidUpdate(prevProps: PagePropCommonDocument) {
         if (prevProps.getPageData.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
                 state.isLoading = true;
                 return state;
-            }, () => {
-                Thread.start(() => {
-                    this.getSettings()
-                    this.setState({
-                        isLoading: false
-                    })
+            }, async () => {
+                await this.getSettings()
+                this.setState({
+                    isLoading: false
                 })
             })
         }
@@ -72,8 +68,8 @@ class PageSettingsStaticLanguages extends Component<PageProps, PageState> {
         })
     }
 
-    getSettings() {
-        let resData = settingService.get({langId: this.props.getPageData.langId})
+    async getSettings() {
+        let resData = await settingService.get({langId: this.props.getPageData.langId})
         if (resData.status) {
             this.setState((state: PageState) => {
                 resData.data.forEach(setting => {

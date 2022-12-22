@@ -9,9 +9,9 @@ import PostTermDocument, {
 } from "types/services/postTerm";
 
 export default {
-    get(params: PostTermGetParamDocument): ServiceResultDocument<PostTermDocument[]> {
+    get(params: PostTermGetParamDocument): Promise<ServiceResultDocument<PostTermDocument[]>> {
         let typeId = Array.isArray(params.typeId) ? [] : [params.typeId?.toString()]
-        return Api.getSync({
+        return Api.get({
             url: [ServicePages.postTerm, params.postTypeId.toString(), ...typeId, params.termId?.toString()],
             data: params
         });

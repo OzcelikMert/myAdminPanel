@@ -13,11 +13,12 @@ type PageState = {} & any;
 
 type PageProps = {
     isPageLoading: boolean
+    isFullPage: boolean
 } & PagePropCommonDocument;
 
 export default class AppRoutes extends Component<PageProps, PageState> {
     render() {
-        return this.props.isPageLoading ? <Spinner/> : (
+        return this.props.isPageLoading ? <Spinner isFullPage={this.props.isFullPage}/> : (
             <Suspense fallback={<Spinner/>}>
                 <Routes>
                     {

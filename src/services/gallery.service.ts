@@ -4,8 +4,8 @@ import ServiceResultDocument from "types/services/api/result";
 import {GalleryDeleteParamDocument, GalleryAddParamDocument} from "types/services/gallery";
 
 export default {
-    get(): ServiceResultDocument<string[]> {
-        return Api.getSync({
+    get(): Promise<ServiceResultDocument<string[]>> {
+        return Api.get({
             url: [ServicePages.gallery],
         });
     },

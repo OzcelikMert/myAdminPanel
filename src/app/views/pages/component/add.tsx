@@ -49,31 +49,27 @@ export default class PageComponentAdd extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-        Thread.start(() => {
-            this.getLangKeys();
-            this.getTypes();
-            if (this.state.formData.componentId) {
-                this.getComponent();
-            }
-            this.setState({
-                isLoading: false
-            })
+        this.getLangKeys();
+        this.getTypes();
+        if (this.state.formData.componentId) {
+            await this.getComponent();
+        }
+        this.setState({
+            isLoading: false
         })
     }
 
-    componentDidUpdate(prevProps: PagePropCommonDocument) {
+    async componentDidUpdate(prevProps: PagePropCommonDocument) {
         if (prevProps.getPageData.langId != this.props.getPageData.langId) {
             this.setState((state: PageState) => {
                 state.isLoading = true;
                 return state;
-            }, () => {
-                Thread.start(() => {
-                    this.getComponent()
-                    this.setState({
-                        isLoading: false
-                    })
+            }, async () => {
+                await this.getComponent()
+                this.setState({
+                    isLoading: false
                 })
             })
         }
@@ -107,8 +103,8 @@ export default class PageComponentAdd extends Component<PageProps, PageState> {
         })
     }
 
-    getComponent() {
-        let resData = componentService.get({
+    async getComponent() {
+        let resData = await componentService.get({
             componentId: this.state.formData.componentId,
             langId: this.props.getPageData.langId,
             getContents: 1

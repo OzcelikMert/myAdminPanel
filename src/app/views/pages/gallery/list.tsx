@@ -48,13 +48,11 @@ export default class PageGalleryList extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle()
-        Thread.start(() => {
-            this.getImages();
-            this.setState({
-                isLoading: false
-            })
+        await this.getImages();
+        this.setState({
+            isLoading: false
         })
     }
 
@@ -62,8 +60,8 @@ export default class PageGalleryList extends Component<PageProps, PageState> {
         this.toast?.hide();
     }
 
-    getImages() {
-        let resData = galleryService.get();
+    async getImages() {
+        let resData = await galleryService.get();
 
         if (resData.status) {
             if (Array.isArray(resData.data)) {

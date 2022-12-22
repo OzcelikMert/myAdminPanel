@@ -45,14 +45,11 @@ export default class PagePostTermList extends Component<PageProps, PageState> {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setPageTitle();
-
-        Thread.start(() => {
-            this.getPostTerms();
-            this.setState({
-                isLoading: false
-            })
+        await this.getPostTerms();
+        this.setState({
+            isLoading: false
         })
     }
 
@@ -63,12 +60,12 @@ export default class PagePostTermList extends Component<PageProps, PageState> {
         ])
     }
 
-    getPostTerms() {
-        let postTerms = postTermService.get({
+    async getPostTerms() {
+        let postTerms = (await postTermService.get({
             typeId: this.props.getPageData.searchParams.termTypeId,
             postTypeId: this.props.getPageData.searchParams.postTypeId,
             langId: this.props.getPageData.mainLangId
-        }).data;
+        })).data;
         this.setState({
             postTerms: postTerms,
             showingPostTerms: postTerms.filter(value => value.statusId !== StatusId.Deleted)
