@@ -1,14 +1,12 @@
 import React, {Component, createRef, RefObject} from 'react'
 import {PagePropCommonDocument} from "types/app/pageProps";
 import UploadingFilesDocument from "types/app/views/pages/gallery/upload";
-import Thread from "library/thread";
 import galleryService from "services/gallery.service";
 import ThemeToast from "components/toast";
 
 type PageState = {
     isDragging: boolean,
     uploadingFiles: UploadingFilesDocument[]
-    isUploading: boolean
 };
 
 type PageProps = {
@@ -18,13 +16,14 @@ type PageProps = {
 
 class PageGalleryUpload extends Component<PageProps, PageState> {
     refInputFile: RefObject<HTMLInputElement> = createRef();
+    maxFileSize: number;
 
     constructor(props: PageProps) {
         super(props);
+        this.maxFileSize = Number(process.env.REACT_APP_UPLOAD_FILE_SIZE ?? 1024000);
         this.state = {
             isDragging: false,
-            uploadingFiles: [],
-            isUploading: false
+            uploadingFiles: []
         }
     }
 
@@ -40,72 +39,54 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
     }
 
     async uploadFiles() {
-        if (!this.state.isUploading && this.state.uploadingFiles.length > 0) {
-            this.setState({
-                isUploading: true
-            }, async () => {
-                let uploadedFiles = await new Promise<string[]>(async (resolve) => {
-                    let uploadedImages: string[] = [];
-                    for (const uploadingFile of this.state.uploadingFiles) {
-                        if (
-                            uploadingFile.progressValue === 100
-                        ) continue;
-                        else if(uploadingFile.file.size > 1024000) {
-                            new ThemeToast({
-                                type: "error",
-                                title: this.props.router.t("error"),
-                                content: `${uploadingFile.file.name} ${this.props.router.t("bigImageSize")}`,
-                                position: "top-right",
-                                timeOut: 5
-                            })
-                            continue;
-                        }
+        let uploadedImages: string[] = [];
+        for (const [index, uploadingFile] of this.state.uploadingFiles.entries()) {
+            if (
+                uploadingFile.progressValue === 100
+            ) continue;
 
-                        this.setState((state: PageState) => {
-                            let findIndex = state.uploadingFiles.indexOfKey("id", uploadingFile.id);
-                            if (findIndex > -1) {
-                                state.uploadingFiles[findIndex].isUploading = true;
-                            }
-                            return state;
-                        }, async () => {
-                            const formData = new FormData();
-                            formData.append("file", uploadingFile.file, uploadingFile.file.name);
-
-                            let resData = await galleryService.add(formData);
-                            if(
-                                resData.status &&
-                                Array.isArray(resData.data) &&
-                                resData.data.length > 0
-                            ) {
-                                uploadedImages.push(resData.data[0]);
-                                new ThemeToast({
-                                    type: "success",
-                                    title: this.props.router.t("successful"),
-                                    content: `${uploadingFile.file.name} ${this.props.router.t("imageUploadedWithName")}`,
-                                    position: "top-right",
-                                    timeOut: 5
-                                })
-                            }
-                            await Thread.sleep(750);
-                            this.setState((state: PageState) => {
-                                let findIndex = state.uploadingFiles.indexOfKey("id", uploadingFile.id);
-                                if (findIndex > -1) {
-                                    state.uploadingFiles[findIndex].progressValue = 100;
-                                    state.uploadingFiles[findIndex].isUploading = false;
-                                }
-                                return state;
-                            })
-                        })
-                    }
-                    resolve(uploadedImages);
-                })
-
-                this.setState({
-                    isUploading: false
-                }, () => {
-                    if(this.props.uploadedImages) this.props.uploadedImages(uploadedFiles)
+            if (uploadingFile.file.size > this.maxFileSize) {
+                await new Promise(resolve => {
+                    this.setState((state: PageState) => {
+                        state.uploadingFiles[index].progressValue = 100;
+                        return state;
+                    }, () => resolve(true));
                 });
+                new ThemeToast({
+                    type: "error",
+                    title: this.props.router.t("error"),
+                    content: `${uploadingFile.file.name} ${this.props.router.t("bigImageSize")}`,
+                    position: "top-right",
+                    timeOut: 5
+                })
+                continue;
+            }
+
+            const formData = new FormData();
+            formData.append("file", uploadingFile.file, uploadingFile.file.name);
+
+            let resData = await galleryService.add(formData, (e, percent) => {
+                console.log(e, percent)
+                this.setState((state: PageState) => {
+                    state.uploadingFiles[index].progressValue = percent ?? 100;
+                    return state;
+                })
             });
+
+            if (
+                resData.status &&
+                Array.isArray(resData.data) &&
+                resData.data.length > 0
+            ) {
+                uploadedImages.push(resData.data[0]);
+                new ThemeToast({
+                    type: "success",
+                    title: this.props.router.t("successful"),
+                    content: `${uploadingFile.file.name} ${this.props.router.t("imageUploadedWithName")}`,
+                    position: "top-right",
+                    timeOut: 5
+                })
+            }
         }
     }
 
@@ -118,8 +99,7 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
                     state.uploadingFiles.push({
                         id: String.createId(),
                         file: file,
-                        progressValue: 0,
-                        isUploading: false
+                        progressValue: 0
                     });
                 }
             }
@@ -148,8 +128,7 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
                     state.uploadingFiles.push({
                         id: String.createId(),
                         file: file,
-                        progressValue: 0,
-                        isUploading: false
+                        progressValue: 0
                     });
                 }
                 state.isDragging = false;
@@ -171,7 +150,7 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
             <div
                 className={`col-md-2 uploading-item bg-gradient-${(props.file.size > 1024000) ? "danger" : "secondary"}`}>
                 {
-                    (!props.isUploading)
+                    (props.progressValue >= 100)
                         ? <div className="uploading-item-remove">
                             <span onClick={() => this.onRemoveImageInList(props.id)}>
                                 <i className="mdi mdi-close"></i>
@@ -187,10 +166,14 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
                 }
                 <img className="shadow-lg mb-1" src={URL.createObjectURL(props.file)} alt={props.file.name}/>
                 {
-                    (props.file.size > 1024000)
+                    (props.file.size > this.maxFileSize)
                         ? <b>{this.props.router.t("bigImageSize")}</b>
                         : null
                 }
+                <div className="progress-lg progress">
+                    <div role="progressbar" className="progress-bar bg-gradient-info" style={{width: `${props.progressValue}%`}}>{props.progressValue}%
+                    </div>
+                </div>
             </div>
         );
     }
