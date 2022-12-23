@@ -16,6 +16,7 @@ type PageProps<T> = {
     isSearchable?: boolean
     isSelectable?: boolean
     isAllSelectable?: boolean
+    isMultiSelectable?: false
     selectedRows?: T[]
 } & TableProps<T>;
 
@@ -63,6 +64,9 @@ export default class ThemeDataTable<T> extends Component<PageProps<T>, PageState
             if (findIndex > -1) {
                 if (remove) state.selectedItems.remove(findIndex)
             } else {
+                if(this.props.isMultiSelectable === false){
+                    state.selectedItems = [];
+                }
                 state.selectedItems.push(item);
             }
 

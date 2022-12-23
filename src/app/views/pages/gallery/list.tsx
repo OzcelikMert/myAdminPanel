@@ -273,6 +273,7 @@ export default class PageGalleryList extends Component<PageProps, PageState> {
                                 t={this.props.router.t}
                                 isSelectable={true}
                                 isAllSelectable={!(this.props.isModal && !this.props.isMulti)}
+                                isMultiSelectable={false}
                                 isSearchable={true}
                             />
                         </div>

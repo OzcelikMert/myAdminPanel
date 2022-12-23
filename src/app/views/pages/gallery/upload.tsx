@@ -88,6 +88,9 @@ class PageGalleryUpload extends Component<PageProps, PageState> {
                 })
             }
         }
+        if(this.props.uploadedImages){
+            this.props.uploadedImages(uploadedImages);
+        }
     }
 
     onChangeFile = (event: React.ChangeEvent<HTMLInputElement>) => {
