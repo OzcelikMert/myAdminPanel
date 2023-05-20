@@ -31,12 +31,6 @@ export default class ProviderPermission extends Component<PageProps, PageState> 
         this.onRouteChanged();
     }
 
-    componentDidUpdate(prevProps: Readonly<PageProps>, prevState: Readonly<PageState>) {
-        if (this.props.router.location.pathname !== prevProps.router.location.pathname) {
-            this.onRouteChanged();
-        }
-    }
-
     onRouteChanged() {
         this.setState({
             isPageLoading: true,

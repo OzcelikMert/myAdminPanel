@@ -258,6 +258,7 @@ export default class PageGalleryList extends Component<PageProps, PageState> {
 
 
     render() {
+        console.log("gallery list")
         return this.state.isLoading ? <Spinner/> : (
             <div className="page-gallery">
                 <this.ImageViewer/>

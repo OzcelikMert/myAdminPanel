@@ -221,7 +221,7 @@ export default class PageComponentAdd extends Component<PageProps, PageState> {
             <SweetAlert
                 show={this.state.isSuccessMessage}
                 title={this.props.router.t("successful")}
-                text={`${this.props.router.t((V.isEmpty(this.props.getPageData.searchParams.userId)) ? "itemAdded" : "itemEdited")}!`}
+                text={`${this.props.router.t((V.isEmpty(this.state.formData.componentId)) ? "itemAdded" : "itemEdited")}!`}
                 icon="success"
                 timer={1000}
                 timerProgressBar={true}
